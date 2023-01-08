@@ -1,0 +1,73 @@
+body {
+    height: 100%;
+    width: 100%;
+}
+
+.header {   
+    display: block;
+    height: 100px;
+    width: 100%;
+}
+
+.form-wrapper {
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    width:250px;
+    height:300px;
+    margin:0 auto;
+    padding: 48px 40px 36px;
+}
+
+.form-wrapper .user-id {
+    display: block;
+    width:100%;
+    height:40px;
+    padding:10px;
+}
+
+.form-wrapper .user-pw {
+    display: block;
+    width:100%;
+    height:40px;
+    padding:10px;
+}
+.form-wrapper .register{
+    width : 80%;
+    margin : 0 auto;
+    height : 6%;
+}
+
+.register .question{
+    width : 100%;
+    height : 100%;
+    margin :0 auto;
+    display : flex;
+    border-radius : 10px;
+    
+}
+
+.register .question p{
+    margin : 0;
+    width : 65%;
+    box-sizing : border-box;
+    height : 100%;
+    font-size : 10px;
+    text-align : center;
+}
+
+.register .question a{
+    box-sizing : border-box;
+    width : 30%;
+    height : 100%;
+    border : 0.8px solid #000;
+    border-radius : 10px;
+    font-size : 10px;
+    text-align : center;
+}
+
+.question a:hover{
+    background-color: rgba(108, 60, 244, 0.85);
+    cursor: pointer;
+    color: white;
+    border: none;
+}

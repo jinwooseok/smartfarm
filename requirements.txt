@@ -1,0 +1,10 @@
+pandas
+django
+requests
+argon2-cffi
+geopy
+openpyxl
+statsmodels
+sklearn
+scipy
+json

@@ -1,0 +1,2 @@
+cd ../../ven/Scripts
+activate

@@ -1,0 +1,12 @@
+<html>
+    <div id="a">{{result}}</div>
+    <div>
+        <a href="{% url 'smartfarm:excel' %}">
+            <button id="back" name="back" style="margin-top:30px">돌아가기</button>
+        </a>
+    </div>
+</html>
+<script>
+    a=document.getElementById('a');
+    a.innerHTML=a.innerText;
+</script>

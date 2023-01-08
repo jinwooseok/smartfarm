@@ -1,0 +1,28 @@
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'users/register.css' %}">
+</head>
+<body>
+    <div>회원가입 페이지</div>
+    <div class="wrap">
+        <form action="" method="post">
+            {% csrf_token %}
+
+            {% for form in forms %}
+            <div>
+                <label for="{{form.if_for_label}}">{{form.label}}</label> <!--label값-->
+                {{ form }} <!--widget 호출-->
+            </div>
+            {% endfor %}
+
+            {% if error %}
+            {{ error }} <!-- error 출력 class=errorlist -->
+            {% endif %} 
+            <button type="submit" name="regiser_submit" value="register">회원가입하기</button>
+
+        </form>
+    </div>
+</body>

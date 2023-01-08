@@ -1,0 +1,35 @@
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'users/login.css' %}">
+</head>
+<body>
+    <div>로그인 페이지</div>
+    <div class="header"></div>
+    <div class="form-wrapper">
+        <form action="" method="post">
+            {% csrf_token %}
+
+            {% for form in forms %}
+            <div>
+                <label for="{{form.if_for_label}}">{{form.label}}</label> <!--label값-->
+                {{ form }} <!--widget 호출-->
+            </div>
+            {% endfor %}
+
+            {% if error %}
+            {{ error }} <!-- error 출력 class=errorlist -->
+            {% endif %} 
+            <button type="submit" name="login_submit" value="login">로그인</button>
+
+        </form>
+        <div class="register">
+            <div class="question">
+                <p>아직 회원이 아니시라면?</p>
+                <a href="{% url 'users:register' %}">회원가입</a>
+            </div>
+        </div>
+    </div>
+</body>
