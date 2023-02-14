@@ -1,2 +1,90 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            #bottomSheetContainer{
+                position: absoluute;
+                top:0px;
+                left:0px;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,0);
+                align-items: flex-end;
+                justify-content: center;
+                display: none;
+            }
+            #bottomSheetContainer.active{
+                display:flex;
+            }
+            #bottomSheet{
+                background-color:#FFF;
+                width:100%;
+                height:100px;
+                transform: translateY(100%);
+                transition: transform 0.4s ease-in-out;
+            }
+            #bottomSheet.active{
+                transform: translateY(0);
+            }
+        </style>
+    </head>
+    <body>
+        <button onclick="showBottomSheet()">전처리도구</button>
+    <div id="bottomSheetContainer">
+        <div id="bottomSheet">
+            <label>무엇을(어떤열을)</label>
+            <input type="text" list="list" id="numbers"/>
+            <datalist id ="list">
+                <option value="1">
+                <option value="2">
+                <option value="3">
+                <option value="4">
+                <option value="5">
+                <option value="6">
+            </datalist>
+            <label>언제(조건)</label>
+            <input type="text" list="list" id="numbers"/>
+            <datalist id ="list">
+                <option value="전체">
+                <option value="1">
+                <option value="2">
+                <option value="3">
+                <option value="4">
+                <option value="5">
+            </datalist>
+            <label>어떻게(결과물)</label>
+            <input type="text" list="list" id="numbers"/>
+            <datalist id ="list">
+                <option value="삭제">
+                <option value="2">
+                <option value="3">
+                <option value="4">
+                <option value="5">
+                <option value="6">
+            </datalist>
+        </div>
+    </div>
+    </body>
+    <script>
+        function showBottomSheet(){
+            let container = document.querySelector('#bottomSheetContainer');
+            let bottomSheet = document.querySelector('#bottomSheetContainer #bottomSheet');
+        
+            if (container.className == "active"){
+                console.log(bottomSheet);
+                bottomSheet.classList.remove("active");
+                setTimeout(() => {container.classList.remove("active");},400);
+                return 0;
+            }
 
-<table class="simpletable">\n<caption>OLS Regression Results</caption>\n<tr>\n  <th>Dep. Variable:</th>          <td>공급EC</td>       <th>  R-squared:         </th> <td>   0.341</td>\n</tr>\n<tr>\n  <th>Model:</th>                   <td>OLS</td>       <th>  Adj. R-squared:    </th> <td>   0.308</td>\n</tr>\n<tr>\n  <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   10.34</td>\n</tr>\n<tr>\n  <th>Date:</th>             <td>Sun, 06 Nov 2022</td> <th>  Prob (F-statistic):</th> <td>3.24e-09</td>\n</tr>\n<tr>\n  <th>Time:</th>                 <td>16:45:45</td>     <th>  Log-Likelihood:    </th> <td>  88.977</td>\n</tr>\n<tr>\n  <th>No. Observations:</th>      <td>   127</td>      <th>  AIC:               </th> <td>  -164.0</td>\n</tr>\n<tr>\n  <th>Df Residuals:</th>          <td>   120</td>      <th>  BIC:               </th> <td>  -144.0</td>\n</tr>\n<tr>\n  <th>Df Model:</th>              <td>     6</td>      <th>                     </th>     <td> </td>   \n</tr>\n<tr>\n  <th>Covariance Type:</th>      <td>nonrobust</td>    <th>                     </th>     <td> </td>   \n</tr>\n</table>\n<table class="simpletable">\n<tr>\n    <td></td>       <th>coef</th>     <th>std err</th>      <th>t</th>      <th>P>|t|</th>  <th>[0.025</th>    <th>0.975]</th>  \n</tr>\n<tr>\n  <th>공급PH</th>  <td>   -0.1753</td> <td>    0.122</td> <td>   -1.432</td> <td> 0.155</td> <td>   -0.418</td> <td>    0.067</td>\n</tr>\n<tr>\n  <th> 공급량 </th> <td> 8.052e-05</td> <td> 9.82e-05</td> <td>    0.820</td> <td> 0.414</td> <td>   -0.000</td> <td>    0.000</td>\n</tr>\n<tr>\n  <th> 배액량 </th> <td>-9.969e-05</td> <td> 4.09e-05</td> <td>   -2.440</td> <td> 0.016</td> <td>   -0.000</td> <td>-1.88e-05</td>\n</tr>\n<tr>\n  <th>드리퍼수</th>  <td>    0.7428</td> <td>    0.131</td> <td>    5.684</td> <td> 0.000</td> <td>    0.484</td> <td>    1.001</td>\n</tr>\n<tr>\n  <th>배액율</th>   <td>    0.3185</td> <td>    0.193</td> <td>    1.646</td> <td> 0.102</td> <td>   -0.065</td> <td>    0.702</td>\n</tr>\n<tr>\n  <th>배액EC</th>  <td>   -0.0535</td> <td>    0.018</td> <td>   -3.008</td> <td> 0.003</td> <td>   -0.089</td> <td>   -0.018</td>\n</tr>\n<tr>\n  <th>배액PH</th>  <td>    0.0483</td> <td>    0.048</td> <td>    0.999</td> <td> 0.320</td> <td>   -0.047</td> <td>    0.144</td>\n</tr>\n</table>\n<table class="simpletable">\n<tr>\n  <th>Omnibus:</th>       <td>70.788</td> <th>  Durbin-Watson:     </th> <td>   1.852</td>\n</tr>\n<tr>\n  <th>Prob(Omnibus):</th> <td> 0.000</td> <th>  Jarque-Bera (JB):  </th> <td> 346.433</td>\n</tr>\n<tr>\n  <th>Skew:</th>          <td> 1.935</td> <th>  Prob(JB):          </th> <td>5.93e-76</td>\n</tr>\n<tr>\n  <th>Kurtosis:</th>      <td>10.105</td> <th>  Cond. No.          </th> <td>3.98e+04</td>\n</tr>\n</table><br/><br/>Notes:<br/>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.<br/>[2] The condition number is large, 3.98e+04. This might indicate that there are<br/>strong multicollinearity or other numerical problems.
+            container.classList.add("active");
+            setTimeout(() => {bottomSheet.classList.add("active");},1);
+            return 0;
+        }
+
+      
+    </script>
+</html>
+<input class="test"></input>

@@ -36,7 +36,7 @@ SECRET_KEY = get_secret('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*','127.0.0.1']
 
 
 # Application definition
@@ -48,8 +48,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #주요 함수 앱
     'smartfarm',
+    #유저 관련 앱
     'users',
+    #api관련
+    'rest_framework',
+    #크로스도메인 보안 관련
+    'corsheaders',
+
 ]
 
 MIDDLEWARE = [
@@ -60,6 +67,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    #cors header 
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -89,8 +99,8 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default' : {
         'ENGINE': 'django.db.backends.mysql',    
-        'NAME': 'nmh',                  
-        'USER': 'user',                          
+        'NAME': 'nmhproject',                  
+        'USER': 'root',                          
         'PASSWORD': get_secret("DATABASE_PASSWORD"),                  
         'HOST': get_secret("DATABASE_HOST" ),                    
         'PORT': get_secret("DATABASE_PORT"),                          
@@ -153,3 +163,13 @@ MAX_UPLOAD_SIZE = 5242880
 DATA_UPLOAD_MAX_MEMORY_SIZE = None
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
+
+#CORS 크로스 도메인 이슈 - 나중에 세부 설정할 것
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+
+#rest_framework
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}

@@ -45,22 +45,7 @@ $(document).ready(function () {
     document.getElementById('download').onclick = function () {
         x.download(); // 파일 이름 설정?
     }
-    // 분석에 사용할 열데이터 불러오기
-    var getX= function(){
-        var element1 = document.getElementById('x_value');//변수선택창 호출
-        var a=document.getElementById('jsonObject').value;//html창의 json문자열의 value값을 가져옴. 문자열은 input hidden으로 숨겨둠
-        a = JSON.parse(a);//문자열 형태라 인덱싱이 안돼서 json객체로 파싱. 이제 키값이나 인덱싱 가능
-        for (var i=0; i<Object.keys(a[1]).length;i++){//1열의 key값을 불러옴. 데이터 특성상 1열의 key값이 마지막까지의 key값과 같음.
-            element1.innerHTML+="<option value='"+Object.keys(a[1])[i]+"'>"+Object.keys(a[1])[i]+"</option>";
-        }//html코드로 select에 옵션을 추가함.다른 형태면 이부분을 변경
-        var element2 = document.getElementById('y_value');//아래까진 똑같음
-        var a=document.getElementById('jsonObject').value;
-        a = JSON.parse(a);
-        for (var i=0; i<Object.keys(a[1]).length;i++){
-            element2.innerHTML+="<option value='"+Object.keys(a[1])[i]+"'>"+Object.keys(a[1])[i]+"</option>";
-        }
-    }
-    document.getElementById('lr_button').addEventListener("click",getX); 
+    
 });
 
 // 각종 엑셀 열, 행 관련 함수

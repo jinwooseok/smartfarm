@@ -1,156 +1,46 @@
-{% load static %}
 <!DOCTYPE html>
+{% load static %}
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>이름을 정해주세요</title>
-
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/modals/">
-    
-    <!-- Favicons -->
-    <link rel="apple-touch-icon" href="/docs/5.2/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
-    <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
-    <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
-    <link rel="manifest" href="/docs/5.2/assets/img/favicons/manifest.json">
-    <link rel="mask-icon" href="/docs/5.2/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
-    <link rel="icon" href="/docs/5.2/assets/img/favicons/favicon.ico">
+    <title>smart farm</title>
 
     <!-- css -->
     <link rel="stylesheet" href="{% static 'main/main.css' %}">
-    <link href="https://getbootstrap.com/docs/5.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
-    <link href="modals.css" rel="stylesheet">
 
-    <script src="https://kit.fontawesome.com/4c4b76e7c2.js" crossorigin="anonymous"></script>
-  </head>
-  
+</head>
 
 <body>
-    <header>
-       <div class="head">
-            <img src="{% static 'main/전남대마크.png' %}" alt="">
-            <a href="" class="title">
-              HELLO
-            </a>
-
-            <p> 스마트팜 빅데이터 분석 서비스 </p>
-            <ul id="'bar" class="bar">
-              <li><a href="#">소개</a></li>
-              {% if user_name != none %}
-              <li><a href="{% url 'smartfarm:mypage' %}">{{user_name}}님 환영합니다</a></li>
-              {% else %}
-              <li><a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">로그인</a></li>
-              <li><a href="{% url 'users:register' %}">회원가입</a></li>
-              {% endif %}
+    <div class="logo-box">
+        <img src="{% static 'logo.png' %}" alt="logo" class="logo">
+        <div class="login">
+            <ul>
+                <li><a href="{% url 'users:login' %}">로그인</a></li>
+                
             </ul>
-
-            <a href="#" id="nav_button" class="nav_button" onclick="dis()"><i class="fa-solid fa-bars"></i></a>
-        </div> 
-    </header>
-
-    <div class="nav_bar">
-      <ul>
-        <li class="item tomato"><a href="#">토마토</a></li>
-        <li class="item strawberry"><a href="#">딸기</a></li>
-        <li class="item paprika"><a href="#">파프리카</a></li>
-        <li class="item s-tomato"><a href="#">방울 토마토</a></li>
-        <li class="item etc"><a href="#">기타 서비스</a></li>
-      </ul>
-    </div>
-
-    <div class="contents">
-      <div class="box">
-        <h2>스마트팜</h2>
-        <h3>빅데이터 분석 플랫폼</h3>
-        <p>
-          스마트팜 최적환경설정 안재 서비스는 <br/>
-          우수농가를 선정하고 데이터 수집을 통해 <br/>
-          빅데이터, 모델링, 기계학습 등으로 환경설정값을 안내해드립니다.
-        </p>
-
-        <div class = "link">
-          <a href="#" class="tomato">
-            <img src="{% static 'tomato/tomato-a.png' %}"><p>토마토</p>
-          </a>
-          <a href="#" class="strawberry">
-            <img src=""><p>딸기</p>
-          </a>
-          <a href="#">
-            <img src="" class="paprika"><p>파프리카</p>
-          </a>
-          <a href="#">
-            <img src="" class="Cherry-tomato"><p>방울토마토</p>
-          </a>
-          <a href="#">
-            <img src="" class="system"><p>병충해 반펼시스템</p>
-          </a>
         </div>
-      </div>
     </div>
-
-    <!-- Modal login -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal modal-signin position-static d-block bg-secondary py-5" tabindex="-1" role="dialog" id="modalSignin">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content rounded-4 shadow">
-            <div class="modal-header p-5 pb-4 border-bottom-0">
-              <!-- <h5 class="modal-title">Modal title</h5> -->
-              <h2 class="fw-bold mb-0">Sign up for free</h2>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close"><span aria-hidden="true"></span></button>
+    <div class="container">
+        <div class="inner-container">
+            <div class="text">
+                전남대학교 <br/>
+            <p>농업 빅데이터 연구소</p>
+            </div>5
+    
+            <div class="button-box">
+                <button class="btn btn-16" id="merge">병합</button>
+                <button class="btn btn-16" id="analysis">분석</button>
             </div>
-      
-            <div class="modal-body p-5 pt-0">
-              <!--로그인 폼 부분-->
-              <form method="post" id="form" onsubmit="return false;">
-                {% csrf_token %}
-                <div class="form-floating mb-3">
-                  <input type="id" class="form-control rounded-3" id="user_id" placeholder="name@example.com">
-                  <label for="user_id">ID</label>
-                </div>
-                <div class="form-floating mb-3">
-                  <input type="password" class="form-control rounded-3" id="user_pw" placeholder="Password">
-                  <label for="user_pw">Password</label>
-                </div>
-                <div id="login_error" style=" height:auto;display:none"><p style="font-size: 3px; color:red">로그인에 실패하였습니다.</p></div>
-                <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit" id="login_submit">Sign up</button>
-              </form>
-              <small class="text-muted">By clicking Sign up, you agree to the terms of use.</small>
-              <hr class="my-4">
-              <h2 class="fs-5 fw-bold mb-3">Or use a third-party</h2>
-              <button class="w-100 py-2 mb-2 btn btn-outline-dark rounded-3" type="submit" id="login_submit">
-                <svg class="bi me-1" width="16" height="16"><use xlink:href="#twitter"/></svg>
-                Sign up with Twitter
-              </button>
-              <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-3" type="submit">
-                <svg class="bi me-1" width="16" height="16"><use xlink:href="#facebook"/></svg>
-                Sign up with Facebook
-              </button>
-              <button class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="submit">
-                <svg class="bi me-1" width="16" height="16"><use xlink:href="#github"/></svg>
-                Sign up with GitHub
-              </button>
-            </div>
-          </div>
         </div>
-      </div>
-            
     </div>
-
-    <footer>
-      <div class="container">
-        <a href="#">빅데이터 분석 플랫폼</a>
-        <br>
-        <span>010-xxxx-xxxx</span>
-      </div>
-    </footer>
-
-    <!-- js -->
-    
-    <script src="{% static 'main/jquery-1.12.4.min.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
-    <script src="{% static 'main/main.js' %}"></script>
-    
 </body>
+
+
+<!-- js -->
+<script src="{% static 'main/main.js' %}"></script>
+<script src="{% static 'jquery-1.12.4.min.js' %}"></script>
+
 </html>

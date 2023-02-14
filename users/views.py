@@ -4,34 +4,37 @@ from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
 from .models import User
 from argon2 import PasswordHasher, exceptions
-from .forms import RegisterForm, LoginForm
 from django.http import JsonResponse
+
 # Create your views here.
 
-def register(request : HttpRequest) -> HttpResponse:
-    register_form = RegisterForm()
-    context = {'forms': register_form}
-
+#회원가입 버튼을 누르면 작동하는 함수
+def register(request):
     if request.method == 'GET' : 
-        return render(request, 'users/register.html', context)
+        return render(request, 'users/register.html')
     
     elif request.method == 'POST' :
-        register_form = RegisterForm(request.POST)
-        if register_form.is_valid() : # form.py의 clean 호출
-            user=User(
-                user_id = register_form.user_id,
-                user_pw = register_form.user_pw,
-                user_name = register_form.user_name,
-                user_email = register_form.user_email
-            )
-            user.save()
-            return redirect('/')
-        else : 
-            context['forms'] = register_form
-            if register_form.errors : 
-                for value in register_form.errors.values() :
-                    context['error'] = value
-        return render(request, 'users/register.html', context)
+        user_id=request.POST['regi_id']
+        #비밀번호는 argon2의 hash함수를 사용해 db에 저장
+        user_pw=request.POST['regi_pass']
+        user_pw=PasswordHasher().hash(user_pw)
+        
+        user_name=request.POST['name']
+        
+        user_job=request.POST['regi_job']
+        #phone에서 3개의 요소를 받기 때문에 (###,####,####) getlist로 값을 받음
+        user_tel=request.POST.getlist('phone')
+        user_tel = ''.join(user_tel)
+        user=User(
+            user_id = user_id,
+            user_pw = user_pw,
+            user_name = user_name,
+            user_tel = user_tel,
+            user_job = user_job,
+        )
+        user.save()
+        return redirect('users:login')
+ 
 
 # def login(request : HttpRequest) -> HttpResponse:
 #     loginform = LoginForm()
@@ -57,23 +60,20 @@ def register(request : HttpRequest) -> HttpResponse:
 
 
 def login(request):
-
+    #처음 로그인 화면으로 들어올 때는 get방식이므로 핸들링
     if request.method == "GET":
-        return redirect('smartfarm:main')
+        return render(request, 'users/login.html' )
 
+    #post방식을 받은 경우 로그인 유효성 인증 실시
     elif request.method == "POST":
-        login_user_id=request.POST['user_id']
-        login_user_pw = request.POST['user_pw']
+        login_user_id=request.POST['id']
+        login_user_pw = request.POST['password']
 
         try:
             user = User.objects.get(user_id=login_user_id)
         except User.DoesNotExist:
             user=None
-            result = {
-                'result':'success',
-                'data' : "fail"
-            }
-            return JsonResponse(result)
+            return redirect("users:login")
         
         try :
             PasswordHasher().verify(user.user_pw.encode(), login_user_pw.encode())
@@ -82,19 +82,11 @@ def login(request):
         
         if user != None:
             request.session['user'] = user.id
-            result = {
-                'result':'success',
-                'data' : "cor"
-            }
             # Redirect to a success page.
-            return JsonResponse(result)
+            return redirect('/')
             
         else:
-            result = {
-                'result':'success',
-                'data' : "fail"
-            }
-            return JsonResponse(result)
+            return redirect('users:login')
 
 def logout(request):
     request.session.flush()

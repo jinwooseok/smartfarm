@@ -60,81 +60,7 @@ def fileSave(result,object):
     file_form.save()
     return 0
 
-#환경데이터 처리
-# def Envir(request):
-#     id = request.session.get('user')
-#     file_object=File_db.objects.get(id=id)
-#     work_dir = './media/' + str(file_object.file_Root)  # 저장 파일 위치 정보
-#     envir = pd.read_csv(work_dir, encoding='cp949')
-#     address='광주광역시'
-#     # print(str(file_root.before_file))
-#     # address='광주광역시'
-#     # envir = pd.read_csv(work_dir+str(file_root.before_file), encoding='cp949')
-#     envir_date = pd.DataFrame()
-#     envir_date['일시'] = envir.iloc[:,0].to_list()
-#     [long,lati]=proc.geocoding(address)
-#     start_month=envir_date.iloc[0,0][0:7]
-#     end_month=envir_date.iloc[-1,0][0:7]
-#     #일출일몰
-#     sun = proc.get_sun(round(long),round(lati),start_month,end_month)
-#     #낮밤구분
-#     nd_div=proc.ND_div(sun, envir_date)
-#     #정오구분
-#     afternoon_div =proc.afternoon_div(sun,nd_div,noon=12)
-#     #일출일몰t시간전후
-#     t_diff=3
-#     t_div=proc.time_div(sun,afternoon_div, t_diff)
-#     t_div['일시']=t_div['일시'].astype('str')
-#     #일일데이터로 변환
-#     generating_data=proc.generating_dailydata(envir, 0, t_div,t_diff,[3],[4],[5],[2],[6,7,9])
-#     if(request.GET['DorW']=="week"):
-#     #주별데이털로 변환
-#         result = proc.making_weekly2(generating_data,0)
-#         result['날짜']=result['날짜'].astype('str')
-#         print(result)
-#     #after저장
-#     else:
-#         result=generating_data
-#         result['날짜']=result['날짜'].astype('str')
-#     fileSave(result,file_object)
-    # #json 배열형식으로 변경
-    # result=result.replace({np.nan: 0})
-    # result_json=result.to_json(orient="records",force_ascii=False)
-    # return render(request,'analytics/index.html',context={"result_json":result_json,
-    # })
-    # return render(request,'analytics/index.html',{'result_json':result_json})
-    #결과값 json파일로 변환
 
-# Create your views here.
-
-
-
-#생육데이터 처리
-# def Growth(request):
-#     id = request.session.get('user')
-#     file_object=File_db.objects.get(id=id)
-#     work_dir = './media/' + str(file_object.file_Root)  # 저장 파일 위치 정보
-#     growth_object = pd.read_csv(work_dir, encoding='cp949')
-#     result=proc.making_weekly2(growth_object,1)
-#     fileSave(result,file_object)
-    
-
-
-#생산량데이터 처리
-# def Crop(request):
-#     id = request.session.get('user')
-#     date_ind = request.GET['date_ind']
-#     d_ind = request.GET['d_ind']
-#     file_object=File_db.objects.get(id=id)
-#     work_dir = './media/' + str(file_object.file_Root)  # 저장 파일 위치 정보
-#     crop = pd.read_csv(work_dir, encoding='cp949')
-#     #생산량 분할 모듈
-#     #df:생산량 데이터 프레임
-#     #date_ind:날짜 데이터 열
-#     #d_ind:생산량 데이터 열
-#     result=proc.y_split(crop,date_ind,d_ind)
-#     fileSave(result,file_object)
-    
 
 #-------------excel창 관련------------------------
 #작업창 호출함수
@@ -174,17 +100,20 @@ def load_data(request):
             }
             # Redirect to a success page.
     return JsonResponse(result)
+
+
 #분석호출함수
 def probing(request):
     prob_type=request.POST.get("prob","")
+    data=request.POST['data']
     if prob_type=="1":
-        result=analizer.lr_model(request)
-        context={'result':result}
+        result=analizer.linear(data)
     elif prob_type=="2" or prob_type=="3" or prob_type=="4":
-        result=analizer.t_test(request,prob_type)
-        context={"result":result}
+        result=analizer.ttest(data)
     elif prob_type=="5":
-        result=analizer.logistic_test(request)
+        result=analizer.logistic(data)
+        
+    context={"result":result}
     return render(request,'analytics/anal_result.html',context)
 
 #전처리관련
@@ -207,13 +136,31 @@ def mypage(request):
     context={"file":file_root, }
     return render(request, "mypage/mypage.html",context)
 
+
+#------------------------------농업관련 데이터 처리 부분------------------
+#데이터의 형식이나 원하는 전처리에 따라 파이프라인을 설정하는 부분
+
 def farm(request):
-    data=request.POST['jsonObject']
-    file_type=request.POST['file_type']
+    file_type=request.POST.get('file_type','기본')
     date=request.POST.get('date','0')
-    address=request.POST.get('address','광주광역시')
-    DorW=request.POST['DorW']
-    a = ETL_system(data,file_type,date,address,DorW)
+    lat=request.POST.get('lat','35')
+    lon=request.POST.get('lon','126')
+    lat_lon=[lat,lon]
+    DorW=request.POST.get('DorW','주간')
+
+    if file_type == '합치기':
+        data=request.POST.getlist('data')
+        result = ETL_system.join_data(data)
+        result_json=result.to_json(orient="records",force_ascii=False)
+        result = {
+                'result':'success',
+                'data' : result_json,
+            }
+            # Redirect to a success page.
+        return JsonResponse(result)
+        
+    data=request.POST['data']
+    a = ETL_system(data,file_type,date,lat_lon,DorW)
     result=a.ETL_stream()
     result_json=result.to_json(orient="records",force_ascii=False)
     result = {
@@ -222,15 +169,14 @@ def farm(request):
             }
             # Redirect to a success page.
     return JsonResponse(result)
-#------------------------------농업관련 데이터 처리 부분------------------
-#데이터의 형식이나 원하는 전처리에 따라 파이프라인을 설정하는 부분
+
 class ETL_system:
-    def __init__(self,data,file_type,date,address,DorW):
+    def __init__(self,data,file_type,date,lat_lon,DorW):
         b=pd.read_json(data)
         self.data = b
         self.file_type = file_type
         self.date = date
-        self.address=address
+        self.lat, self.lon=lat_lon
         self.DorW = DorW
     #객체의 file의 형식에 따라 관련 url로 이동
     # def ETL_stream(self,request):
@@ -260,16 +206,18 @@ class ETL_system:
         # work_dir = './media/' + str(file_object.file_Root)  # 저장 파일 위치 정보
         # envir = pd.read_csv(work_dir, encoding='cp949')
         date = self.date
+        lon = self.lon
+        lat = self.lat
         date = int(date)
-        address='광주광역시'
+
         # envir = pd.read_csv(work_dir+str(file_root.before_file), encoding='cp949')
         envir_date = pd.DataFrame()
         envir_date['일시'] = self.data.iloc[:,date].to_list()
-        [long,lati]=proc.geocoding(address)
+        # [long,lati]=proc.geocoding(address)
         start_month=envir_date.iloc[0,0][0:7]
         end_month=envir_date.iloc[-1,0][0:7]
         #일출일몰
-        sun = proc.get_sun(round(long),round(lati),start_month,end_month)
+        sun = proc.get_sun(round(float(lon)),round(float(lat)),start_month,end_month)
         #낮밤구분
         nd_div=proc.ND_div(sun, envir_date)
         #정오구분
@@ -284,7 +232,6 @@ class ETL_system:
         #주별데이털로 변환
             result = proc.making_weekly2(generating_data,date)
             result['날짜']=result['날짜'].astype('str')
-            print(result)
         #after저장
         else:
             result=generating_data
@@ -301,6 +248,7 @@ class ETL_system:
         date = self.date
         date = int(date)
         result=proc.making_weekly2(growth_object,date)
+        result['날짜']=result['날짜'].astype('str')
         return result
 
     #생산량데이터 처리함수
@@ -319,11 +267,20 @@ class ETL_system:
         #date_ind:날짜 데이터 열
         #d_ind:생산량 데이터 열
         result=proc.y_split(crop,date_ind,d_ind)
+        result['날짜']=result['날짜'].astype('str')
         return result
     
     #weekly함수 실행 시에 날짜의 열이름이 '날짜'로 통일되는 점을 활용, 주별데이터, 중복없는 일일데이터 가능
-    def join_data(env,prod,yld):
-        if len(env['날짜']) == len(prod['날짜']) == len(yld['날짜']):
-            env_prod=pd.merge(env,prod)
-            env_prod_yld=pd.merge(env_prod,yld)
-            return env_prod_yld
+    def join_data(x):
+        env,prod,yld=x[0],x[1],x[2]
+        env_prod=pd.merge(env,prod,left_on="날짜",right_on="날짜",how="outer")
+        env_prod_yld=pd.merge(env_prod,yld,left_on="날짜",right_on="날짜",how="outer")
+        print(env_prod_yld)
+        return env_prod_yld
+
+
+def test(request):
+    return render(request,'analytics/test.html')
+
+
+

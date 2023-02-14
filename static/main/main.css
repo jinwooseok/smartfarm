@@ -1,241 +1,150 @@
-ul,li {
-    list-style : none;
+ul,
+li {
+    list-style: none;
 }
 
-a{
-    text-decoration: none;
-}
-
-*{
+* {
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
 }
 
-/*header*/
-header {
-    z-index: 1;
-    position: fixed;
-    top: 0px;
-    left: 0;
-    width: 100%;
-    height: 80px;
-    border-bottom: 1px solid #000;
-    background-color: #FFF;
-}
-
-header .head{
-    position: relative;
-    width : 80%;
-    height : 80px;
-    margin: 0 auto;
-    padding: auto;
-}
-
-header .head .title{
-    display : inline-block;
-}
-
-header .head img{
-    position : absolute;
-    top : 7px;
-    height : 60px;
-    width : 60px;
-    opacity: 1;
-}
-
-header .head .title{
-    position : absolute;
-    left : 65px;
-    font-size : 20px;
-    color : #000;
-    line-height : 70px;
-}
-
-header .head p{
-    position :  absolute;
-    left : 170px;
-    line-height: 70px;
-    font-size: 25px;
-}
-
-header .head .bar{
-    box-sizing : border-box;
-    float : right;
-    margin :0;
-    padding : 0;
-    height: 60px;
-    margin-right: 20px;
-    z-index: 0;
-}
-
-
-header .head li {
-    font-size: 15px;
-    float : left;
-    margin-right: 20px;
-    line-height: 70px;
-    cursor: pointer;
-}
-
-header .head li a{
-    color : #000;
-}
-
-header .head .nav_button{
-    right :10px;
-    position : absolute;
-    top : 23px;
-}
-
-/* nav_bar */
-.nav_bar{
-    position :fixed;
-    top : 80px;
-    right : -500px;
-    height : 100vh;
-    width : 500px;
-    transition: ease 0.1s;
-    z-index: 100;
-    background-color: #FFF;
-}
-
-.nav_bar .item{
-    width : 500px;
-    height : 50px;
-    line-height: 50px;
-    padding-left: 20px;
-    border-bottom: 1px solid #999;
-    border-left: 1px solid #999;
-    border-right: 1px solid #999;
-}
-
-.nav_bar .tomato{
-    border-top: 1px solid #999;
-}
-
-.nav_bar a{
+a {
+    text-decoration: none;
     color: #000;
-    padding-right: 50px;
-    font-size: 30px;
 }
 
-/* nav_bar hover*/
-.nav_bar a:hover{
-    cursor: pointer;
-    color: #fff;
+.logo-box {
+    width: 100%;
+    height: 70px;
+    font-size: 0px;
 }
 
-.nav_bar .tomato:hover{
-    background-color: #ff6347
+.logo-box .logo {
+    margin-top: 3px;
+    margin-left: 2%;
 }
 
-.nav_bar .strawberry:hover{
-    background-color: #f02040
-}
+.logo-box .login {
+    text-align: center;
 
-.nav_bar .paprika:hover{
-    background-color: rgb(255, 240, 32);
-}
-
-.nav_bar .s-tomato:hover{
-    background-color: #ff6347;
-}
-
-.nav_bar .etc:hover{
-    background-color: #999;
-}
-
-/*contents*/
-.contents{
-    width : 100%;
-    height : 800px;
-    margin-top: 60px;
-    background : url() no-repeat center center;
-    background-size : cover;
-    filter : blur(0px);
-}
-
-.contents .box{
     position: relative;
-    width : 80%;
-    height : 800px;
-    margin: 0 auto;
+    top: 17px;
+
+    font-size: 0px;
+    float: right;
+    border: none;
+    border-radius: 10px;
+
+    margin-right: 2%;
+    padding-top: 3px;
+    width: 70px;
+    height: 30px;
+    background-color: #007A33;
 }
 
-.box h2{
-    position :absolute;
-    top : 40px;
-    left : 30px;
-    font-size: 40px;
+.logo-box .login a {
+    color: white;
+    font-size: 17px;
 }
 
-.box h3{
-    position :absolute;
-    top : 90px;
-    left : 30px;
-    font-size: 30px;
+.container {
+    width: 100%;
+    height: calc(85vh - 70px);
+    background: url(배경.png) no-repeat center center;
+    background-size: cover;
+
+    position: relative;
 }
 
-.box >p{
-    position :absolute;
-    top : 140px;
-    left : 30px;
-    font-size: 20px;
-    line-height: 26px;
-}
+.container .inner-container {
+    width: 700px;
+    height: 300px;
 
-/*link*/
-.link{
-    position : absolute;
-    width : 100%;
-    height: 260px;
-    left : 0px;
-    top: 480px;
-    display: flex;
-    justify-content: center;
-    background: rgba(245, 245, 245, 0.9);    
-}
-.link a{
-    flex-direction: column;
-    float : left;
-    justify-content: center;
-    align-items: center;
-    width : 200px;
-    height: 260px;
-    margin: 0 auto;
-}
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -70%);
 
-.link img{
-    width : 200px;
-    height : 200px;
-    display: inline-block;
-    margin : 20 auto;
-}
-
-.link p{
     text-align: center;
 }
 
-/* footer */
-footer{
-    border-top: 1px solid #000;
-    height: 140px;
+.container .text {
+    width: 700px;
+    height: 180px;
+    font-size: 70px;
+    margin: 0 auto;
 }
 
-footer .container{
+.container .text p {
+    color: #fff;
+    font-size: 50px;
+}
+
+.container .button-box {
+    width: 400px;
+    height: 50px;
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+    font-size: 0px;
+}
+
+.container .button-box .btn {
+    width: 130px;
+    height: 40px;
+    color: #000;
+    border-radius: 5px;
+    padding: 10px 25px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 500;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
     position: relative;
-    width : 80%;
-    height: 140px;
-    margin : 0 auto;
+    display: inline-block;
+    background-color: #FFF;
+    box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+        7px 7px 20px 0px rgba(0, 0, 0, .1),
+        4px 4px 5px 0px rgba(0, 0, 0, .1);
+    outline: none;
 }
 
-footer .container a{
-    position: absolute;
-    top: 40px;
-    left : 50px;
+.btn-16 {
+    border: none;
+    color: #000;
 }
-footer .container span{
+
+.btn-16:after {
     position: absolute;
-    top: 70px;
-    left : 50px;
+    content: "";
+    width: 0;
+    height: 100%;
+    top: 0;
+    left: 0;
+    direction: rtl;
+    z-index: -1;
+    box-shadow:
+        -7px -7px 20px 0px #fff9,
+        -4px -4px 5px 0px #fff9,
+        7px 7px 20px 0px #0002,
+        4px 4px 5px 0px #0001;
+    transition: all 0.3s ease;
+}
+
+.btn-16:hover {
+    color: #000;
+}
+
+.btn-16:hover:after {
+    left: auto;
+    right: 0;
+    width: 100%;
+}
+
+.btn-16:active {
+    top: 2px;
 }

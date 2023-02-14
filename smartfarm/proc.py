@@ -14,18 +14,18 @@ warnings.filterwarnings(action='ignore')
 
 #day to week
 from urllib.parse import urlencode, quote_plus, unquote
-from geopy.geocoders import Nominatim
+# from geopy.geocoders import Nominatim
 
 
-def geocoding(address):
-    geo_local = Nominatim(user_agent='South Korea')
-    try:
-        geo = geo_local.geocode(address)
-        x_y = [geo.latitude, geo.longitude]
-        return x_y
+# def geocoding(address):
+#     geo_local = Nominatim(user_agent='South Korea')
+#     try:
+#         geo = geo_local.geocode(address)
+#         x_y = [geo.latitude, geo.longitude]
+#         return x_y
 
-    except:
-        return [0,0]
+#     except:
+#         return [0,0]
 
 def get_sun(long, lati, st, ed):
     # 일출,일몰 크롤링 모듈
@@ -104,7 +104,6 @@ def ND_div(sun, df):
 
     for j in range(len(sun)):
         mask_dawn = (sun2.loc[j]['일출'] > df2['time']) & (sun2.loc[j]['날짜'] == df2['일시'])
-        print(mask_dawn)
         mask_afternoon = (sun2.loc[j]['일출'] < df2['time']) & (df2['time'] < sun2.loc[j]['일몰']) & (sun2.loc[j]['날짜'] == df2['일시'])
         mask_night = (sun2.loc[j]['일몰'] < df2['time']) & (sun2.loc[j]['날짜'] == df2['일시'])
         df_return.loc[mask_dawn,'div'] = '야간' 
@@ -121,7 +120,6 @@ def afternoon_div(sun, df, noon=12):
     ary = np.empty(shape=(len(df['일시']),1))
     ary[:] = np.nan
     df2['day_afternoon']=ary
-    print(df2)
     df_return = df2.copy()
     sun2['날짜']=sun2['날짜'].astype(str) # str로 타입변환
     sun2['날짜']=sun2['날짜'].replace('-','',regex=True).str[0:6]
@@ -130,11 +128,9 @@ def afternoon_div(sun, df, noon=12):
     sun2['일출'] = sun2['일출'].astype(int)
     sun2['날짜'] = sun2['날짜'].astype(int)
     df2['일시']=df2['일시'].astype(int)
-    print(sun2,df2)
     for j in range(len(sun2)):
         mask =  (sun2.loc[j]['일출'] < df2['time']) & (df2['time'] <= noon*100) & ( sun2.loc[j]['날짜'] == df2['일시'])
             # sum데이터의 월과 df의 월이 같고  일출<time<noon*12 -> 일출부터 정오
-        print(mask)
         df_return.loc[mask,'day_afternoon'] = '일출부터정오'
     
         df_return=df_return.replace(np.nan,'')
@@ -312,7 +308,6 @@ def making_weekly2(gdata,date_ind):
         date = pd.to_datetime(date)
     date1=date[0]
     while True:
-        print(date1)
         mask = (pd.to_datetime(gdata.날짜) >= date1) & (pd.to_datetime(gdata.날짜) < (date1 + pd.Timedelta(days=7)))
         g = gdata.loc[mask,:]
         g = g.iloc[:,1:]

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+{% load static %}
+<head>
+    
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+
+    <!-- css -->
+    <link rel="stylesheet" href="{% static 'analytics/test.css' %}">
+    <!-- fontawesome-->
+    <script src="https://kit.fontawesome.com/4c4b76e7c2.js" crossorigin="anonymous"></script>
+
+    <!-- spreadsheetjs -->
+    <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
+    <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
+    <script src="https://jsuites.net/v4/jsuites.js"></script>
+    <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+</head>
+
+<body>
+    <div class="side-bar">
+        <div class="logo">
+            <a href="#"><img src="../../logo.png" alt=""></a>
+        </div>
+        <div class="link">
+            <ul>
+                
+                <li>
+                    <div onclick="showBottomSheet()">
+                        <i class="fa-regular fa-folder"></i>
+                        <span>파일</span>
+                    </div>
+                    <div id="bottomSheetContainer">
+                        <div id="bottomSheet"></div></div>
+                </li>
+                <li>
+                    <i class="fa-regular fa-folder"></i>
+                    <span>처리</span>
+                </li>
+                <li>
+                    <i class="fa-regular fa-folder"></i>
+                    <span>분석</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="exx">
+        <div id="spreadsheet" class="spreadsheet"></div>
+        <input type="file" id="fileUploader" name="fileUploader" accept=".xls, .xlsx">
+        <p><button id='download'>Export my spreadsheet as CSV</button></p>
+
+        <select name="data-select" id="data_select" onclick="Select()" multiple size="4"></select>
+
+        <div class="main">
+
+            <input type="radio" id="tab-1" name="show" checked />
+            <input type="radio" id="tab-2" name="show" />
+            <input type="radio" id="tab-3" name="show" />
+            <input type="radio" id="tab-4" name="show" />
+            <div class="tab">
+                <label for="tab-1">graph</label>
+                <label for="tab-2">???</label>
+                <label for="tab-3">Textile</label>
+                <label for="tab-4">Design</label>
+            </div>
+            <div class="content">
+                <div class="content-dis">
+                    <button id="x-axis">x축</button>
+                    <button id="add">y축</button>
+                    <!-- <button id="draw">그리기</button> -->
+                    <button id="delete">삭제</button>
+                    <button id="clear">초기화</button>
+                    <div id="grim" class="grim">
+                        <canvas id="myChart" style="width : 500px; height : 300px; box-sizing: border-box;"></canvas>
+                    </div>
+                </div>
+                <div class="content-dis">
+                    Color의 body안 내용을 넣으세요.
+                </div>
+                <div class="content-dis">
+                    Textile의 body안 내용을 넣으세요.
+                </div>
+                <div class="content-dis">
+                    Design의 body안 내용을 넣으세요.
+                </div>
+            </div>
+        </div>
+        <label id="jsonObject" style="display:none"> </label>
+    </div>
+
+    <!-- js -->
+    <script src="../../../../js-library/execl/xlsx.full.min.js"></script>
+    <script src="./jquery-1.12.4.min.js"></script>
+    <script src="./chart_draw.js"></script>
+    <script src="./excel.js"></script>
+
+</body>
+<script>
+    function showBottomSheet(){
+        let container = document.querySelector('#bottomSheetContainer');
+        let bottomSheet = document.querySelector('#bottomSheetContainer #bottomSheet');
+    
+        if (container.className == "active"){
+            console.log(bottomSheet);
+            bottomSheet.classList.remove("active");
+            setTimeout(() => {container.classList.remove("active");},400);
+            return 0;
+        }
+
+        container.classList.add("active");
+        setTimeout(() => {bottomSheet.classList.add("active");},1);
+        return 0;
+    }
+
+  
+</script>
+</html>

@@ -1,28 +1,61 @@
+<!DOCTYPE html>
 {% load static %}
+<html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+
     <link rel="stylesheet" href="{% static 'users/register.css' %}">
+
 </head>
+
 <body>
-    <div>회원가입 페이지</div>
-    <div class="wrap">
-        <form action="" method="post">
+    <div class="logo-box">
+        <a href="{% url 'smartfarm:main' %}"><img src="{% static 'logo.png' %}" alt="logo" class="logo"></a>
+    </div>
+    <div class="register_wrapper">
+        <div class="regi_logo">
+            <h1>회원가입</h1>
+        </div>
+        <form action="{% url 'users:register' %}" method="post" class="regi_form">
             {% csrf_token %}
-
-            {% for form in forms %}
-            <div>
-                <label for="{{form.if_for_label}}">{{form.label}}</label> <!--label값-->
-                {{ form }} <!--widget 호출-->
+            <div class="email">
+                <input type="text" class="form_text regi_id" id="regi_id" name="regi_id" placeholder="이메일">
+                <div id="emailError" class="error"></div>
             </div>
-            {% endfor %}
+            <div class="password">
+                <input type="password" class="form_text regi_pass" id="regi_pass" name="regi_pass" placeholder="비밀번호">
+                <div id="passwordError" class="error"></div>
+            </div>
+            <div class="re_pass">
+                <input type="password" class="form_text regi_re_pass" id="regi_re_pass" placeholder="비밀번호 확인">
+                <div id="passwordCheckError" class="error"></div>
+            </div>
+            <div class="name">
+                <input type="text" class="form_text name" id="name" name="name" placeholder="이름">
+                <div id="nameError" class="error"></div>
+            </div>
+            <div class="job">
+                <input type="text" class="form_text regi_job" id="regi_job" name="regi_job" placeholder="직업">
+            </div>
+            <div class="phone">
+                <label for="phone">전화번호</label>
+                <input type="tel" class="phone1" id="phone1" name="phone" maxlength="3" pattern="[0-9]{3}"  oninput="check_phone1()">-
+                <input type="tel" class="phone2" id="phone2" name="phone" maxlength="4" pattern="[0-9]{4}"  oninput="check_phone2()">-
+                <input type="tel" class="phone3" id="phone3" name="phone" maxlength="4" pattern="[0-9]{4}" >
+            </div>
 
-            {% if error %}
-            {{ error }} <!-- error 출력 class=errorlist -->
-            {% endif %} 
-            <button type="submit" name="regiser_submit" value="register">회원가입하기</button>
-
+            <div class="btn">
+                <button class="regi_btn" id="regi_btn" type="submit" disabled >제출하기</button>
+                <button class="return" id="return" type="button">돌아가기</button>
+            </div>
         </form>
     </div>
 </body>
+<script src="{% static 'users/register.js' %}"></script>
+<script src="{% static 'jquery-1.12.4.min.js' %}"></script>
+
+</html>
