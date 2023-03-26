@@ -4,7 +4,7 @@ from .models import File_db
 from django.core.files.storage import Storage
 from django.core.files import File
 import pandas as pd
-import sqlite3
+import copy
 from users.models import User
 from django.views import View
 import numpy as np
@@ -13,7 +13,9 @@ from . import analizer,prep,proc
 from config.settings import BASE_DIR
 from django.http import JsonResponse
 import os
-from django.core.files.storage import FileSystemStorage
+from django.utils.datastructures import MultiValueDictKeyError
+from .decorators import logging_time
+
 
 #메인화면 호출. user정보를 사용
 def main(request):
@@ -25,45 +27,125 @@ def main(request):
     if id == None:
             return render(request,'main/main.html')
 
+#------------------------ management창 ------------------------
+def manage(request):
+    id = request.session.get('user')
+    if id != None:
+            user=User.objects.get(id=id)
+            file_object=File_db.objects.filter(user_id=id)
+            context={'user_name':user.user_name,
+                'files':file_object}
+            return render(request,'datamanage/manage.html',context)
+    if id == None:
+            return render(request,'datamanage/manage.html')
 
+def merge(request):
+    return render(request,'merge/merge.html')
+
+#------------------------ edit창 ------------------------
+
+def show(request,file_name):
+    id = request.session.get('user')#접속한 유저데이터 획득
+    file_object=File_db.objects.get(user_id=id,file_Title=file_name)#파일명을 유저기준으로 찾아서 저장
+    work_dir = './media/' + str(file_object.file_Root)#저장된 경로에서 파일을 꺼내옴
+    if os.path.splitext(work_dir)[1] == ".csv":#파일의 확장자를 검사
+        try:
+            data=pd.read_csv(work_dir,encoding="cp949")
+        except UnicodeDecodeError:
+            data=pd.read_csv(work_dir,encoding="utf-8")
+    else:#excel일경우 read_excel아닐경우 read_csv
+        data = pd.read_excel(work_dir, sheet_name= 0)
+    data=data.replace({np.nan: 0})#결측치를 처리해줌
+    data[data.select_dtypes(exclude=['object']).columns] = data.select_dtypes(exclude=['object']).round(decimals = 2)
+    nullCountData=pd.DataFrame(data.isnull().sum()).T
+    typeData=pd.DataFrame(data.dtypes).T
+    nullIndexData=data.apply(lambda x: x.index[x.isnull()].tolist()).T
+    nullCountData.index=["nullCount"]
+    typeData.index=["types"]
+    nullIndexData.index=["nullIndex"]
+    typeData = typeData.astype("str")
+    numData = data.describe().iloc[[1,3,4,5,6,7],:]
+    numData.index = ["mean","min","1Q","2Q","3Q","max"]
+    summary=pd.concat([nullCountData,typeData,numData,nullIndexData], ignore_index=False)
+    data_json=data.to_json(orient="records",force_ascii=False)#데이터프레임을 json배열형식으로변환(형식은 spreadsheet.js에 맞춰)
+    summary_json = summary.to_json(orient="columns",force_ascii=False)
+    context = {#파일명과 파일데이터를 폼으로 저장
+                'file':file_object,
+                'data' : data_json,
+                'summarys' : json.loads(summary_json)
+            }
+    return render(request, "show/show.html", context) #전송
 
 #------------------------업로드 및 저장관련 ------------------------
 #파일 업로드 함수
+@logging_time
 def file_uploading(request):
     id = request.session.get('user')
     if request.method == 'POST':
-        file_type=request.POST['f_type']
-        uploadedFile = request.FILES["file"]
-        file_name=str(uploadedFile).rsplit('.')[0]
-        filetitle=file_name+'_'+file_type
+        uploadedFile = request.FILES["file_input"]
+        try:
+            file_name=request.POST['upload_title']
+        except MultiValueDictKeyError:
+            file_name=str(uploadedFile)
+
+        if File_db.objects.filter(user_id=id, file_Title=file_name):
+            file_name_copy = copy.copy(file_name)
+            unique = 1
+            while File_db.objects.filter(user_id=id, file_Title=file_name_copy):
+                unique+=1
+                file_name_copy=file_name+"_"+str(unique)
+            file_name = file_name_copy
         print("----------------------",uploadedFile)
         print(uploadedFile,type(uploadedFile))
         if uploadedFile != None:
             file_form =File_db(
                 user_id=User.objects.get(id=id),
-                file_Title=filetitle,
+                file_Title=file_name,
                 file_Root=uploadedFile,
-                file_type=file_type,
             )
             file_form.save()
-        return redirect("smartfarm:mypage")
-        
+        return redirect("smartfarm:manage")
 
-def fileSave(result,object):
+@logging_time
+def fileDelete(request):
+    id = request.session.get('user')
+    files = request.POST.get('data')
+    files = json.loads(files)
+    for i in range(len(files)):
+        file_object=File_db.objects.get(user_id=id,file_Title=files[i])
+        file_object.delete()
+        os.remove('./media/' + str(file_object.file_Root))
+    result = {
+                'result':'success'
+            }
+            # Redirect to a success page.
+    return JsonResponse(result)
+
+@logging_time
+def fileSave(id, result,file_name):#결과 dataframe, object:파일경로
     #전처리 후 excel파일로 변환 > open()을 통해 이진형식 rb로 읽어야 db에 저장가능
-    file_name=str(object).rsplit('.')[0]
-    after_name=file_name+'_after'
-    after_File=result.to_excel(after_name+'.xlsx')
-    f = open(after_File,'rb')
-    file_open=File(f,name=str(after_File))
-    file_form = File_db(user_id=User.objects.get(id=id),file_Title=after_name,after_file=file_open)
+    if File_db.objects.filter(user_id=id, file_Title=file_name+".csv"):
+        file_name_copy = copy.copy(file_name)
+        unique = 1
+        while File_db.objects.filter(user_id=id, file_Title=file_name_copy+".csv"):
+            unique+=1
+            file_name_copy=file_name+"_"+str(unique)
+        file_name = file_name_copy+".csv"
+        result.to_csv(file_name)
+    else:
+        file_name = file_name+".csv"
+        result.to_csv(file_name)
+    f = open(file_name,'rb')
+    file_open=File(f,name=file_name)
+    file_form = File_db(user_id=User.objects.get(id=id),file_Title=file_name,file_Root=file_open)
     file_form.save()
+    f.close()
+    os.remove(file_name)
     return 0
-
-
 
 #-------------excel창 관련------------------------
 #작업창 호출함수
+@logging_time
 def excel(request):
     id = request.session.get('user')
     if id == None:
@@ -73,6 +155,7 @@ def excel(request):
     return render(request,'analytics/excel.html',context)
 
 #--------------파일 정보 불러오기-------------
+@logging_time
 def Summary(data):
     summary = {"null_list":[int(data[str(i)].isnull().sum()) for i in data.columns],
     "nrow":[int(len(data[str(i)])) for i in data.columns],
@@ -82,6 +165,7 @@ def Summary(data):
     result=json.dumps(summary)
     return result
 
+@logging_time
 def load_data(request):
     filename=request.POST['filename']
     file_object=File_db.objects.get(file_Title=filename)
@@ -103,6 +187,7 @@ def load_data(request):
 
 
 #분석호출함수
+@logging_time
 def probing(request):
     prob_type=request.POST.get("prob","")
     data=request.POST['data']
@@ -139,29 +224,34 @@ def mypage(request):
 
 #------------------------------농업관련 데이터 처리 부분------------------
 #데이터의 형식이나 원하는 전처리에 따라 파이프라인을 설정하는 부분
-
+@logging_time
 def farm(request):
+    id = request.session.get('user')
+    file_name=request.POST.get('file_name')
     file_type=request.POST.get('file_type','기본')
     date=request.POST.get('date','0')
     lat=request.POST.get('lat','35')
     lon=request.POST.get('lon','126')
     lat_lon=[lat,lon]
-    DorW=request.POST.get('DorW','주간')
-
-    if file_type == '합치기':
-        data=request.POST.getlist('data')
-        result = ETL_system.join_data(data)
-        result_json=result.to_json(orient="records",force_ascii=False)
-        result = {
-                'result':'success',
-                'data' : result_json,
-            }
-            # Redirect to a success page.
-        return JsonResponse(result)
-        
+    DorW=request.POST.get('DorW','days')
+    var=request.POST.get('valueObject')
+    var=json.loads(var)
     data=request.POST['data']
-    a = ETL_system(data,file_type,date,lat_lon,DorW)
+    print(var)
+    # if file_type == '합치기':
+    #     data=request.POST.getlist('data')
+    #     result = ETL_system.join_data(data)
+    #     result_json=result.to_json(orient="records",force_ascii=False)
+    #     result = {
+    #             'result':'success',
+    #             'data' : result_json,
+    #         }
+    #         # Redirect to a success page.
+    #     return JsonResponse(result)
+        
+    a = ETL_system(data,file_type,date,lat_lon,DorW,var)
     result=a.ETL_stream()
+    fileSave(id, result, file_name)
     result_json=result.to_json(orient="records",force_ascii=False)
     result = {
                 'result':'success',
@@ -170,14 +260,18 @@ def farm(request):
             # Redirect to a success page.
     return JsonResponse(result)
 
+
+
+
 class ETL_system:
-    def __init__(self,data,file_type,date,lat_lon,DorW):
+    def __init__(self,data,file_type,date,lat_lon,DorW,var):
         b=pd.read_json(data)
         self.data = b
         self.file_type = file_type
         self.date = date
         self.lat, self.lon=lat_lon
         self.DorW = DorW
+        self.var = var
     #객체의 file의 형식에 따라 관련 url로 이동
     # def ETL_stream(self,request):
     #     if request.POST['file_type'] == '환경':
@@ -209,13 +303,19 @@ class ETL_system:
         lon = self.lon
         lat = self.lat
         date = int(date)
-
         # envir = pd.read_csv(work_dir+str(file_root.before_file), encoding='cp949')
+        #하루 중 구분할 수 있는 틀
         envir_date = pd.DataFrame()
         envir_date['일시'] = self.data.iloc[:,date].to_list()
+        if type(envir_date['일시'][0]) != str:
+            self.data.iloc[:,date] = self.data.iloc[:,date].astype(str)
+            self.data.iloc[:,date] = pd.to_datetime(self.data.iloc[:,date]).astype(str)
+            envir_date['일시'] = envir_date['일시'].astype(str)
+        envir_date['일시'] = pd.to_datetime(envir_date['일시']).astype(str)
+        print(envir_date['일시'][0])
         # [long,lati]=proc.geocoding(address)
-        start_month=envir_date.iloc[0,0][0:7]
-        end_month=envir_date.iloc[-1,0][0:7]
+        start_month=str(pd.to_datetime(envir_date['일시'].iloc[0]))[0:7]
+        end_month=str(pd.to_datetime(envir_date['일시'].iloc[-1]))[0:7]
         #일출일몰
         sun = proc.get_sun(round(float(lon)),round(float(lat)),start_month,end_month)
         #낮밤구분
@@ -227,11 +327,13 @@ class ETL_system:
         t_div=proc.time_div(sun,afternoon_div, t_diff)
         t_div['일시']=t_div['일시'].astype('str')
         #일일데이터로 변환
-        generating_data=proc.generating_dailydata(self.data, date, t_div,t_diff,[3],[4],[5],[2],[6,7,9])
-        if(self.DorW=="week"):
+        generating_data=proc.generating_dailydata(self.data, date, t_div,t_diff, self.var)
+        if(self.DorW=="weeks"):
         #주별데이털로 변환
             result = proc.making_weekly2(generating_data,date)
             result['날짜']=result['날짜'].astype('str')
+        elif self.DorW!="days" and self.DorW!="weeks":
+            result = proc.making_weekly2(generating_data,date,int(self.DorW))
         #after저장
         else:
             result=generating_data

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>병합</title>
+
+    <!-- css -->
+    <link rel="stylesheet" href="./merge.css">
+
+    <!-- fontawesome-->
+    <script src="https://kit.fontawesome.com/4c4b76e7c2.js" crossorigin="anonymous"></script>
+
+    <!-- spreadsheetjs -->
+    <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
+    <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
+    <script src="https://jsuites.net/v4/jsuites.js"></script>
+    <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+</head>
+
+<body>
+    <div class="logo-box">
+        <a href="../main/main2.html"><img src="../logo.png" alt="logo" class="logo"></a>
+    </div>
+    <div class="excel">
+        <div class="show_excel">
+            <div id="spreadsheet" class="spreadsheet">
+                <input type="file" id="file_input" class="file_input" accept=".xls, .xlsx">
+                <i class="fa-solid fa-file-import" id="file_icon"></i>
+            </div>
+            <select name="data-select" class="data_select" id="data_select" onclick="Select()" multiple size="4"></select>
+            <input type="file" class="fileUploader" id="fileUploader" name="fileUploader" accept=".xls, .xlsx">
+        </div>
+    </div>
+
+    <label id="jsonObject" style="display:none"> </label>
+</body>
+
+<!-- js -->
+<script src="{% static 'jquery-1.12.4.min.js' %}"></script>
+<script src="{% static 'xlsx.full.min.js' %}"></script>
+<script src="{% static 'merge/merge.js' %}"></script>
+
+</html>

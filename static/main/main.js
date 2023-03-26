@@ -1,7 +1,7 @@
 const $merge = document.querySelector('#merge');
 
-function move_merge(){
-    location.replace("../merge/merge.html");
+function move_manage(){
+    location.href = "/manage";
 }
 
-$merge.addEventListener('click', move_merge);
+$merge.addEventListener('click', move_manage);

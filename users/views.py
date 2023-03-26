@@ -67,26 +67,37 @@ def login(request):
     #post방식을 받은 경우 로그인 유효성 인증 실시
     elif request.method == "POST":
         login_user_id=request.POST['id']
-        login_user_pw = request.POST['password']
+        login_user_pw=request.POST['password']
 
         try:
             user = User.objects.get(user_id=login_user_id)
         except User.DoesNotExist:
             user=None
-            return redirect("users:login")
+            context = {
+                'error' : '계정이 존재하지 않습니다.'
+            }
+            return render(request, 'users/login.html', context)
         
         try :
             PasswordHasher().verify(user.user_pw.encode(), login_user_pw.encode())
         except exceptions.VerifyMismatchError:
             user=None  
+            context = {
+                'error' : '비밀번호가 일치하지 않습니다.'
+            }
+            return render(request, 'users/login.html', context)
         
         if user != None:
             request.session['user'] = user.id
+        
             # Redirect to a success page.
             return redirect('/')
             
         else:
-            return redirect('users:login')
+            context = {
+                'error' : '로그인에 실패하였습니다.'
+            }
+            return render(request, 'users/login.html', context)
 
 def logout(request):
     request.session.flush()

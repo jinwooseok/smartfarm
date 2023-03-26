@@ -17,21 +17,24 @@
             <a href="{% url 'smartfarm:main' %}">전남대학교</a><br/>
             농업 빅데이터 연구실
         </div>
-        <form action="" method="post" class="login_form">
+        <form action="{% url 'users:login' %}" method="post" class="login_form">
             {% csrf_token %}
-
             <input type="text" id="id" class="id" name="id" placeholder="ID">
             <input type="password" id="password" class="password" name="password" placeholder="password">
-            <button id="login_btn" class="login_btn" type="submit" disabled>login</button>
+            {% if error %}
+                <div id="error" class="error">{{ error }}</div>
+            {% endif %}
+            <button id="login_btn" name="login_btn" class="login_btn" type="submit" disabled>login</button>
         </form>
 
         <div class="else">
             <a href="{% url 'users:register' %}" class="register">register</a>
-        
+            /
             <a href="#" class="find_pswd">find-password</a>
         </div>
     </div>
 </body>
-<script src="{% static 'users/login.js' %}"></script>
+
 <script src="{% static 'jquery-1.12.4.min.js' %}"></script>
+<script src="{% static 'users/login.js' %}"></script>
 </html>

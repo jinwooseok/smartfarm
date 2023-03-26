@@ -58,7 +58,7 @@ body {
 .login_form .password{
     width: 100%;
     height: 40px;
-    margin: 3px 0;
+    margin: 3px 0 0 0;
     padding: 0 10px;
     background-color: #FAFAFA;
     border : 1px solid #DBDBDB;
@@ -80,10 +80,18 @@ body {
     color : #262626;
 }
 
+.login_form .error{
+    color : #fb0404;
+    display : "block";
+    padding-bottom: 1px;
+    font-size: 8px;
+}
+
+
 .login_form .login_btn{
     width: 100%;
     height: 33px;
-    margin : 10px 0 5px 0;
+    margin : 3px 0 5px 0;
 
     color: white;
     background-color: #8E8E8E;

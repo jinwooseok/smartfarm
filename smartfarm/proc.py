@@ -15,7 +15,7 @@ warnings.filterwarnings(action='ignore')
 #day to week
 from urllib.parse import urlencode, quote_plus, unquote
 # from geopy.geocoders import Nominatim
-
+from .decorators import logging_time
 
 # def geocoding(address):
 #     geo_local = Nominatim(user_agent='South Korea')
@@ -26,7 +26,7 @@ from urllib.parse import urlencode, quote_plus, unquote
 
 #     except:
 #         return [0,0]
-
+@logging_time
 def get_sun(long, lati, st, ed):
     # 일출,일몰 크롤링 모듈
     #
@@ -77,7 +77,7 @@ def get_sun(long, lati, st, ed):
         })
     
     return res
-
+@logging_time
 def ND_div(sun, df):
     # 년 월 일 시간 데이터
     df2=df.copy()
@@ -112,7 +112,7 @@ def ND_div(sun, df):
 
     
     return df_return
-
+@logging_time
 def afternoon_div(sun, df, noon=12):
  # 데이터 저장
     df2=df.copy()
@@ -138,6 +138,7 @@ def afternoon_div(sun, df, noon=12):
     
     return df_return
 #t_diff:전후시간차
+@logging_time
 def time_div(sun, df, t_diff):
     ment = '일출전후'+ str(t_diff)+'시간'
     df2=df.copy()
@@ -165,6 +166,7 @@ def time_div(sun, df, t_diff):
 #date_ind:날짜가 포함된 열의 index
 #d_ind:
 #t_diff:전후시간차
+@logging_time
 def generating_variable(data, date_ind, d_ind, kind,t_diff , div_DN=False, tbase=15):        
     kind_div = []
     ment = '일출전후'+ str(t_diff)+'시간'
@@ -269,7 +271,8 @@ def generating_variable(data, date_ind, d_ind, kind,t_diff , div_DN=False, tbase
     temp_df = pd.concat([pd.DataFrame(date, columns=['날짜']),temp_df], axis=1)      
     return temp_df
 
-def generating_dailydata(df, date_ind, t_div,t_diff, intemp, hum, co2, cumsolar,elsewhere=None):
+@logging_time
+def generating_dailydata(df, date_ind, t_div, t_diff, var, elsewhere=None):
 
     #########################################
 # 최종 환경변수 데일리 데이터 생성 모듈 #
@@ -282,43 +285,65 @@ def generating_dailydata(df, date_ind, t_div,t_diff, intemp, hum, co2, cumsolar,
 # cumsolar: 누적일사량 나와있는 열 번호
 # elsewhere: 그외에 만들고 싶은 변수의 열 번호 (default=NULL)
     ment = '일출전후'+ str(t_diff)+'시간'
-    t = generating_variable(df, date_ind, intemp, ["평균",["주간","평균"], ["야간","평균"], "최소","최대","DIF","GDD",[ment,"평균"]],t_diff, t_div)
-    h = generating_variable(df, date_ind, hum, ["평균",["주간","평균"], ["야간","평균"], "최소","최대"],t_diff, t_div)
-    c = generating_variable(df, date_ind, co2, ["평균","최대","최소",["일출부터정오","평균"]],t_diff,t_div)
-    s = generating_variable(df, date_ind, cumsolar, [["주간","최대"]],t_diff, t_div)
+    for i in range(len(var)):
+        if i == 0:
+            k=list(df.columns).index(list(var[i].keys())[0])
+            v=list(var[i].values())[0]
+            full_data = generating_variable(df, date_ind, [k], v,t_diff, t_div)
+        elif i > 0:
+            k=list(df.columns).index(list(var[i].keys())[0])
+            v=list(var[i].values())[0]
+            t = generating_variable(df, date_ind, [k], v,t_diff, t_div)
+            full_data = pd.merge(full_data, t, 'right')
+        # h = generating_variable(df, date_ind, hum, ["평균",["주간","평균"], ["야간","평균"], "최소","최대"],t_diff, t_div)
+        # c = generating_variable(df, date_ind, co2, ["평균","최대","최소",["일출부터정오","평균"]],t_diff,t_div)
+        # s = generating_variable(df, date_ind, cumsolar, [["주간","최대"]],t_diff, t_div)
     
-    a1 = pd.merge(t, h,  'right')
-    a2 = pd.merge(a1, c, 'right')
-    a3 = pd.merge(a2, s, 'right')
+    
     if elsewhere is not None:
         for i in elsewhere:
             e = generating_variable(df, date_ind, [i], ["평균","최소","최대","누적","DIF","GDD"],t_diff, t_div) 
-            a3 = pd.merge(a3, e, 'right')
-    return a3
+            full_data = pd.merge(full_data, e, 'right')
+    return full_data
 
-def making_weekly2(gdata,date_ind):
+def GetWeekNumberLastDate(year, weekNumber):
+    yearFirstDate = datetime.datetime(year, 1, 1)
+    currentDate   = yearFirstDate + datetime.timedelta(weeks = weekNumber - 1)
+    targetDate    = currentDate - datetime.timedelta(days = currentDate.isoweekday() % 7 - 7)
+    return targetDate
+
+@logging_time
+def making_weekly2(gdata,date_ind,interval=7):
     gdata.rename(columns={gdata.columns[date_ind]:'날짜'},inplace=True)
     d = pd.DataFrame(columns=gdata.iloc[:,date_ind+1:].columns)
     day = []
     week = []
     i=0
-    update=0
+    weeknum=0
     date=gdata['날짜']
+    lastDate=pd.to_datetime(date.iloc[-1])
     if type(date[0]) != type(pd.to_datetime(date)):
         date = pd.to_datetime(date)
-    date1=date[0]
+    if interval == 7 :
+        import datetime
+        weeknum = datetime.datetime(date[0].year,date[0].month,date[0].day).isocalendar()[1] #첫 날짜가 몇주차인지 출력
+        date1 = pd.to_datetime(str(GetWeekNumberLastDate(date[0].year, weeknum))) #해당 주차의 마지막 날짜
+    else:
+        date1= date[0] - pd.offsets.YearBegin() # 시작 날이 포함된 년도의 1월 1일 추출 
     while True:
-        mask = (pd.to_datetime(gdata.날짜) >= date1) & (pd.to_datetime(gdata.날짜) < (date1 + pd.Timedelta(days=7)))
+        mask = (pd.to_datetime(gdata.날짜) >= date1) & (pd.to_datetime(gdata.날짜) < (date1 + pd.Timedelta(days=interval)))
         g = gdata.loc[mask,:]
-        g = g.iloc[:,1:]
-        g=g.apply('mean')
-        d.loc[i]=g
-        day.append(date1)
-        week.append(i+1)
-        i+=1
-        if date1+pd.Timedelta(days=7) > pd.to_datetime(gdata['날짜'].iloc[-1]):
+        if len(g) != 0:
+            g = g.iloc[:,1:]
+            g = g.apply('mean')
+            d.loc[i]=g
+            day.append(date1)
+            week.append(weeknum+1)
+            i+=1
+        weeknum+=1
+        if lastDate < date1+pd.Timedelta(days=interval):
             break
-        date1=date1+pd.Timedelta(days=7)
+        date1=date1+pd.Timedelta(days=interval)
     d.insert(0, '날짜', day)
     d.insert(1, 'week', week)
     return d

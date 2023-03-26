@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>데이터 관리 및 수정-page</title>
+
+    <!-- css -->
+    <link rel="stylesheet" href="{% static 'datamanage/manage.css' %}">
+
+    <!-- fontawesome-->
+    <script src="https://kit.fontawesome.com/4c4b76e7c2.js" crossorigin="anonymous"></script>
+
+    <!-- spreadsheetjs -->
+    <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
+    <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
+    <script src="https://jsuites.net/v4/jsuites.js"></script>
+    <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+</head>
+
+<body>
+    <div class="logo-box">
+        <a href="{% url 'smartfarm:main' %}"><img src="{% static 'logo.png' %}" alt="logo" class="logo"></a>
+    </div>
+
+    <div class="container" >
+        <div class="list-container" id="list-container">
+            <div class="list">
+                <input type="checkbox" class="check-all" id="check-all"> 
+                <div class="number" id="number">순서</div>
+                <div class="title">
+                    제목 
+                </div>
+                <div class="date" id="date">
+                    등록 시간 
+                </div>
+            </div>
+            {% for file in files %}
+            <div class="list">
+                <input type="checkbox" class="check">
+                <div class="number"></div>
+                <div class="title">
+                    <a href="/manage/show/{{file.file_Title}}" target="_self">
+                    {{file.file_Title}}
+                    </a>
+                </div>
+                <div class="date">
+                    {{file.created_at | date:'Y-m-d H:i'}}
+                </div>
+            </div>
+            {% endfor %}
+            
+        </div>
+        <div class="btn-wrap">
+            <button class="delete" id="delete">삭제</button>
+            <button class="merge" id="merge">병합</button>
+            <button class="upload" id="upload">등록</button>
+        </div>
+    </div>
+    
+    <dialog>
+            <form method="POST" action="{% url 'smartfarm:uploading' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="excel">
+                    <div id="spreadsheet" class="spreadsheet">
+                        <input type="file" id="file_input" class="file_input" name="file_input" accept=".xls, .xlsx">
+                        <i class="fa-solid fa-file-import" id="file_icon"></i>
+                    </div>
+                </div>
+                <input type="text" placeholder="제목을 입력하세요" id="upload_title">
+                
+                <div class="btn-wrap">
+                    <button id="confirm" class="confirm" type="submit">확인</button>
+                    <a href="{% url 'smartfarm:manage' %}">
+                        <button id="cancel" class="cancel" type="reset">취소</button>
+                    </a>
+                </div>
+        
+            <input id="jsonObject" style="display:none">
+            </form>        
+    </dialog>
+
+</body>
+
+<!-- js -->
+<script src="{% static 'jquery-1.12.4.min.js' %}"></script>
+<script src="{% static 'xlsx.full.min.js' %}"></script>
+<script src="{% static 'datamanage/manage.js' %}"></script>
+
+</html>
