@@ -10,16 +10,16 @@ urlpatterns = [
     path('',views.main, name = 'main'),
     #데이터관리 창
     path('manage/', views.manage, name='manage'),
-    path('uploading/',views.file_uploading, name='uploading'),
-    path('manage/delete/', views.fileDelete, name="fileDelete"),
+    path('uploading/',views.fileUploadView, name='uploading'),
+    path('manage/delete/', views.fileDeleteView, name="fileDelete"),
     #merge 창
     path('merge/', views.merge, name='merge'),
 
     #데이터수정 창
     path('manage/show/<str:file_name>', views.show, name='show'),
 
-    path('probing/', views.probing, name='probing'),
-    path('manage/show/loaddata/',views.load_data,name='loaddata'),
+    #path('probing/', views.probing, name='probing'),
+    path('manage/show/loaddata/',views.fileLoadView,name='loaddata'),
     path('manage/show/farm/', views.farm, name='farm'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
