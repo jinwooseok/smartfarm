@@ -1,9 +1,8 @@
 import pandas as pd
-from pandas import DataFrame
 import numpy as np
 from functools import reduce
 # Datetime
-from datetime import datetime
+import datetime
 from dateutil.relativedelta import relativedelta
 
 # Crolling
@@ -36,10 +35,10 @@ def get_sun(long, lati, st, ed):
     # ed: 끝년 끝월 "2018-06" "201806" 201806
     
     # start date
-    st_datetime = datetime.strptime(st, "%Y-%m")
+    st_datetime = datetime.datetime.strptime(st, "%Y-%m")
     
     # end date
-    ed_datetime = datetime.strptime(ed, "%Y-%m")
+    ed_datetime = datetime.datetime.strptime(ed, "%Y-%m")
     ed_datetime = ed_datetime+relativedelta(months=1)
 
     # api 서비스 키
@@ -121,9 +120,9 @@ def afternoon_div(sun, df, noon=12):
     ary[:] = np.nan
     df2['day_afternoon']=ary
     df_return = df2.copy()
-    sun2['날짜']=sun2['날짜'].astype(str) # str로 타입변환
-    sun2['날짜']=sun2['날짜'].replace('-','',regex=True).str[0:6]
-    df2['일시']=df2['일시'].str[0:6]
+    sun2['날짜'] = sun2['날짜'].astype(str) # str로 타입변환
+    sun2['날짜'] = sun2['날짜'].replace('-','',regex=True).str[0:6]
+    df2['일시'] = df2['일시'].str[0:6]
     df2['time'] = df2['time'].astype(int)
     sun2['일출'] = sun2['일출'].astype(int)
     sun2['날짜'] = sun2['날짜'].astype(int)
@@ -306,11 +305,6 @@ def generating_dailydata(df, date_ind, t_div, t_diff, var, elsewhere=None):
             full_data = pd.merge(full_data, e, 'right')
     return full_data
 
-def GetWeekNumberLastDate(year, weekNumber):
-    yearFirstDate = datetime.datetime(year, 1, 1)
-    currentDate   = yearFirstDate + datetime.timedelta(weeks = weekNumber - 1)
-    targetDate    = currentDate - datetime.timedelta(days = currentDate.isoweekday() % 7 - 7)
-    return targetDate
 
 @logging_time
 def making_weekly2(gdata,date_ind,interval=7):
@@ -322,12 +316,16 @@ def making_weekly2(gdata,date_ind,interval=7):
     weeknum=0
     date=gdata['날짜']
     lastDate=pd.to_datetime(date.iloc[-1])
-    if type(date[0]) != type(pd.to_datetime(date)):
+    if type(date[0]) != str:
+        date = date.astype('str')
+    if type(date[0]) != type(pd.to_datetime(date)[0]):
         date = pd.to_datetime(date)
     if interval == 7 :
-        import datetime
-        weeknum = datetime.datetime(date[0].year,date[0].month,date[0].day).isocalendar()[1] #첫 날짜가 몇주차인지 출력
-        date1 = pd.to_datetime(str(GetWeekNumberLastDate(date[0].year, weeknum))) #해당 주차의 마지막 날짜
+        print(date[0])
+        weeknum = int(datetime.datetime(date[0].year,date[0].month,date[0].day).strftime("%U"))
+        print(weeknum)
+        date1 = pd.to_datetime(datetime.datetime.strptime(f"{date[0].year}-W{weeknum}-1", "%G-W%V-%u")) #해당 주차의 마지막 날짜
+        print(date1)
     else:
         date1= date[0] - pd.offsets.YearBegin() # 시작 날이 포함된 년도의 1월 1일 추출 
     while True:
@@ -349,10 +347,9 @@ def making_weekly2(gdata,date_ind,interval=7):
     return d
 
 def y_split(df,date_ind,d_ind):
-        date_ind=int(date_ind)
         if df.isnull().sum != 0:
             df.dropna()
-        everyday=pd.date_range(df.iloc[0,date_ind],df.iloc[-2,date_ind])
+        everyday=pd.date_range(df.iloc[0,date_ind],df.iloc[-1,date_ind])
         df2=pd.DataFrame(everyday)
         date_temp=pd.to_datetime(df.iloc[:,date_ind])#date_temp type:datetime, serialize, 2020-11-03,...
         date1=date_temp[0]#2020-11-03  #2columns dataframe

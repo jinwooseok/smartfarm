@@ -18,13 +18,9 @@ urlpatterns = [
     #데이터수정 창
     path('manage/show/<str:file_name>', views.show, name='show'),
 
-
-    # path('CreateFile/',views.CreateFile, name="CreateFile"),
-    path('excel/',views.excel, name='excel'),
     path('probing/', views.probing, name='probing'),
-    path('excel/loaddata/',views.load_data,name='loaddata'),
+    path('manage/show/loaddata/',views.load_data,name='loaddata'),
     path('manage/show/farm/', views.farm, name='farm'),
 
-    path('test/',views.test, name='test'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

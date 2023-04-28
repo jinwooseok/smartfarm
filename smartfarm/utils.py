@@ -1,0 +1,175 @@
+from .decorators import logging_time
+import pandas as pd
+import numpy as np
+import os
+import copy
+import json
+
+from django.http import JsonResponse
+from django.shortcuts import render, HttpResponseRedirect, redirect
+#---------------모델 import---------------------
+from .models import File_db
+#---------------오류 import---------------------
+from django.utils.datastructures import MultiValueDictKeyError
+## -------------파일 처리 클래스-----------------
+from django.core.files import File
+
+class FileSystem:
+    #리퀘스트를 통한 파일처리
+    def __init__(self, request):
+        self.user = request.user
+        return 0
+    #백엔드에서 파일처리
+    def __init__(self, user):
+        self.user = user
+        return 0
+
+    #파일 업로드 함수 - 처음 파일을 등록하는 함수
+    def fileUpload(self, request):
+        if request.method == 'POST':
+            uploadedFile = request.FILES["file_input"]
+            try:
+                file_name=request.POST['upload_title']
+            except MultiValueDictKeyError:#파일 이름 미지정
+                file_name=str(uploadedFile)
+            file_name = self.fileNameCheck(self.user, file_name)
+
+            if uploadedFile != None:
+                self.fileSaveForm()
+            return 0
+    #fileDelete는 무조건 request를 통해 받아야함
+    def fileDelete(request):
+        files = request.POST.get('data')
+        files = json.loads(files)
+        for i in range(len(files)):
+            file_object=File_db.objects.get(user_id=id,file_Title=files[i])
+            file_object.delete()
+            os.remove('./media/' + str(file_object.file_Root))
+        result = {
+                    'result':'success'
+                }
+                # Redirect to a success page.
+        return result
+    #파일 저장 함수
+    def fileSave(self, id, result,file_name):#결과 dataframe, object:파일경로
+        #전처리 후 excel파일로 변환 > open()을 통해 이진형식 rb로 읽어야 db에 저장가능
+        #---------------같은 이름 파일명 처리-------------
+        file_name = self.fileNameCheck()
+        result.to_csv(file_name, index = False)
+        #--------------------------------------------------
+        f = open(file_name,'rb')
+        file_open=File(f,name=file_name)
+        self.fileSaveForm(user_id=self.user.id
+                          ,file_Title=file_name,file_Root=file_open)
+        f.close()
+        os.remove(file_name)
+        return 0
+
+    @logging_time
+    def fileLoad(request):
+        file_name=request.POST['file_name']
+        file_object=File_db.objects.get(user_id=id, file_Title=file_name)
+        work_dir = './media/' + str(file_object.file_Root)
+        if os.path.splitext(work_dir)[1] == ".csv":
+            try:
+                data=pd.read_csv(work_dir,encoding="cp949")
+            except UnicodeDecodeError:
+                data=pd.read_csv(work_dir,encoding="utf-8")
+        else:
+            data = pd.read_excel(work_dir, sheet_name= 0)
+        instance = DataProcess(data)
+        summary=instance.makeSummary()
+        #---------------json생성------------------
+        data=data.replace({np.nan: 0})
+        data_json=data.to_json(orient="records",force_ascii=False)#데이터프레임을 json배열형식으로변환(형식은 spreadsheet.js에 맞춰)
+        summary_json = summary.to_json(orient="columns",force_ascii=False)
+        context = {
+                    'result':'success',
+                    'data' : data_json,
+                    'summarys' : json.loads(summary_json)
+                }
+        return context
+    
+    #파일 저장 폼
+    def fileSaveForm(user, fileTitle, fileRoot):
+        instance = File_db(
+                    user_id=user,
+                    file_Title=fileTitle,
+                    file_Root=fileRoot,
+                )
+        instance.save()
+    #input : id, file이름 output: 중복되지 않는 파일이름
+    def fileNameCheck(id, file_name):
+        if File_db.objects.filter(user_id=id, file_Title=file_name):
+                file_name_copy = copy.copy(file_name)
+                unique = 1
+                while File_db.objects.filter(user_id=id, file_Title=file_name_copy):
+                    unique+=1
+                    file_name_copy=file_name+"_"+str(unique)
+                file_name = file_name_copy
+        return file_name
+## -------------데이터 변경 클래스-----------------
+class DataProcess:
+    def __init__(self, data, date):
+        self.data = data
+        self.date = int(date) - 1
+    def __init__(self, data):
+        self.data = data
+    #컬럼명 변경
+    def columnConverter(self, bef, aft):
+        
+        return 0
+    
+    #실수 자료를 소수점 2자리 수로 반올림
+    def roundConverter(self):
+        data = self.data
+        data[data.select_dtypes(exclude=['object']).columns] = data.select_dtypes(exclude=['object']).round(decimals = 2)
+        data[data.select_dtypes(include=['object','datetime64[ns]']).columns] = data.select_dtypes(include=['object','datetime64[ns]']).astype(str)
+
+        return 0
+    
+    #데이터 변경, 결측치,이상치 처리
+    def dataConverter(self):
+        return 0
+
+    #다양한 날짜 형식 처리, 타입 처리 전엔 항상 날짜의 형태의 문자열로 처리, 날짜 열만 따로 호출함.
+    def dateConverter(self, date):
+        dateType = type(date)
+        dateColumn = self.data[[date]]
+        if dateType == str:
+            dateColumn = pd.to_datetime(dateColumn)
+        elif dateType == int:
+            dateColumn = pd.to_datetime(dateColumn.astype(str))
+        elif dateType == "datetime64":    
+            dateColumn = pd.to_datetime(dateColumn)
+        else:
+            print("날짜 형식이 아니거나 이미 판다스 날짜 형식 입니다.")
+        return 0
+    
+    def getDate(self):
+        return self.data[[self.date]]
+    
+    def makeSummary(df):
+        nullCountData=pd.DataFrame(df.isnull().sum()).T
+        nullCountData.index=["Null_count"]
+        try:
+            numData = df.describe().iloc[[4,5,6,1,3,7],:]
+            numData.index = ["Q1","Q2","Q3","mean","min","max"]
+            summary = pd.concat([nullCountData,numData], ignore_index=False)
+            summary = summary.replace({np.nan: "-"})#결측치를 처리해줌
+            summary = summary.round(2)
+
+        except IndexError:
+            numData = pd.DataFrame(index = ["Q1","Q2","Q3","mean","min","max"], columns = df.columns)
+            summary = pd.concat([nullCountData,numData], ignore_index=False)
+            summary = summary.replace({np.nan: "-"})#결측치를 처리해줌
+        return summary
+    #함수 input과 output은 데이터프레임. json변환은 따로 따로. 초기 변환은 배치처리
+
+@staticmethod
+class JsonProcess:
+    def jsonToDf(json):
+        data = pd.DataFrame(json)
+        return data
+
+

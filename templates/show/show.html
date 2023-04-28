@@ -27,14 +27,28 @@
         <a href="{% url 'smartfarm:main' %}"><img src="{% static 'logo.png' %}" alt="logo" class="logo"></a>
     </div>
 
+    <div class="shortCut">
+      <a href="../data-manage/manage.html">관리</a>
+      <a href="./show.html">수정</a>
+      <a href="#">병합</a>
+    </div>
+
     <div class="exp-box">
-        <h3>데이터 수정</h3>
-        <p>- 변수 선택을 통해 데이터를 수정하고 저장 할 수 있습니다.</p>
+      <h3>데이터 수정</h3>
+      <p>- 변수 선택을 통해 데이터를 수정하고 저장 할 수 있습니다.</p>
+      <select name="manage_list_menu" id="manage_list_menu" class="manage_list_menu">
+        <!-- <option value=''>-- 선택 --</option>
+        {% for file in fileList %}
+          <option>{{file.file_Title}}</option>
+        {% endfor %} -->
+      </select>
     </div>
 
     <div class="excel" id="excel">
         <div id="spreadsheet" class="spreadsheet">
         </div>
+        <button id="excel_down">down-excel()</button>
+
     </div>
 
     <form method="post" id="form" onsubmit="return false;">
@@ -77,60 +91,62 @@
                     <!-- /* 엑셀 전처리 방법 */ -->
             <div class="content">
               <div class="list-container" id="list-container">
-                  <div class="list">
-                      <div class="col_name" id="col_name">
-                          열 번호
-                      </div>
-                      <div class="Null_count" id="Null_count">
-                          빈셀 수
-                      </div>
-                      <div class="Q1" id="Q1">
-                          1사분위 값
-                      </div>
-                      <div class="mean" id="mean">
-                          평균
-                      </div>
-                      <div class="Q3" id="Q3">
-                          3사분위값
-                      </div>
-                      <div class="out_range" id="out_range">
-                          이상치 범위
-                      </div>
-                      <div class="min" id="min">
-                          최소
-                      </div>
-                      <div class="max" id="max">
-                          최대
-                      </div>
-                  </div>
+                <div class="list" id="list-header">
+                    <div class="col_name" id="col_name">
+                        열 번호
+                    </div>
+                    <div class="Null_count" id="Null_count">
+                        빈셀 수
+                    </div>
+                    <div class="Q1" id="Q1">
+                        1사분위 값
+                    </div>
+                    <div class="Q2" id="Q2">
+                        중앙값
+                    </div>
+                    <div class="Q3" id="Q3">
+                        3사분위값
+                    </div>
+                    <div class="mean" id="mean">
+                        평균
+                    </div>
+                    <div class="min" id="min">
+                        최소
+                    </div>
+                    <div class="max" id="max">
+                        최대
+                    </div>
+                </div>
+                <div class="list-body" id="list-body">
                   {% for key, values in summarys.items %}
                   <div class="list">
-                      <div class="col_name" id="col_name">
-                        <a href="#" class="draw_col" id="draw_col" onclick="xxx(event)">{{key}}</a>
+                      <div class="col_name">
+                        <a href="#" class="draw_col" onclick="xxx(event)">{{key}}</a>
                       </div>
-                      <div class="Null_count" id="Null_count">
-                        {{values.nullCount}}
+                      <div class="Null_count">
+                        {{values.Null_count}}
                       </div>
-                      <div class="Q1" id="Q1">
-                        {{values.1Q}}
+                      <div class="Q1">
+                        {{values.Q1}}
                       </div>
-                      <div class="mean" id="mean">
-                        {{values.2Q}}
+                      <div class="Q2">
+                        {{values.Q2}}
                       </div>
-                      <div class="Q3" id="Q3">
-                        {{values.3Q}}
+                      <div class="Q3">
+                        {{values.Q3}}
                       </div>
-                      <div class="out_range" id="out_range">
+                      <div class="mean">
                         {{values.mean}}
                       </div>
-                      <div class="min" id="min">
+                      <div class="min">
                         {{values.min}}
                       </div>
-                      <div class="max" id="max">
-                        {{summary.max}}
+                      <div class="max">
+                        {{values.max}}
                       </div>
                   </div>
                   {% endfor %}
+                </div>
               </div>
               
               <div class="pre-out">
@@ -159,7 +175,7 @@
               <div class="date-box box-relative">
                   <div class="date center">
                       <label for="columnDate">날짜 열</label>
-                      <input type="text" name="columnDate" id="columnDate" class="columnDate" placeholder="1">
+                      <input type="text" name="columnDate" id="columnDate" class="columnDate" placeholder="첫번째 열이 1열입니다.">
 
                       <label for="periods">주기선택</label>
                       <select name="periods" id="periods" class="periods" name="periods">
@@ -236,21 +252,21 @@
                 <div class="select-wrapper">
                   <select name="ex_var2" id="ex_var2" class="ex_var2" multiple size="5">
                     <option value="전체">전체</option>
-                    <option value="주간">주간</option>
-                    <option value="야간">야간</option>
-                    <option value="일출부터정오">일출부터정오</option>
-                    <option value="일출전후t시간">일출전후t시간</option>
-                </select>
+                    <option value="주간_">주간</option>
+                    <option value="야간_">야간</option>
+                    <option value="일출부터정오_">일출부터정오</option>
+                    <option value="일출전후t시간_">일출전후t시간</option>
+                  </select>
                 </div>
                 <div class="select-wrapper">
                   <select name="ex_var3" id="ex_var3" class="ex_var3" multiple size="5">
-                    <option value="평균">평균</option>
-                    <option value="최소">최소</option>
-                    <option value="최대">최대</option>
-                    <option value="누적">누적</option>
-                    <option value="DIF">DIF</option>
-                    <option value="GDD">GDD</option>
-                </select>
+                      <option value="평균_">평균</option>
+                      <option value="최소_">최소</option>
+                      <option value="최대_">최대</option>
+                      <option value="누적_">누적</option>
+                      <option value="DIF_">DIF</option>
+                      <option value="GDD_">GDD</option>
+                  </select>
                 </div>
   
                 <div class="DeleteMove">
@@ -280,14 +296,26 @@
               </div>
             </div>
           </li>
-        </ul>
-      </div>
-    </div>
-    </form>
-    <dialog style="width : 550px; height : 500px; box-sizing: border-box;">
-      <canvas id="myChart" style="width : 500px; height : 300px; box-sizing: border-box;"></canvas>
-      <button class="close" id="close">닫기</button>
-    </dialog>
+                  <!-- tap4  -->
+          <li class="tab">
+            <input type="radio" id="tab-4" name="tab-group-1">
+            <label for="tab-4">abms</label>
+
+            <div class="content">
+                
+            </div>
+        </li>
+  </ul> 
+  </form>
+     <!-- 그래프 -->
+     <!-- 그래프 -->
+  <dialog style="width : 1000px; height : 700px; box-sizing: border-box;">
+    <canvas id="myChart"style="width : 900px; height : 650px;">
+    </canvas>
+    <button class="close" id="close">닫기</button>
+    <button class="point" id="point">point</button>
+  </dialog>
+
     <div id="jsonObjects">
         <input id="jsonObject" type="hidden" value="{{data}}"></input>
     </div>
@@ -295,7 +323,6 @@
 <!-- js -->
 <script src="{% static 'jquery-1.12.4.min.js' %}"></script>
 <script src="{% static 'xlsx.full.min.js' %}"></script>
-<!-- <script src="{% static 'show/show.js' %}"></script> -->
-<script src="{% static 'show/tab_2.js' %}"></script>
-<script src="{% static 'show/tab_3.js' %}"></script>
+<script src="{% static 'show/show.js' %}"></script>
+
 </html>

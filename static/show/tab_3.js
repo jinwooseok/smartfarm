@@ -28,13 +28,26 @@ window.onload = function () {
     },);
 }
 
-// var selectionActive = function (instance, x1, y1, x2, y2, origin) {
-//     var cellName1 = jexcel.getColumnNameFromId([x1, y1]);
-//     var cellName2 = jexcel.getColumnNameFromId([x2, y2]);
-//     console.log('The selection from ' + cellName1 + ' to ' + cellName2 + '');
-//     $('#spreadsheet').jexcel('getValue', cellName1)
-// }
-
+//excel개수는 유지하고 데이터만 변경하고 싶을 때 data는 넣을 데이터배열
+function updateExcel(data){
+    console.time("updateExcel"); // 측정 시작
+    let excel_col = []; // 엑셀 열 제목
+    array=JSON.parse(data);
+    // json 키값 저장
+    for (let i = 0; i < Object.keys(array[1]).length; i++) {
+        // select box 데이터 추가
+        $excel_var.innerHTML += `<Option value= '${Object.keys(array[0])[i]}' id='select_column'>` + Object.keys(array[0])[i] + "</option>";
+        // 엑셀 열 제목 추가 및 열 크기 지정
+        excel_col[i] = ({ title: Object.keys(array[0])[i], width: '150px' }) // "저장시간":"202206071700" 에서 저장시간 부분
+    }
+    // excel 정보
+    a=jspreadsheet($spreadsheet, {
+        data: array,
+        tableOverflow: true,
+        columns: excel_col,
+    });
+    console.timeEnd("updateExcel"); // 측정 종료
+}
 
 
 ///////////////////////////////////////////
@@ -194,6 +207,8 @@ $move.addEventListener('click', () => {
             if (CheckDuplicate(string.split('_').join(''))) {
                 $final_var[0].innerHTML += `<Option value= '${string}'>` + string.split('_').join('') + `</option>`;
                 $final_var[1].innerHTML += `<Option value= '${string}'>` + string.split('_').join('') + `</option>`;
+                text2=text2.replace('_','');
+                text3=text3.replace('_','');
                 newDataArr.push(string.split('_').join(''));
                 add_Obj(text1, text2, text3);
             }
@@ -219,7 +234,6 @@ $move.addEventListener('click', () => {
 
 })
 
-
 // 삭제 함수
 function varDelete() {
     let checked = document.querySelectorAll('#final_var :checked');
@@ -228,13 +242,18 @@ function varDelete() {
     if (selected) {
         for (let x of selected) {
             let inputValue = x.split('_');
-            newDataArr.splice(newDataArr.indexOf(inputValue.join('')), 1); // 배열 제거
-            $(`#final_var option[value='${x}']`).remove(); // check 한 값을 select-box에서 제거
+            console.log(inputValue);
             for (let i = 0; i < Object.keys(newData).length; i++) {
                 if (Object.keys(newData[i])[0] === inputValue[2]) {
                     for (let j = 0; j < newData[i][inputValue[2]].length; j++) {
+                        console.log(newData[i][inputValue[2]][j].includes(inputValue[0]));
+                        console.log(newData[i][inputValue[2]][j].includes(inputValue[1]));
                         if (newData[i][inputValue[2]][j].includes(inputValue[0]) && newData[i][inputValue[2]][j].includes(inputValue[1])) {
+                            console.log("complete");
+                            newDataArr.splice(newDataArr.indexOf(inputValue.join('')), 1); // 배열 제거
+                            $(`#final_var option[value='${x}']`).remove(); // check 한 값을 select-box에서 제거
                             newData[i][inputValue[2]].splice(j, 1); // 객체에서 제거
+                            break;
                         }
                     }
                     if(newData[i][inputValue[2]].length === 0){
@@ -247,6 +266,9 @@ function varDelete() {
         alert('삭제할 항목을 선택하세요');
     }
 }
+
+
+
 // 변수 삭제
 $optionDelete[0].addEventListener(('click'), varDelete);
 $optionDelete[1].addEventListener(('click'), varDelete);
@@ -320,6 +342,46 @@ $(function(){
                 // $('#spreadsheet1').empty();
                 // updateExcel(response.data,newnum);
                 console.timeEnd("submit_data"); // 측정 종료
+            }
+            else {                  
+        }},
+        error : function(xhr, error){
+            alert("에러입니다.");
+            console.error("error : " + error);
+        }
+    })
+})
+})
+
+let Title=JSON.parse(localStorage.getItem("title_list"));
+let $manage_list_menu = document.querySelector('#manage_list_menu');
+for(let x of Title){
+    $manage_list_menu.innerHTML += `<Option value= '${x}'>`+x+`</option>`;
+}
+
+
+//엑셀 바꾸기
+$(function(){
+    console.time("change_data"); // 측정 시작
+    $('#manage_list_menu').on('change', function() {
+        let file_name = $(this).val();
+        console.log(file_name);
+    $.ajax({
+        url:'loaddata/',
+        type:'post',
+        dataType:'json',
+        headers: {'X-CSRFToken': csrftoken},
+        data:{
+            file_name:file_name,
+        },
+        success:function(response){
+            if (response.data != null){
+                var json = $("jsonObject");
+                json.val(response.data);
+                console.log(response.data);
+                $('#spreadsheet').empty();
+                updateExcel(response.data);
+                console.timeEnd("change_data"); // 측정 종료
             }
             else {                  
         }},

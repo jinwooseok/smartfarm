@@ -34,41 +34,6 @@ var csrftoken = $('[name=csrfmiddlewaretoken]').val();
 
 // 글 추가
 function createList() {
-    // const list = document.querySelectorAll('.list');
-    // const check = document.createElement('input');
-    // check.type = 'checkbox';
-    // check.className = 'check';
-
-    // const number = document.createElement('div');
-    // number.className = 'number';
-    // number.textContent = parseInt(order) + 1;
-    // order = number.textContent
-
-    // const title = document.createElement('div');
-    // title.className = 'title';
-
-    // const link = document.createElement('a');
-    // link.href = '#';
-    // title.appendChild(link);
-    // link.textContent = $upload_title.value;
-    // $upload_title.value = '';
-
-    // let day = new Date();
-    // const date = document.createElement('div');
-    // date.className = 'date'
-    // date.textContent = day.getFullYear() + "." + parseInt(day.getMonth() + 1) + "." + day.getDate();
-
-    // //list의 자식 div로 넣기
-    // list.appendChild(check);
-    // list.appendChild(number);
-    // list.appendChild(title);
-    // list.appendChild(date);
-
-
-    // // 글 목록에 글 추가
-    // $list_container.appendChild(list);
-
-
 
     // 팝업 닫기
     $dialog.close();
@@ -78,23 +43,6 @@ function createList() {
 
     //return list;
 }
-
-//날짜 형식 변경
-// function dateFormat(){
-//     dates=document.querySelectorAll(".date");
-//     for (let i = 1; i < dates.length; i++) {
-//         console.log(dates[i].innerText);
-//         date = new Date(dates[i].innerText);
-//         console.log(date);
-//         date = date.toLocaleString();
-//         dates[i].innerText = date;
-//       }
-// }
-// function ready() {
-//     dateFormat();
-// }
-// document.addEventListener("DOMContentLoaded", ready);
-
 
 // file drag upload
 function drawExcel(evt) {
@@ -236,3 +184,11 @@ $delete.addEventListener('click', select_delete);
 
 // 전체 선택
 $check_all.addEventListener('change', Allcheck);
+
+let xx=document.querySelectorAll('.title>a');
+let title_list = []
+for(let x of xx){
+    title_list.push(x.textContent);
+    console.log(x.textContent);
+}
+localStorage.setItem("title_list", JSON.stringify(title_list));
