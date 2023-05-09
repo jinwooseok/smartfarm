@@ -1,0 +1,320 @@
+ul,
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+* :not(dialog){
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* scroll 디자인 */
+*::-webkit-scrollbar {
+    width: 3px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #999;
+}
+
+/* header */
+.header {
+    width: 95%;
+    height: 70px;
+    margin: 0 auto;
+    margin-top: 10px;
+
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header .title {
+    color: #007A33;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.header .login {
+    width: 80px;
+    height: 30px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 30px;
+
+    background-color: #007A33;
+    border-radius: 8px;
+    color: #fff;
+}
+
+/* nav */
+.nav {
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.nav .nav-item:hover {
+    transform: scale(1.2);
+    transition-duration: 0.5s;
+}
+
+.nav .nav-item a {
+    color: #888;
+}
+
+.nav .nav-item a:hover {
+    color: #000;
+}
+
+
+/* excel */
+.excel {
+    width: 85%;
+    height: 350px;
+    margin: 10px auto;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.excel .spreadsheet {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    border: 1px solid #000;
+    margin-bottom: 5px;
+
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+.excel .spreadsheet .file_drag {
+    width: 100%;
+    height: 100%;
+}
+
+.excel .spreadsheet i {
+    content: "f56f";
+    font: var(--fa-font-solid);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    font-size: 50px;
+}
+
+.excel .wrap {
+    display: inline-block;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: start;
+    align-items: center;
+
+}
+
+.excel .wrap  input[type="file"] {
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+    border: 0;
+
+    position: absolute;
+	overflow: hidden;
+	clip:rect(0,0,0,0);
+}
+
+.excel .wrap  label {
+	display: inline-block;
+	padding: .5em .75em;
+    border: 1px solid #ebebeb;
+	border-bottom-color: #e2e2e2;
+	border-radius: .25em;
+
+	color: #fff;
+	font-size: inherit;
+	line-height: normal;
+	background-color: #007A33;
+
+    vertical-align: middle;
+
+	cursor: pointer;
+}
+
+.excel .wrap .upload-name {
+    display: inline-block;
+    padding: .5em .75em;
+    border: 1px solid #ebebeb;
+    border-bottom-color: #e2e2e2;
+    border-radius: .25em;
+
+    vertical-align: middle;
+    background-color: #f5f5f5;
+
+    font-size: inherit;
+    line-height: normal;
+    
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+
+/* radio 탭 */
+.tabs {
+    position: relative;
+
+    width: 85%;
+    margin: 0 auto;
+}
+
+.tab {
+    float: left;
+    padding: 10px 0;
+}
+
+.tab label {
+    /* 탭 헤더 */
+    position: relative;
+
+    border: 1px solid #ccc;
+    padding: 8px 20px;
+
+    background: #eee;
+}
+
+.tab label:hover {
+    cursor: pointer;
+}
+
+.tab [type="radio"] {
+    display: none;
+}
+
+.tab .content {
+    position: absolute;
+
+    width: 100%;
+    height: auto;
+    top: 39px;
+    left: 0;
+    padding-bottom: 20px;
+    border: 1px solid #ccc;
+
+    background: white;
+
+    display: none;
+
+    text-align: center;
+
+    overflow-y: auto;
+}
+
+.tab [type="radio"]:checked~label {
+    border-bottom: 1px solid white;
+
+    background: white;
+
+    z-index: 2;
+    /* 선택한 탭 헤더를 앞으로 옮겨 컨텐츠 테두리 선에 가려지지 않도록 처리 */
+}
+
+.tab [type="radio"]:checked+label+.content {
+    z-index: 1;
+
+    display: block;
+}
+
+
+/* 사용 방법 tap1 */
+.tab .content .explain {
+    padding: 10px 0;
+}
+
+
+/* 엑셀 데이터 확인, tap2 */
+
+.content .list-container {
+    width: 96%;
+    height: 250px;
+    padding: 3px 0;
+    margin: 10px auto;
+    text-align: center;
+
+    border: 1px solid #000;
+
+    overflow-y: scroll;
+}
+
+.content .list-container .list {
+    width: 100%;
+    height: 30px;
+    line-height: 26px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+}
+
+.content .list-container .list:first-child {
+    border-bottom: 1px solid #999;
+    margin-bottom: 5px;
+}
+
+.content .list-container .list>*:first-child {
+    font-size: 20px;
+}
+
+.content .list-container .list>* {
+    height: 26px;
+}
+
+.content .list-container .list .col_name {
+    width: 20%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.content .list-container .list .Null_count,
+.content .list-container .list .out_range,
+.content .list-container .list .Q1,
+.content .list-container .list .mean,
+.content .list-container .list .Q3,
+.content .list-container .list .min,
+.content .list-container .list .max {
+    width: 10%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.content .list-container .list:not(:first-child)>* {
+    border-right: 1px solid #888;
+    font-size: 16px;
+    margin-top: 8px;
+}
+
+.content .list-container .list a:hover {
+    color: blue;
+}

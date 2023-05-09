@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>업로드</title>
+
+    <link rel="stylesheet" href="/templates/upload/upload.css">
+
+    <!-- spreadsheetjs -->
+    <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
+    <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
+    <script src="https://jsuites.net/v4/jsuites.js"></script>
+    <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+
+    <!-- chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+    <!-- fontawesome-->
+    <script src="https://kit.fontawesome.com/4c4b76e7c2.js" crossorigin="anonymous"></script>
+
+
+</head>
+
+<body>
+    <div class="header">
+        <a href="/" class="title">전남대학교 </br>농업 빅데이터 연구실</a>
+
+        <a href="/login" class="login">로그인</a>
+    </div>
+    <ul class="nav">
+        <li class="nav-item"><a href="/">홈</a></li>
+        <li class="nav-item"><a href="/revise">데이터 수정</a></li>
+        <li class="nav-item"><a href="/merge">데이터 통합</a></li>
+        <li class="nav-item"><a href="#">그래프 및 분석</a></li>
+        <li class="nav-item"><a href="/data_list">마이페이지</a></li>
+    </ul>
+    <div class="excel">
+        <div id="spreadsheet" class="spreadsheet">
+            <i class="fa-solid fa-file-import" id="file_icon"></i>
+            <input type="file" id="file_drag" class="file_drag" accept=".xls, .xlsx, .csv">
+
+        </div>
+
+        <div class="wrap">
+            <input type="file" id="file_input" class="file_input" accept=".xls, .xlsx, .csv">
+            <label for="file_input">업로드</label>
+            <input id="file_name" class="upload-name" value="파일선택" disabled="disabled">
+
+            <button id="excel_down" disabled>download()</button>
+        </div>
+    </div>
+
+    <ul class="tabs">
+        <!-- tap1  -->
+        <li class="tab">
+            <input type="radio" id="tab-1" name="tab-group-1" checked>
+            <label for="tab-1">사용 방법</label>
+
+            <div class="content">
+                <div class="explain">
+                    <h4>결측치 & 이상치 수정</h4>
+                    <br>
+                    <p>결측치 : 엑셀의 빈 값(NULL)을 평균값, 최빈값과 같은 값들로 처리합니다.</p>
+                    <p>엑셀에서 비어있는 칸을 처리할 방법을 고르고 저장버튼을 클릭합니다.</p>
+                    <br>
+                    <p>이상치 : 데이터 분포에서 많이 벗어난 값들을 제거합니다.</p>
+                    <p>변수를 선택하여 사용할 데이터의 범위를 지정해주고 저장버튼을 클릭합니다.</p>
+                </div>
+            </div>
+        </li>
+
+        <!-- tap2  -->
+        <li class="tab">
+            <input type="radio" id="tab-2" name="tab-group-1">
+            <label for="tab-2">결측치 & 이상치 확인</label>
+
+            <!-- /* 엑셀 전처리 방법 */ -->
+            <div class="content">
+                <div class="list-container" id="list-container">
+                    <div class="list">
+                        <div class="col_name" id="col_name">
+                            열 번호
+                        </div>
+                        <div class="Null_count" id="Null_count">
+                            결측치 수
+                        </div>
+                        <div class="out_range" id="out_range">
+                            이상치 수
+                        </div>
+                        <div class="Q1" id="Q1">
+                            1사분위 값
+                        </div>
+                        <div class="mean" id="mean">
+                            평균
+                        </div>
+                        <div class="Q3" id="Q3">
+                            3사분위값
+                        </div>
+                        <div class="min" id="min">
+                            최소
+                        </div>
+                        <div class="max" id="max">
+                            최대
+                        </div>
+                    </div>
+                    <div class="list">
+                        <div class="col_name" id="col_name">
+                            <a href="#" class="draw_col" id="draw_col" onclick="lineDraw(this.textContent)">제어온도</a>
+                        </div>
+                        <div class="Null_count" id="Null_count">
+                            결측치 수
+                        </div>
+                        <div class="out_range" id="out_range">
+                            이상치 수
+                        </div>
+                        <div class="Q1" id="Q1">
+                            1사분위 값
+                        </div>
+                        <div class="mean" id="mean">
+                            평균
+                        </div>
+                        <div class="Q3" id="Q3">
+                            3사분위값
+                        </div>
+                        <div class="min" id="min">
+                            최소
+                        </div>
+                        <div class="max" id="max">
+                            최대
+                        </div>
+                    </div>
+                    <div class="list">
+                        <div class="col_name" id="col_name">
+                            <a href="#" class="draw_col" id="draw_col" onclick="lineDraw(this.textContent)">제어습도</a>
+                        </div>
+                        <div class="Null_count" id="Null_count">
+                            결측치 수
+                        </div>
+                        <div class="out_range" id="out_range">
+                            이상치 수
+                        </div>
+                        <div class="Q1" id="Q1">
+                            1사분위 값
+                        </div>
+                        <div class="mean" id="mean">
+                            평균
+                        </div>
+                        <div class="Q3" id="Q3">
+                            3사분위값
+                        </div>
+                        <div class="min" id="min">
+                            최소
+                        </div>
+                        <div class="max" id="max">
+                            최대
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+        <!-- tap3  -->
+        <li class="tab">
+            <input type="radio" id="tab-3" name="tab-group-1">
+            <label for="tab-3">결측치 & 이상치 처리</label>
+
+            <div class="content">
+                <button id="submit_data">저장</button>
+            </div>
+        </li>
+    </ul>
+
+    <!-- 그래프 -->
+    <dialog style="width : 900px; height : 700px; box-sizing: border-box;">
+        <canvas id="myChart" style="margin: 0 auto;">
+        </canvas>
+        <button class="close" id="close">닫기</button>
+    </dialog>
+</body>
+<!-- js -->
+<script type="module" src="/templates/upload/upload.js"></script>
+<script src="/templates/upload/draw.js"></script>
+<script src="/templates/jquery-1.12.4.min.js"></script>
+<script src="/templates/xlsx.full.min.js"></script>
+
+</html>

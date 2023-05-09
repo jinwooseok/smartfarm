@@ -5,8 +5,6 @@ import os
 import copy
 import json
 
-from django.http import JsonResponse
-from django.shortcuts import render, HttpResponseRedirect, redirect
 #---------------모델 import---------------------
 from .models import File_db
 #---------------오류 import---------------------
@@ -15,15 +13,14 @@ from django.utils.datastructures import MultiValueDictKeyError
 from django.core.files import File
 
 class FileSystem:
-    #리퀘스트를 통한 파일처리
-    def __init__(self, request):
-        self.user = request.user
-        return 0
     #백엔드에서 파일처리
     def __init__(self, user):
         self.user = user
-        return 0
 
+    def getFileList(self):
+        fileList=File_db.objects.filter(user_id=self.user)
+        return fileList
+    
     #파일 업로드 함수 - 처음 파일을 등록하는 함수
     def fileUpload(self, request):
         if request.method == 'POST':
@@ -35,14 +32,15 @@ class FileSystem:
             file_name = self.fileNameCheck(self.user, file_name)
 
             if uploadedFile != None:
-                self.fileSaveForm()
+                self.fileSaveForm(user_id=self.user
+                          ,file_Title=file_name,file_Root=uploadedFile)
             return 0
     #fileDelete는 무조건 request를 통해 받아야함
-    def fileDelete(request):
+    def fileDelete(self, request):
         files = request.POST.get('data')
         files = json.loads(files)
         for i in range(len(files)):
-            file_object=File_db.objects.get(user_id=id,file_Title=files[i])
+            file_object=File_db.objects.get(user_id=self.user,file_Title=files[i])
             file_object.delete()
             os.remove('./media/' + str(file_object.file_Root))
         result = {
@@ -51,7 +49,7 @@ class FileSystem:
                 # Redirect to a success page.
         return result
     #파일 저장 함수
-    def fileSave(self, id, result,file_name):#결과 dataframe, object:파일경로
+    def fileSave(self, result,file_name):#결과 dataframe, object:파일경로
         #전처리 후 excel파일로 변환 > open()을 통해 이진형식 rb로 읽어야 db에 저장가능
         #---------------같은 이름 파일명 처리-------------
         file_name = self.fileNameCheck()
@@ -59,16 +57,15 @@ class FileSystem:
         #--------------------------------------------------
         f = open(file_name,'rb')
         file_open=File(f,name=file_name)
-        self.fileSaveForm(user_id=self.user.id
+        self.fileSaveForm(user_id=self.user
                           ,file_Title=file_name,file_Root=file_open)
         f.close()
         os.remove(file_name)
         return 0
 
-    @logging_time
-    def fileLoad(request):
-        file_name=request.POST['file_name']
-        file_object=File_db.objects.get(user_id=id, file_Title=file_name)
+    def fileLoad(self, file_name):
+        file_object=File_db.objects.get(user_id=self.user, file_Title=file_name)
+
         work_dir = './media/' + str(file_object.file_Root)
         if os.path.splitext(work_dir)[1] == ".csv":
             try:
@@ -77,8 +74,7 @@ class FileSystem:
                 data=pd.read_csv(work_dir,encoding="utf-8")
         else:
             data = pd.read_excel(work_dir, sheet_name= 0)
-        instance = DataProcess(data)
-        summary=instance.makeSummary()
+        summary=DataProcess(data).makeSummary()
         #---------------json생성------------------
         data=data.replace({np.nan: 0})
         data_json=data.to_json(orient="records",force_ascii=False)#데이터프레임을 json배열형식으로변환(형식은 spreadsheet.js에 맞춰)
@@ -91,14 +87,16 @@ class FileSystem:
         return context
     
     #파일 저장 폼
-    def fileSaveForm(user, fileTitle, fileRoot):
+    @staticmethod
+    def fileSaveForm(user_id, file_Title, file_Root):
         instance = File_db(
-                    user_id=user,
-                    file_Title=fileTitle,
-                    file_Root=fileRoot,
+                    user_id=user_id,
+                    file_Title=file_Title,
+                    file_Root=file_Root,
                 )
         instance.save()
     #input : id, file이름 output: 중복되지 않는 파일이름
+    @staticmethod
     def fileNameCheck(id, file_name):
         if File_db.objects.filter(user_id=id, file_Title=file_name):
                 file_name_copy = copy.copy(file_name)
@@ -108,11 +106,14 @@ class FileSystem:
                     file_name_copy=file_name+"_"+str(unique)
                 file_name = file_name_copy
         return file_name
+    
+
+
 ## -------------데이터 변경 클래스-----------------
 class DataProcess:
     def __init__(self, data, date):
         self.data = data
-        self.date = int(date) - 1
+        self.date = int(date)
     def __init__(self, data):
         self.data = data
     #컬럼명 변경
@@ -133,9 +134,10 @@ class DataProcess:
         return 0
 
     #다양한 날짜 형식 처리, 타입 처리 전엔 항상 날짜의 형태의 문자열로 처리, 날짜 열만 따로 호출함.
-    def dateConverter(self, date):
-        dateType = type(date)
-        dateColumn = self.data[[date]]
+    def dateConverter(self):
+        dateType = type(self.date)
+        dateColumn = self.data[[self.date]]
+        self.data[[self.date]].name = "날짜"
         if dateType == str:
             dateColumn = pd.to_datetime(dateColumn)
         elif dateType == int:
@@ -144,12 +146,13 @@ class DataProcess:
             dateColumn = pd.to_datetime(dateColumn)
         else:
             print("날짜 형식이 아니거나 이미 판다스 날짜 형식 입니다.")
-        return 0
+        return self
     
     def getDate(self):
         return self.data[[self.date]]
     
-    def makeSummary(df):
+    def makeSummary(self):
+        df = self.data
         nullCountData=pd.DataFrame(df.isnull().sum()).T
         nullCountData.index=["Null_count"]
         try:
@@ -166,6 +169,10 @@ class DataProcess:
         return summary
     #함수 input과 output은 데이터프레임. json변환은 따로 따로. 초기 변환은 배치처리
 
+    @staticmethod
+    def dataMerger(df1, df2):
+        df1 = df1.append(df2)
+        return df1
 @staticmethod
 class JsonProcess:
     def jsonToDf(json):

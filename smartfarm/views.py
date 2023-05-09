@@ -7,211 +7,82 @@ import copy
 from users.models import User
 import numpy as np
 import json
-from . import analizer,prep,proc
+from . import proc
 from config.settings import BASE_DIR
 from django.http import JsonResponse
 import os
 from django.utils.datastructures import MultiValueDictKeyError
+#-----------------------DRF import-----------------------
+from rest_framework.response import Response
+from rest_framework.views import APIView
+#-----------------------유틸리티 import-----------------------
 from .decorators import logging_time
-
+from .validators import loginValidator
+from .utils import FileSystem, DataProcess
 ##페이지 별로 필요한 request를 컨트롤
-#-----------------------메인화면 호출. user정보를 사용56
+
+#-----------------------메인화면 호출. user정보를 사용
+
 def main(request):
-    id = request.session.get('user')#session데이터불러오기
-    if id != None:
-            user=User.objects.get(id=id)
+    user = loginValidator(request)
+    if user != None:
             context={'user_name':user.user_name}
             return render(request,'main/main.html',context)
-    if id == None:
+    if user == None:
             return render(request,'main/main.html')
 
 #------------------------ management창 ------------------------
-def manage(request):
-    id = request.session.get('user')
-    if id != None:
-            user=User.objects.get(id=id)
-            file_object=File_db.objects.filter(user_id=id)
+def data_list(request):
+    user = loginValidator(request)
+    if user != None:
+            file_object=File_db.objects.filter(user_id=user.id)
             context={'user_name':user.user_name,
                 'files':file_object}
-            return render(request,'datamanage/manage.html',context)
-    if id == None:
-            return render(request,'datamanage/manage.html')
+            return render(request,'data_list/data_list.html',context)
+    if user == None:
+            return render(request,'data_list/data_list.html')
 
-def merge(request):
-    return render(request,'merge/merge.html')
-
-#파일 업로드 함수 - manage창
-@logging_time
-def file_uploading(request):
-    id = request.session.get('user')
-    if request.method == 'POST':
-        uploadedFile = request.FILES["file_input"]
-        try:
-            file_name=request.POST['upload_title']
-        except MultiValueDictKeyError:
-            file_name=str(uploadedFile)
-
-        if File_db.objects.filter(user_id=id, file_Title=file_name):
-            file_name_copy = copy.copy(file_name)
-            unique = 1
-            while File_db.objects.filter(user_id=id, file_Title=file_name_copy):
-                unique+=1
-                file_name_copy=file_name+"_"+str(unique)
-            file_name = file_name_copy
-        print("----------------------",uploadedFile)
-        print(uploadedFile,type(uploadedFile))
-        if uploadedFile != None:
-            file_form =File_db(
-                user_id=User.objects.get(id=id),
-                file_Title=file_name,
-                file_Root=uploadedFile,
-            )
-            file_form.save()
-        return redirect("smartfarm:manage")
-    
-#------------------------ show창 ------------------------
-def show(request,file_name):
-    id = request.session.get('user')#접속한 유저데이터 획득
-    file_object=File_db.objects.get(user_id=id,file_Title=file_name)#파일명을 유저기준으로 찾아서 변수로 저장
-    fileList=File_db.objects.filter(user_id=id)
-    work_dir = './media/' + str(file_object.file_Root)#저장된 경로에서 파일을 꺼내옴
-    if os.path.splitext(work_dir)[1] == ".csv":#파일의 확장자를 검사
-        try:
-            data=pd.read_csv(work_dir,encoding="cp949")
-        except UnicodeDecodeError:
-            data=pd.read_csv(work_dir,encoding="utf-8")
-    else:#excel일경우 read_excel아닐경우 read_csv
-        data = pd.read_excel(work_dir, sheet_name = 0)
-    data[data.select_dtypes(exclude=['object']).columns] = data.select_dtypes(exclude=['object']).round(decimals = 2)
-    data[data.select_dtypes(include=['object','datetime64[ns]']).columns] = data.select_dtypes(include=['object','datetime64[ns]']).astype(str)
-    #-------------열별 요약데이터 생성--------------
-    summary = makeSummary(data)
-    #----------------------------------------------
-    data=data.replace({np.nan: 0})#결측치를 처리해줌
-    data_json=data.to_json(orient="records",force_ascii=False)#데이터프레임을 json배열형식으로변환(형식은 spreadsheet.js에 맞춰)
-    summary_json = summary.to_json(orient="columns",force_ascii=False)
-    context = {#파일명과 파일데이터를 폼으로 저장
-                'data' : data_json,
-                'summarys' : json.loads(summary_json)
-            }
-    return render(request, "show/show.html", context) #전송
-
-@logging_time
-def makeSummary(df):
-    nullCountData=pd.DataFrame(df.isnull().sum()).T
-    # typeData=pd.DataFrame(data.dtypes).T
-    # nullIndexData=data.apply(lambda x: x.index[x.isnull()].tolist()).T
-    nullCountData.index=["Null_count"]
-    # typeData.index=["types"]
-    # nullIndexData.index=["nullIndex"]
-    # typeData = typeData.astype("str")
-    try:
-        numData = df.describe().iloc[[4,5,6,1,3,7],:]
-        numData.index = ["Q1","Q2","Q3","mean","min","max"]
-        summary = pd.concat([nullCountData,numData], ignore_index=False)
-        summary = summary.replace({np.nan: "-"})#결측치를 처리해줌
-        summary = summary.round(2)
-    except IndexError:
-        numData = pd.DataFrame(index = ["Q1","Q2","Q3","mean","min","max"], columns = df.columns)
-        summary = pd.concat([nullCountData,numData], ignore_index=False)
-        summary = summary.replace({np.nan: "-"})#결측치를 처리해줌
-    return summary
-
-#------------------------업로드 및 저장관련 ------------------------
+#파일 업로드 함수 - data_list창
+def fileUploadView(request):
+    user = loginValidator(request)
+    FileSystem(user).fileUpload(request)
+    return render(request, 'upload/upload.html')
 
 
-@logging_time
-def fileDelete(request):
-    id = request.session.get('user')
-    files = request.POST.get('data')
-    files = json.loads(files)
-    for i in range(len(files)):
-        file_object=File_db.objects.get(user_id=id,file_Title=files[i])
-        file_object.delete()
-        os.remove('./media/' + str(file_object.file_Root))
-    result = {
-                'result':'success'
-            }
+def fileDeleteView(request):
+    user = loginValidator(request)
+    result = FileSystem(user).fileDelete(request)
             # Redirect to a success page.
     return JsonResponse(result)
 
-@logging_time
-def fileSave(id, result,file_name):#결과 dataframe, object:파일경로
-    #전처리 후 excel파일로 변환 > open()을 통해 이진형식 rb로 읽어야 db에 저장가능
-    #---------------같은 이름 파일명 처리-------------
-    if File_db.objects.filter(user_id=id, file_Title=file_name+".csv"):
-        file_name_copy = copy.copy(file_name)
-        unique = 1
-        while File_db.objects.filter(user_id=id, file_Title=file_name_copy+".csv"):
-            unique+=1
-            file_name_copy=file_name+"_"+str(unique)
-        file_name = file_name_copy+".csv"
-        result.to_csv(file_name)
-    else:
-        file_name = file_name+".csv"
-        result.to_csv(file_name)
-    #--------------------------------------------------
-    f = open(file_name,'rb')
-    file_open=File(f,name=file_name)
-    file_form = File_db(user_id=User.objects.get(id=id),file_Title=file_name,file_Root=file_open)
-    file_form.save()
-    f.close()
-    os.remove(file_name)
-    return 0
-
-
-#--------------파일 정보 불러오기-------------
-
-@logging_time
-def load_data(request):
-    id = request.session.get('user')#접속한 유저데이터 획득
-    file_name=request.POST['file_name']
-    print(file_name)
-    file_object=File_db.objects.get(user_id=id, file_Title=file_name)
-    work_dir = './media/' + str(file_object.file_Root)
-    if os.path.splitext(work_dir)[1] == ".csv":
-        try:
-            data=pd.read_csv(work_dir,encoding="cp949")
-        except UnicodeDecodeError:
-            data=pd.read_csv(work_dir,encoding="utf-8")
-    else:
-        data = pd.read_excel(work_dir, sheet_name= 0)
-    data[data.select_dtypes(exclude=['object']).columns] = data.select_dtypes(exclude=['object']).round(decimals = 2)
-    data[data.select_dtypes(include=['object','datetime64[ns]']).columns] = data.select_dtypes(include=['object','datetime64[ns]']).astype(str)
-    summary=makeSummary(data)
-    #---------------json생성------------------
-    data=data.replace({np.nan: 0})
-    data_json=data.to_json(orient="records",force_ascii=False)#데이터프레임을 json배열형식으로변환(형식은 spreadsheet.js에 맞춰)
-    summary_json = summary.to_json(orient="columns",force_ascii=False)
-    context = {
-                'result':'success',
-                'data' : data_json,
-                'summarys' : json.loads(summary_json)
-            }
+#파일 삭제 함수 - data_list창
+    
+#------------------------ revise창 ------------------------
+def revise(request, file_name):
+    user = loginValidator(request)
+    context = FileSystem(user).fileLoad(file_name)
+    return render(request, "revise/revise.html", context) #전송
+def revise2(request):
+     user = loginValidator(request)
+     context={'user_name':user.user_name}
+     return render(request, "revise/revise.html", context)
+#--------------파일 정보 비동기 불러오기 - revise창-------------
+def fileLoadView(request):
+    user = loginValidator(request)
+    context = FileSystem(user).fileLoad(request)
     return JsonResponse(context)
 
-# #분석호출함수
-# @logging_time
-# def probing(request):
-#     prob_type=request.POST.get("prob","")
-#     data=request.POST['data']
-#     if prob_type=="1":
-#         result=analizer.linear(data)
-#     elif prob_type=="2" or prob_type=="3" or prob_type=="4":
-#         result=analizer.ttest(data)
-#     elif prob_type=="5":
-#         result=analizer.logistic(data)
-        
-#     context={"result":result}
-#     return render(request,'analytics/anal_result.html',context)
+#------------------------ merge창 ------------------------
+def merge(request):
+    user = loginValidator(request)
+    context={'user_name':user.user_name}
+    return render(request, "merge/merge.html", context) #전송
 
-#------------------마이페이지 관련 ----------------------
-def mypage(request):
-    id = request.session.get('user')
-    file_root=File_db.objects.filter(user_id=id)
-    print(file_root)
-    context={"file":file_root, }
-    return render(request, "mypage/mypage.html",context)
+#------------------------ analysis창 ------------------------
+def analysis(request):
+    user = loginValidator(request)
+    context = FileSystem(user).fileLoad(request)
+    return render(request, "show/show.html", context) #전송
 
 
 #------------------------------농업관련 데이터 처리 부분------------------
@@ -230,20 +101,10 @@ def farm(request):
     var=json.loads(var)
     data=request.POST['data']
     print(var)
-    # if file_type == '합치기':
-    #     data=request.POST.getlist('data')
-    #     result = ETL_system.join_data(data)
-    #     result_json=result.to_json(orient="records",force_ascii=False)
-    #     result = {
-    #             'result':'success',
-    #             'data' : result_json,
-    #         }
-    #         # Redirect to a success page.
-    #     return JsonResponse(result)
         
     a = ETL_system(data,file_type,date,lat_lon,DorW,var)
     result=a.ETL_stream()
-    fileSave(id, result, file_name)
+    FileSystem.fileSaveForm(id, result, file_name)
     result_json=result.to_json(orient="records",force_ascii=False)
     result = {
                 'result':'success',
@@ -280,24 +141,22 @@ class ETL_system:
     def Envir(self):
         lon = self.lon
         lat = self.lat
-        date = self.date #날짜가 포함된 열.
-        if(self.DorW=="weeks"):
+
+        dt = DataProcess(self.data, self.date)
+        if self.DorW=="weeks":
         #주별데이털로 변환
-            result = proc.making_weekly2(self.data, date)
+            result = proc.making_weekly2(dt.data, dt.date)
             result['날짜']=result['날짜'].astype('str')
         elif self.DorW == 'days':
             #시간 구별 데이터프레임 생성
             envir_date = pd.DataFrame()
-            envir_date['일시'] = self.data.iloc[:,date].to_list()
-            if type(envir_date['일시'][0]) != str:
-                self.data.iloc[:,date] = self.data.iloc[:,date].astype(str)
-                self.data.iloc[:,date] = pd.to_datetime(self.data.iloc[:,date]).astype(str)
-                envir_date['일시'] = envir_date['일시'].astype(str)
-            envir_date['일시'] = pd.to_datetime(envir_date['일시']).astype(str)
-            print(envir_date['일시'][0])
-            # [long,lati]=proc.geocoding(address)
-            start_month=str(pd.to_datetime(envir_date['일시'].iloc[0]))[0:7]
-            end_month=str(pd.to_datetime(envir_date['일시'].iloc[-1]))[0:7]
+            envir_date['날짜'] = dt.getDate()
+            
+            dt = dt.dateConverter()
+            envir_date['날짜'] = pd.to_datetime(envir_date['날짜']).astype(str)
+            
+            start_month=str(pd.to_datetime(envir_date['날짜'][0]))[0:7]
+            end_month=str(pd.to_datetime(envir_date['날짜'][-1]))[0:7]
             #일출일몰
             sun = proc.get_sun(round(float(lon)),round(float(lat)),start_month,end_month)
             #낮밤구분
@@ -307,12 +166,12 @@ class ETL_system:
             #일출일몰t시간전후
             t_diff=3
             t_div=proc.time_div(sun,afternoon_div, t_diff)
-            t_div['일시']=t_div['일시'].astype('str')
+            t_div['날짜']=t_div['날짜'].astype('str')
             #일일데이터로 변환
-            generating_data=proc.generating_dailydata(self.data, date, t_div,t_diff, self.var)
+            generating_data=proc.generating_dailydata(dt.data, dt.date, t_div,t_diff, self.var)
             result=generating_data
         else:
-            result = proc.making_weekly2(self.data, date, int(self.DorW))
+            result = proc.making_weekly2(dt.data, dt.date, int(self.DorW))
             result['날짜']=result['날짜'].astype('str')
         result['날짜']=result['날짜'].astype('str')
         return result

@@ -17,27 +17,36 @@ body {
     background-color: #fafafa;
 }
 
+/* header */
+.header{
+    width: 95%;
+    height: 70px;
+    margin: 0 auto;
+    margin-top: 10px;
+
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header .title{
+    color: #007A33;
+    font-size: 18px;
+    font-weight: bold;
+}
+
 .hide{
     display: none;
 }
 
-.logo-box{
-    width : 100%;
-    height : 70px;
-    font-size: 0px;
-}
-
-.logo-box .logo{
-    margin-top: 3px;
-    margin-left: 2%;
+.error{
+    font-size: 10px;
+    color : red;
 }
 
 .register_wrapper{
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
     width : 350px;
     height: 550px;
 
@@ -47,28 +56,41 @@ body {
 
     background-color: #FFF;
     border: 1px solid #DBDBDB;
-}
 
-.regi_logo{
-    margin: 30px 0 20px;
-    font-size: 14px;
-    font-weight: 100px;
-}
-
-.regi_form{
+    position: absolute;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.register_wrapper .regi_logo{
+    margin-bottom: 15px;
+
+    color: #007A33;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.register_wrapper  .regi_form{
     width: 280px;
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-wrap: nowrap;
+
     margin-top: 10px;
 }
 
-.email, .password, .re_pass, .name, .job{
+.email,
+.password,
+.re_pass,
+.name,
+.job{
     width: 100%;
     height: 60px;
-}
-
-.alt{
-    font-size: 10px;
 }
 
 .form_text{
@@ -82,6 +104,8 @@ body {
 
 .phone{
     display: flex;
+    flex-direction: row;
+    align-items: center;
     width: 100%;
     height: 20px;
 }
@@ -109,7 +133,7 @@ body {
 }
 
 .btn .regi_btn,
-.btn .return{
+.btn .backToLogin{
     width: 100%;
     height: 250px;
     margin-bottom: 5px;
@@ -119,4 +143,8 @@ body {
 .error{
     font-size: 10px;
     color : red;
+}
+
+.form_text::placeholder{
+    color : #000;
 }
