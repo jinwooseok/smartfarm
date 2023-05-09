@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data List</title>
+    <!-- css -->
+    <link rel="stylesheet" href="/templates/data_list/data_list.css">
+
+    <!-- fontawesome-->
+    <script src="https://kit.fontawesome.com/4c4b76e7c2.js" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+    <div class="header">
+        <a href="/" class="title">전남대학교 </br>농업 빅데이터 연구실</a>
+        {% if user_name != anonymous %}
+            <li><a href="/users/logout/" class = 'login'>로그아웃</a></li>
+        {% else %}
+            <li><a href="/users/login/" class = 'login'>로그인</a></li>
+        {% endif %}
+    </div>
+    <ul class="nav">
+        <li class="nav-item"><a href="/">홈</a></li>
+        <li class="nav-item"><a href="/revise/">데이터 수정</a></li>
+        <li class="nav-item"><a href="/merge/">데이터 통합</a></li>
+        <li class="nav-item"><a href="#">그래프 및 분석</a></li>
+        <li class="nav-item"><a href="/data_list/">마이페이지</a></li>
+    </ul>
+    <div class="explain">
+        <h3>데이터 업로드</h3>
+        <p>업로드 버튼을 통해 .xls .xlsx .csv 파일을 저장 할 수 있습니다.</p>
+    </div>
+    <div class="search_box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input id="search" type="text" placeholder="입력">
+        
+    </div>
+    <div class="list-container" id="list-container">
+        <div class="list">
+            <input type="checkbox" class="check-all" id="check-all">
+            <div class="list_title" id="listTitle">
+                파일명
+            </div>
+            <div class="date" id="date">
+                업로드 날짜
+            </div>
+            <div class="n_date" id="n_date">
+                마지막 수정 날짜
+            </div>
+        </div>
+        {% for file in files %}
+            <div class="list">
+                <input type="checkbox" class="check">
+                <div class="list_title" id="list_title">
+                    <a href="/revise/{{file.file_Title}}/">{{file.file_Title}}</a>
+                </div>
+                <div class="date" id="date">
+                    {{file.created_at | date:'Y-m-d H:i'}}
+                </div>
+                <div class="n_date" id="n_date">
+                    {{file.updated_at | date:'Y-m-d H:i'}}
+                </div>
+            </div>
+        {% endfor %}             
+    </div>
+    <div class="btn-wrap">
+        <button class="delete" id="delete">파일 삭제</button>
+        <a class="merge" id="merge" href="/merge/">파일 병합</a>
+        <a class="upload" id="upload" href="upload/">파일 업로드</a>
+    </div>
+</body>
+<!-- js -->
+<script src="/templates/data_list/data_list.js"></script>
+
+</html>

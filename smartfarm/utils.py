@@ -5,8 +5,6 @@ import os
 import copy
 import json
 
-from django.http import JsonResponse
-from django.shortcuts import render, HttpResponseRedirect, redirect
 #---------------모델 import---------------------
 from .models import File_db
 #---------------오류 import---------------------
@@ -19,6 +17,10 @@ class FileSystem:
     def __init__(self, user):
         self.user = user
 
+    def getFileList(self):
+        fileList=File_db.objects.filter(user_id=self.user)
+        return fileList
+    
     #파일 업로드 함수 - 처음 파일을 등록하는 함수
     def fileUpload(self, request):
         if request.method == 'POST':
@@ -61,10 +63,8 @@ class FileSystem:
         os.remove(file_name)
         return 0
 
-    def fileLoad(self, request):
-        file_name=request.POST['file_name']
+    def fileLoad(self, file_name):
         file_object=File_db.objects.get(user_id=self.user, file_Title=file_name)
-        fileList=File_db.objects.filter(user_id=self.user)
 
         work_dir = './media/' + str(file_object.file_Root)
         if os.path.splitext(work_dir)[1] == ".csv":
@@ -113,7 +113,7 @@ class FileSystem:
 class DataProcess:
     def __init__(self, data, date):
         self.data = data
-        self.date = int(date) - 1
+        self.date = int(date)
     def __init__(self, data):
         self.data = data
     #컬럼명 변경
@@ -134,9 +134,10 @@ class DataProcess:
         return 0
 
     #다양한 날짜 형식 처리, 타입 처리 전엔 항상 날짜의 형태의 문자열로 처리, 날짜 열만 따로 호출함.
-    def dateConverter(self, date):
-        dateType = type(date)
-        dateColumn = self.data[[date]]
+    def dateConverter(self):
+        dateType = type(self.date)
+        dateColumn = self.data[[self.date]]
+        self.data[[self.date]].name = "날짜"
         if dateType == str:
             dateColumn = pd.to_datetime(dateColumn)
         elif dateType == int:
@@ -145,12 +146,13 @@ class DataProcess:
             dateColumn = pd.to_datetime(dateColumn)
         else:
             print("날짜 형식이 아니거나 이미 판다스 날짜 형식 입니다.")
-        return 0
+        return self
     
     def getDate(self):
         return self.data[[self.date]]
     
-    def makeSummary(df):
+    def makeSummary(self):
+        df = self.data
         nullCountData=pd.DataFrame(df.isnull().sum()).T
         nullCountData.index=["Null_count"]
         try:
@@ -167,6 +169,10 @@ class DataProcess:
         return summary
     #함수 input과 output은 데이터프레임. json변환은 따로 따로. 초기 변환은 배치처리
 
+    @staticmethod
+    def dataMerger(df1, df2):
+        df1 = df1.append(df2)
+        return df1
 @staticmethod
 class JsonProcess:
     def jsonToDf(json):

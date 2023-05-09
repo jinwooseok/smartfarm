@@ -12,13 +12,17 @@ from config.settings import BASE_DIR
 from django.http import JsonResponse
 import os
 from django.utils.datastructures import MultiValueDictKeyError
+#-----------------------DRF import-----------------------
+from rest_framework.response import Response
+from rest_framework.views import APIView
 #-----------------------유틸리티 import-----------------------
 from .decorators import logging_time
 from .validators import loginValidator
 from .utils import FileSystem, DataProcess
 ##페이지 별로 필요한 request를 컨트롤
 
-#-----------------------메인화면 호출. user정보를 사용56
+#-----------------------메인화면 호출. user정보를 사용
+
 def main(request):
     user = loginValidator(request)
     if user != None:
@@ -28,24 +32,22 @@ def main(request):
             return render(request,'main/main.html')
 
 #------------------------ management창 ------------------------
-def manage(request):
+def data_list(request):
     user = loginValidator(request)
     if user != None:
             file_object=File_db.objects.filter(user_id=user.id)
             context={'user_name':user.user_name,
                 'files':file_object}
-            return render(request,'datamanage/manage.html',context)
+            return render(request,'data_list/data_list.html',context)
     if user == None:
-            return render(request,'datamanage/manage.html')
+            return render(request,'data_list/data_list.html')
 
-def merge(request):
-    return render(request,'merge/merge.html')
-
-#파일 업로드 함수 - manage창
+#파일 업로드 함수 - data_list창
 def fileUploadView(request):
     user = loginValidator(request)
     FileSystem(user).fileUpload(request)
-    return redirect("smartfarm:manage")
+    return render(request, 'upload/upload.html')
+
 
 def fileDeleteView(request):
     user = loginValidator(request)
@@ -53,19 +55,34 @@ def fileDeleteView(request):
             # Redirect to a success page.
     return JsonResponse(result)
 
-#파일 삭제 함수 - manage창
+#파일 삭제 함수 - data_list창
     
-#------------------------ show창 ------------------------
-def show(request):
+#------------------------ revise창 ------------------------
+def revise(request, file_name):
     user = loginValidator(request)
-    context = FileSystem(user).fileLoad(request)
-    return render(request, "show/show.html", context) #전송
-
-#--------------파일 정보 비동기 불러오기 - show창-------------
+    context = FileSystem(user).fileLoad(file_name)
+    return render(request, "revise/revise.html", context) #전송
+def revise2(request):
+     user = loginValidator(request)
+     context={'user_name':user.user_name}
+     return render(request, "revise/revise.html", context)
+#--------------파일 정보 비동기 불러오기 - revise창-------------
 def fileLoadView(request):
     user = loginValidator(request)
     context = FileSystem(user).fileLoad(request)
     return JsonResponse(context)
+
+#------------------------ merge창 ------------------------
+def merge(request):
+    user = loginValidator(request)
+    context={'user_name':user.user_name}
+    return render(request, "merge/merge.html", context) #전송
+
+#------------------------ analysis창 ------------------------
+def analysis(request):
+    user = loginValidator(request)
+    context = FileSystem(user).fileLoad(request)
+    return render(request, "show/show.html", context) #전송
 
 
 #------------------------------농업관련 데이터 처리 부분------------------
@@ -124,24 +141,22 @@ class ETL_system:
     def Envir(self):
         lon = self.lon
         lat = self.lat
-        date = self.date #날짜가 포함된 열.
-        if(self.DorW=="weeks"):
+
+        dt = DataProcess(self.data, self.date)
+        if self.DorW=="weeks":
         #주별데이털로 변환
-            result = proc.making_weekly2(self.data, date)
+            result = proc.making_weekly2(dt.data, dt.date)
             result['날짜']=result['날짜'].astype('str')
         elif self.DorW == 'days':
             #시간 구별 데이터프레임 생성
             envir_date = pd.DataFrame()
-            envir_date['일시'] = self.data.iloc[:,date].to_list()
-            if type(envir_date['일시'][0]) != str:
-                self.data.iloc[:,date] = self.data.iloc[:,date].astype(str)
-                self.data.iloc[:,date] = pd.to_datetime(self.data.iloc[:,date]).astype(str)
-                envir_date['일시'] = envir_date['일시'].astype(str)
-            envir_date['일시'] = pd.to_datetime(envir_date['일시']).astype(str)
-            print(envir_date['일시'][0])
-            # [long,lati]=proc.geocoding(address)
-            start_month=str(pd.to_datetime(envir_date['일시'].iloc[0]))[0:7]
-            end_month=str(pd.to_datetime(envir_date['일시'].iloc[-1]))[0:7]
+            envir_date['날짜'] = dt.getDate()
+            
+            dt = dt.dateConverter()
+            envir_date['날짜'] = pd.to_datetime(envir_date['날짜']).astype(str)
+            
+            start_month=str(pd.to_datetime(envir_date['날짜'][0]))[0:7]
+            end_month=str(pd.to_datetime(envir_date['날짜'][-1]))[0:7]
             #일출일몰
             sun = proc.get_sun(round(float(lon)),round(float(lat)),start_month,end_month)
             #낮밤구분
@@ -151,12 +166,12 @@ class ETL_system:
             #일출일몰t시간전후
             t_diff=3
             t_div=proc.time_div(sun,afternoon_div, t_diff)
-            t_div['일시']=t_div['일시'].astype('str')
+            t_div['날짜']=t_div['날짜'].astype('str')
             #일일데이터로 변환
-            generating_data=proc.generating_dailydata(self.data, date, t_div,t_diff, self.var)
+            generating_data=proc.generating_dailydata(dt.data, dt.date, t_div,t_diff, self.var)
             result=generating_data
         else:
-            result = proc.making_weekly2(self.data, date, int(self.DorW))
+            result = proc.making_weekly2(dt.data, dt.date, int(self.DorW))
             result['날짜']=result['날짜'].astype('str')
         result['날짜']=result['날짜'].astype('str')
         return result

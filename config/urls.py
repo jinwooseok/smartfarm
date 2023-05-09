@@ -18,22 +18,10 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from users.models import User
-from rest_framework import routers, serializers, viewsets
+from rest_framework import routers
 from smartfarm import views
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ['url','user_name','user_email']
-
-#viewsets
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
 router = routers.DefaultRouter()
-
-router.register(r'users',UserViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

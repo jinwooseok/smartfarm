@@ -1,0 +1,168 @@
+ul,li{
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* header */
+.header{
+    width: 95%;
+    height: 70px;
+    margin: 0 auto;
+    margin-top: 10px;
+
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header .title{
+    color: #007A33;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.header .login{
+    width: 80px;
+    height: 30px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 30px;
+
+    background-color: #007A33;
+    border-radius: 8px;
+    color: #fff;
+}
+
+/* nav */
+.nav{
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.nav .nav-item:hover{
+    transform: scale(1.2);
+    transition-duration: 0.5s;
+}
+
+.nav .nav-item a{
+    color: #888;
+}
+
+.nav .nav-item a:hover{
+    color: #000;
+}
+
+/* container */
+.container{
+    background : url(./KakaoTalk_20230423_230138175.jpg) no-repeat center center;
+    background-size : cover;
+
+    width: 100%;
+    height: 250px;
+    margin-top: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    text-align: center;
+    font-weight: bold;
+}
+
+.container .first{
+    font-size: 20px;
+}
+
+.container span{
+    color: #007A33;
+    font-size: 40px;
+}
+
+.container .second{
+    font-size: 40px;
+}
+
+.container .third{
+    font-size: 24px;
+}
+
+.container p{
+    margin:1px;
+    color: #000;
+}
+
+/* service */
+.service{
+    width: 100%;
+    height: 350px;
+    margin-top: 30px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.service .service-item{
+    width: 20%;
+    height: 230px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 9px 9px #e1e1e1;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 15px;
+    text-align: center;
+}
+
+.service .service-item .item-title{
+    font-weight: bold;
+}
+
+.service .service-item .item-content{
+    margin:10px 0;
+}
+
+.service .service-item .item-btn{
+    width: 40%;
+    height: 30px;
+
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px 3px #e1e1e1;
+
+    background-color: #007A33;
+}
+
+.service .service-item .item-btn:hover{
+    transform: scale(1.1);
+    transition-duration: 0.5s;
+    font-size: 16px;
+}
+
+.service .service-item .item-btn a{
+    color: #fff;
+}
