@@ -19,10 +19,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from users.models import User
 from rest_framework import routers
-from smartfarm import views
+from smartfarm import views, models, serializers
 
 router = routers.DefaultRouter()
 
+#router.register(r'users', views.UserViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('smartfarm.urls')),
