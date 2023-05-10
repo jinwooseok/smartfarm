@@ -3,20 +3,18 @@ from django.shortcuts import render, redirect
 from .models import File_db
 from django.core.files import File
 import pandas as pd
-import copy
 from users.models import User
-import numpy as np
 import json
 
 from . import proc
 
 from config.settings import BASE_DIR
 from django.http import JsonResponse
-import os
-from django.utils.datastructures import MultiValueDictKeyError
 #-----------------------DRF import-----------------------
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
+from .serializers import FileSerializer, UserSerializer
 #-----------------------유틸리티 import-----------------------
 from .decorators import logging_time
 from .validators import loginValidator
@@ -49,7 +47,6 @@ def fileUploadView(request):
     user = loginValidator(request)
     FileSystem(user).fileUpload(request)
     return render(request, 'upload/upload.html')
-
 
 def fileDeleteView(request):
     user = loginValidator(request)
@@ -205,6 +202,24 @@ class ETL_system:
         return env_prod_yld
     
 
+#------------------------ APIview ------------------------
+@api_view(['GET'])
+def userApiView(request, pk):
+    user = User.objects.get(pk=pk)
+    serializer = UserSerializer(user)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def fileListApiView(request):
+    fileList = File_db.objects.all()
+    serializer = FileSerializer(fileList)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def mergeApiView(request):
+    user = loginValidator(request)
+    result = FileSystem(user).fileLoad(request)
+    return Response(result)
 
 
 

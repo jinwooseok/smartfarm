@@ -299,3 +299,51 @@ $reset_data.addEventListener('click', () => {
     $final_var.innerHTML = '';
     $fileName.value = '';
 })
+
+
+//우석추가
+//농업 전처리 클래스와 연결된 함수
+$(function(){
+    console.time("submit_data"); // 측정 시작
+    $('#submit_data').click(function(){
+    
+    let file_name=$('#fileName').val();
+    let file_type=$('#file_type').val();
+    let date=$('#date').val();
+    let periods=$('#periods').val();
+    let data=$('#jsonObject').val();
+    let valueObject=JSON.stringify(newData);
+    if (periods == 'else'){
+        periods = document.getElementById('else_peri').value;
+    }
+    $.ajax({
+        url:'farm/',
+        type:'post',
+        dataType:'json',
+        headers: {'X-CSRFToken': csrftoken},
+        data:{
+            file_name:file_name,
+            file_type:file_type,
+            date:date,
+            DorW:periods,
+            data:data,
+            valueObject:valueObject,
+        },
+        success:function(response){
+            if (response.data != null){
+                // a.setHeader([정수], [문자열]);
+                console.log(response.data);
+                location.href = "../";
+                // $('#spreadsheet1').empty();
+                // updateExcel(response.data,newnum);
+                console.timeEnd("submit_data"); // 측정 종료
+            }
+            else {                  
+        }},
+        error : function(xhr, error){
+            alert("에러입니다.");
+            console.error("error : " + error);
+        }
+    })
+})
+})

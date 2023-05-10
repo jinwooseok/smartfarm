@@ -179,4 +179,6 @@ class JsonProcess:
         data = pd.DataFrame(json)
         return data
 
-
+def dataJoiner(df1, df2, left_key, right_key):
+    joinedData = pd.merge(df1, df2, left_on=left_key, right_on=right_key, how='left')
+    return joinedData

@@ -21,16 +21,13 @@ from users.models import User
 from rest_framework import routers
 from smartfarm import views, models, serializers
 
-router = routers.DefaultRouter()
 
-#router.register(r'users', views.UserViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('smartfarm.urls')),
     path('users/',include('users.urls')),
     
     path('api-auth/',include('rest_framework.urls', namespace = "rest_framework")),
-    path("api",include(router.urls)),
 ]
 
 if settings.DEBUG: 

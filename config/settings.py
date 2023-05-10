@@ -168,9 +168,8 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 #CORS 크로스 도메인 이슈 - 나중에 세부 설정할 것
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
-#rest_framework
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ]
+   'DEFAULT_AUTHENTICATION_CLASSES': (
+   'rest_framework.authentication.TokenAuthentication',
+   )
 }

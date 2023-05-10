@@ -1,10 +1,11 @@
-from django.urls import path
+from django.urls import path, include
 
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 
 app_name='smartfarm'
+
 
 urlpatterns = [
     #데이터관리 창
@@ -24,6 +25,9 @@ urlpatterns = [
     path('revise/loaddata/',views.fileLoadView,name='loaddata'),
     path('revise/farm/', views.farm, name='farm'),
 
+    path('api/users/', views.userApiView),
+    path('api/files/', views.fileListApiView),
+    path('api/merges/', views.mergeApiView),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
