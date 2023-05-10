@@ -6,11 +6,13 @@ const $phone1 = document.querySelector('#phone1');
 const $phone2 = document.querySelector('#phone2');
 const $phone3 = document.querySelector('#phone3');
 const $regi_btn = document.querySelector('#regi_btn');
-const $return = document.querySelector('#return');
+const $backToLogin = document.querySelector('#backToLogin');
 
-let check1 = false;
-let check2 = false;
-let check3 = false;
+let check1 = false; // ID
+let check2 = false; // PASSWORD
+let check3 = false; // PASSWORD 확인
+let check4 = false; // 전화번호 확인
+let check5 = false; // 이름 입력 확인
 
 // 휴대폰 번호 확인
 function check_phone1() {
@@ -36,7 +38,7 @@ $id.onkeyup = function () {
             document.querySelector('#emailError').innerHTML = "이메일이 올바르지 않습니다.";
         } else {
             document.querySelector('#emailError').innerHTML = '';
-            check1 =true;
+            check1 = true;
         }
     }
 };
@@ -53,7 +55,7 @@ $pass.onkeyup = function () {
     }
     else {
         document.querySelector('#passwordError').innerHTML = '';
-        check2=true;
+        check2 = true;
     }
 
 }
@@ -68,24 +70,41 @@ $check_pass.onkeyup = function () {
             document.querySelector('#passwordCheckError').innerHTML = "비밀번호가 동일하지 않습니다.";
         } else {
             document.querySelector('#passwordCheckError').innerHTML = "";
-            check3=true;
+            check3 = true;
         }
     }
 }
 
+// 전화번호 확인
+function check_phone() {
+    if (($phone1.value.length === 3) && ($phone2.value.length === 4) && ($phone3.value.length === 4)) {
+        check4 = true;
+    }
+}
+
+// 이름확인
+$name.onkeyup = function () {
+    if (!$name.value){
+        document.querySelector('#nameError').innerHTML = "이름을 입력하세요"
+    } else {
+        document.querySelector('#nameError').innerHTML = ""
+        check5 = true;
+    }
+}
+
 function button() {
-    switch (!(check1 && check2 && check3)) {
+    switch (!(check1 && check2 && check3 && check4 && check5)) {
         case true: $regi_btn.disabled = true; break;
         case false: $regi_btn.disabled = false; break
     }
 }
 
-function move_login(){
-    location.href="../login";
+function move_login() {
+    location.href = "../login/login.html";
 }
 
 $id.addEventListener('keyup', button);
 $pass.addEventListener('keyup', button);
 $check_pass.addEventListener('keyup', button);
 $regi_btn.addEventListener('click', move_login);
-$return.addEventListener('click', move_login);
+$backToLogin.addEventListener('click', move_login);

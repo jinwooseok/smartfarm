@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-{% load static %}
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -8,16 +7,16 @@
     <title>login</title>
 
     <!--  css  -->
-    <link rel="stylesheet" href="{% static 'users/login.css' %}">
+    <link rel="stylesheet" href="/templates/users/login.css">
     
 </head>
 <body>
     <div class="login_wrapper">
         <div class="login_logo">
-            <a href="{% url 'smartfarm:main' %}">전남대학교</a><br/>
+            <a href="/">전남대학교</a><br/>
             농업 빅데이터 연구실
         </div>
-        <form action="{% url 'users:login' %}" method="post" class="login_form">
+        <form action="/users/login/" method="post" class="login_form">
             {% csrf_token %}
             <input type="text" id="id" class="id" name="id" placeholder="ID">
             <input type="password" id="password" class="password" name="password" placeholder="password">
@@ -35,6 +34,6 @@
     </div>
 </body>
 
-<script src="{% static 'jquery-1.12.4.min.js' %}"></script>
-<script src="{% static 'users/login.js' %}"></script>
+<script src="/templates/jquery-1.12.4.min.js"></script>
+<script src="/templates/users/login.js"></script>
 </html>

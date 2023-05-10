@@ -7,19 +7,23 @@ from django.conf.urls.static import static
 app_name='smartfarm'
 
 urlpatterns = [
-    path('',views.main, name = 'main'),
     #데이터관리 창
-    path('manage/', views.manage, name='manage'),
-    path('uploading/',views.file_uploading, name='uploading'),
-    path('manage/delete/', views.fileDelete, name="fileDelete"),
+    path('', views.main, name='main'),
+    path('data_list/', views.data_list, name='data_list'),
+    path('data_list/upload/',views.fileUploadView, name='upload'),
+    path('data_list/delete/', views.fileDeleteView, name="fileDelete"),
     #merge 창
     path('merge/', views.merge, name='merge'),
 
     #데이터수정 창
-    path('manage/show/<str:file_name>', views.show, name='show'),
+    path('revise/<str:file_name>/', views.revise, name='revise'),
+    path('revise/', views.revise2, name='revise2'),
 
-    path('manage/show/loaddata/',views.load_data,name='loaddata'),
-    path('manage/show/farm/', views.farm, name='farm'),
+
+    #path('probing/', views.probing, name='probing'),
+    path('revise/loaddata/',views.fileLoadView,name='loaddata'),
+    path('revise/farm/', views.farm, name='farm'),
+
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

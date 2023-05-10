@@ -16,6 +16,7 @@ from urllib.parse import urlencode, quote_plus, unquote
 # from geopy.geocoders import Nominatim
 from .decorators import logging_time
 
+from  .utils import DataProcess
 # def geocoding(address):
 #     geo_local = Nominatim(user_agent='South Korea')
 #     try:
@@ -81,25 +82,23 @@ def ND_div(sun, df):
     # 년 월 일 시간 데이터
     df2=df.copy()
     sun2=sun.copy()
-    df_split=df['일시'].str.split(" ", expand=True) # 데이터를 연도와 시간으로 분리
-    df2['일시']=df_split[0].replace('-','',regex=True) # '-' 제거 
+    df_split=df['날짜'].str.split(" ", expand=True) # 데이터를 연도와 시간으로 분리
+    df2['날짜']=df_split[0].replace('-','',regex=True) # '-' 제거 
     df2['time']=pd.to_numeric(df_split[1].replace(':','',regex=True)) # ':' 제거 후 int로 타입변환
     
     # 크롤링 데이터
     sun2.dtypes
-    sun2['일출']=sun2['일출'].astype(int) # int로 타입변환
-    sun2['일몰']=sun2['일몰'].astype(int) # int로 타입변환
+    sun2[['일출','일몰']]=sun2[['일출','일몰']].astype(int) # int로 타입변환
     sun2['날짜']=sun2['날짜'].astype(str) # str로 타입변환
     sun2['날짜']=sun2['날짜'].replace('-','',regex=True).str[0:6]
     # 전날 밤, 주간, 야간 구분
-    ary = np.empty(shape=(len(df['일시']),3))
-    ary[:] = np.nan
+    ary = np.empty(shape=(len(df['날짜']),3))
 
     df_return = pd.DataFrame(ary)
-    df_return.columns = ['일시','time','div']
-    df_return.iloc[:,0]=df2['일시']
+    df_return.columns = ['날짜','time','div']
+    df_return.iloc[:,0]=df2['날짜']
     df_return.iloc[:,1]=df2['time']
-    df2['일시']=df2['일시'].str[0:6]
+    df2['날짜']=df2['날짜'].str[0:6]
 
     for j in range(len(sun)):
         mask_dawn = (sun2.loc[j]['일출'] > df2['time']) & (sun2.loc[j]['날짜'] == df2['일시'])
@@ -116,8 +115,7 @@ def afternoon_div(sun, df, noon=12):
  # 데이터 저장
     df2=df.copy()
     sun2=sun.copy()
-    ary = np.empty(shape=(len(df['일시']),1))
-    ary[:] = np.nan
+    ary = np.empty(shape=(len(df['날짜']),1))
     df2['day_afternoon']=ary
     df_return = df2.copy()
     sun2['날짜'] = sun2['날짜'].astype(str) # str로 타입변환
@@ -273,16 +271,6 @@ def generating_variable(data, date_ind, d_ind, kind,t_diff , div_DN=False, tbase
 @logging_time
 def generating_dailydata(df, date_ind, t_div, t_diff, var, elsewhere=None):
 
-    #########################################
-# 최종 환경변수 데일리 데이터 생성 모듈 #
-#########################################
-# data: 시간 단위 데이터
-# date_ind: 일시 나와있는 열 번호
-# intemp: 내부온도 나와있는 열 번호
-# hum: 습도 나와있는 열 번호
-# co2: CO2 나와있는 열 번호
-# cumsolar: 누적일사량 나와있는 열 번호
-# elsewhere: 그외에 만들고 싶은 변수의 열 번호 (default=NULL)
     ment = '일출전후'+ str(t_diff)+'시간'
     for i in range(len(var)):
         if i == 0:
@@ -308,7 +296,6 @@ def generating_dailydata(df, date_ind, t_div, t_diff, var, elsewhere=None):
 
 @logging_time
 def making_weekly2(gdata,date_ind,interval=7):
-    gdata.rename(columns={gdata.columns[date_ind]:'날짜'},inplace=True)
     d = pd.DataFrame(columns=gdata.iloc[:,date_ind+1:].columns)
     day = []
     week = []

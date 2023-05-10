@@ -1,0 +1,302 @@
+ul,
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* scroll 디자인 */
+*::-webkit-scrollbar{
+    width : 3px;
+}
+*::-webkit-scrollbar-thumb{
+    background-color: #999;
+}
+
+/* header */
+.header {
+    width: 95%;
+    height: 70px;
+    margin: 0 auto;
+    margin-top: 10px;
+
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header .title {
+    color: #007A33;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.header .login {
+    width: 80px;
+    height: 30px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 30px;
+
+    background-color: #007A33;
+    border-radius: 8px;
+    color: #fff;
+}
+
+/* nav */
+.nav {
+    width: 100%;
+    height: auto;
+
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.nav .nav-item:hover {
+    transform: scale(1.2);
+    transition-duration: 0.5s;
+}
+
+.nav .nav-item a {
+    color: #888;
+}
+
+.nav .nav-item a:hover {
+    color: #000;
+}
+
+/* excel */
+.excel {
+    width: 85%;
+    height: 350px;
+    margin: 10px auto;
+    margin-bottom: 0px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.excel .spreadsheet {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    border: 1px solid #000;
+    margin-bottom: 5px;
+
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+/* radio 탭 */
+.tabs {
+    position: relative;
+
+    width:85%;
+    margin: 0 auto;
+}
+
+.tab {
+    float: left;
+    padding: 10px 0;
+}
+
+.tab>label {
+    /* 탭 헤더 */
+    position: relative;
+
+    border: 1px solid #ccc;
+    padding: 8px 20px;
+
+    background: #eee;
+}
+
+.tab label:hover {
+    cursor: pointer;
+}
+
+.tab [name="tab-group-1"] {
+    display: none;
+}
+
+.tab .content {
+    position: absolute;
+
+    width: 100%;
+    height: auto;
+    top: 39px;
+    left: 0;
+    padding-bottom: 20px;
+    border: 1px solid #ccc;
+
+    background: white;
+
+    display: none;
+
+    text-align: center;
+
+    overflow-y: auto;
+}
+
+.tab [name="tab-group-1"]:checked~label {
+    border-bottom: 1px solid white;
+    
+    background: white;
+    
+    z-index: 2;
+    /* 선택한 탭 헤더를 앞으로 옮겨 컨텐츠 테두리 선에 가려지지 않도록 처리 */
+}
+
+.tab [name="tab-group-1"]:checked+label+.content {
+    z-index: 1;
+
+    display: block;
+}
+
+/* 사용 방법 tap1 */
+.tab .content .explain {
+    padding: 10px 0;
+}
+
+/* tap2 */
+.tab [name="tab-group-1"]:checked+label+.flex{
+    height: 230px;
+    padding-top: 20px;
+
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+}
+
+/* 기간 및 열 지정 */
+.date-container{
+    width: 20%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+
+}
+
+.date-container .columnDate-container,
+.date-container .peri-container{
+    width: 60%;
+    height: 20px;
+}
+
+.date-container >:first-child{
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+.columnDate-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.date-container .peri-container .else_peri{
+    width: 100%;
+}
+
+/* 변수 선택 창 */
+.variables-container{
+    width: 60%;
+    height: 100%;
+    position: relative;
+    text-align: center;
+}
+
+/* 난이도 선택 */
+input[name="level"] {
+    display: none;
+}
+
+.variables-container>label {
+    display: inline-block;
+    margin: 0 15px;
+}
+
+.box {
+    width: 100%;
+
+    display: none;
+
+    position: absolute;
+    top: 60px;
+}
+
+label:hover {
+    border-bottom: 2px solid #000;
+}
+
+input[name="level"]:checked+label {
+    border-bottom: 2px solid #007A33;
+    cursor: default;
+}
+
+input[name="level"]:checked+label+.box{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+/* easyVersion */
+.easyVersion >*:not(:last-child){
+    margin-right: 15px;
+}
+
+.easyVersion >*:not(button){
+    flex-shrink : 0;
+    width: 25%;
+}
+
+/* hardVersion */
+.hardVersion >*:not(:last-child){
+    margin-right: 10px;
+}
+
+.hardVersion >*:not(button){
+    flex-shrink : 0;
+    width: 15%;
+}
+
+.hardVersion .final_var{
+    flex-shrink : 0;
+    width: 25%;
+}
+
+/* 파일 저장 */
+
+.fileSave-container{
+    width: 20%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+.fileSave-container >*:not(:nth-child(2)){
+    margin-top: 30px;
+}
