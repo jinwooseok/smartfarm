@@ -18,7 +18,6 @@ urlpatterns = [
     #데이터수정 창
     path('manage/show/<str:file_name>', views.show, name='show'),
 
-    path('probing/', views.probing, name='probing'),
     path('manage/show/loaddata/',views.load_data,name='loaddata'),
     path('manage/show/farm/', views.farm, name='farm'),
 

@@ -7,7 +7,7 @@ import copy
 from users.models import User
 import numpy as np
 import json
-from . import analizer,prep,proc
+from . import analizer, proc
 from config.settings import BASE_DIR
 from django.http import JsonResponse
 import os
