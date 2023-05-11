@@ -27,7 +27,7 @@ urlpatterns = [
 
     path('api/users/', views.userApiView),
     path('api/files/', views.fileListApiView),
-    path('api/merges/', views.mergeApiView),
+
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

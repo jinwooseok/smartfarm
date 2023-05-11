@@ -204,22 +204,17 @@ class ETL_system:
 
 #------------------------ APIview ------------------------
 @api_view(['GET'])
-def userApiView(request, pk):
-    user = User.objects.get(pk=pk)
-    serializer = UserSerializer(user)
+def userApiView(request):
+    user = User.objects.all()
+    serializer = UserSerializer(user, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 def fileListApiView(request):
     fileList = File_db.objects.all()
-    serializer = FileSerializer(fileList)
+    serializer = FileSerializer(fileList, many=True)
     return Response(serializer.data)
 
-@api_view(['GET'])
-def mergeApiView(request):
-    user = loginValidator(request)
-    result = FileSystem(user).fileLoad(request)
-    return Response(result)
 
 
 
