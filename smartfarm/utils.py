@@ -63,7 +63,8 @@ class FileSystem:
         os.remove(file_name)
         return 0
 
-    def fileLoad(self, file_name):
+    def fileLoad(self, request):
+        request.POST.get('file_name')
         file_object=File_db.objects.get(user_id=self.user, file_Title=file_name)
 
         work_dir = './media/' + str(file_object.file_Root)
