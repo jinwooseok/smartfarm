@@ -38,9 +38,10 @@ $var2.addEventListener('click', (event) =>{
 
 $merge_button.addEventListener('click', () => {
     alert(`${var1_text}과 ${var2_text}를 기준으로 병합합니다.`)
-    isData=true;
-    if(isData){
-        document.querySelector('#download').disabled = false;
-    }
+    // ajax로 성공시 밑 실행
+    // isData=true;
+    // if(isData){
+    //     document.querySelector('#download').disabled = false;
+    // }
 })
 

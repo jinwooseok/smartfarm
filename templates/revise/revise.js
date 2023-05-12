@@ -1,4 +1,4 @@
-import {Excel} from '/templates/excel_show.mjs'
+import { Excel } from '/templates/excel_show.mjs'
 
 const csrftoken = $('[name=csrfmiddlewaretoken]').val(); // csrftoken
 
@@ -23,16 +23,16 @@ const $excel_down = document.querySelector('#excel_down'); // 파일 다운
 let data;
 let excel_arr;
 
-window.onload = () =>{
+window.onload = () => {
     data = new Excel(excel_data, $spreadsheet);
     excel_arr = Object.keys(data.getData()[0]);
-    for(let x of excel_arr){
+    for (let x of excel_arr) {
         $excel_var.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
     }
 }
 
 // downToCSV //////////////////////////////////////////////////
-$excel_down.addEventListener('click', ()=>{
+$excel_down.addEventListener('click', () => {
     data.download(newData);
 });
 
@@ -84,7 +84,7 @@ const $default_select = document.querySelector('#default_select'); // 디폴트 
 const $default_value = document.querySelector('#default_value'); // 디폴트 선택 값에 따른 변수 select box
 const $final_var = document.querySelectorAll('#final_var'); // 마지막 select-box [0]은 쉬운 버전, [1]은 어려운 버전 박스
 
-let excel_var_text='';
+let excel_var_text = '';
 $excel_var.addEventListener('click', (event) => {
     excel_var_text = event.target.textContent;
 })
@@ -92,7 +92,7 @@ $excel_var.addEventListener('click', (event) => {
 // 디폴드 선택에 따른 default_value 창 변동
 $default_select.addEventListener('click', (event) => {
 
-    if(!excel_var_text){
+    if (!excel_var_text) {
         alert('값을 선택해주세요');
         return true;
     }
@@ -303,34 +303,32 @@ $reset_data.addEventListener('click', () => {
 
 //우석추가
 //농업 전처리 클래스와 연결된 함수
-$(function(){
-    console.time("submit_data"); // 측정 시작
-    $('#submit_data').click(function(){
-    
-    let file_name=$('#fileName').val();
-    let file_type=$('#file_type').val();
-    let date=$('#date').val();
-    let periods=$('#periods').val();
-    let data=$('#jsonObject').val();
-    let valueObject=JSON.stringify(newData);
-    if (periods == 'else'){
+$('#submit_data').click(function () {
+    console.time("submit_data");
+    let file_name = $('#fileName').val();
+    let file_type = $('#file_type').val();
+    let date = $('#date').val();
+    let periods = $('#periods').val();
+    let data = $('#jsonObject').val();
+    let valueObject = JSON.stringify(newData);
+    if (periods == 'else') {
         periods = document.getElementById('else_peri').value;
     }
     $.ajax({
-        url:'farm/',
-        type:'post',
-        dataType:'json',
-        headers: {'X-CSRFToken': csrftoken},
-        data:{
-            file_name:file_name,
-            file_type:file_type,
-            date:date,
-            DorW:periods,
-            data:data,
-            valueObject:valueObject,
+        url: 'farm/',
+        type: 'post',
+        dataType: 'json',
+        headers: { 'X-CSRFToken': csrftoken },
+        data: {
+            file_name: file_name,
+            file_type: file_type,
+            date: date,
+            DorW: periods,
+            data: data,
+            valueObject: valueObject,
         },
-        success:function(response){
-            if (response.data != null){
+        success: function (response) {
+            if (response.data != null) {
                 // a.setHeader([정수], [문자열]);
                 console.log(response.data);
                 location.href = "../";
@@ -338,12 +336,12 @@ $(function(){
                 // updateExcel(response.data,newnum);
                 console.timeEnd("submit_data"); // 측정 종료
             }
-            else {                  
-        }},
-        error : function(xhr, error){
+            else {
+            }
+        },
+        error: function (xhr, error) {
             alert("에러입니다.");
             console.error("error : " + error);
         }
     })
-})
 })
