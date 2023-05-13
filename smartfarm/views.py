@@ -88,6 +88,9 @@ def analysis(request):
     context = FileSystem(user).fileLoad(request)
     return render(request, "show/show.html", context) #전송
 
+#------------------------ test.html연결 ------------------------
+def test(request):
+    return render(request, "test.html") #전송
 
 #------------------------------농업관련 데이터 처리 부분------------------
 #데이터의 형식이나 원하는 전처리에 따라 파이프라인을 설정하는 부분
