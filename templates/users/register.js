@@ -6,7 +6,6 @@ const $phone1 = document.querySelector('#phone1');
 const $phone2 = document.querySelector('#phone2');
 const $phone3 = document.querySelector('#phone3');
 const $regi_btn = document.querySelector('#regi_btn');
-const $backToLogin = document.querySelector('#backToLogin');
 
 let check1 = false; // ID
 let check2 = false; // PASSWORD
@@ -107,4 +106,3 @@ $id.addEventListener('keyup', button);
 $pass.addEventListener('keyup', button);
 $check_pass.addEventListener('keyup', button);
 $regi_btn.addEventListener('click', move_login);
-$backToLogin.addEventListener('click', move_login);

@@ -13,6 +13,9 @@ a {
     padding: 0;
 }
 
+/* 높이 : 864, 너비 : 1536 내 노트북, padding-top = height/width x 100 */
+/* 높이 : 864, 너비 : 1028 작은 노트북 */
+
 /* header */
 .header{
     width: 95%;
@@ -34,8 +37,9 @@ a {
 }
 
 .header .login{
-    width: 80px;
-    height: 30px;
+    width: auto;
+    height: auto;
+    padding: 3px 8px;
     text-align: center;
     font-size: 14px;
     font-weight: bold;

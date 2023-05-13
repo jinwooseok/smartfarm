@@ -27,13 +27,14 @@
             <li><a href="/users/login/" class = 'login'>로그인</a></li>
         {% endif %}
     </div>
+
     <ul class="nav">
         <li class="nav-item"><a href="/">홈</a></li>
+        <li class="nav-item"><a href="/data_list">파일 목록</a></li>
         <li class="nav-item"><a href="/revise">데이터 수정</a></li>
-        <li class="nav-item"><a href="/merge">데이터 통합</a></li>
         <li class="nav-item"><a href="#">그래프 및 분석</a></li>
-        <li class="nav-item"><a href="/data_list">마이페이지</a></li>
     </ul>
+
     <div class="excel">
         <div id="spreadsheet" class="spreadsheet">
 
@@ -54,9 +55,12 @@
 
         </div>
     </div>
+
+    <!-- new data -->
+    <div id="JsonValue" style="display: none;"></div>
 </body>
 <script type="module" src="/templates/merge/merge.js"></script>
-<script src="/templates/jquery-1.12.4.min.js"></script>
-<script src="/templates/xlsx.full.min.js"></script>
+<script src="/templates/JS/jquery-1.12.4.min.js"></script>
+<script src="/templates/JS/xlsx.full.min.js"></script>
 
 </html>

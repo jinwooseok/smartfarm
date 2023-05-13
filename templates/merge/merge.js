@@ -1,4 +1,4 @@
-import {Excel} from '/templates/excel_show.mjs';
+import {Excel} from '/templates/JS/excel_show.mjs';
 
 const $spreadsheet = document.querySelector('#spreadsheet')
 const $spreadsheet2 = document.querySelector('#spreadsheet2')
@@ -37,14 +37,14 @@ $var2.addEventListener('click', (event) =>{
     var2_text = event.target.value
 })
 
-$merge_button.addEventListener('click', () => {
-    alert(`${var1_text}과 ${var2_text}를 기준으로 병합합니다.`)
+// $merge_button.addEventListener('click', () => {
+//     alert(`${var1_text}과 ${var2_text}를 기준으로 병합합니다.`)
 
-    isData=true;
-    if(isData){
-        document.querySelector('#download').disabled = false;
-        let data3 = new Excel(newData, $spreadsheet3)
-    }
-})
+//     isData=true;
+//     if(isData){
+//         document.querySelector('#download').disabled = false;
+//         let data3 = new Excel(newData, $spreadsheet3)
+//     }
+// })
 
 

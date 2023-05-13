@@ -1,3 +1,8 @@
+let sort = function(instance, cellNum, order) {
+    var order = (order) ? 'desc' : 'asc';
+    $('#log').append('The column  ' + cellNum + ' sorted by ' + order + '');
+}
+
 // import 모듈화
 export class Excel {
     constructor(data, box) { // 데이터와 div를 생성할 때 매개변수로
@@ -11,6 +16,7 @@ export class Excel {
             data : this.excelData,
             columns : this.excelColumn,
             tableOverflow: true,
+            onsort : sort,
         })
     }
 
