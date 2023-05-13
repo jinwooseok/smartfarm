@@ -28,6 +28,8 @@ urlpatterns = [
     path('api/users/', views.userApiView),
     path('api/files/', views.fileListApiView),
 
+    #test url 추가
+    path('test/', views.test, name='test'),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
