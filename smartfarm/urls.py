@@ -23,7 +23,7 @@ urlpatterns = [
 
     #path('probing/', views.probing, name='probing'),
     path('revise/loaddata/',views.fileLoadView,name='loaddata'),
-    path('revise/farm/', views.farm, name='farm'),
+    path('farm/', views.farm, name='farm'),
 
     path('api/users/', views.userApiView),
     path('api/files/', views.fileListApiView),

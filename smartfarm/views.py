@@ -44,9 +44,14 @@ def data_list(request):
 
 #파일 업로드 함수 - data_list창
 def fileUploadView(request):
-    user = loginValidator(request)
-    FileSystem(user).fileUpload(request)
-    return render(request, 'upload/upload.html')
+    if request.method == 'POST':
+        user = loginValidator(request)
+        FileSystem(user).fileUpload(request)
+        return redirect('data_list')
+    elif request.method == 'GET':
+        user = loginValidator(request)
+        FileSystem(user).fileUpload(request)
+        return render(request, 'upload/upload.html')
 
 def fileDeleteView(request):
     user = loginValidator(request)
@@ -90,7 +95,7 @@ def analysis(request):
 def farm(request):
     id = request.session.get('user')
     file_name=request.POST.get('file_name')
-    file_type=request.POST.get('file_type','기본')
+    file_type=request.POST.get('file_type','환경')
     date=request.POST.get('date','0')
     lat=request.POST.get('lat','35')
     lon=request.POST.get('lon','126')

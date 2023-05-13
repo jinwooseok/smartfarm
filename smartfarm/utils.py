@@ -23,18 +23,17 @@ class FileSystem:
     
     #파일 업로드 함수 - 처음 파일을 등록하는 함수
     def fileUpload(self, request):
-        if request.method == 'POST':
-            uploadedFile = request.FILES["file_input"]
-            try:
-                file_name=request.POST['upload_title']
-            except MultiValueDictKeyError:#파일 이름 미지정
-                file_name=str(uploadedFile)
-            file_name = self.fileNameCheck(self.user, file_name)
+        uploadedFile = request.FILES["file_input"]
+        try:
+            file_name=request.POST['upload_title']
+        except MultiValueDictKeyError:#파일 이름 미지정
+            file_name=str(uploadedFile)
+        file_name = self.fileNameCheck(self.user, file_name)
 
-            if uploadedFile != None:
-                self.fileSaveForm(user_id=self.user
-                          ,file_Title=file_name,file_Root=uploadedFile)
-            return 0
+        if uploadedFile != None:
+            self.fileSaveForm(user_id=self.user
+                        ,file_Title=file_name,file_Root=uploadedFile)
+        return 0
     #fileDelete는 무조건 request를 통해 받아야함
     def fileDelete(self, request):
         files = request.POST.get('data')
@@ -63,8 +62,7 @@ class FileSystem:
         os.remove(file_name)
         return 0
 
-    def fileLoad(self, request):
-        request.POST.get('file_name')
+    def fileLoad(self, file_name):
         file_object=File_db.objects.get(user_id=self.user, file_Title=file_name)
 
         work_dir = './media/' + str(file_object.file_Root)
@@ -112,11 +110,10 @@ class FileSystem:
 
 ## -------------데이터 변경 클래스-----------------
 class DataProcess:
-    def __init__(self, data, date):
+    def __init__(self, data, date = 0):
         self.data = data
         self.date = int(date)
-    def __init__(self, data):
-        self.data = data
+
     #컬럼명 변경
     def columnConverter(self, bef, aft):
         
@@ -137,8 +134,8 @@ class DataProcess:
     #다양한 날짜 형식 처리, 타입 처리 전엔 항상 날짜의 형태의 문자열로 처리, 날짜 열만 따로 호출함.
     def dateConverter(self):
         dateType = type(self.date)
-        dateColumn = self.data[[self.date]]
-        self.data[[self.date]].name = "날짜"
+        dateColumn = self.data.iloc[:, self.date]
+        self.data.columns.values[self.date] = "날짜"
         if dateType == str:
             dateColumn = pd.to_datetime(dateColumn)
         elif dateType == int:
@@ -150,7 +147,7 @@ class DataProcess:
         return self
     
     def getDate(self):
-        return self.data[[self.date]]
+        return self.data.iloc[:, self.date]
     
     def makeSummary(self):
         df = self.data

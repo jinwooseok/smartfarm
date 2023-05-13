@@ -1,7 +1,6 @@
 import {Excel} from '/templates/excel_show.mjs'
 
 const csrftoken = $('[name=csrfmiddlewaretoken]').val(); // csrftoken
-
 // upload를 통해 저장된 파일 이름을 불러옴
 let Title = JSON.parse(localStorage.getItem("title_list"));
 let $manage_list_menu = document.querySelector('#manage_list_menu');
@@ -317,7 +316,7 @@ $(function(){
         periods = document.getElementById('else_peri').value;
     }
     $.ajax({
-        url:'farm/',
+        url:'/farm/',
         type:'post',
         dataType:'json',
         headers: {'X-CSRFToken': csrftoken},
