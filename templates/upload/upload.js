@@ -11,7 +11,6 @@ const $excel_down = document.querySelector('#excel_down'); // 파일 다운
 
 let data = '';
 
-
 $file_input.addEventListener('change', (event) => {
     // 파일 읽기
     let selectedFile = event.target.files[0];
