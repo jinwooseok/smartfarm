@@ -50,6 +50,20 @@ a {
     color: #fff;
 }
 
+.header .logout{
+    width: auto;
+    height: auto;
+    padding: 5px 10px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 30px;
+
+    background-color: #007A33;
+    border-radius: 8px;
+    color: #fff;
+}
+
 /* nav */
 .nav{
     width: 100%;

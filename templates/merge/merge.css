@@ -42,9 +42,24 @@ a {
     font-weight: bold;
 }
 
-.header .login {
-    width: 80px;
-    height: 30px;
+.header .login{
+    width: auto;
+    height: auto;
+    padding: 3px 8px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 30px;
+
+    background-color: #007A33;
+    border-radius: 8px;
+    color: #fff;
+}
+
+.header .logout{
+    width: auto;
+    height: auto;
+    padding: 5px 10px;
     text-align: center;
     font-size: 14px;
     font-weight: bold;

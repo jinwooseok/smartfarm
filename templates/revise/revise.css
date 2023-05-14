@@ -46,9 +46,24 @@ dialog{
     font-weight: bold;
 }
 
-.header .login {
-    width: 80px;
-    height: 30px;
+.header .login{
+    width: auto;
+    height: auto;
+    padding: 3px 8px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 30px;
+
+    background-color: #007A33;
+    border-radius: 8px;
+    color: #fff;
+}
+
+.header .logout{
+    width: auto;
+    height: auto;
+    padding: 5px 10px;
     text-align: center;
     font-size: 14px;
     font-weight: bold;
@@ -84,12 +99,21 @@ dialog{
     color: #000;
 }
 
+/* exp-box */
+.exp-box{
+    width: 85%;
+    margin: 0 auto;
+    margin-top: 10px;
+
+    display: flex;
+    justify-content: right;
+}
+
 /* excel */
 .excel {
     width: 85%;
     height: 350px;
-    margin: 10px auto;
-    margin-bottom: 0px;
+    margin: 3px auto;
 
     display: flex;
     flex-direction: column;
@@ -176,7 +200,7 @@ dialog{
     padding: 10px 0;
 }
 
-/* tap2 */
+
 
 /* 엑셀 데이터 확인, tap2 */
 .content .list-container {
