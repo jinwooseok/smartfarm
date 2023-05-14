@@ -102,7 +102,11 @@ function button() {
 }
 
 function move_login() {
-    location.href = "../main/main.html";
+    location.href = "/users/login/";
+}
+
+function move_main(){
+    location.href = "/";
 }
 
 $id.addEventListener('keyup', button); // id
@@ -110,4 +114,4 @@ $pass.addEventListener('keyup', button); // 비밀번호
 $check_pass.addEventListener('keyup', button); // 비밀번호 일치여부
 $phone3.addEventListener('keyup', button); // 비밀번호 일치여부
 $regi_btn.addEventListener('click', move_login);
-$backToLogin.addEventListener('click', move_login);
+$backToLogin.addEventListener('click', move_main);
