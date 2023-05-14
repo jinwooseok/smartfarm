@@ -24,6 +24,11 @@ function AllCheck() {
 function select_delete() {
     const All_Checkbox = document.querySelectorAll('.check'); // check-box
 
+    if(All_Checkbox.length===0){
+        alert('삭제할 파일을 선택해주세요')
+        return
+    }
+
     const yesOrNo = confirm('정말 삭제하나요?'); // 예, 아니요를 입력 받음
     if (yesOrNo) {
         for (let i = 0; i < All_Checkbox.length; i++) {
@@ -51,6 +56,8 @@ function select_delete() {
                 console.error("error : " + error);
             }
         })
+    } else{
+        alert('삭제를 취소합니다.');
     }
     
     document.querySelector('.check-all').checked = false;

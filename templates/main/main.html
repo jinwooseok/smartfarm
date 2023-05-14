@@ -15,7 +15,7 @@
     <div class="header">
         <a href="/" class="title">전남대학교 </br>농업 빅데이터 연구실</a>
         {% if user_name != anonymous %}
-        <li><a href="/users/logout/" class='login'>로그아웃</a></li>
+        <li><a href="/users/logout/" class='logout'>로그아웃</a></li>
         {% else %}
         <li><a href="/users/login/" class='login'>로그인</a></li>
         {% endif %}
@@ -23,7 +23,7 @@
 
     <ul class="nav">
         <li class="nav-item"><a href="/">홈</a></li>
-        <li class="nav-item"><a href="/data_list">파일 목록</a></li>
+        <li class="nav-item"><a href="/fileList">파일 목록</a></li>
         <li class="nav-item"><a href="/revise">데이터 수정</a></li>
         <li class="nav-item"><a href="#">그래프 및 분석</a></li>
     </ul>
@@ -36,14 +36,14 @@
 
     <div class="service">
         <div class="service-item">
-            <div class="item-title">My Data</div>
+            <div class="item-title">파일 목록</div>
             <div class="item-content">
                 기존에 등록했던 파일과</br>
                 신규 등록한 파일을</br>
                 관리할 수 있습니다.
             </div>
             <button class="item-btn">
-                <a href="/data_list">바로가기</a>
+                <a href="/fileList">바로가기</a>
             </button>
         </div>
 

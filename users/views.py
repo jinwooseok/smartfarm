@@ -10,7 +10,7 @@ from django.http import JsonResponse
 
 #회원가입 버튼을 누르면 작동하는 함수
 def register(request):
-    if request.method == 'GET' : 
+    if request.method == 'GET': 
         return render(request, 'users/register.html')
     
     elif request.method == 'POST' :
@@ -35,29 +35,6 @@ def register(request):
         user.save()
         return redirect('users:login')
  
-
-# def login(request : HttpRequest) -> HttpResponse:
-#     loginform = LoginForm()
-#     context={'forms': loginform}
-
-#     if request.method=='GET':
-#         return render(request, 'users/login.html', context)
-
-#     elif request.method=='POST':
-#         loginform = LoginForm(request.POST)
-
-#         if loginform.is_valid():
-#             request.session['login_session'] = loginform.login_session
-#             request.session.set_expiry(0) #set_expiry메서드는 세션만료시간을 설정합니다. 0을 넣을 경우 브라우저를 닫을 시 세션 쿠키 삭제 + DB의 만료기간은 14일로 설정됩니다.
-#             return redirect('/')
-
-#         else : 
-#             context['forms'] = loginform
-#             if loginform.errors:
-#                 for value in loginform.errors.values():
-#                     context['error'] = value
-#         return render(request, 'users/login.html', context)
-
 
 def login(request):
     #처음 로그인 화면으로 들어올 때는 get방식이므로 핸들링

@@ -51,7 +51,7 @@ class FileSystem:
     def fileSave(self, result,file_name):#결과 dataframe, object:파일경로
         #전처리 후 excel파일로 변환 > open()을 통해 이진형식 rb로 읽어야 db에 저장가능
         #---------------같은 이름 파일명 처리-------------
-        file_name = self.fileNameCheck()
+        file_name = self.fileNameCheck(self.user, file_name)
         result.to_csv(file_name, index = False)
         #--------------------------------------------------
         f = open(file_name,'rb')
@@ -97,13 +97,14 @@ class FileSystem:
     #input : id, file이름 output: 중복되지 않는 파일이름
     @staticmethod
     def fileNameCheck(id, file_name):
-        if File_db.objects.filter(user_id=id, file_Title=file_name):
+        if File_db.objects.filter(user_id=id, file_Title=file_name+".csv"):
                 file_name_copy = copy.copy(file_name)
                 unique = 1
-                while File_db.objects.filter(user_id=id, file_Title=file_name_copy):
+                while File_db.objects.filter(user_id=id, file_Title=file_name_copy+".csv"):
                     unique+=1
                     file_name_copy=file_name+"_"+str(unique)
                 file_name = file_name_copy
+        file_name = file_name + ".csv"
         return file_name
     
 
@@ -144,7 +145,7 @@ class DataProcess:
             dateColumn = pd.to_datetime(dateColumn)
         else:
             print("날짜 형식이 아니거나 이미 판다스 날짜 형식 입니다.")
-        return self
+        self.data.iloc[:, self.date] = dateColumn
     
     def getDate(self):
         return self.data.iloc[:, self.date]
