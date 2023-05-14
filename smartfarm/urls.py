@@ -10,9 +10,9 @@ app_name='smartfarm'
 urlpatterns = [
     #데이터관리 창
     path('', views.main, name='main'),
-    path('data_list/', views.data_list, name='data_list'),
-    path('data_list/upload/',views.fileUploadView, name='upload'),
-    path('data_list/delete/', views.fileDeleteView, name="fileDelete"),
+    path('fileList/', views.fileList, name='fileList'),
+    path('fileList/upload/',views.fileUploadView, name='upload'),
+    path('fileList/delete/', views.fileDeleteView, name="fileDelete"),
     #merge 창
     path('merge/', views.merge, name='merge'),
 

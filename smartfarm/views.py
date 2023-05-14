@@ -10,6 +10,7 @@ from . import proc
 
 from config.settings import BASE_DIR
 from django.http import JsonResponse
+from django.http import HttpResponse
 #-----------------------DRF import-----------------------
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -32,15 +33,15 @@ def main(request):
             return render(request,'main/main.html')
 
 #------------------------ management창 ------------------------
-def data_list(request):
+def fileList(request):
     user = loginValidator(request)
     if user != None:
             file_object=File_db.objects.filter(user_id=user.id)
             context={'user_name':user.user_name,
                 'files':file_object}
-            return render(request,'data_list/data_list.html',context)
+            return render(request,'fileList/fileList.html',context)
     if user == None:
-            return render(request,'data_list/data_list.html')
+            return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
 
 #파일 업로드 함수 - data_list창
 def fileUploadView(request):
@@ -96,7 +97,7 @@ def test(request):
 #데이터의 형식이나 원하는 전처리에 따라 파이프라인을 설정하는 부분
 @logging_time
 def farm(request):
-    id = request.session.get('user')
+    user = loginValidator(request)
     file_name=request.POST.get('file_name')
     file_type=request.POST.get('file_type','환경')
     date=request.POST.get('date','0')
@@ -111,7 +112,8 @@ def farm(request):
         
     a = ETL_system(data,file_type,date,lat_lon,DorW,var)
     result=a.ETL_stream()
-    FileSystem.fileSaveForm(id, result, file_name)
+    print(file_name)
+    FileSystem(user).fileSave(result, file_name)
     result_json=result.to_json(orient="records",force_ascii=False)
     result = {
                 'result':'success',
@@ -128,7 +130,7 @@ class ETL_system:
         b=pd.read_json(data)
         self.data = b
         self.file_type = file_type
-        self.date = int(date) - 1
+        self.date = int(date)
         self.lat, self.lon=lat_lon
         self.DorW = DorW
         self.var = var
@@ -148,7 +150,7 @@ class ETL_system:
     def Envir(self):
         lon = self.lon
         lat = self.lat
-
+        print(self.date)
         dt = DataProcess(self.data, self.date)
         if self.DorW=="weeks":
         #주별데이털로 변환
@@ -157,14 +159,13 @@ class ETL_system:
         elif self.DorW == 'days':
             #시간 구별 데이터프레임 생성
             envir_date = pd.DataFrame()
+            dt.dateConverter()
             envir_date['날짜'] = dt.getDate()
-            
-            dt = dt.dateConverter()
             envir_date['날짜'] = pd.to_datetime(envir_date['날짜']).astype(str)
             
-            start_month=str(pd.to_datetime(envir_date['날짜'][0]))[0:7]
-            end_month=str(pd.to_datetime(envir_date['날짜'][-1]))[0:7]
-            #일출일몰
+            start_month=envir_date['날짜'][0][0:7]
+            end_month=envir_date['날짜'][len(envir_date)-1][0:7]
+            
             sun = proc.get_sun(round(float(lon)),round(float(lat)),start_month,end_month)
             #낮밤구분
             nd_div=proc.ND_div(sun, envir_date)

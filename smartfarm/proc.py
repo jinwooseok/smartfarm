@@ -101,9 +101,9 @@ def ND_div(sun, df):
     df2['날짜']=df2['날짜'].str[0:6]
 
     for j in range(len(sun)):
-        mask_dawn = (sun2.loc[j]['일출'] > df2['time']) & (sun2.loc[j]['날짜'] == df2['일시'])
-        mask_afternoon = (sun2.loc[j]['일출'] < df2['time']) & (df2['time'] < sun2.loc[j]['일몰']) & (sun2.loc[j]['날짜'] == df2['일시'])
-        mask_night = (sun2.loc[j]['일몰'] < df2['time']) & (sun2.loc[j]['날짜'] == df2['일시'])
+        mask_dawn = (sun2.loc[j]['일출'] > df2['time']) & (sun2.loc[j]['날짜'] == df2['날짜'])
+        mask_afternoon = (sun2.loc[j]['일출'] < df2['time']) & (df2['time'] < sun2.loc[j]['일몰']) & (sun2.loc[j]['날짜'] == df2['날짜'])
+        mask_night = (sun2.loc[j]['일몰'] < df2['time']) & (sun2.loc[j]['날짜'] == df2['날짜'])
         df_return.loc[mask_dawn,'div'] = '야간' 
         df_return.loc[mask_afternoon,'div'] = '주간'
         df_return.loc[mask_night,'div'] = '야간'
@@ -120,13 +120,13 @@ def afternoon_div(sun, df, noon=12):
     df_return = df2.copy()
     sun2['날짜'] = sun2['날짜'].astype(str) # str로 타입변환
     sun2['날짜'] = sun2['날짜'].replace('-','',regex=True).str[0:6]
-    df2['일시'] = df2['일시'].str[0:6]
+    df2['날짜'] = df2['날짜'].str[0:6]
     df2['time'] = df2['time'].astype(int)
     sun2['일출'] = sun2['일출'].astype(int)
     sun2['날짜'] = sun2['날짜'].astype(int)
-    df2['일시']=df2['일시'].astype(int)
+    df2['날짜']=df2['날짜'].astype(int)
     for j in range(len(sun2)):
-        mask =  (sun2.loc[j]['일출'] < df2['time']) & (df2['time'] <= noon*100) & ( sun2.loc[j]['날짜'] == df2['일시'])
+        mask =  (sun2.loc[j]['일출'] < df2['time']) & (df2['time'] <= noon*100) & ( sun2.loc[j]['날짜'] == df2['날짜'])
             # sum데이터의 월과 df의 월이 같고  일출<time<noon*12 -> 일출부터 정오
         df_return.loc[mask,'day_afternoon'] = '일출부터정오'
     
@@ -140,21 +140,21 @@ def time_div(sun, df, t_diff):
     ment = '일출전후'+ str(t_diff)+'시간'
     df2=df.copy()
     sun2=sun.copy()
-    ary = np.empty(shape=(len(df['일시']),1))
+    ary = np.empty(shape=(len(df['날짜']),1))
     ary[:] = np.nan
     df2['day_thour']=ary
     df_return = df2.copy()
     sun2['날짜']=sun2['날짜'].astype(str) # str로 타입변환
     sun2['날짜']=sun2['날짜'].replace('-','',regex=True).str[0:6]
-    df2['일시']=df2['일시'].str[0:6]
+    df2['날짜'] = df2['날짜'].str[0:6]
     df2['time'] = df2['time'].astype(int)
     sun2['일출'] = sun2['일출'].astype(int)
     sun2['날짜'] = sun2['날짜'].astype(int)
-    df2['일시']=df2['일시'].astype(int)
+    df2['날짜'] = df2['날짜'].astype(int)
     # 일출전 t부터 일출후 t까지 시간 구분 모듈 
     for i in range(len(sun)):
             # sum데이터의 월과 df의 월이 같고  time<일출 -> 전날 밤
-        mask=((sun2.loc[i]['일출']-t_diff*100) <= df2['time'])&(df2['time']<=(sun2.loc[i]['일출']+t_diff*100))&( sun2.loc[i]['날짜'] == df2['일시'])
+        mask=((sun2.loc[i]['일출']-t_diff*100) <= df2['time'])&(df2['time']<=(sun2.loc[i]['일출']+t_diff*100))&( sun2.loc[i]['날짜'] == df2['날짜'])
         df_return.loc[mask,'day_thour'] = ment
     df_return=df_return.replace(np.nan,'')
     
@@ -205,8 +205,8 @@ def generating_variable(data, date_ind, d_ind, kind,t_diff , div_DN=False, tbase
             kind_ND[i] = '일출부터정오'
         if(ment  in kind[i]):
             kind_ND[i] = ment      
-    date_seq = data.iloc[:,date_ind].apply(lambda x: x[0:10])
-    date_seq = date_seq.astype('str').replace('-','',regex=True)
+
+    date_seq = data.iloc[:,date_ind].astype('str').apply(lambda x: x[0:10]).replace('-','',regex=True)
     date = pd.Series(pd.to_datetime(date_seq.unique(), format="%Y-%m-%d")) 
     # 만약 div_DN이 있을 시의 코드
     # if ("야간" in kind_ND):
@@ -236,13 +236,13 @@ def generating_variable(data, date_ind, d_ind, kind,t_diff , div_DN=False, tbase
         if ('전체' in kind_ND):
             today_ind = date_seq[ date_seq==date_i2 ].index.tolist()
         if ('주간' in kind_ND):
-            daytime_ind = div_DN.index[(div_DN['div']=='주간') & (div_DN['일시']==date_i2)].tolist()
+            daytime_ind = div_DN.index[(div_DN['div']=='주간') & (div_DN['날짜']==date_i2)].tolist()
         if ('야간' in kind_ND):
-            night_ind = div_DN.index[(div_DN['div']=='야간') & (div_DN['일시']== date_i2)].tolist()
+            night_ind = div_DN.index[(div_DN['div']=='야간') & (div_DN['날짜']== date_i2)].tolist()
         if ('일출부터정오' in kind_ND):
-            noon_ind = div_DN.index[(div_DN['day_afternoon']=='일출부터정오') & (div_DN['일시']==date_i2)].tolist()
+            noon_ind = div_DN.index[(div_DN['day_afternoon']=='일출부터정오') & (div_DN['날짜']==date_i2)].tolist()
         if (ment  in kind_ND):
-            thour_ind = div_DN.index[(div_DN['day_thour']==ment ) & (div_DN['일시']==date_i2)].tolist()
+            thour_ind = div_DN.index[(div_DN['day_thour']==ment ) & (div_DN['날짜']==date_i2)].tolist()
         for j in d_ind:
             for kind_num in range(len(kind)):
                 if (kind_ND[kind_num] == "주간"):

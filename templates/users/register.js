@@ -102,7 +102,10 @@ function button() {
 }
 
 function move_login() {
-    location.href = "/users/login/";
+    var form = document.getElementById("regi_form");
+    form.action = "/users/register/";
+    form.mothod = "POST";
+    form.submit();
 }
 
 function move_main(){
