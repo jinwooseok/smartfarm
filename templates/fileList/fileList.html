@@ -85,12 +85,12 @@
             {% csrf_token %}
             <div class="excel">
                 <div id="spreadsheet" class="spreadsheet">
-                    <input type="file" id="file_drag" class="file_drag" accept=".xls, .xlsx, .csv">
+                    <input type="file" name="file_input" id="file_drag" class="file_drag" accept=".xls, .xlsx, .csv">
                     <i class="fa-solid fa-file-import" id="file_icon"></i>
                 </div>
             </div>
             <div class="wrap">
-                <input type="file" id="file_input" class="file_input" accept=".xls, .xlsx, .csv">
+                <input type="file" name="file_input" id="file_input" class="file_input" accept=".xls, .xlsx, .csv">
                 <label for="file_input">업로드</label>
                 <input id="file_name" class="upload-name" value="파일선택" disabled="disabled">
             </div>
@@ -103,9 +103,8 @@
     </dialog>
 </body>
 <!-- js -->
-<script src="/templates/fileList/fileList.js"></script>
 <script type="module" src="/templates/fileList/upload.js"></script>
 <script src="/templates/JS/jquery-1.12.4.min.js"></script>
 <script src="/templates/JS/xlsx.full.min.js"></script>
-
+<script src="/templates/fileList/fileList.js"></script>
 </html>

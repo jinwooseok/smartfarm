@@ -30,9 +30,8 @@ POST
 ###### /merge/
 POST
     - 데이터 2개 합치기
-    request : {name:'data1',type:string,description:기준 데이터
-    name:'data2',type:string,description:상대 데이터}
-    response : 합쳐진 데이터의 json문자열
+    request : {name:'data',type:array,description:체크 박스를 누른 파일 이름 리스트}
+    response : "[json객체 , json객체]" 의 형태
 ### revise URL
 ###### /revise/
 GET

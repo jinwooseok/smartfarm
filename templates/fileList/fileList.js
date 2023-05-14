@@ -5,6 +5,8 @@ const $check_all = document.querySelector('#check-all'); // 상단 체크박스
 const $upload = document.querySelector('#upload'); // 등록버튼
 const $merge = document.querySelector('#merge'); // 병합버튼
 const $delete = document.querySelector('#delete'); // 삭제버튼
+//토큰
+const csrftoken = $('[name=csrfmiddlewaretoken]').val(); // csrftoken
 
 // 전체 선택
 function AllCheck() {
@@ -23,17 +25,18 @@ function AllCheck() {
 // 삭제
 function select_delete() {
     const All_Checkbox = document.querySelectorAll('.check'); // check-box
-
+    let titles = document.querySelectorAll('.list_title');
+    console.log(titles);
     if(All_Checkbox.length===0){
         alert('삭제할 파일을 선택해주세요')
         return
     }
-
+    let deleteList = new Array();
     const yesOrNo = confirm('정말 삭제하나요?'); // 예, 아니요를 입력 받음
     if (yesOrNo) {
         for (let i = 0; i < All_Checkbox.length; i++) {
             if (All_Checkbox[i].checked) {
-                All_Checkbox[i].parentElement.remove();
+                deleteList.push(titles[i+1].innerText);
             }
             // 삭제 후 순서 숫자 감소 ???
         }
@@ -43,7 +46,7 @@ function select_delete() {
             dataType:'json',
             headers: {'X-CSRFToken': csrftoken},
             data:{
-                data:JSON.stringify(Titlelist)
+                data:JSON.stringify(deleteList)
             },
             success:function(response){
                 if (response.data != null){

@@ -48,7 +48,7 @@ def fileUploadView(request):
     if request.method == 'POST':
         user = loginValidator(request)
         FileSystem(user).fileUpload(request)
-        return redirect('data_list')
+        return redirect('/fileList/')
     elif request.method == 'GET':
         user = loginValidator(request)
         FileSystem(user).fileUpload(request)
@@ -80,7 +80,8 @@ def fileLoadView(request):
 #------------------------ merge창 ------------------------
 def merge(request):
     user = loginValidator(request)
-    context={'user_name':user.user_name}
+    context = FileSystem(user).fileLoad(request)
+    print(context)
     return render(request, "merge/merge.html", context) #전송
 
 #------------------------ analysis창 ------------------------
