@@ -7,7 +7,7 @@ const $merge = document.querySelector('#merge'); // 병합버튼
 const $delete = document.querySelector('#delete'); // 삭제버튼
 
 // 전체 선택
-function Allcheck() {
+function AllCheck() {
     const All_Checkbox = document.querySelectorAll('.check'); // check-box
     if (this.checked) {
         for (let i = 0; i < All_Checkbox.length; i++) {
@@ -32,17 +32,36 @@ function select_delete() {
             }
             // 삭제 후 순서 숫자 감소 ???
         }
+        $.ajax({
+            url:'delete/',
+            type:'post',
+            dataType:'json',
+            headers: {'X-CSRFToken': csrftoken},
+            data:{
+                data:JSON.stringify(Titlelist)
+            },
+            success:function(response){
+                if (response.data != null){
+                    location.href = "../";
+                }
+                else {                  
+            }},
+            error : function(xhr, error){
+                alert("에러입니다.");
+                console.error("error : " + error);
+            }
+        })
     }
     
     document.querySelector('.check-all').checked = false;
-    Allcheck();
+    AllCheck();
 }
 
 // 선택 삭제
 $delete.addEventListener('click', select_delete);
 
 // 전체 선택
-$check_all.addEventListener('change', Allcheck);
+$check_all.addEventListener('change', AllCheck);
 
 
 // 검색
@@ -56,8 +75,8 @@ for(let x of $titleAll){
     titleList.push(x.innerText);
 }
 
-$search.addEventListener('keyup', (evnet)=>{
-    let text = evnet.target.value;
+$search.addEventListener('keyup', (event)=>{
+    let text = event.target.value;
     for(let i=0; i<titleList.length; i++){
         if(!titleList[i].includes(text)){
             $listAll[i+1].style.display='none';
@@ -65,6 +84,10 @@ $search.addEventListener('keyup', (evnet)=>{
             $listAll[i+1].style.display='flex';
         }
     }
+})
+
+$merge.addEventListener('click' , () =>{
+    location.href = "/merge";
 })
 
 // title 내부 저장

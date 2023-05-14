@@ -1,5 +1,4 @@
-ul,
-li {
+ul,li{
     list-style: none;
 }
 
@@ -8,14 +7,20 @@ a {
     color: #000;
 }
 
-* {
-    box-sizing: border-box;
+*:not(dialog){
     margin: 0;
     padding: 0;
 }
 
+body{
+    box-sizing: border-box;
+}
+
+/* 높이 : 864, 너비 : 1536 내 노트북, padding-top = height/width x 100 */
+/* 높이 : 864, 너비 : 1028 작은 노트북 */
+
 /* header */
-.header {
+.header{
     width: 95%;
     height: 70px;
     margin: 0 auto;
@@ -28,15 +33,16 @@ a {
     align-items: center;
 }
 
-.header .title {
+.header .title{
     color: #007A33;
     font-size: 18px;
     font-weight: bold;
 }
 
-.header .login {
-    width: 80px;
-    height: 30px;
+.header .login{
+    width: auto;
+    height: auto;
+    padding: 3px 8px;
     text-align: center;
     font-size: 14px;
     font-weight: bold;
@@ -48,7 +54,7 @@ a {
 }
 
 /* nav */
-.nav {
+.nav{
     width: 100%;
     height: auto;
 
@@ -59,16 +65,16 @@ a {
     align-items: center;
 }
 
-.nav .nav-item:hover {
+.nav .nav-item:hover{
     transform: scale(1.2);
     transition-duration: 0.5s;
 }
 
-.nav .nav-item a {
+.nav .nav-item a{
     color: #888;
 }
 
-.nav .nav-item a:hover {
+.nav .nav-item a:hover{
     color: #000;
 }
 
@@ -199,6 +205,118 @@ a {
     margin: 10px auto;
 }
 
-.btn-wrap>* {
+.btn-wrap .delete{
+    float: left;
+}
+
+.btn-wrap .upload,
+.btn-wrap .merge{
+    float: right;
+}
+
+.btn-wrap >*:not(:last-child){
+    margin: 0;
+}
+
+.btn-wrap button{
+    border: 1px solid #007A33;
+    margin-right: 5px;
+    padding: 3px 8px;
+    background-color:#007A33;
+    color: #fff;
+}
+
+.btn-wrap button:hover{
+    cursor: pointer;
+}
+
+/* popup */
+dialog{
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    border : 0;
+    border-radius: 20px;
+
+    text-align: center;
+}
+
+dialog .spreadsheet {
+    position: relative;
+    width: 500px;
+    height: 300px;
     border: 1px solid #000;
+    margin-bottom: 5px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+dialog .spreadsheet .file_drag {
+    width: 100%;
+    height: 100%;
+}
+
+dialog .spreadsheet i {
+    content: "f56f";
+    font: var(--fa-font-solid);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    font-size: 50px;
+}
+
+dialog .wrap {
+    display: inline-block;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: start;
+    align-items: center;
+}
+
+dialog .wrap input[type="file"] {
+	display: none;
+}
+
+dialog .wrap label {
+	display: inline-block;
+	padding: .5em .75em;
+    border: 1px solid #ebebeb;
+	border-bottom-color: #e2e2e2;
+	border-radius: .25em;
+
+	color: #fff;
+	font-size: inherit;
+	line-height: normal;
+	background-color: #007A33;
+
+    vertical-align: middle;
+
+	cursor: pointer;
+}
+
+dialog .wrap .upload-name {
+    display: inline-block;
+    padding: .5em .75em;
+    border: 1px solid #ebebeb;
+    border-bottom-color: #e2e2e2;
+    border-radius: .25em;
+
+    vertical-align: middle;
+    background-color: #f5f5f5;
+
+    font-size: inherit;
+    line-height: normal;
+    
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+dialog .btn-wrap {
+    width: 130px;
+    margin : 5px auto;
+    display: flex;
+    align-items :center;
+    justify-content: space-between;
 }

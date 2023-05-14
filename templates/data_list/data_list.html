@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data List</title>
     <!-- css -->
-    <link rel="stylesheet" href="/templates/data_list/data_list.css">
+    <link rel="stylesheet" href="/templates/data_list/fileList.css">
 
     <!-- fontawesome-->
     <script src="https://kit.fontawesome.com/4c4b76e7c2.js" crossorigin="anonymous"></script>
@@ -23,13 +23,14 @@
             <li><a href="/users/login/" class = 'login'>로그인</a></li>
         {% endif %}
     </div>
+
     <ul class="nav">
         <li class="nav-item"><a href="/">홈</a></li>
-        <li class="nav-item"><a href="/revise/">데이터 수정</a></li>
-        <li class="nav-item"><a href="/merge/">데이터 통합</a></li>
+        <li class="nav-item"><a href="/data_list">파일 목록</a></li>
+        <li class="nav-item"><a href="/revise">데이터 수정</a></li>
         <li class="nav-item"><a href="#">그래프 및 분석</a></li>
-        <li class="nav-item"><a href="/data_list/">마이페이지</a></li>
     </ul>
+
     <div class="explain">
         <h3>데이터 업로드</h3>
         <p>업로드 버튼을 통해 .xls .xlsx .csv 파일을 저장 할 수 있습니다.</p>
@@ -59,21 +60,46 @@
                     <a href="/revise/{{file.file_Title}}/">{{file.file_Title}}</a>
                 </div>
                 <div class="date" id="date">
-                    {{file.created_at | date:'Y-m-d H:i'}}
+                    {{file.created_at | date:'Y-m-d'}}
                 </div>
                 <div class="n_date" id="n_date">
-                    {{file.updated_at | date:'Y-m-d H:i'}}
+                    {{file.updated_at | date:'Y-m-d'}}
                 </div>
             </div>
         {% endfor %}             
     </div>
     <div class="btn-wrap">
         <button class="delete" id="delete">파일 삭제</button>
-        <a class="merge" id="merge" href="/merge/">파일 병합</a>
-        <a class="upload" id="upload" href="upload/">파일 업로드</a>
+        <button class="merge" id="merge">파일 병합</button>
+        <button class="upload" id="upload">파일 업로드</button>
     </div>
+
+    <dialog>
+        <form action="{% url 'smartfarm:upload' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="excel">
+                <div id="spreadsheet" class="spreadsheet">
+                    <input type="file" id="file_drag" class="file_drag" accept=".xls, .xlsx, .csv">
+                    <i class="fa-solid fa-file-import" id="file_icon"></i>
+                </div>
+            </div>
+            <div class="wrap">
+                <input type="file" id="file_input" class="file_input" accept=".xls, .xlsx, .csv">
+                <label for="file_input">업로드</label>
+                <input id="file_name" class="upload-name" value="파일선택" disabled="disabled">
+            </div>
+
+            <div class="btn-wrap">
+                <button id="confirm" class="confirm">확인</button>
+                <button id="cancel" class="cancel">취소</button>
+            </div>
+        </form>
+    </dialog>
 </body>
 <!-- js -->
-<script src="/templates/data_list/data_list.js"></script>
+<script src="/templates/data_list/fileList.js"></script>
+<script type="module" src="/templates/data_list/upload.js"></script>
+<script src="/templates/JS/jquery-1.12.4.min.js"></script>
+<script src="/templates/JS/xlsx.full.min.js"></script>
 
 </html>
