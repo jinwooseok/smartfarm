@@ -6,24 +6,13 @@ const $phone1 = document.querySelector('#phone1');
 const $phone2 = document.querySelector('#phone2');
 const $phone3 = document.querySelector('#phone3');
 const $regi_btn = document.querySelector('#regi_btn');
+const $backToLogin = document.querySelector('#backToLogin');
 
 let check1 = false; // ID
 let check2 = false; // PASSWORD
 let check3 = false; // PASSWORD 확인
-let check4 = false; // 전화번호 확인
-let check5 = false; // 이름 입력 확인
-
-// 휴대폰 번호 확인
-function check_phone1() {
-    if ($phone1.value.length === 3) {
-        $phone2.focus();
-    }
-}
-function check_phone2() {
-    if ($phone2.value.length === 4) {
-        $phone3.focus();
-    }
-}
+let check4 = false; // 이름 입력 확인
+let check5 = false; // 전화번호 확인
 
 // valid_check
 
@@ -70,14 +59,8 @@ $check_pass.onkeyup = function () {
         } else {
             document.querySelector('#passwordCheckError').innerHTML = "";
             check3 = true;
+            $name.focus();
         }
-    }
-}
-
-// 전화번호 확인
-function check_phone() {
-    if (($phone1.value.length === 3) && ($phone2.value.length === 4) && ($phone3.value.length === 4)) {
-        check4 = true;
     }
 }
 
@@ -87,7 +70,27 @@ $name.onkeyup = function () {
         document.querySelector('#nameError').innerHTML = "이름을 입력하세요"
     } else {
         document.querySelector('#nameError').innerHTML = ""
+        check4 = true;
+    }
+}
+
+// 전화번호 확인
+$phone3.onkeyup =  function(){
+    if (($phone1.value.length === 3) && ($phone2.value.length === 4) && ($phone3.value.length === 4)) {
         check5 = true;
+        console.log(` check5 ${check5}`)
+    }
+}
+
+// 휴대폰 번호 확인
+function check_phone1() {
+    if ($phone1.value.length === 3) {
+        $phone2.focus();
+    }
+}
+function check_phone2() {
+    if ($phone2.value.length === 4) {
+        $phone3.focus();
     }
 }
 
@@ -99,10 +102,16 @@ function button() {
 }
 
 function move_login() {
-    location.href = "../login/login.html";
+    location.href = "/users/login/";
 }
 
-$id.addEventListener('keyup', button);
-$pass.addEventListener('keyup', button);
-$check_pass.addEventListener('keyup', button);
+function move_main(){
+    location.href = "/";
+}
+
+$id.addEventListener('keyup', button); // id
+$pass.addEventListener('keyup', button); // 비밀번호
+$check_pass.addEventListener('keyup', button); // 비밀번호 일치여부
+$phone3.addEventListener('keyup', button); // 비밀번호 일치여부
 $regi_btn.addEventListener('click', move_login);
+$backToLogin.addEventListener('click', move_main);
