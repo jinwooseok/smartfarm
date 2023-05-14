@@ -1,7 +1,6 @@
 import { Excel } from '/templates/JS/excel_show.mjs'
 
 const csrftoken = $('[name=csrfmiddlewaretoken]').val(); // csrftoken
-import {Excel} from '../js/excel_show.mjs'
 
 // upload를 통해 저장된 파일 이름을 불러옴
 let Title = JSON.parse(localStorage.getItem("title_list"));

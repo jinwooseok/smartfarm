@@ -19,8 +19,8 @@
         <div class="regi_logo">
             <h1>회원가입</h1>
         </div>
+        {% csrf_token %}
         <form action="{% url 'users:register' %}" method="post" class="regi_form">
-            {% csrf_token %}
             <div class="email">
                 <input type="text" class="form_text regi_id" id="regi_id" name="regi_id" placeholder="이메일">
                 <div id="emailError" class="error"></div>
