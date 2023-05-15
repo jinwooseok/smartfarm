@@ -38,10 +38,14 @@ class FileSystem:
     def fileDelete(self, request):
         files = request.POST.get('data')
         files = json.loads(files)
+        print(files)
         for i in range(len(files)):
             file_object=File_db.objects.get(user_id=self.user,file_Title=files[i])
             file_object.delete()
-            os.remove('./media/' + str(file_object.file_Root))
+            try:
+                os.remove('./media/' + str(file_object.file_Root))
+            except FileNotFoundError:
+                print("파일이 이미 삭제된 상태입니다.")
         result = {
                     'result':'success'
                 }
@@ -85,6 +89,24 @@ class FileSystem:
                 }
         return context
     
+    #다중 파일 로드
+    def fileLoadMulti(self, file_names):
+        data_json = []
+        for file_name in file_names:
+            file_object=File_db.objects.get(user_id=self.user, file_Title=file_name)
+            work_dir = './media/' + str(file_object.file_Root)
+            if os.path.splitext(work_dir)[1] == ".csv":
+                try:
+                    data=pd.read_csv(work_dir,encoding="cp949")
+                except UnicodeDecodeError:
+                    data=pd.read_csv(work_dir,encoding="utf-8")
+            else:
+                data = pd.read_excel(work_dir, sheet_name= 0)
+            data_json.append(data.to_json(orient="records",force_ascii=False))#데이터프레임을 json배열형식으로변환(형식은 spreadsheet.js에 맞춰)
+        context = {
+                    'data' : data_json,
+                }
+        return context
     #파일 저장 폼
     @staticmethod
     def fileSaveForm(user_id, file_Title, file_Root):
@@ -97,6 +119,8 @@ class FileSystem:
     #input : id, file이름 output: 중복되지 않는 파일이름
     @staticmethod
     def fileNameCheck(id, file_name):
+        if file_name.split(".")[-1] in ["xlsx","xls","csv"]:
+            file_name = file_name.split(".")[0]
         if File_db.objects.filter(user_id=id, file_Title=file_name+".csv"):
                 file_name_copy = copy.copy(file_name)
                 unique = 1
