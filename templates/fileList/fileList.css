@@ -141,18 +141,14 @@ body{
 }
 
 /* list-container */
-
 .list-container {
-    width: 80%;
-    height: 280px;
+    width: 85%;
     margin: 0 auto;
     padding: 3px 0;
     border: 1px solid #000;
-
-    overflow-y: scroll;
 }
 
-.list-container .list {
+.list-container .list_head{
     width: 95%;
     margin: 0 auto;
     margin-bottom: 3px;
@@ -166,27 +162,51 @@ body{
     text-align: center;
 }
 
+.list-container .file-container{
+    width: 95%;
+    height: 300px;
+    margin: 0 auto;
+
+
+    overflow-y: scroll;
+}
+
+.list-container .file-container .list{
+    width: 100%;
+    margin-bottom: 3px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+
+    text-align: center;
+}
+
+.list-container .list_head>*,
 .list-container .list>* {
     margin: 0 10px;
 }
 
-.list-container .list:first-child {
+.list-container .list_head {
     border-bottom: 1px solid #999;
     margin-bottom: 5px;
 }
 
-.list-container .list:not(:first-child)>* {
+.list-container .list>* {
     border: 1px solid #000;
 
     font-size: 12px;
 }
 
-.list-container .list .check-all,
+.list-container .list_head .check-all,
 .list-container .list .check {
     width: 16px;
     height: 16px;
 }
 
+.list-container .list_head .list_title,
 .list-container .list .list_title {
     width: 70%;
     height: 26px;
@@ -197,13 +217,15 @@ body{
     white-space: nowrap;
 }
 
-.list-container div:not(:first-of-type).list .list_title {
+.list-container .list .list_title {
     text-align: left;
     padding-left: 5px;
 }
 
+.list-container .list_head .date,
+.list-container .list_head .n_date,
 .list-container .list .date,
-.list-container .list .n_date {
+.list-container .list .n_date{
     width: 13%;
     height: 26px;
     line-height: 26px;
@@ -212,6 +234,7 @@ body{
     overflow: hidden;
     white-space: nowrap;
 }
+
 
 /* btn-wrap */
 .btn-wrap {

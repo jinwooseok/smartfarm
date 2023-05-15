@@ -47,7 +47,7 @@
 
     </div>
     <div class="list-container" id="list-container">
-        <div class="list">
+        <div class="list_head">
             <input type="checkbox" class="check-all" id="check-all">
             <div class="list_title" id="listTitle">
                 파일명
@@ -59,20 +59,22 @@
                 마지막 수정 날짜
             </div>
         </div>
-        {% for file in files %}
-        <div class="list">
-            <input type="checkbox" class="check">
-            <div class="list_title" id="list_title">
-                <a href="/revise/{{file.file_Title}}/">{{file.file_Title}}</a>
+        <div class="file-container">
+            {% for file in files %}
+            <div class="list">
+                <input type="checkbox" class="check">
+                <div class="list_title" id="list_title">
+                    <a href="/revise/{{file.file_Title}}/">{{file.file_Title}}</a>
+                </div>
+                <div class="date" id="date">
+                    {{file.created_at | date:'Y-m-d'}}
+                </div>
+                <div class="n_date" id="n_date">
+                    {{file.updated_at | date:'Y-m-d'}}
+                </div>
             </div>
-            <div class="date" id="date">
-                {{file.created_at | date:'Y-m-d'}}
-            </div>
-            <div class="n_date" id="n_date">
-                {{file.updated_at | date:'Y-m-d'}}
-            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
     <div class="btn-wrap">
         <button class="delete" id="delete">파일 삭제</button>

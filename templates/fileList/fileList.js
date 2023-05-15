@@ -86,9 +86,9 @@ $search.addEventListener('keyup', (event)=>{
     let text = event.target.value;
     for(let i=0; i<titleList.length; i++){
         if(!titleList[i].includes(text)){
-            $listAll[i+1].style.display='none';
+            $listAll[i].style.display='none';
         } else{
-            $listAll[i+1].style.display='flex';
+            $listAll[i].style.display='flex';
         }
     }
 })
