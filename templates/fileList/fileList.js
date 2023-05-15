@@ -26,19 +26,21 @@ function AllCheck() {
 function select_delete() {
     const All_Checkbox = document.querySelectorAll('.check'); // check-box
     let titles = document.querySelectorAll('.list_title');
-    console.log(titles);
-    if(All_Checkbox.length===0){
-        alert('삭제할 파일을 선택해주세요')
-        return
+    let check_count=[...All_Checkbox].filter((v) => v.checked===true).length; // 체크 수 확인
+
+    if(!check_count){
+        alert('삭제할 파일을 선택하세요');
+        return;
     }
-    let deleteList = new Array();
+
     const yesOrNo = confirm('정말 삭제하나요?'); // 예, 아니요를 입력 받음
     if (yesOrNo) {
+        let deleteList = [];
         for (let i = 0; i < All_Checkbox.length; i++) {
             if (All_Checkbox[i].checked) {
                 deleteList.push(titles[i+1].innerText);
+                All_Checkbox[i].parentElement.remove();
             }
-            // 삭제 후 순서 숫자 감소 ???
         }
         $.ajax({
             url:'delete/',
@@ -59,12 +61,12 @@ function select_delete() {
                 console.error("error : " + error);
             }
         })
+        document.querySelector('.check-all').checked = false;
+        AllCheck();
     } else{
         alert('삭제를 취소합니다.');
     }
-    
-    document.querySelector('.check-all').checked = false;
-    AllCheck();
+
 }
 
 // 선택 삭제
@@ -97,7 +99,23 @@ $search.addEventListener('keyup', (event)=>{
 })
 
 $merge.addEventListener('click' , () =>{
-    location.href = "/merge";
+    const All_Checkbox = document.querySelectorAll('.check'); // check-box
+    let check_count=[...All_Checkbox].filter((v) => v.checked===true).length;
+
+    if(check_count!==2){
+        alert('파일은 2개를 선택해야 합니다.')
+        return;
+    }
+    let mergeList = [];
+    for (let i = 0; i < All_Checkbox.length; i++) {
+        if (All_Checkbox[i].checked) {
+            mergeList.push(All_Checkbox[i].parentElement.childNodes[3].innerText);                
+        }
+        if(mergeList.length===2){
+            break;
+        }
+    }
+    // location.href = "/merge";
 })
 
 // title 내부 저장
