@@ -90,9 +90,9 @@
                 <!-- /* 엑셀 전처리 방법 */ -->
                 <div class="content">
                     <div class="list-container" id="list-container">
-                        <div class="list" id="list-header">
+                        <div class="list">
                             <div class="col_name" id="col_name">
-                                열 번호
+                                열 이름
                             </div>
                             <div class="Null_count" id="Null_count">
                                 빈셀 수
@@ -116,36 +116,34 @@
                                 최대
                             </div>
                         </div>
-                        <div class="list-body" id="list-body">
-                            {% for key, values in summarys.items %}
-                            <div class="list">
-                                <div class="col_name">
-                                    <a href="#" class="draw_col" onclick="lineDraw(this.textContent)">{{key}}</a>
-                                </div>
-                                <div class="Null_count">
-                                    {{values.Null_count}}
-                                </div>
-                                <div class="Q1">
-                                    {{values.Q1}}
-                                </div>
-                                <div class="Q2">
-                                    {{values.Q2}}
-                                </div>
-                                <div class="Q3">
-                                    {{values.Q3}}
-                                </div>
-                                <div class="mean">
-                                    {{values.mean}}
-                                </div>
-                                <div class="min">
-                                    {{values.min}}
-                                </div>
-                                <div class="max">
-                                    {{values.max}}
-                                </div>
+                        {% for key, values in summarys.items %}
+                        <div class="list">
+                            <div class="col_name">
+                                <a href="#" class="draw_col" onclick="lineDraw(this.textContent)">{{key}}</a>
                             </div>
-                            {% endfor %}
+                            <div class="Null_count">
+                                {{values.Null_count}}
+                            </div>
+                            <div class="Q1">
+                                {{values.Q1}}
+                            </div>
+                            <div class="Q2">
+                                {{values.Q2}}
+                            </div>
+                            <div class="Q3">
+                                {{values.Q3}}
+                            </div>
+                            <div class="mean">
+                                {{values.mean}}
+                            </div>
+                            <div class="min">
+                                {{values.min}}
+                            </div>
+                            <div class="max">
+                                {{values.max}}
+                            </div>
                         </div>
+                        {% endfor %}
                     </div>
                 </div>
             </li>
@@ -172,6 +170,12 @@
                                 <option value="else">기타</option>
                             </select>
                             <input type="text" id="else_peri" class="else_peri" disabled>
+                        </div>
+
+                        <div class="type-select" id="type-select">
+                            <input type="radio" name="type" id="환경" value="환경" checked><label for="환경">환경</label>
+                            <input type="radio" name="type" id="생육" value="생육"><label for="생육">생육</label>
+                            <input type="radio" name="type" id="생산량" value="생산량"><label for="생산량">생산량</label>
                         </div>
                     </div>
 

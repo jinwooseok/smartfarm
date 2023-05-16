@@ -112,15 +112,18 @@ dialog{
 /* excel */
 .excel {
     width: 85%;
+    height: 330px;
     margin: 3px auto;
 
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
 }
 
 .excel .spreadsheet {
     position: relative;
     width: 100%;
+    height: 300px;
     border: 1px solid #000;
     margin-bottom: 10px;
 
@@ -249,10 +252,6 @@ dialog{
     margin-bottom: 5px;
 }
 
-.content .list-container .list>*:first-child {
-    font-size: 20px;
-}
-
 .content .list-container .list>* {
     height: 26px;
 }
@@ -267,6 +266,7 @@ dialog{
 .content .list-container .list .Null_count,
 .content .list-container .list .out_range,
 .content .list-container .list .Q1,
+.content .list-container .list .Q2,
 .content .list-container .list .mean,
 .content .list-container .list .Q3,
 .content .list-container .list .min,
@@ -307,7 +307,7 @@ dialog{
 
     display: flex;
     flex-direction: column;
-    justify-content: start;
+    justify-content: space-evenly;
     align-items: center;
 
 }
@@ -318,11 +318,6 @@ dialog{
     height: 20px;
 }
 
-.date-container >:first-child{
-    margin-top: 30px;
-    margin-bottom: 50px;
-}
-
 .columnDate-container{
     display: flex;
     flex-direction: column;
@@ -331,7 +326,6 @@ dialog{
 .date-container .peri-container .else_peri{
     width: 100%;
 }
-
 /* 변수 선택 창 */
 .variables-container{
     width: 60%;
