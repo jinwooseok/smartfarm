@@ -55,7 +55,7 @@ export class Excel {
             return;
         }
 
-        let fileName = `${this.fileName}_수정`; // 다운로드 파일 이름
+        let fileName = `${this.fileName}`; // 다운로드 파일 이름
 
         //Initialize file format you want csv or xls
         let uri = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURI(toCsv);

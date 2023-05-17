@@ -25,6 +25,7 @@ makeSelectBox(); // selectedBox 데이터 추가
 
 const $merge_button =document.querySelector('#merge_button');
 const $download = document.querySelector('#download');
+const $save = document.querySelector('#save');
 let newData;
 let var1_text=$var1.childNodes[1].textContent;
 let var2_text=$var2.childNodes[1].textContent;
@@ -61,11 +62,30 @@ $merge_button.addEventListener('click', () => {
 
     if(isData){
         newData = new Excel(mergeData(data1.getData(), data2.getData(), var2_text), $spreadsheet3);
-        document.querySelector('#download').disabled = false;
-        // 병합 후 자동 저장? OR 저장하기 버튼?
+        $download.disabled = false;
+        $save.disabled = false;
+        
     }
 })
 
 $download.addEventListener('click', ()=>{
-    newData.download(newData.getData());
+    newData.setFileName($('#fileName').val());
+    setTimeout(()=>{
+        newData.download(newData.getData());
+    }, 500)
+}, {once : true})
+
+$save.addEventListener('click', ()=>{
+    console.log(newData.getData());
+    console.log($('#fileName').val());
+    $.ajax({
+        url:'/merge/',
+        type:'post',
+        dataType:'json',
+        headers: { 'X-CSRFToken': csrftoken },
+        data:{
+            data : newData.getData(),
+            file_name : $('#fileName').val(),
+        }
+    })
 })
