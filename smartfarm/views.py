@@ -68,9 +68,9 @@ def revise(request, file_name):
     context = FileSystem(user).fileLoad(file_name)
     return render(request, "revise/revise.html", context) #전송
 def revise2(request):
-     user = loginValidator(request)
-     context={'user_name':user.user_name}
-     return render(request, "revise/revise.html", context)
+    user = loginValidator(request)
+    context={'user_name':user.user_name}
+    return render(request, "revise/revise.html", context)
 #--------------파일 정보 비동기 불러오기 - revise창-------------
 def fileLoadView(request):
     user = loginValidator(request)
@@ -80,17 +80,24 @@ def fileLoadView(request):
 #------------------------ merge창 ------------------------
 def merge(request):
     user = loginValidator(request)
+    context={'user_name':user.user_name}
+    return render(request, "merge/merge.html", context) #전송
+
+def mergeView(request):
+    user = loginValidator(request)
     if request.method == 'GET':
         files = request.GET.get('data')
         files = json.loads(files)
         context = FileSystem(user).fileLoadMulti(files)
         print(context)
-        return render(request, "merge/merge.html", context) #전송
+        return JsonResponse(context)
     elif request.method == 'POST':
         data = request.POST.get('data')
+        print("-------------"+data)
         file_name = request.POST.get('file_name')
         data = pd.read_json(data)
         FileSystem(user).fileSave(data, file_name)
+        return JsonResponse({'result':'success'})
 
 #------------------------ analysis창 ------------------------
 def analysis(request):
@@ -109,7 +116,7 @@ def farm(request):
     user = loginValidator(request)
     file_name=request.POST.get('file_name')
     file_type=request.POST.get('file_type','환경')
-    date=request.POST.get('date','0')
+    date=request.POST.get('date','1')
     lat=request.POST.get('lat','35')
     lon=request.POST.get('lon','126')
     lat_lon=[lat,lon]
@@ -199,8 +206,8 @@ class ETL_system:
         print(self.date)
         dt = DataProcess(self.data, self.date)
         dt.dateConverter()
-        growth_object = self.data
-        date = self.date
+        growth_object = dt.data
+        date = dt.date
         result=proc.making_weekly2(growth_object,date)
         result['날짜']=result['날짜'].astype('str')
         return result

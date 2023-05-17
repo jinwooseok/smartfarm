@@ -319,7 +319,7 @@ $submit_data.addEventListener('click', () => {
     console.time("submit_data");
     let file_name = $('#fileName').val();
     let file_type = fileType
-    let date = $('#date').val();
+    let date = $('#columnDate').val();
     let periods = $('#periods').val();
     let data = $('#jsonObject').val();
     let valueObject = JSON.stringify(newData);

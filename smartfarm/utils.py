@@ -162,12 +162,13 @@ class DataProcess:
         dateType = self.data.iloc[:, self.date].dtype
         print(dateType)
         dateColumn = self.data.iloc[:, self.date]
-        self.data.columns.values[self.date] = "날짜"
+        self.data.rename(columns={self.data.columns[self.date]:'날짜'}, inplace=True)
+        print(self.data.columns[self.date])
         if dateType == str:
             dateColumn = pd.to_datetime(dateColumn)
         elif dateType == int:
             dateColumn = pd.to_datetime(dateColumn.astype(str))
-        elif dateType == "datetime64":    
+        elif dateType == "datetime64[ns]":    
             dateColumn = pd.to_datetime(dateColumn)
         else:
             print("날짜 형식이 아니거나 이미 판다스 날짜 형식 입니다.")
