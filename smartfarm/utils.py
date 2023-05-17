@@ -83,6 +83,7 @@ class FileSystem:
         data_json=data.to_json(orient="records",force_ascii=False)#데이터프레임을 json배열형식으로변환(형식은 spreadsheet.js에 맞춰)
         summary_json = summary.to_json(orient="columns",force_ascii=False)
         context = {
+                    'user_name':self.user,
                     'result':'success',
                     'data' : data_json,
                     'summarys' : json.loads(summary_json)
