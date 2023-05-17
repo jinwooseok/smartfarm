@@ -61,8 +61,19 @@ $merge_button.addEventListener('click', () => {
 
     if(isData){
         newData = new Excel(mergeData(data1.getData(), data2.getData(), var2_text), $spreadsheet3);
+        /*
+        $.ajax({
+            url:'/farm',
+            type:'post',
+            dataType:'json',
+            headers: { 'X-CSRFToken': csrftoken },
+            data:{
+
+            }
+        })
+*/
         document.querySelector('#download').disabled = false;
-        // 병합 후 자동 저장? OR 저장하기 버튼?
+        
     }
 })
 

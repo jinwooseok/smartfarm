@@ -318,7 +318,7 @@ $submit_data.addEventListener('click', () => {
     }
     console.time("submit_data");
     let file_name = $('#fileName').val();
-    let file_type = $('#file_type').val();
+    let file_type = fileType
     let date = $('#date').val();
     let periods = $('#periods').val();
     let data = $('#jsonObject').val();
@@ -351,6 +351,7 @@ $submit_data.addEventListener('click', () => {
                     console.timeEnd("submit_data"); // 측정 종료
                 }
                 else {
+                    alert('전송할 데이터가 없습니다.')
                 }
             },
             error: function (xhr, error) {

@@ -115,7 +115,28 @@ $merge.addEventListener('click' , () =>{
             break;
         }
     }
-    // location.href = "/merge";
+
+    $.ajax({
+        url:'/merge/',
+        type:'post',
+        dataType:'json',
+        headers: { 'X-CSRFToken': csrftoken },
+        data:{
+            data:mergeList,
+        },
+        success:function(response){
+            if(response.data != null){
+                    location.href = "/merge";
+            }
+            else{
+                console.log("왜안돼?")
+            }
+        },
+        error: function (xhr, error) {
+            alert("에러입니다.");
+            console.error("error : " + error);
+        }
+    })
 })
 
 // title 내부 저장
