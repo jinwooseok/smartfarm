@@ -159,7 +159,8 @@ class DataProcess:
 
     #다양한 날짜 형식 처리, 타입 처리 전엔 항상 날짜의 형태의 문자열로 처리, 날짜 열만 따로 호출함.
     def dateConverter(self):
-        dateType = type(self.date)
+        dateType = self.data.iloc[:, self.date].dtype
+        print(dateType)
         dateColumn = self.data.iloc[:, self.date]
         self.data.columns.values[self.date] = "날짜"
         if dateType == str:

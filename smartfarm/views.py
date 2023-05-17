@@ -80,9 +80,17 @@ def fileLoadView(request):
 #------------------------ merge창 ------------------------
 def merge(request):
     user = loginValidator(request)
-    context = FileSystem(user).fileLoad(request)
-    print(context)
-    return render(request, "merge/merge.html", context) #전송
+    if request.method == 'GET':
+        files = request.GET.get('data')
+        files = json.loads(files)
+        context = FileSystem(user).fileLoadMulti(files)
+        print(context)
+        return render(request, "merge/merge.html", context) #전송
+    elif request.method == 'POST':
+        data = request.POST.get('data')
+        file_name = request.POST.get('file_name')
+        data = pd.read_json(data)
+        FileSystem(user).fileSave(data, file_name)
 
 #------------------------ analysis창 ------------------------
 def analysis(request):
@@ -131,7 +139,7 @@ class ETL_system:
         b=pd.read_json(data)
         self.data = b
         self.file_type = file_type
-        self.date = int(date)
+        self.date = int(date) - 1
         self.lat, self.lon=lat_lon
         self.DorW = DorW
         self.var = var
@@ -153,6 +161,7 @@ class ETL_system:
         lat = self.lat
         print(self.date)
         dt = DataProcess(self.data, self.date)
+        dt.dateConverter()
         if self.DorW=="weeks":
         #주별데이털로 변환
             result = proc.making_weekly2(dt.data, dt.date)
@@ -160,7 +169,6 @@ class ETL_system:
         elif self.DorW == 'days':
             #시간 구별 데이터프레임 생성
             envir_date = pd.DataFrame()
-            dt.dateConverter()
             envir_date['날짜'] = dt.getDate()
             envir_date['날짜'] = pd.to_datetime(envir_date['날짜']).astype(str)
             
@@ -187,9 +195,12 @@ class ETL_system:
     
     #생육데이터 처리함수
     def Growth(self):
+        print("--------------생육입니다.-------------------------")
+        print(self.date)
+        dt = DataProcess(self.data, self.date)
+        dt.dateConverter()
         growth_object = self.data
         date = self.date
-        date = int(date)
         result=proc.making_weekly2(growth_object,date)
         result['날짜']=result['날짜'].astype('str')
         return result
