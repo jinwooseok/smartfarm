@@ -118,7 +118,7 @@ $merge.addEventListener('click' , () =>{
 
     $.ajax({
         url:'/merge/',
-        type:'post',
+        type:'get',
         dataType:'json',
         headers: { 'X-CSRFToken': csrftoken },
         data:{
@@ -127,9 +127,6 @@ $merge.addEventListener('click' , () =>{
         success:function(response){
             if(response.data != null){
                     location.href = "/merge";
-            }
-            else{
-                console.log("왜안돼?")
             }
         },
         error: function (xhr, error) {
