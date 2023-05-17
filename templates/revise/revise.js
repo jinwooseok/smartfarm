@@ -22,16 +22,16 @@ const $excel_down = document.querySelector('#excel_down'); // 파일 다운
 let data;
 let excel_arr;
 
-window.onload = () =>{
+window.onload = () => {
     data = new Excel(excel_data, $spreadsheet);
     excel_arr = Object.keys(data.getData()[0]);
-    for(let x of excel_arr){
+    for (let x of excel_arr) {
         $excel_var.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
     }
 }
 
 // downToCSV //////////////////////////////////////////////////
-$excel_down.addEventListener('click', ()=>{
+$excel_down.addEventListener('click', () => {
     data.download(newData);
 });
 
@@ -82,7 +82,7 @@ const $excel_var = document.querySelector('#excel_var'); // 모든 열 추가
 const $default_select = document.querySelector('#default_select'); // 디폴트 값 select box
 const $final_var = document.querySelectorAll('#final_var'); // 마지막 select-box [0]은 쉬운 버전, [1]은 어려운 버전 박스
 
-let excel_var_text='';
+let excel_var_text = '';
 $excel_var.addEventListener('click', (event) => {
     excel_var_text = event.target.textContent;
 })
@@ -90,7 +90,7 @@ $excel_var.addEventListener('click', (event) => {
 // 디폴드 선택에 따른 default_value 창 변동
 $default_select.addEventListener('click', (event) => {
 
-    if(!excel_var_text){
+    if (!excel_var_text) {
         alert('값을 선택해주세요');
         return true;
     }
@@ -133,7 +133,7 @@ const $ex_var1 = document.querySelector('#ex_var1');
 const $ex_var2 = document.querySelector('#ex_var2');
 const $ex_var3 = document.querySelector('#ex_var3');
 
-// [ {text1 : [[text2, text3]] }]
+// [ {ex_var1_text : [[ex_var2_text, ex_var3_text]] }]
 let ex_var1_text;
 let ex_var2_text;
 let ex_var3_text;
@@ -173,7 +173,7 @@ const $optionDelete = document.querySelectorAll('#option_delete'); // 변수 삭
 $move.addEventListener('click', () => {
     // 2,3번 박스만 선택
     if (ex_var1_text && ex_var2_text) {
-        // text2가 전체면 default 값을 불러옴
+        // ex_var2_text 전체면 default 값을 불러옴
         if (ex_var2_text === '전체') {
             let text = ex_var1_text;
             for (let string of defaultVar) { // string = '주간_평균_' 구조
@@ -198,21 +198,21 @@ $move.addEventListener('click', () => {
                     }
                 }
             }
-        } else if (ex_var2_text !== '전체' && ex_var3_text) { //text2가 default값이 아니고 text3가 있다면
+        } else if (ex_var2_text !== '전체' && ex_var3_text) { //ex_var2_text가 default값이 아니고 ex_var3_text가 있다면
             let string = ex_var2_text + ex_var3_text + ex_var1_text;
             console.log(string);
             if (CheckDuplicate(string.split('_').join(''))) {
                 $final_var[0].innerHTML += `<Option value= '${string}'>` + string.split('_').join('') + `</option>`;
                 $final_var[1].innerHTML += `<Option value= '${string}'>` + string.split('_').join('') + `</option>`;
                 newDataArr.push(string.split('_').join(''));
-                ex_var2_text = text2.replace('_', '');
-                ex_var3_text = text3.replace('_', '');
+                ex_var2_text = ex_var2_text.replace('_', '');
+                ex_var3_text = ex_var3_text.replace('_', '');
                 add_Obj(ex_var1_text, ex_var2_text, ex_var3_text);
             }
-        } else { // text3 미설정
+        } else { // ex_var3_text 미설정
             alert('4번 박스를 선택해 주세요.')
         }
-        // text2,3 초기화
+        // ex_var2_text,3 초기화
         ex_var2_text = '';
         ex_var3_text = '';
 
@@ -283,24 +283,39 @@ $periods.addEventListener('change', (event) => {
 
 })
 
-// data 최종 확인
-$submit_data.addEventListener('click', () => {
-    console.log(newDataArr);
-    console.log('-----------------');
-    console.log(newData);
-})
+const $type = document.querySelectorAll('input[name="type"]'); // 파일 종류 확인
+let fileType; // 파일 종류 전송 변수
+
+// // data 최종 확인
+// $submit_data.addEventListener('click', () => {
+//     for(let i=0; i<$type.length; i++){
+//         if($type[i].checked){
+//             fileType=$type[i].value
+//         }
+//     }
+//     console.log(fileType)
+//     console.log(newDataArr);
+//     console.log('-----------------');
+//     console.log(newData);
+// })
 
 // 초기화
 $reset_data.addEventListener('click', () => {
     newData = [];
     newDataArr = [];
-    $final_var.innerHTML = '';
+    $final_var[0].innerHTML = '';
+    $final_var[1].innerHTML = '';
     $fileName.value = '';
 })
 
 //우석추가
 //농업 전처리 클래스와 연결된 함수
-$('#submit_data').click(function () {
+$submit_data.addEventListener('click', () => {
+    for (let i = 0; i < $type.length; i++) {
+        if ($type[i].checked) {
+            fileType = $type[i].value; //생육, 환경, 생산량 선택 값
+        }
+    }
     console.time("submit_data");
     let file_name = $('#fileName').val();
     let file_type = $('#file_type').val();
@@ -311,34 +326,37 @@ $('#submit_data').click(function () {
     if (periods == 'else') {
         periods = document.getElementById('else_peri').value;
     }
-    $.ajax({
-        url:'/farm/',
-        type:'post',
-        dataType:'json',
-        headers: {'X-CSRFToken': csrftoken},
-        data:{
-            file_name:file_name,
-            file_type:file_type,
-            date:date,
-            DorW:periods,
-            data:data,
-            valueObject:valueObject,
-        },
-        success: function (response) {
-            if (response.data != null) {
-                // a.setHeader([정수], [문자열]);
-                console.log(response.data);
-                location.href = "../";
-                // $('#spreadsheet1').empty();
-                // updateExcel(response.data,newnum);
-                console.timeEnd("submit_data"); // 측정 종료
+    const yesOrNo = confirm('파일을 저장합니다.'); // 예, 아니요를 입력 받음
+    if (yesOrNo) {
+        $.ajax({
+            url: '/farm/',
+            type: 'post',
+            dataType: 'json',
+            headers: { 'X-CSRFToken': csrftoken },
+            data: {
+                file_name: file_name,
+                file_type: file_type,
+                date: date,
+                DorW: periods,
+                data: data,
+                valueObject: valueObject,
+            },
+            success: function (response) {
+                if (response.data != null) {
+                    // a.setHeader([정수], [문자열]);
+                    console.log(response.data);
+                    // location.href = "../";
+                    // $('#spreadsheet1').empty();
+                    // updateExcel(response.data,newnum);
+                    console.timeEnd("submit_data"); // 측정 종료
+                }
+                else {
+                }
+            },
+            error: function (xhr, error) {
+                alert("에러입니다.");
+                console.error("error : " + error);
             }
-            else {
-            }
-        },
-        error: function (xhr, error) {
-            alert("에러입니다.");
-            console.error("error : " + error);
-        }
-    })
-})
+        })
+    }
+},{once : true})
