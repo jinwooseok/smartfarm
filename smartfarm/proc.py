@@ -207,6 +207,7 @@ def generating_variable(data, date_ind, d_ind, kind,t_diff , div_DN=False, tbase
             kind_ND[i] = ment      
 
     date_seq = data.iloc[:,date_ind].astype('str').apply(lambda x: x[0:10]).replace('-','',regex=True)
+    print(date_seq)
     date = pd.Series(pd.to_datetime(date_seq.unique(), format="%Y-%m-%d")) 
     # 만약 div_DN이 있을 시의 코드
     # if ("야간" in kind_ND):
@@ -301,7 +302,8 @@ def making_weekly2(gdata,date_ind,interval=7):
     week = []
     i=0
     weeknum=0
-    date=gdata['날짜']
+    print(gdata.columns.values[date_ind])
+    date=gdata["날짜"]
     lastDate=pd.to_datetime(date.iloc[-1])
     if type(date[0]) != str:
         date = date.astype('str')

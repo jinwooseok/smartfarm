@@ -83,6 +83,7 @@ class FileSystem:
         data_json=data.to_json(orient="records",force_ascii=False)#데이터프레임을 json배열형식으로변환(형식은 spreadsheet.js에 맞춰)
         summary_json = summary.to_json(orient="columns",force_ascii=False)
         context = {
+                    'user_name':self.user,
                     'result':'success',
                     'data' : data_json,
                     'summarys' : json.loads(summary_json)
@@ -158,14 +159,16 @@ class DataProcess:
 
     #다양한 날짜 형식 처리, 타입 처리 전엔 항상 날짜의 형태의 문자열로 처리, 날짜 열만 따로 호출함.
     def dateConverter(self):
-        dateType = type(self.date)
+        dateType = self.data.iloc[:, self.date].dtype
+        print(dateType)
         dateColumn = self.data.iloc[:, self.date]
-        self.data.columns.values[self.date] = "날짜"
+        self.data.rename(columns={self.data.columns[self.date]:'날짜'}, inplace=True)
+        print(self.data.columns[self.date])
         if dateType == str:
             dateColumn = pd.to_datetime(dateColumn)
         elif dateType == int:
             dateColumn = pd.to_datetime(dateColumn.astype(str))
-        elif dateType == "datetime64":    
+        elif dateType == "datetime64[ns]":    
             dateColumn = pd.to_datetime(dateColumn)
         else:
             print("날짜 형식이 아니거나 이미 판다스 날짜 형식 입니다.")

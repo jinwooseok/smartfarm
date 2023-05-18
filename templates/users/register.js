@@ -104,7 +104,7 @@ function button() {
 function move_login() {
     var form = document.getElementById("regi_form");
     form.action = "/users/register/";
-    form.mothod = "POST";
+    form.method = "POST";
     form.submit();
 }
 

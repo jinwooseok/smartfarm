@@ -117,16 +117,17 @@ $merge.addEventListener('click' , () =>{
     }
 
     $.ajax({
-        url:'/merge/',
+        url:'/mergeView/',
         type:'get',
         dataType:'json',
         headers: { 'X-CSRFToken': csrftoken },
         data:{
-            data:mergeList,
+            data:JSON.stringify(mergeList),
         },
         success:function(response){
             if(response.data != null){
-                    location.href = "/merge";
+                localStorage.setItem("mergeData", JSON.stringify(response.data));
+                location.href = "/merge/";
             }
         },
         error: function (xhr, error) {

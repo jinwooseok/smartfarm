@@ -319,7 +319,7 @@ $submit_data.addEventListener('click', () => {
     console.time("submit_data");
     let file_name = $('#fileName').val();
     let file_type = fileType
-    let date = $('#date').val();
+    let date = $('#columnDate').val();
     let periods = $('#periods').val();
     let data = $('#jsonObject').val();
     let valueObject = JSON.stringify(newData);
@@ -343,11 +343,8 @@ $submit_data.addEventListener('click', () => {
             },
             success: function (response) {
                 if (response.data != null) {
-                    // a.setHeader([정수], [문자열]);
                     console.log(response.data);
-                    // location.href = "../";
-                    // $('#spreadsheet1').empty();
-                    // updateExcel(response.data,newnum);
+                
                     console.timeEnd("submit_data"); // 측정 종료
                 }
                 else {

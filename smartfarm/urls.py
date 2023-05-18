@@ -15,7 +15,7 @@ urlpatterns = [
     path('fileList/delete/', views.fileDeleteView, name="fileDelete"),
     #merge 창
     path('merge/', views.merge, name='merge'),
-
+    path('mergeView/', views.mergeView, name='mergeView'),
     #데이터수정 창
     path('revise/<str:file_name>/', views.revise, name='revise'),
     path('revise/', views.revise2, name='revise2'),
