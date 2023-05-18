@@ -4,10 +4,7 @@ const $spreadsheet2 = document.querySelector('#spreadsheet2');
 const $spreadsheet3 = document.querySelector('#spreadsheet3');
 const $var1 = document.querySelector('#var1');
 const $var2 = document.querySelector('#var2');
-let dataSet=JSON.parse(localStorage.getItem('mergeData'));
-console.log(dataSet);
-let excel_data = JSON.parse(dataSet[0]);
-let excel_data2 = JSON.parse(dataSet[1]);
+const $fileName=document.querySelector('#fileName')
 
 let data1 = new Excel(excel_data, $spreadsheet1);
 let data2 = new Excel(excel_data2, $spreadsheet2);
@@ -40,8 +37,7 @@ $var2.addEventListener('click', (event) =>{
     var2_text = event.target.value
 })
 
-
-function mergeData(data1, data2, column){
+function mergeData(data1, data2){
     let merge=[];
 
     if(data1.length !== data2.length){
@@ -49,24 +45,41 @@ function mergeData(data1, data2, column){
         return;
     }
 
+    // 특수문자제거
+    let regExp = /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/ ]/gi;
+
     for(let i in data2){
-        delete data2[i][column];
-        let obj = {...data1[i], ...data2[i]};
-        merge.push(obj);
+        if(data1[i][var1_text].replace(regExp,'') === data2[i][var2_text].replace(regExp,'')){
+            delete data2[i][column];
+            let obj = {...data1[i], ...data2[i]};
+            merge.push(obj);
+        } else{
+            alert(`${i+1}번 열의 값이 ${data1[i][var1_text]}, ${data2[i][var2_text]}로 다릅니다.`);
+            return;
+        }
     }
     
     return merge;
 }
 
 $merge_button.addEventListener('click', () => {
+
+    if(!$fileName.value){
+        alert('파일 제목을 입력하세요')
+        return;
+    }
+    
     alert(`${var1_text}과 ${var2_text}를 기준으로 병합합니다.`)
     isData=true;
 
     if(isData){
-        newData = new Excel(mergeData(data1.getData(), data2.getData(), var2_text), $spreadsheet3);
-        $download.disabled = false;
-        $save.disabled = false;
-        
+        if(mergeData(data1.getData(), data2.getData())){
+            newData = new Excel(mergeData(data1.getData(), data2.getData()), $spreadsheet3);
+            document.querySelector('#download').disabled = false;
+            document.querySelector('#save').disabled = false;
+        }else{
+            return;
+        }
     }
 })
 
