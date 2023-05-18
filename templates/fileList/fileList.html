@@ -87,12 +87,14 @@
             {% csrf_token %}
             <div class="excel">
                 <div id="spreadsheet" class="spreadsheet">
-                    <input type="file" name="file_input" id="file_drag" class="file_drag" accept=".xls, .xlsx, .csv">
-                    <i class="fa-solid fa-file-import" id="file_icon"></i>
+                    <div id="file_drag" class="file_drag">
+                        <i class="fa-solid fa-cloud-arrow-up" id="file_icon"></i>
+                        <span>파일을 올려주세요</span>
+                    </div>
                 </div>
             </div>
             <div class="wrap">
-                <input type="file" name="file_input" id="file_input" class="file_input" accept=".xls, .xlsx, .csv">
+                <input type="file" id="file_input" class="file_input" accept=".xls, .xlsx, .csv">
                 <label for="file_input">업로드</label>
                 <input id="file_name" class="upload-name" value="파일선택" disabled="disabled">
             </div>
