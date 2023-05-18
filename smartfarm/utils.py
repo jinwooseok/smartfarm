@@ -80,7 +80,12 @@ class FileSystem:
         summary=DataProcess(data).makeSummary()
         #---------------json생성------------------
         data=data.replace({np.nan: 0})
+        
+        dateIndex = DataProcess.dateDetecter(data)
+        data = DataProcess.columnToString(data, dateIndex)
         data_json=data.to_json(orient="records",force_ascii=False)#데이터프레임을 json배열형식으로변환(형식은 spreadsheet.js에 맞춰)
+        
+        print(data_json)
         summary_json = summary.to_json(orient="columns",force_ascii=False)
         context = {
                     'user_name':self.user,
@@ -140,10 +145,6 @@ class DataProcess:
         self.data = data
         self.date = int(date)
 
-    #컬럼명 변경
-    def columnConverter(self, bef, aft):
-        
-        return 0
     
     #실수 자료를 소수점 2자리 수로 반올림
     def roundConverter(self):
@@ -154,8 +155,7 @@ class DataProcess:
         return 0
     
     #데이터 변경, 결측치,이상치 처리
-    def dataConverter(self):
-        return 0
+
 
     #다양한 날짜 형식 처리, 타입 처리 전엔 항상 날짜의 형태의 문자열로 처리, 날짜 열만 따로 호출함.
     def dateConverter(self):
@@ -199,6 +199,22 @@ class DataProcess:
     def dataMerger(df1, df2):
         df1 = df1.append(df2)
         return df1
+    
+    #날짜열의 위치를 탐지. 반드시 날짜 형식이 있어야 함. 없을 시 변화없고 경고문 출력
+    @staticmethod
+    def dateDetecter(data):
+        for i, k in enumerate(data):
+            if data[k].dtype == "datetime64[ns]":
+                return i
+        print("날짜 형식의 열이 존재하지 않습니다. 날짜 열이 문자열로 되어있는지 확인해 주세요.")
+        return -1
+    #컬럼명 변경
+    @staticmethod
+    def columnToString(df, columnIndex):
+        if columnIndex != -1:
+            df.iloc[:, columnIndex] = df.iloc[:, columnIndex].astype(str)
+        return df
+    
 @staticmethod
 class JsonProcess:
     def jsonToDf(json):
