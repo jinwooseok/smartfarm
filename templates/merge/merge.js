@@ -6,6 +6,10 @@ const $var1 = document.querySelector('#var1');
 const $var2 = document.querySelector('#var2');
 const $fileName=document.querySelector('#fileName')
 
+let dataSet=JSON.parse(localStorage.getItem('mergeData'));
+let excel_data = JSON.parse(dataSet[0]);
+let excel_data2 = JSON.parse(dataSet[1]);
+
 let data1 = new Excel(excel_data, $spreadsheet1);
 let data2 = new Excel(excel_data2, $spreadsheet2);
 
