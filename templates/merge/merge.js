@@ -7,9 +7,9 @@ const $var2 = document.querySelector('#var2');
 const $fileName=document.querySelector('#fileName')
 
 let dataSet=JSON.parse(localStorage.getItem('mergeData'));
+console.log(dataSet);
 let excel_data = JSON.parse(dataSet[0]);
 let excel_data2 = JSON.parse(dataSet[1]);
-
 let data1 = new Excel(excel_data, $spreadsheet1);
 let data2 = new Excel(excel_data2, $spreadsheet2);
 
@@ -54,7 +54,7 @@ function mergeData(data1, data2){
 
     for(let i in data2){
         if(data1[i][var1_text].replace(regExp,'') === data2[i][var2_text].replace(regExp,'')){
-            delete data2[i][column];
+            delete data2[i][var2_text];
             let obj = {...data1[i], ...data2[i]};
             merge.push(obj);
         } else{

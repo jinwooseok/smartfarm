@@ -3,11 +3,32 @@ import { Excel } from '/templates/JS/excel_show.mjs'
 const csrftoken = $('[name=csrfmiddlewaretoken]').val(); // csrftoken
 
 // upload를 통해 저장된 파일 이름을 불러옴
-let Title = JSON.parse(localStorage.getItem("title_list"));
+let localTitleList = JSON.parse(localStorage.getItem("title_list"));
 let $manage_list_menu = document.querySelector('#manage_list_menu');
-for (let x of Title) {
-    $manage_list_menu.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
+let localFIleTitle = JSON.parse(localStorage.getItem("fileTitle"));
+for (let x of localTitleList) {
+    if(x === localFIleTitle){
+        $manage_list_menu.innerHTML += `<Option value= '${x}' selected>` + x + `</option>`;
+    } else{
+        $manage_list_menu.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
+    }
 }
+
+// 파일 이동
+$manage_list_menu.addEventListener('change', () => {
+    let text = $manage_list_menu.options[$manage_list_menu.selectedIndex].value;
+    localStorage.setItem('fileTitle', JSON.stringify(text));
+    let link = document.createElement("a");
+    link.href = `/revise/${text}/`;
+    link.style = "visibility:hidden";
+
+    console.log(text, link);
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+})
+
 
 //////////////////////////////////////////////
 // test data
@@ -344,7 +365,7 @@ $submit_data.addEventListener('click', () => {
             success: function (response) {
                 if (response.data != null) {
                     console.log(response.data);
-                
+
                     console.timeEnd("submit_data"); // 측정 종료
                 }
                 else {
@@ -357,4 +378,4 @@ $submit_data.addEventListener('click', () => {
             }
         })
     }
-},{once : true})
+}, { once: true })

@@ -136,6 +136,11 @@ $merge.addEventListener('click' , () =>{
     })
 })
 
+function saveTitle(event) {
+    localStorage.setItem('fileTitle', JSON.stringify(event.target.innerHTML));
+    event.target.href=`/revise/${event.target.innerHTML}/`;
+}
+
 // title 내부 저장
 localStorage.setItem("title_list", JSON.stringify(titleList));
 
