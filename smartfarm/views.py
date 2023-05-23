@@ -89,15 +89,27 @@ def mergeView(request):
         files = request.GET.get('data')
         files = json.loads(files)
         context = FileSystem(user).fileLoadMulti(files)
-        print(context)
         return JsonResponse(context)
     elif request.method == 'POST':
-        data = request.POST.get('data')
-        print("-------------"+data)
-        file_name = request.POST.get('file_name')
-        data = pd.read_json(data)
-        FileSystem(user).fileSave(data, file_name)
-        return JsonResponse({'result':'success'})
+        if request.POST.get('header') == 'merge':
+            data = pd.read_json(request.POST.get('data'))
+            data1 = data.iloc[0,0]
+            data2 = data.iloc[1,0]
+            data1 = pd.read_json(data1) 
+            data2 = pd.read_json(data2)
+            var1, var2 = request.POST.get('var1'), request.POST.get('var2')
+            mergeData = pd.merge(data1, data2, how='outer', left_on=var1, right_on=var2)
+            mergeData = mergeData.to_json(orient='records', force_ascii=False)
+            print(mergeData)
+            return JsonResponse({'result':'success',
+                                'data':mergeData})
+        elif request.POST.get('header') == 'save':
+            data = request.POST.get('data')
+            print("-------------"+data)
+            file_name = request.POST.get('file_name')
+            data = pd.read_json(data)
+            FileSystem(user).fileSave(data, file_name)
+            return JsonResponse({'result':'success'})
 
 #------------------------ analysis창 ------------------------
 def analysis(request):
