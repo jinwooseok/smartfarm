@@ -16,8 +16,10 @@
     <script src="https://jsuites.net/v4/jsuites.js"></script>
     <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
 
-</head>
+    <!-- chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 
+</head>
 
 <body>
 
@@ -119,7 +121,7 @@
                         {% for key, values in summarys.items %}
                         <div class="list">
                             <div class="col_name">
-                                <a href="#" class="draw_col" onclick="lineDraw(this.textContent)">{{key}}</a>
+                                <a href="#" class="draw_col" id="draw_col" onclick="lineDraw(this.textContent)">{{key}}</a>
                             </div>
                             <div class="Null_count">
                                 {{values.Null_count}}

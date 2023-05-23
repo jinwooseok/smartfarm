@@ -115,7 +115,6 @@ $merge.addEventListener('click' , () =>{
             break;
         }
     }
-
     $.ajax({
         url:'/mergeView/',
         type:'get',
