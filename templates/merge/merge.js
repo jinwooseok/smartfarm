@@ -7,6 +7,8 @@ const $var2 = document.querySelector('#var2');
 const $fileName=document.querySelector('#fileName')
 
 let dataSet=JSON.parse(localStorage.getItem('mergeData'));
+
+console.log(dataSet);
 let excel_data = JSON.parse(dataSet[0]);
 let excel_data2 = JSON.parse(dataSet[1]);
 
