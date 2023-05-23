@@ -14,8 +14,8 @@ let lineDraw = (name) =>{
     let Ydata =[]; // y축
     let Xdata =[]; // x축
 
-    // local에 저장된 데이터를 불러옴
-    let ex_data = JSON.parse(localStorage.getItem('data'))
+    // 저장된 데이터를 불러옴
+    let ex_data = JSON.parse(document.getElementById('jsonObject').value);
 
     for(let i in ex_data){
         Xdata.push(Object.values(ex_data[i])[0]); // x값
