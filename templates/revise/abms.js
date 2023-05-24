@@ -30,8 +30,9 @@ $abms_var.addEventListener('click', (event) => {
         <div id="화방별개화수" class="화방별개화수">화방별개화수<input type="text" value="화방별개화수" onkeyup="colSearch(event)"></div>
         <div id="화방별착과수" class="화방별착과수">화방별착과수<input type="text" value="화방별착과수" onkeyup="colSearch(event)"></div>
         <div id="화방별적과수" class="화방별적과수">화방별적과수<input type="text" value="화방별적과수" onkeyup="colSearch(event)"></div>
-        <div id="화방별수확수" class="화방별수확수">화방별수확수<input type="text" value="화방별수확수" onkeyup="colSearch(event)"></div> 
-        `
+        <div id="화방별수확수" class="화방별수확수">화방별수확수<input type="text" value="화방별수확수" onkeyup="colSearch(event)"></div>
+        <div id="비고" class="비고">비고<input type="text" value="비고" onkeyup="colSearch(event)"></div>
+    `
     } else if (text === '딸기') {
         $abms_text.innerHTML = `
         <div id="농가명" class="농가명">농가명<input type="text" value="농가명" onkeyup="colSearch(event)"></div>
@@ -54,7 +55,8 @@ $abms_var.addEventListener('click', (event) => {
         <div id="화방별적화수" class="화방별적화수">화방별적화수<input type="text" value="화방별적화수" onkeyup="colSearch(event)"></div>
         <div id="화방별착과수" class="화방별착과수">화방별착과수<input type="text" value="화방별착과수" onkeyup="colSearch(event)"></div>
         <div id="화방별적과수" class="화방별적과수">화방별적과수<input type="text" value="화방별적과수" onkeyup="colSearch(event)"></div>
-        <div id="화방별수확수" class="화방별수확수">화방별수확수<input type="text" value="화방별수확수" onkeyup="colSearch(event)"></div>    
+        <div id="화방별수확수" class="화방별수확수">화방별수확수<input type="text" value="화방별수확수" onkeyup="colSearch(event)"></div>
+        <div id="비고" class="비고">비고<input type="text" value="비고" onkeyup="colSearch(event)"></div>    
         `
     }
 })
@@ -73,9 +75,8 @@ $abms_save.addEventListener('click', () =>{
     for(let i=0; i<excel_data.length;i++){
         let x={}; // 데이터 한 줄
         for(let j in abmsColumn){
-            x[abmsColumn[j]] = excel_data[i][inputValue[j]]; 
+            x[abmsColumn[j]] = excel_data[i][inputValue[j]]??''; 
         }
-        console.log(x);
         abmsData.push(x);
     }
     console.log(abmsData)
@@ -84,16 +85,26 @@ $abms_save.addEventListener('click', () =>{
 // 검색으로 찾는건 나중에
 function colSearch(event){
     let text = event.target.value;
-    // for(let i=0; i<excel_col.length; i++){
-    //     if(excel_col[i].includes(text)){
-    //         event.target.value = excel_col[i];
-    //     }
-    // }
+    if(event.target.parentNode.childNodes[2]){
+        event.target.parentNode.childNodes[2].remove();
+    }
+    let searchBox = document.createElement('div');
+    searchBox.className='searchBox';
+    searchBox.id='searchBox';
+    for(let i=0; i<excel_col.length; i++){
+        if(excel_col[i].includes(text)){
+            searchBox.innerHTML +=`<div class="result">${excel_col[i]}</div>` // 여기가 자기 자식으로 들어가야 함
+        }
+    }
+    event.target.parentNode.append(searchBox);
 }
 
-// 할거 
-// 1. 우선 파일을 클릭할 때 제목을 local에 넘겨서 제목을 받아옴
-// 그리고 저장시 파일제목+abms로 고정
+$abms_text.addEventListener('click', (event) =>{
+    event.target.parentNode.parentNode.childNodes[1].value = event.target.textContent;
+    event.target.parentNode.parentNode.childNodes[2].remove();
+})
+
+
 
 // abms
 // 없는 데이터는?

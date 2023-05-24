@@ -447,6 +447,11 @@ input[name="level"]:checked+label+.box{
     align-items: center;
 }
 
+.abms .abms_text .result:hover{
+    color: #fff;
+    background-color: #888;
+}
+
 .abms .abms_select{
     width: 10%;
 
