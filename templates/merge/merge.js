@@ -53,10 +53,10 @@ function mergeData(data1, data2) {
     // 특수문자제거
     let regExp = /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/ ]/gi;
 
-    for (let i in data2) {
-        if (data1[i][var1_text].replace(regExp, '') === data2[i][var2_text].replace(regExp, '')) {
+    for(let i in data2){
+        if(data1[i][var1_text].replace(regExp,'') === data2[i][var2_text].replace(regExp,'')){
             delete data2[i][column];
-            let obj = { ...data1[i], ...data2[i] };
+            let obj = {...data1[i], ...data2[i]};
             merge.push(obj);
         } else {
             alert(`${i + 1}번 열의 값이 ${data1[i][var1_text]}, ${data2[i][var2_text]}로 다릅니다.`);
