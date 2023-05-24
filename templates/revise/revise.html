@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
-
+{% csrf_token %}
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -259,6 +259,8 @@
                             <option value="방울토마토">방울토마토</option>
                             <option value="딸기">딸기</option>
                         </select>
+                        <span>파일 이름</span>
+                        <input type="text" name="abmsFileName" id="abmsFileName" class="abmsFileName">
                         <button id="abms_save" class="abms_save">저장하기</button>
                     </div>
 
