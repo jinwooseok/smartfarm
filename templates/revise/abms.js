@@ -6,6 +6,8 @@ let abmsData = []; // abms 데이터
 let excel_data = JSON.parse(document.getElementById('jsonObject').value);
 let excel_col= Object.keys(excel_data[0]);
 
+const csrftoken = $('[name=csrfmiddlewaretoken]').val();
+
 // 종류 선택
 $abms_var.addEventListener('click', (event) => {
     let text = $abms_var.options[$abms_var.selectedIndex].value;
@@ -65,8 +67,10 @@ let inputValue = []; // 우리가 불러올 열 이름들
 let abmsColumn = []; // abms 열 이름
 // data[abmsColumn] = [inputValue]가 되어야함
 
+
 // abms 데이터 만들기
 $abms_save.addEventListener('click', () =>{
+    abmsData=[];
     let abmsChild= document.querySelectorAll('#abms_text > *');
     for(let i=0; i<abmsChild.length; i++){
         abmsColumn.push(abmsChild[i].classList[0]);
@@ -79,7 +83,23 @@ $abms_save.addEventListener('click', () =>{
         }
         abmsData.push(x);
     }
-    console.log(abmsData)
+
+    $.ajax({
+        url: '/mergeView/',
+        type:'post',
+        dataType: 'json',
+        headers: { 'X-CSRFToken': csrftoken },
+        data:{
+            header:"save",
+            data: JSON.stringify(abmsData),
+            file_name : document.querySelector('#abmsFileName').value,
+        },
+        success:function(response){
+            if(response.data != null){
+                location.href=`/fileList`; // 이게 작동 안함
+            }
+        },
+    })
 })
 
 // 검색으로 찾는건 나중에
@@ -101,7 +121,7 @@ function colSearch(event){
 
 $abms_text.addEventListener('click', (event) =>{
     event.target.parentNode.parentNode.childNodes[1].value = event.target.textContent;
-    event.target.parentNode.parentNode.childNodes[2].remove();
+    document.querySelector('#searchBox').remove();
 })
 
 

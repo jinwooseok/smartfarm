@@ -461,6 +461,10 @@ input[name="level"]:checked+label+.box{
     align-items: center;
 }
 
+.abms .abms_select .abmsFileName{
+    width: 80%;
+}
+
 .abms .abms_select .abms_var{
     width: 80%;
     margin-bottom: 15px;

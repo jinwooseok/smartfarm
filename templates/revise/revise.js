@@ -49,6 +49,11 @@ window.onload = () => {
     for (let x of excel_arr) {
         $excel_var.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
     }
+    // 파일 수정 기본 제목  = 제목 + 수정
+    document.querySelector('#fileName').value=JSON.parse(localStorage.getItem("fileTitle"))+'수정'
+
+    // abms제목 기본 설정 = 제목+abms
+    document.querySelector('#abmsFileName').value=JSON.parse(localStorage.getItem("fileTitle"))+'_abms'
 }
 
 // downToCSV //////////////////////////////////////////////////
