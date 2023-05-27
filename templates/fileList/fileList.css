@@ -222,6 +222,11 @@ body{
     padding-left: 5px;
 }
 
+.list-container .list .list_title :hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 .list-container .list_head .date,
 .list-container .list_head .n_date,
 .list-container .list .date,
