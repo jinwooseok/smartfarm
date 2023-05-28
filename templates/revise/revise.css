@@ -18,14 +18,6 @@ dialog{
     box-sizing: border-box;
 }
 
-/* scroll 디자인 */
-*::-webkit-scrollbar{
-    width : 3px;
-}
-*::-webkit-scrollbar-thumb{
-    background-color: #999;
-}
-
 /* header */
 .header {
     width: 95%;
@@ -128,9 +120,16 @@ dialog{
     margin-bottom: 10px;
 
     overflow-x: auto;
-    overflow-y: auto;
+    overflow-y: hidden;
 }
 
+/* scroll 디자인 */
+.spreadsheet::-webkit-scrollbar{
+    width : 3px;
+}
+.spreadsheet::-webkit-scrollbar-thumb{
+    background-color: #999;
+}
 
 /* radio 탭 */
 .tabs {
