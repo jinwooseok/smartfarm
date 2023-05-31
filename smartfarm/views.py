@@ -40,7 +40,7 @@ def fileList(request):
             context={'user_name':user.user_name,
                 'files':file_object}
             return render(request,'fileList/fileList.html',context)
-    if user == None:
+    elif user == None:
             return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
 
 #파일 업로드 함수 - data_list창
@@ -65,12 +65,19 @@ def fileDeleteView(request):
 #------------------------ revise창 ------------------------
 def revise(request, file_name):
     user = loginValidator(request)
-    context = FileSystem(user).fileLoad(file_name)
-    return render(request, "revise/revise.html", context) #전송
+    if user != None:
+        context = FileSystem(user).fileLoad(file_name)
+        return render(request, "revise/revise.html", context) #전송
+    else:
+        return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
+    
 def revise2(request):
     user = loginValidator(request)
-    context={'user_name':user.user_name}
-    return render(request, "revise/revise.html", context)
+    if user != None:
+        context={'user_name':user.user_name}
+        return render(request, "revise/revise.html", context)
+    else:
+        return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
 #--------------파일 정보 비동기 불러오기 - revise창-------------
 def fileLoadView(request):
     user = loginValidator(request)
@@ -80,8 +87,11 @@ def fileLoadView(request):
 #------------------------ merge창 ------------------------
 def merge(request):
     user = loginValidator(request)
-    context={'user_name':user.user_name}
-    return render(request, "merge/merge.html", context) #전송
+    if user != None:
+        context={'user_name':user.user_name}
+        return render(request, "merge/merge.html", context) #전송
+    else:
+        return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
 
 def mergeView(request):
     user = loginValidator(request)
@@ -178,7 +188,6 @@ class ETL_system:
     def Envir(self):
         lon = self.lon
         lat = self.lat
-        print(self.date)
         dt = DataProcess(self.data, self.date)
         dt.dateConverter()
         if self.DorW=="weeks":
@@ -189,20 +198,17 @@ class ETL_system:
             #시간 구별 데이터프레임 생성
             envir_date = pd.DataFrame()
             envir_date['날짜'] = dt.getDate()
-            envir_date['날짜'] = pd.to_datetime(envir_date['날짜']).astype(str)
-            
-            start_month=envir_date['날짜'][0][0:7]
-            end_month=envir_date['날짜'][len(envir_date)-1][0:7]
-            
+
+            start_month=envir_date['날짜'].astype(str)[0][0:7]
+            end_month=envir_date['날짜'].astype(str)[len(envir_date)-1][0:7]
             sun = proc.get_sun(round(float(lon)),round(float(lat)),start_month,end_month)
             #낮밤구분
             nd_div=proc.ND_div(sun, envir_date)
             #정오구분
-            afternoon_div =proc.afternoon_div(sun,nd_div,noon=12)
+            afternoon_div =proc.afternoon_div(sun, nd_div, noon=12)
             #일출일몰t시간전후
             t_diff=3
             t_div=proc.time_div(sun,afternoon_div, t_diff)
-            t_div['날짜']=t_div['날짜'].astype('str')
             #일일데이터로 변환
             generating_data=proc.generating_dailydata(dt.data, dt.date, t_div,t_diff, self.var)
             result=generating_data
