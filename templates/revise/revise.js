@@ -22,8 +22,6 @@ $manage_list_menu.addEventListener('change', () => {
     link.href = `/revise/${text}/`;
     link.style = "visibility:hidden";
 
-    console.log(text, link);
-
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -31,12 +29,11 @@ $manage_list_menu.addEventListener('change', () => {
 
 
 //////////////////////////////////////////////
-// test data
 let excel_data = JSON.parse(document.getElementById('jsonObject').value);
 
 const $spreadsheet = document.querySelector('#spreadsheet'); // 엑셀 창
 const $excel_down = document.querySelector('#excel_down'); // 파일 다운
-
+const $x_label = document.querySelector('#x_label'); // x값
 //////////////////
 // 초기 설정 -> 데이터 불러오고 그리기
 //////////////////
@@ -48,6 +45,7 @@ window.onload = () => {
     excel_arr = Object.keys(data.getData()[0]);
     for (let x of excel_arr) {
         $excel_var.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
+        $x_label.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
     }
     // 파일 수정 기본 제목  = 제목 + 수정
     document.querySelector('#fileName').value=JSON.parse(localStorage.getItem("fileTitle"))+'_수정'
@@ -58,7 +56,7 @@ window.onload = () => {
 
 // downToCSV //////////////////////////////////////////////////
 $excel_down.addEventListener('click', () => {
-    data.download(newData);
+    data.download(excel_data);
 });
 
 ///////////////////////////////////////////
