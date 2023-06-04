@@ -21,94 +21,87 @@
 </head>
 
 <body>
-    <div class="header">
-        <a href="/" class="title">전남대학교 </br>농업 빅데이터 연구실</a>
-        {% if user_name != anonymous %}
-        <a href="/users/logout/" class='logout'>로그아웃</a>
-        {% else %}
-        <a href="/users/login/" class='login'>로그인</a>
-        {% endif %}
-    </div>
-
     <ul class="nav">
+        <li class="nav-item"><a href="/" class="title">전남대학교 </br>농업 빅데이터 연구실</a></li>
         <li class="nav-item"><a href="/">홈</a></li>
-        <li class="nav-item"><a href="/fileList">파일 목록</a></li>
-        <li class="nav-item"><a href="/revise">데이터 수정</a></li>
-        <li class="nav-item"><a href="#">그래프 및 분석</a></li>
+        <li class="nav-item"><a href="/fileList">데이터 수정</a></li>
+        <li class="nav-item"><a href="#">분석</a></li>
+        {% if user_name != anonymous %}
+        <li class="nav-item"><a href="/users/logout/" class='logout'>로그아웃</a></li>
+        {% else %}
+        <li class="nav-item"><a href="/users/login/" class='login'>로그인</a></li>
+        {% endif %}
     </ul>
 
     <div class="explain">
         <h3>데이터 업로드</h3>
         <p>업로드 버튼을 통해 .xls .xlsx .csv 파일을 저장 할 수 있습니다.</p>
     </div>
-    <div class="search_box">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input id="search" type="text" placeholder="입력">
-
-    </div>
-    <div class="list-container" id="list-container">
-        <div class="list_head">
-            <input type="checkbox" class="check-all" id="check-all">
-            <div class="list_title" id="listTitle">
-                파일명
-            </div>
-            <div class="date" id="date">
-                업로드 날짜
-            </div>
-            <div class="n_date" id="n_date">
-                마지막 수정 날짜
-            </div>
-        </div>
-        <div class="file-container">
-            {% for file in files %}
-            <div class="list">
-                <input type="checkbox" class="check">
-                <div class="list_title" id="list_title">
-                    <a onclick="saveTitle(event)">{{file.file_Title}}</a>
-                </div>
-                <div class="date" id="date">
-                    {{file.created_at | date:'Y-m-d'}}
-                </div>
-                <div class="n_date" id="n_date">
-                    {{file.updated_at | date:'Y-m-d'}}
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    <div class="btn-wrap">
-        <button class="delete" id="delete">파일 삭제</button>
-        <button class="merge" id="merge">파일 병합</button>
-        <button class="upload" id="upload">파일 업로드</button>
-    </div>
-
-    <dialog>
-        <form action="{% url 'smartfarm:upload' %}" method="POST" enctype="multipart/form-data">
+    <div class="container">
+        <form action="{% url 'smartfarm:upload' %}" method="POST" enctype="multipart/form-data" class="upload">
             {% csrf_token %}
             <div class="excel">
                 <div id="spreadsheet" class="spreadsheet">
-                    <div id="file_drag" class="file_drag">
+                    <input type="file" id="file_drag" class="file_drag" name="file_drag" accept=".xls, .xlsx, .csv">
+                    <div class="icon">
                         <i class="fa-solid fa-cloud-arrow-up" id="file_icon"></i>
-                        <span>파일을 올려주세요</span>
+                        <span>파일을 드래그하세요</span>
                     </div>
                 </div>
             </div>
             <div class="wrap">
-                <input type="file" id="file_input" class="file_input" accept=".xls, .xlsx, .csv">
+                <input type="file" name="file_input" id="file_input" class="file_input" accept=".xls, .xlsx, .csv">
                 <label for="file_input">업로드</label>
                 <input id="file_name" class="upload-name" value="파일선택" disabled="disabled">
-            </div>
-
-            <div class="btn-wrap">
-                <button id="confirm" class="confirm" type="submit">확인</button>
-                <button id="cancel" class="cancel" type="button">취소</button>
+                <button id="confirm" class="confirm" type="submit">등록하기</button>
             </div>
         </form>
-    </dialog>
+
+        <div class="Box">
+            <div class="list-container" id="list-container">
+                <div class="list_head">
+                    <input type="checkbox" class="check-all" id="check-all">
+                    <div class="list_title" id="listTitle">
+                        파일명
+                    </div>
+                    <div class="date" id="date">
+                        업로드 날짜
+                    </div>
+                    <div class="n_date" id="n_date">
+                        마지막 수정 날짜
+                    </div>
+                </div>
+                <div class="file-container">
+                    {% for file in files %}
+                    <div class="list">
+                        <input type="checkbox" class="check">
+                        <div class="list_title" id="list_title">
+                            <a onclick="saveTitle(event)">{{file.file_Title}}</a>
+                        </div>
+                        <div class="date" id="date">
+                            {{file.created_at | date:'Y-m-d'}}
+                        </div>
+                        <div class="n_date" id="n_date">
+                            {{file.updated_at | date:'Y-m-d'}}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="search_box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input id="search" type="text" placeholder="입력">
+
+                <button class="delete" id="delete">파일 삭제</button>
+                <button class="merge" id="merge">파일 병합</button>
+            </div>
+        </div>
+    </div>
 </body>
 <!-- js -->
 <script type="module" src="/templates/fileList/upload.js"></script>
 <script src="/templates/JS/jquery-1.12.4.min.js"></script>
 <script src="/templates/JS/xlsx.full.min.js"></script>
 <script src="/templates/fileList/fileList.js"></script>
+
 </html>

@@ -26,9 +26,9 @@ function AllCheck() {
 function select_delete() {
     const All_Checkbox = document.querySelectorAll('.check'); // check-box
     let titles = document.querySelectorAll('.list_title');
-    let check_count=[...All_Checkbox].filter((v) => v.checked===true).length; // 체크 수 확인
+    let check_count = [...All_Checkbox].filter((v) => v.checked === true).length; // 체크 수 확인
 
-    if(!check_count){
+    if (!check_count) {
         alert('삭제할 파일을 선택하세요');
         return;
     }
@@ -43,27 +43,28 @@ function select_delete() {
             }
         }
         $.ajax({
-            url:'delete/',
-            type:'post',
-            dataType:'json',
-            headers: {'X-CSRFToken': csrftoken},
-            data:{
-                data:JSON.stringify(deleteList)
+            url: 'delete/',
+            type: 'post',
+            dataType: 'json',
+            headers: { 'X-CSRFToken': csrftoken },
+            data: {
+                data: JSON.stringify(deleteList)
             },
-            success:function(response){
-                if (response.data != null){
+            success: function (response) {
+                if (response.data != null) {
                     location.href = "../";
                 }
-                else {                  
-            }},
-            error : function(xhr, error){
+                else {
+                }
+            },
+            error: function (xhr, error) {
                 alert("에러입니다.");
                 console.error("error : " + error);
             }
         })
         document.querySelector('.check-all').checked = false;
         AllCheck();
-    } else{
+    } else {
         alert('삭제를 취소합니다.');
     }
 
@@ -87,44 +88,44 @@ for(let x of $titleAll){
     titleList.push(x.innerText);
 }
 
-$search.addEventListener('keyup', (event)=>{
+$search.addEventListener('keyup', (event) => {
     let text = event.target.value;
-    for(let i=0; i<titleList.length; i++){
-        if(!titleList[i].includes(text)){
-            $listAll[i].style.display='none';
-        } else{
-            $listAll[i].style.display='flex';
+    for (let i = 0; i < titleList.length; i++) {
+        if (!titleList[i].includes(text)) {
+            $listAll[i].style.display = 'none';
+        } else {
+            $listAll[i].style.display = 'flex';
         }
     }
 })
 
-$merge.addEventListener('click' , () =>{
+$merge.addEventListener('click', () => {
     const All_Checkbox = document.querySelectorAll('.check'); // check-box
-    let check_count=[...All_Checkbox].filter((v) => v.checked===true).length;
+    let check_count = [...All_Checkbox].filter((v) => v.checked === true).length;
 
-    if(check_count!==2){
+    if (check_count !== 2) {
         alert('파일은 2개를 선택해야 합니다.')
         return;
     }
     let mergeList = [];
     for (let i = 0; i < All_Checkbox.length; i++) {
         if (All_Checkbox[i].checked) {
-            mergeList.push(All_Checkbox[i].parentElement.childNodes[3].innerText);                
+            mergeList.push(All_Checkbox[i].parentElement.childNodes[3].innerText);
         }
-        if(mergeList.length===2){
+        if (mergeList.length === 2) {
             break;
         }
     }
     $.ajax({
-        url:'/mergeView/',
-        type:'get',
-        dataType:'json',
+        url: '/mergeView/',
+        type: 'get',
+        dataType: 'json',
         headers: { 'X-CSRFToken': csrftoken },
-        data:{
-            data:JSON.stringify(mergeList),
+        data: {
+            data: JSON.stringify(mergeList),
         },
-        success:function(response){
-            if(response.data != null){
+        success: function (response) {
+            if (response.data != null) {
                 localStorage.setItem("mergeData", JSON.stringify(response.data));
                 location.href = "/merge/";
             }
@@ -137,10 +138,16 @@ $merge.addEventListener('click' , () =>{
 })
 
 function saveTitle(event) {
+    // title 내부 저장
+    titleList=[];
+    const $titleAll = document.querySelectorAll('#list_title');
+    for (let x of $titleAll) {
+        titleList.push(x.innerText);
+    }
+    localStorage.setItem("title_list", JSON.stringify(titleList));
     localStorage.setItem('fileTitle', JSON.stringify(event.target.innerHTML));
-    event.target.href=`/revise/${event.target.innerHTML}/`;
+    event.target.href = `/revise/${event.target.innerHTML}/`;
 }
 
-// title 내부 저장
-localStorage.setItem("title_list", JSON.stringify(titleList));
+
 

@@ -14,211 +14,211 @@ $abms_var.addEventListener('click', (event) => {
 
     if (text.includes('토마토')) {
         $abms_text.innerHTML = `
-        <div id="columnBox" class="columnBox">
-        농가명<select name="농가명" id="농가명">
+    <div id="columnBox" class="columnBox">
+        농가명<select name="농가명" id="FRMHS_NM">
+            <option value="null"></option>
+    </select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        조사일자<select name="조사일자" id="EXAMIN_DATETM">
             <option value="null"></option>
         </select>
     </div>
     <div id="columnBox" class="columnBox">
-        조사일자<select name="조사일자" id="조사일자">
+        개체번호<select name="개체번호" id="PPLT_NO">
             <option value="null"></option>
         </select>
     </div>
     <div id="columnBox" class="columnBox">
-        개체번호<select name="개체번호" id="개체번호">
+        줄기번호<select name="줄기번호" id="STEM_NO">
             <option value="null"></option>
         </select>
     </div>
     <div id="columnBox" class="columnBox">
-        줄기번호<select name="줄기번호" id="줄기번호">
+        초장<select name="초장" id="PLLN">
             <option value="null"></option>
         </select>
     </div>
     <div id="columnBox" class="columnBox">
-        초장<select name="초장" id="초장">
+        생장길이<select name="생장길이" id="GRWT_LT">
             <option value="null"></option>
         </select>
     </div>
     <div id="columnBox" class="columnBox">
-        생장길이<select name="생장길이" id="생장길이">
+        엽수<select name="엽수" id="FLG_YLD">
             <option value="null"></option>
         </select>
     </div>
     <div id="columnBox" class="columnBox">
-        엽수<select name="엽수" id="엽수">
+        엽장<select name="엽장" id="LFLN">
             <option value="null"></option>
         </select>
     </div>
     <div id="columnBox" class="columnBox">
-        엽장<select name="엽장" id="엽장">
+        엽폭<select name="엽폭" id="FLG_BT">
             <option value="null"></option>
         </select>
     </div>
     <div id="columnBox" class="columnBox">
-        엽폭<select name="엽폭" id="엽폭">
+        줄기굵기<select name="줄기굵기" id="STEM_DMT">
             <option value="null"></option>
         </select>
     </div>
     <div id="columnBox" class="columnBox">
-        줄기굵기<select name="줄기굵기" id="줄기굵기">
+        화방높이<select name="화방높이" id="FCLU_HG">
             <option value="null"></option>
         </select>
     </div>
     <div id="columnBox" class="columnBox">
-        화방높이<select name="화방높이" id="화방높이">
+        화방번호<select name="화방번호" id="FCLU_NO">
             <option value="null"></option>
         </select>
     </div>
     <div id="columnBox" class="columnBox">
-        화방번호<select name="화방번호" id="화방번호">
+        화방별총개수<select name="화방별총개수" id="TOTAL_PER_FCLU">
             <option value="null"></option>
         </select>
     </div>
     <div id="columnBox" class="columnBox">
-        화방별총개수<select name="화방별총개수" id="화방별총개수">
+        화방별꽃수<select name="화방별꽃수" id="FCLU_FLWR_CO">
             <option value="null"></option>
         </select>
     </div>
     <div id="columnBox" class="columnBox">
-        화방별꽃수<select name="화방별꽃수" id="화방별꽃수">
+        화방별꽃봉오리수<select name="화방별꽃봉오리수" id="FCLU_BLM_CO">
             <option value="null"></option>
         </select>
     </div>
     <div id="columnBox" class="columnBox">
-        화방별꽃봉오리수<select name="화방별꽃봉오리수" id="화방별꽃봉오리수">
+        화방별개화수<select name="화방별개화수" id="FCLU_FLAN_CO">
             <option value="null"></option>
         </select>
     </div>
     <div id="columnBox" class="columnBox">
-        화방별개화수<select name="화방별개화수" id="화방별개화수">
+        화방별착과수<select name="화방별착과수" id="FCLU_FRTST_CO">
             <option value="null"></option>
         </select>
     </div>
     <div id="columnBox" class="columnBox">
-        화방별착과수<select name="화방별착과수" id="화방별착과수">
+        화방별적과수<select name="화방별적과수" id="FCLU_FRTTHIN_CO">
             <option value="null"></option>
         </select>
     </div>
     <div id="columnBox" class="columnBox">
-        화방별적과수<select name="화방별적과수" id="화방별적과수">
+        화방별수확수<select name="화방별수확수" id="FCLU_HVST_CO">
             <option value="null"></option>
         </select>
     </div>
     <div id="columnBox" class="columnBox">
-        화방별수확수<select name="화방별수확수" id="화방별수확수">
-            <option value="null"></option>
-        </select>
-    </div>
-    <div id="columnBox" class="columnBox">
-        비고<select name="비고" id="비고">
+        비고<select name="비고" id="RM">
             <option value="null"></option>
         </select>
     </div>
             `
     } else if (text === '딸기') {
         $abms_text.innerHTML = `
-            <div id="columnBox" class="columnBox">
-                농가명<select name="농가명" id="농가명">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                조사일자<select name="조사일자" id="조사일자">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                개체번호<select name="개체번호" id="개체번호">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                액아구분<select name="액아구분" id="액아구분">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                초장<select name="초장" id="초장">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                엽수<select name="엽수" id="엽수">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                엽장<select name="엽장" id="엽장">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                엽폭<select name="엽폭" id="엽폭">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                엽병장<select name="엽병장" id="엽병장">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                관부직경<select name="관부직경" id="관부직경">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                화방번호<select name="화방번호" id="화방번호">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                화방출뢰기<select name="화방출뢰기" id="화방출뢰기">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                개화기일자<select name="개화기일자" id="개화기일자">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                화방별총개수<select name="화방별총개수" id="화방별총개수">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                화방별꽃수<select name="화방별꽃수" id="화방별꽃수">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                화방별꽃봉오리수<select name="화방별꽃봉오리수" id="화방별꽃봉오리수">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                화방별개화수<select name="화방별개화수" id="화방별개화수">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                화방별적화수<select name="화방별적화수" id="화방별적화수">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                화방별착과수<select name="화방별착과수" id="화방별착과수">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                화방별적과수<select name="화방별적과수" id="화방별적과수">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                화방별수확수<select name="화방별수확수" id="화방별수확수">
-                <option value="null"></option></select>
-            </div>
-            <div id="columnBox" class="columnBox">
-                비고<select name="비고" id="비고">
-                <option value="null"></option></select>
-            </div>
+    <div id="columnBox" class="columnBox">
+        농가명<select name="농가명" id="FRMHS_NM">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        조사일자<select name="조사일자" id="EXAMIN_DATETM">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        개체번호<select name="개체번호" id="PPLT_NO">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        액아구분<select name="액아구분" id="AXBD_SE">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        초장<select name="초장" id="PLLN">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        엽수<select name="엽수" id="FLG_YLD">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        엽장<select name="엽장" id="LFLN">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        엽폭<select name="엽폭" id="FLG_BT">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        엽병장<select name="엽병장" id="LFST_LT">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        관부직경<select name="관부직경" id="CROWN_DMT">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        화방번호<select name="화방번호" id="FCLU_NO">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        화방출뢰기<select name="화방출뢰기" id="FCLU_BUDDING_DT">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        개화기일자<select name="개화기일자" id="BLPR_DATETM">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        화방별총개수<select name="화방별총개수" id="TOTAL_PER_FCLU">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        화방별꽃수<select name="화방별꽃수" id="FCLU_FLWR_CO">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        화방별꽃봉오리수<select name="화방별꽃봉오리수" id="FCLU_BLM_CO">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        화방별개화수<select name="화방별개화수" id="FCLU_FLAN_CO">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        화방별적화수<select name="화방별적화수" id="FCLU_DEBLM_CO">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        화방별착과수<select name="화방별착과수" id="FCLU_FRTTHIN_CO">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        화방별적과수<select name="화방별적과수" id="FCLU_FRTST_CO">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        화방별수확수<select name="화방별수확수" id="FCLU_HVST_CO">
+        <option value="null"></option></select>
+    </div>
+    <div id="columnBox" class="columnBox">
+        비고<select name="비고" id="비고" value="RM">
+        <option value="null"></option></select>
+    </div>
             `
     }
     setSelectedValue();
 })
 
-// selectBox 값
+// selectBox 초기값
 function setSelectedValue() {
-    let abmsChild = document.querySelectorAll('#columnBox');
+    let $columnBox = document.querySelectorAll('#columnBox');
     const $columnBox_select = document.querySelectorAll('#columnBox > select');
 
-    for (let i = 0; i < abmsChild.length; i++) {
+    for (let i = 0; i < $columnBox.length; i++) {
         $columnBox_select[i].innerHTML = '<option value="null"></option>'
         for (let x of excel_col) {
-            if (abmsChild[i].childNodes[0].data.trim() === x) {
+            if ($columnBox[i].childNodes[0].data.trim() === x) {
                 $columnBox_select[i].innerHTML += `<Option value= '${x}' selected>` + x + `</option>`;
             } else {
                 $columnBox_select[i].innerHTML += `<Option value= '${x}'>` + x + `</option>`;
@@ -235,17 +235,18 @@ let abmsColumn = []; // abms 열 이름
 // abms 데이터 만들기
 $abms_save.addEventListener('click', () =>{
     abmsData=[];
-    let abmsChild = document.querySelectorAll('#columnBox');
+    let $columnBox = document.querySelectorAll('#columnBox');
     const $columnBox_select = document.querySelectorAll('#columnBox > select');
-
-    for (let i = 0; i < abmsChild.length; i++) {
-        abmsColumn.push(abmsChild[i].childNodes[0].data.trim());
-        inputValue.push($columnBox_select[i].options[$columnBox_select[i].selectedIndex].value);
+    for (let i = 0; i < $columnBox.length; i++) {
+        // console.log($columnBox[i].childNodes[1].id)
+        // abmsColumn.push($columnBox[i].childNodes[0].data.trim()); 한글
+        abmsColumn.push($columnBox[i].childNodes[1].id); // 영문
+        inputValue.push($columnBox_select[i].value);
     }
-    for(let i=0; i<excel_data.length;i++){
-        let x={}; // 데이터 한 줄
-        for(let j in abmsColumn){
-            x[abmsColumn[j]] = excel_data[i][inputValue[j]]??''; 
+    for (let i = 0; i < excel_data.length; i++) {
+        let x = {}; // 데이터 한 줄
+        for (let j in abmsColumn) {
+            x[abmsColumn[j]] = excel_data[i][inputValue[j]] ?? '';
         }
         abmsData.push(x);
     }
@@ -261,9 +262,8 @@ $abms_save.addEventListener('click', () =>{
             file_name : document.querySelector('#abmsFileName').value,
         },
         success:function(response){
-            if(response.data != null){
-                location.href=`/fileList`; // 이게 작동 안함
-            }
+            // location.href='/FileList'
+            alert("완료되었습니다.");
         },
     })
 })

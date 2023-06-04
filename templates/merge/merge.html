@@ -19,20 +19,16 @@
 </head>
 
 <body>
-    <div class="header">
-        <a href="/" class="title">전남대학교 </br>농업 빅데이터 연구실</a>
-        {% if user_name != anonymous %}
-        <a href="/users/logout/" class='logout'>로그아웃</a>
-        {% else %}
-        <a href="/users/login/" class='login'>로그인</a>
-        {% endif %}
-    </div>
-
     <ul class="nav">
+        <li class="nav-item"><a href="/" class="title">전남대학교 </br>농업 빅데이터 연구실</a></li>
         <li class="nav-item"><a href="/">홈</a></li>
-        <li class="nav-item"><a href="/fileList">파일 목록</a></li>
-        <li class="nav-item"><a href="/revise">데이터 수정</a></li>
-        <li class="nav-item"><a href="#">그래프 및 분석</a></li>
+        <li class="nav-item"><a href="/fileList">데이터 수정</a></li>
+        <li class="nav-item"><a href="#">분석</a></li>
+        {% if user_name != anonymous %}
+        <li class="nav-item"><a href="/users/logout/" class='logout'>로그아웃</a></li>
+        {% else %}
+        <li class="nav-item"><a href="/users/login/" class='login'>로그인</a></li>
+        {% endif %}
     </ul>
 
     <div class="excel">

@@ -17,10 +17,9 @@ a {
 dialog{
     box-sizing: border-box;
 }
-
-/* header */
-.header {
-    width: 95%;
+/* nav */
+.nav {
+    width: 1280px;
     height: 70px;
     margin: 0 auto;
     margin-top: 10px;
@@ -32,15 +31,13 @@ dialog{
     align-items: center;
 }
 
-.header .title {
+.nav .title {
     color: #007A33;
     font-size: 18px;
     font-weight: bold;
 }
 
-.header .login{
-    width: auto;
-    height: auto;
+.nav .login{
     padding: 3px 15px;
     text-align: center;
     font-size: 14px;
@@ -52,9 +49,7 @@ dialog{
     color: #fff;
 }
 
-.header .logout{
-    width: auto;
-    height: auto;
+.nav .logout{
     padding: 3px 10px;
     text-align: center;
     font-size: 14px;
@@ -66,24 +61,13 @@ dialog{
     color: #fff;
 }
 
-/* nav */
-.nav {
-    width: 100%;
-    height: auto;
-
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-.nav .nav-item:hover {
+.nav .nav-item:hover{
     transform: scale(1.2);
     transition-duration: 0.5s;
 }
 
-.nav .nav-item a {
+.nav .nav-item a:not(:first-child),
+.nav .nav-item a:not(:last-child) {
     color: #888;
 }
 
@@ -220,6 +204,12 @@ dialog{
 
 
 /* 엑셀 데이터 확인, tap2 */
+.content .x-container{
+    text-align: left;
+    float: left;
+    margin : 10px 2%;
+}
+
 .content .list-container {
     width: 96%;
     height: 250px;

@@ -10,17 +10,25 @@ $close.addEventListener('click', () =>{
 let lineDraw = (name) =>{
     let showColumnName = name; // 그려줄 열 이름
 
-    // x축 설정 및 데이터 입력
-    let Ydata =[]; // y축
-    let Xdata =[]; // x축
+    let yData =[]; // y축 값 배열
+    let xData =[]; // x축 값 배열
 
     // 저장된 데이터를 불러옴
     let ex_data = JSON.parse(document.getElementById('jsonObject').value);
 
-    for(let i in ex_data){
-        Xdata.push(Object.values(ex_data[i])[0]); // x값
-        Ydata.push(ex_data[i][showColumnName]); // y값
+    // x축 열 이름
+    let xColumn = document.querySelector('#x_label').options[document.querySelector('#x_label').selectedIndex].value;
+
+    if(xColumn === "null"){
+        alert('x축을 선택해 주세요')
+        return;
     }
+
+    for(let i in ex_data){
+        xData.push(ex_data[i][xColumn]); // x값
+        yData.push(ex_data[i][showColumnName]); // y값
+    }
+
 
     // 색 지정
     let RGB_1 = Math.floor(Math.random() * (255 + 1));
@@ -30,11 +38,11 @@ let lineDraw = (name) =>{
     const draw_data = [{
         label: showColumnName, // 데이터의 제목
         borderColor: 'rgba(' + RGB_1 + ',' + RGB_2 + ',' + RGB_3 + ',0.7)', // 색상
-        data: Ydata, // 데이터
+        data: yData, // 데이터
         pointStyle: false,
     }]
 
-    const labels = Xdata;
+    const labels = xData;
 
     // 데이터
     const showData = {
@@ -76,7 +84,6 @@ let lineDraw = (name) =>{
         }
     }
 
-    dialog.showModal();
-
     let chart = new Chart(document.getElementById('myChart'), config);
+    dialog.showModal();
 }
