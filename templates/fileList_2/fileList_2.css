@@ -103,6 +103,8 @@ body {
         height: 400px;
         border: 1px solid #000;
         border-radius: 10px;
+
+        overflow-y: hidden;
     }
 
     .list-container .list_head {
@@ -308,6 +310,8 @@ body {
         height: 300px;
         border: 1px solid #000;
         border-radius: 10px;
+
+        overflow-y: hidden;
     }
 
     .list-container .list_head {
