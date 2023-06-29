@@ -17,6 +17,7 @@ body {
     box-sizing: border-box;
 }
 
+
 /* 1280px 보다 크면 */
 @media (min-width: 1280px) {
 
@@ -52,30 +53,15 @@ body {
         color: #fff;
     }
 
-    .nav .logout {
-        padding: 3px 10px;
-        text-align: center;
-        font-size: 14px;
-        font-weight: bold;
-        line-height: 30px;
-
-        background-color: #007A33;
-        border-radius: 8px;
-        color: #fff;
-    }
-
-    .nav .nav-item:hover {
+    .nav .nav-item:hover:not(:first-child) {
         transform: scale(1.2);
         transition-duration: 0.5s;
+        color: #000;
     }
 
     .nav .nav-item a:not(:first-child),
     .nav .nav-item a:not(:last-child) {
         color: #888;
-    }
-
-    .nav .nav-item a:hover {
-        color: #000;
     }
 
     /* explain */
@@ -100,140 +86,20 @@ body {
     .container {
         width: 1280px;
         margin: 20px auto;
-
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
     }
 
-    /* upload */
-    .container .upload {
-        width: 400px;
+    .Box{
+        width: 1000px;
         height: 480px;
-        margin-left: 25px;
-        margin-right: 30px;
-    }
-
-    .container .upload .excel {
-        width: 400px;
-        height: 400px;
-
+        margin: 0 auto;
+        
         display: flex;
         flex-direction: column;
-        justify-content: start;
-        align-items: center;
-
-        position: relative;
-    }
-
-    .container .excel .spreadsheet {
-        width: 100%;
-        height: 100%;
-        border: 2px dashed #007A33;
-        border-radius: 10px;
-
-        overflow-x: hidden;
-        overflow-y: hidden;
-
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        position: relative;
-    }
-
-    .spreadsheet .file_drag {
-        width: 300%;
-        height: 300%;
-
-        /* visibility: hidden; */
-    }
-
-    .spreadsheet .icon {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .spreadsheet i {
-        content: "f56f";
-        font: var(--fa-font-solid);
-        margin-bottom: 10px;
-
-        font-size: 100px;
-    }
-
-    .spreadsheet span {
-        font-size: 18px;
-    }
-
-    .upload .wrap {
-        margin-top: 10px;
-
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .upload .wrap input[type="file"] {
-        display: none;
-    }
-
-    .upload .wrap label {
-        display: inline-block;
-        padding: 3px 8px;
-        border: 1px solid #ebebeb;
-        border-bottom-color: #e2e2e2;
-        border-radius: .25em;
-
-        color: #fff;
-        font-size: inherit;
-        line-height: normal;
-        background-color: #007A33;
-
-        vertical-align: middle;
-
-        cursor: pointer;
-    }
-
-    .upload .wrap .upload-name {
-        display: inline-block;
-        padding: 3px 8px;
-        border: 1px solid #ebebeb;
-        border-bottom-color: #e2e2e2;
-        border-radius: .25em;
-
-        vertical-align: middle;
-        background-color: #f5f5f5;
-
-        font-size: inherit;
-        line-height: normal;
-
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-    }
-
-    .Box {
-        width: 800px;
-        height: 480px;
-
-        display: flex;
-        flex-direction: column;
-
     }
 
     /* fileList */
     .list-container {
-        width: 800px;
+        width: 1000px;
         height: 400px;
         border: 1px solid #000;
         border-radius: 10px;
@@ -310,7 +176,7 @@ body {
         padding-left: 5px;
     }
 
-    .list-container .list .list_title :hover {
+    .list-container .list .list_title :hover{
         cursor: pointer;
         text-decoration: underline;
     }
@@ -337,7 +203,7 @@ body {
         background-color: #999;
     }
 
-    .search_box {
+    .search_box{
         width: 800px;
         margin-top: 10px;
 
@@ -349,33 +215,12 @@ body {
         height: 20px;
         margin-left: 3px;
     }
-
-    .search_box .delete,
-    .search_box .merge {
-        float: right;
-    }
-
-    .search_box>*:not(:last-child) {
-        margin: 0;
-    }
-
-    .search_box button {
-        border: 1px solid #007A33;
-        margin-right: 5px;
-        padding: 3px 8px;
-        background-color: #007A33;
-        color: #fff;
-    }
-
-    .search_box button:hover {
-        cursor: pointer;
-    }
 }
+
 
 /* ////////////////////////////////////////// */
 /* 1280보다 작으면 */
 @media (max-width:1280px) {
-
     /* nav */
     .nav {
         width: 1000px;
@@ -398,18 +243,6 @@ body {
 
     .nav .login {
         padding: 3px 15px;
-        text-align: center;
-        font-size: 14px;
-        font-weight: bold;
-        line-height: 30px;
-
-        background-color: #007A33;
-        border-radius: 8px;
-        color: #fff;
-    }
-
-    .nav .logout {
-        padding: 3px 10px;
         text-align: center;
         font-size: 14px;
         font-weight: bold;
@@ -457,130 +290,12 @@ body {
         width: 1000px;
         margin: 20px auto;
 
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
     }
 
-    /* upload */
-    .container .upload {
-        width: 300px;
-        height: 300px;
-        margin-left: 15px;
-        margin-right: 20px;
-    }
-
-    .container .upload .excel {
-        width: 300px;
-        height: 300px;
-
-        display: flex;
-        flex-direction: column;
-        justify-content: start;
-        align-items: center;
-
-        position: relative;
-    }
-
-    .container .excel .spreadsheet {
-        width: 100%;
-        height: 100%;
-        border: 2px dashed #007A33;
-        border-radius: 10px;
-
-        overflow-x: hidden;
-        overflow-y: hidden;
-
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        position: relative;
-    }
-
-    .spreadsheet .file_drag {
-        width: 300%;
-        height: 300%;
-    }
-
-    .spreadsheet .icon{
-        position: absolute;
-        top:50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .spreadsheet i {
-        content: "f56f";
-        font: var(--fa-font-solid);
-        margin-bottom: 10px;
-
-        font-size: 80px;
-    }
-
-    .spreadsheet span {
-        font-size: 14px;
-    }
-
-    .upload .wrap {
-        margin-top: 10px;
-
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .upload .wrap input[type="file"] {
-        display: none;
-    }
-
-    .upload .wrap label {
-        display: inline-block;
-        padding: 3px 8px;
-        border: 1px solid #ebebeb;
-        border-bottom-color: #e2e2e2;
-        border-radius: .25em;
-
-        color: #fff;
-        font-size: inherit;
-        line-height: normal;
-        background-color: #007A33;
-
-        vertical-align: middle;
-
-        cursor: pointer;
-
-    }
-
-    .upload .wrap .upload-name {
-        display: inline-block;
-        padding: 3px 8px;
-        border: 1px solid #ebebeb;
-        border-bottom-color: #e2e2e2;
-        border-radius: .25em;
-
-        vertical-align: middle;
-        background-color: #f5f5f5;
-
-        font-size: inherit;
-        line-height: normal;
-
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
-    }
-
-    .Box {
+    .Box{
         width: 650px;
         height: 380px;
+        margin: 0 auto;
 
         display: flex;
         flex-direction: column;
@@ -666,7 +381,7 @@ body {
         padding-left: 5px;
     }
 
-    .list-container .list .list_title :hover {
+    .list-container .list .list_title :hover{
         cursor: pointer;
         text-decoration: underline;
     }
@@ -693,7 +408,7 @@ body {
         background-color: #999;
     }
 
-    .search_box {
+    .search_box{
         width: 650px;
         margin-top: 10px;
 
@@ -704,26 +419,5 @@ body {
         width: 180px;
         height: 20px;
         margin-left: 3px;
-    }
-
-    .search_box .delete,
-    .search_box .merge {
-        float: right;
-    }
-
-    .search_box>*:not(:last-child) {
-        margin: 0;
-    }
-
-    .search_box button {
-        border: 1px solid #007A33;
-        margin-right: 5px;
-        padding: 3px 8px;
-        background-color: #007A33;
-        color: #fff;
-    }
-
-    .search_box button:hover {
-        cursor: pointer;
     }
 }
