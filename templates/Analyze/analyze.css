@@ -1,0 +1,113 @@
+ul,
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+*:not(dialog) {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* 1280px 보다 크면 */
+@media (min-width: 1280px) {
+
+    /* nav */
+    .nav {
+        width: 1280px;
+        height: 70px;
+        margin: 0 auto;
+        margin-top: 10px;
+
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .nav .title {
+        color: #007A33;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .nav .login {
+        padding: 3px 15px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 30px;
+
+        background-color: #007A33;
+        border-radius: 8px;
+        color: #fff;
+    }
+
+    .nav .nav-item:hover:not(:first-child) {
+        transform: scale(1.2);
+        transition-duration: 0.5s;
+        color: #000;
+    }
+
+    .nav .nav-item a:not(:first-child),
+    .nav .nav-item a:not(:last-child) {
+        color: #888;
+    }
+
+    .container {
+        width :1280px;
+        margin: 0 auto;
+
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+    }
+
+    .container legend {
+        margin-bottom: 5px;
+        padding: 3px 5px;
+        border: 1px solid #888;
+    }
+
+    .container select{
+        width: 150px;
+    }
+
+    .container .analyze-wrapper{
+        width: 100%;
+        margin-bottom: 20px;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+
+        text-align: center;
+    }
+
+    .container .analyze-wrapper .flex-start{
+        align-self: start;
+    }
+
+    .container .analyze-wrapper>*{
+        margin-right: 10px;
+    }
+
+    .container .analyze-result{
+        margin-bottom: 20px;
+    }
+    
+    .container .graph-wrapper{
+        width: 100%;
+    }
+
+    .graph-wrapper fieldset{
+        margin-top: 10px;
+    }
+}

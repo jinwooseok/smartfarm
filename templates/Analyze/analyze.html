@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>분석</title>
+
+    <!-- css -->
+    <link rel="stylesheet" href="./analyze.css">
+    <link rel="stylesheet" href="./billboard.css">
+
+    <!-- spreadsheetjs -->
+    <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
+    <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
+    <script src="https://jsuites.net/v4/jsuites.js"></script>
+    <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+
+    <!-- billboard.ks -->
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+
+</head>
+
+<body>
+    <ul class="nav">
+        <li class="nav-item"><a href="/" class="title">전남대학교 </br>농업 빅데이터 연구실</a></li>
+        <li class="nav-item"><a href="/">홈</a></li>
+        <li class="nav-item"><a href="/fileList">데이터 수정</a></li>
+        <li class="nav-item"><a href="/fileList_2">데이터 분석</a></li>
+        {% if user_name != anonymous %}
+        <li class="nav-item"><a href="/users/logout/" class='logout'>로그아웃</a></li>
+        {% else %}
+        <li class="nav-item"><a href="/users/login/" class='login'>로그인</a></li>
+        {% endif %}
+    </ul>
+
+    <div class="container">
+        <div class="analyze-wrapper">
+            <fieldset>
+                <legend>x 값</legend>
+                <select name="" id="xValue" multiple size="5">
+
+                </select>
+            </fieldset>
+            <button class="x_delete" id="x_delete">&lt= </button>
+            <button class="x_move" id="x_move"> =&gt </button>
+            <fieldset>
+                <legend>선택된 x 값</legend>
+                <select name="" id="selectedXValue" multiple size="5">
+
+                </select>
+            </fieldset>
+            <fieldset class="flex-start">
+                <legend>y 값</legend>
+                <select name="" id="yValue">
+
+                </select>
+            </fieldset>
+        </div>
+        <div class="analyze-result">
+            <fieldset>
+                <legend>분석 결과</legend>
+            </fieldset>
+        </div>
+
+        <div class="graph-wrapper">
+            <!-- 그래프 -->
+            <select name="" id="selectBox">
+                <option value="null"></option>
+            </select>
+            <button id="show">클릭</button>
+            <select name="" id="selectBox2">
+    
+            </select>
+            <button id="add">추가</button>
+            <button id="delete">제거</button>
+            <fieldset>
+                <legend>그래프</legend>
+                <div id="chart"></div>
+            </fieldset>
+        </div>
+    
+    </div>
+
+    <div id="jsonObjects">
+        <input id="jsonObject" type="hidden" value="{{data}}"></input>
+    </div>
+
+</body>
+<script src="/templates/JS/jquery-1.12.4.min.js"></script>
+<script src="/templates/JS/billboard.js"></script>
+<script src="/templates/Analyze/analyze.js"></script>
+</html>
