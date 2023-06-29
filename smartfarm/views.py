@@ -122,14 +122,27 @@ def mergeView(request):
             return JsonResponse({'result':'success'})
 
 #------------------------ analysis창 ------------------------
-def analysis(request):
+def fileList2(request):
     user = loginValidator(request)
-    context = FileSystem(user).fileLoad(request)
-    return render(request, "show/show.html", context) #전송
+    if user != None:
+        file_object=File_db.objects.filter(user_id=user.id)
+        context={'user_name':user.user_name,
+            'files':file_object}
+        return render(request, "fileList_2/fileList_2.html", context) #전송
+    elif user == None:
+        return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
+
+def analyze(request, file_name):
+    user = loginValidator(request)
+    if user != None:
+        context = FileSystem(user).fileLoad(file_name)
+        return render(request, "Analyze/analyze.html", context) #전송
+    elif user == None:
+        return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
 
 #------------------------ test.html연결 ------------------------
 def test(request):
-    return render(request, "test.html") #전송
+    return render(request, "analytics/excel.html") #전송
 
 #------------------------------농업관련 데이터 처리 부분------------------
 #데이터의 형식이나 원하는 전처리에 따라 파이프라인을 설정하는 부분
