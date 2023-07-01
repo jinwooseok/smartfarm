@@ -113,8 +113,7 @@ body {
     height: 25px;
 }
 
-.else .register,
-.else .find_pswd{
+.else .register{
     color : #01376A;
 }
 

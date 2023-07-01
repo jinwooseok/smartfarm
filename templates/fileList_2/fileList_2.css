@@ -53,6 +53,18 @@ body {
         color: #fff;
     }
 
+    .nav .logout{
+        padding: 3px 10px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 30px;
+    
+        background-color: #007A33;
+        border-radius: 8px;
+        color: #fff;
+    }
+
     .nav .nav-item:hover:not(:first-child) {
         transform: scale(1.2);
         transition-duration: 0.5s;
