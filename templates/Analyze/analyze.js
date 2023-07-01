@@ -1,10 +1,10 @@
 const csrftoken = $('[name=csrfmiddlewaretoken]').val(); // csrftoken
 // 그래프
-const $show = document.querySelector('#show');
 const $add = document.querySelector('#add');
 const $delete = document.querySelector('#delete');
 const $selectBox = document.querySelector("#selectBox");
 const $selectBox2 = document.querySelector("#selectBox2");
+const $down = document.querySelector('#down');
 
 // 분석
 const $xValue = document.querySelector('#xValue');
@@ -13,107 +13,151 @@ const $yValue = document.querySelector('#yValue');
 const $x_move = document.querySelector('#x_move');
 const $x_delete = document.querySelector('#x_delete');
 
-// 테스트 데이터
+
 let data = JSON.parse(document.getElementById('jsonObject').value);
 let dataColumn = Object.keys(data[0]);
-let graphArr = [];
 
-
-window.onload = () =>{
+window.onload = () => {
     for (let x of dataColumn) {
         $xValue.innerHTML += `<option value=${x}>${x}</option>`
         $yValue.innerHTML += `<option value=${x}>${x}</option>`
         $selectBox.innerHTML += `<option value=${x}>${x}</option>`
         $selectBox2.innerHTML += `<option value=${x}>${x}</option>`
     }
-    
+
 }
 
 /////////////////////////////////////
 // 분석
-
-const xValueArr=[]; // 선택한 x값 배열
+const xValueArr = []; // 선택한 x값 배열
 
 // 선택한 x값 이동
-$x_move.addEventListener('click', () =>{
+$x_move.addEventListener('click', () => {
     let checked = document.querySelectorAll('#xValue :checked');
     let selected = [...checked].map(option => option.value);
 
-    for(let x of selected){
+    for (let x of selected) {
         $selectedXValue.innerHTML += `<option value=${x}>${x}</option>`;
         xValueArr.push(x);
     }
 })
 
 // x값 삭제
-$x_delete.addEventListener('click', () =>{
+$x_delete.addEventListener('click', () => {
     let checked = document.querySelectorAll('#selectedXValue :checked');
     let selected = [...checked].map(option => option.value);
 
-    for(let x of selected){
+    for (let x of selected) {
         $(`#selectedXValue option[value='${x}']`).remove();
-        xValueArr.splice(xValueArr.indexOf(x),1);
+        xValueArr.splice(xValueArr.indexOf(x), 1);
     }
 })
-
-
 
 /////////////////////////////////////
-// 그래프
+// 그래프 //
+var chart; // 그래프
+let graphArr = []; // 사용한 변수
 
-let text; // $manage_list_menu.options[$manage_list_menu.selectedIndex].value;
-$selectBox.addEventListener('click', (event) => {
-    text = event.target.options[event.target.selectedIndex].value;
-})
-
-var chart;
+// 특수 문자 및 공백 제거 정규 표현식
+let reg = /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/ ]/gim
 
 // 그래프 보여주기
-$show.addEventListener("click", () => {
-    let arr=[];
-    arr.push(text)
-    for (let i = 0; i < 6; i++) {
-        arr.push(Number(data[i][text]));
+$add.addEventListener("click", () => {
+    let arr = [];
+
+    let xText = $selectBox.options[$selectBox.selectedIndex].value;
+    let yText = $selectBox2.options[$selectBox2.selectedIndex].value;
+
+    // 처음
+    if (graphArr.length === 0) {
+        arr.push(xText);
+        // x축 값 넣기
+        for (let i = 0; i < data.length; i++) {
+            if (reg.test(data[i][xText])) {
+                // arr.push(Number(data[i][xText].replace(reg, "")));
+                arr.push(data[i][xText]);
+            } else {
+                arr.push(Number(data[i][xText]));
+            }
+        }
+        graphArr.push(arr);
+        arr = [];
+        // y축
+        arr.push(yText);
+        for (let i = 0; i < data.length; i++) {
+            arr.push(Number(data[i][yText]));
+        }
+        graphArr.push(arr);
+
+        chart = bb.generate({
+            bindto: "#chart",
+            data: {
+                x: xText,
+                // x : "x축",
+                type: "line",
+                columns:
+                    graphArr,
+            },
+            zoom: {
+                enabled: true, // for ESM specify as: zoom()
+                type: "drag"
+            },
+            axis: {
+                x: {
+                    type: "category",
+                    tick: {
+                        rotate: 75,
+                        multiline: false,
+                        tooltip: true
+                    },
+                    //height: 130
+                }
+            },
+        });
+        return;
+    }
+
+    if (graphArr.includes(yText)) {
+        return;
+    }
+
+    // y축
+    arr.push(yText);
+    for (let i = 0; i < data.length; i++) {
+        arr.push(Number(data[i][yText]));
     }
     graphArr.push(arr);
-    graphArr.push(["x",1,2,3,4,5,6])
-    chart = bb.generate({
-        bindto: "#chart",
-        data: {
-            x: text,
-            // x : "x축",
-            type: "line",
-            columns:
-                graphArr,
-        },
-        zoom: {
-            enabled: true, // for ESM specify as: zoom()
-            type: "drag"
-        },
+
+    chart.load({
+        columns: graphArr,
     });
 
-    chart.unload({
-		ids: "x",
-	});
-    graphArr.pop();
-})
-
-$add.addEventListener('click', () => {
-    let = sText = $selectBox2.options[$selectBox2.selectedIndex].value;
-    let arr=[];
-    arr.push(sText);
-    for (let i = 0; i < 6; i++) {
-        arr.push(Number(data[i][sText]));
-    }
-    graphArr.push(arr);
-    chart.load({
-		columns: graphArr,
-	});
 })
 
 $delete.addEventListener('click', () => {
-    let = sText = $selectBox2.options[$selectBox2.selectedIndex].value;
+    let yText = $selectBox2.options[$selectBox2.selectedIndex].value;
     chart.unload({
-		ids: sText,
-	});
+        ids: yText,
+    });
+
+    graphArr.splice(graphArr.indexOf(yText), 1);
+    console.log(graphArr);
+})
+
+$down.addEventListener('click', () => {
+    chart.export({
+        // width: 800,
+        // height: 600,
+        // preserveAspectRatio: false,
+        // preserveFontStyle: false,
+        mimeType: "image/png"
+    }, dataUrl => {
+        const link = document.createElement("a");
+
+        link.download = `${Date.now()}.png`;
+        link.href = dataUrl;
+        link.innerHTML = "Download chart as image";
+
+        document.body.appendChild(link);
+    });
 })
