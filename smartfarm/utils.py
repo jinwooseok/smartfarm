@@ -11,7 +11,8 @@ from .models import File_db
 from django.utils.datastructures import MultiValueDictKeyError
 ## -------------파일 처리 클래스-----------------
 from django.core.files import File
-
+#--------------캐시 처리 라이브러리-------------
+from django.core.cache import cache
 class FileSystem:
     #백엔드에서 파일처리
     def __init__(self, user):
@@ -67,32 +68,36 @@ class FileSystem:
         return 0
 
     def fileLoad(self, file_name):
-        file_object=File_db.objects.get(user_id=self.user, file_Title=file_name)
-
-        work_dir = './media/' + str(file_object.file_Root)
-        if os.path.splitext(work_dir)[1] == ".csv":
-            try:
-                data=pd.read_csv(work_dir,encoding="cp949")
-            except UnicodeDecodeError:
-                data=pd.read_csv(work_dir,encoding="utf-8")
+        cacheData = cacheGetter(self.user, file_name)
+        if cacheData != False:
+            return {'data':str(cacheData)}
         else:
-            data = pd.read_excel(work_dir, sheet_name= 0)
-        summary=DataProcess(data).makeSummary()
-        #---------------json생성------------------
-        data=data.replace({np.nan: 0})
-        
-        dateIndex = DataProcess.dateDetecter(data)
-        data = DataProcess.columnToString(data, dateIndex)
-        data_json=data.to_json(orient="records",force_ascii=False)#데이터프레임을 json배열형식으로변환(형식은 spreadsheet.js에 맞춰)
-        
-        summary_json = summary.to_json(orient="columns",force_ascii=False)
-        context = {
-                    'user_name':self.user,
-                    'result':'success',
-                    'data' : data_json,
-                    'summarys' : json.loads(summary_json)
-                }
-        return context
+            file_object=File_db.objects.get(user_id=self.user, file_Title=file_name)
+
+            work_dir = './media/' + str(file_object.file_Root)
+            if os.path.splitext(work_dir)[1] == ".csv":
+                try:
+                    data=pd.read_csv(work_dir,encoding="cp949")
+                except UnicodeDecodeError:
+                    data=pd.read_csv(work_dir,encoding="utf-8")
+            else:
+                data = pd.read_excel(work_dir, sheet_name= 0)
+            summary=DataProcess(data).makeSummary()
+            #---------------json생성------------------
+            data=data.replace({np.nan: 0})
+            
+            dateIndex = DataProcess.dateDetecter(data)
+            data = DataProcess.columnToString(data, dateIndex)
+            data_json=data.to_json(orient="records",force_ascii=False)#데이터프레임을 json배열형식으로변환(형식은 spreadsheet.js에 맞춰)
+            cacheSetter(self.user, file_name, data_json)
+            summary_json = summary.to_json(orient="columns",force_ascii=False)
+            context = {
+                        'user_name':self.user,
+                        'result':'success',
+                        'data' : data_json,
+                        'summarys' : json.loads(summary_json)
+                    }
+            return context
     
     #다중 파일 로드
     def fileLoadMulti(self, file_names):
@@ -221,3 +226,15 @@ class JsonProcess:
 def dataJoiner(df1, df2, left_key, right_key):
     joinedData = pd.merge(df1, df2, left_on=left_key, right_on=right_key, how='left')
     return joinedData
+
+def cacheSetter(user, file_name, data):
+    cacheID = File_db.objects.get(user_id=user, file_Title=file_name).id
+    cache.set(cacheID, data, timeout=60)
+
+def cacheGetter(user, file_name):
+    cacheID = File_db.objects.get(user_id=user, file_Title=file_name).id
+    if cache.get(cacheID):
+        print("캐싱된 데이터입니다.")
+        return cache.get(cacheID)
+    else:
+        return False

@@ -63,6 +63,7 @@ def fileDeleteView(request):
 #파일 삭제 함수 - data_list창
     
 #------------------------ revise창 ------------------------
+@logging_time
 def revise(request, file_name):
     user = loginValidator(request)
     if user != None:
@@ -136,10 +137,50 @@ def analyze(request, file_name):
     user = loginValidator(request)
     if user != None:
         context = FileSystem(user).fileLoad(file_name)
+        print(context)
         return render(request, "Analyze/analyze.html", context) #전송
     elif user == None:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
 
+def useAnalizer(request):
+    user = loginValidator(request)
+    if user != None:
+        data = request.POST.get('data')
+        data = pd.read_json(data)
+        print(data)
+        if request.POST.get('header') == 'linear':
+            x = request.POST.getlist('x_value')
+            y = request.POST.get('y_value')
+            result = proc.linear(data, x, y)
+            return JsonResponse({'result':'success',
+                                'data':result})
+        elif request.POST.get('header') == 'ttest':
+            type = request.POST.get('type')
+            if type == '2':
+                x = request.POST.get('x_value')
+                result = proc.ttest(data, type, x)
+                return JsonResponse({'result':'success',
+                                    'data':result})
+            elif type == '3':
+                x = request.POST.get('x_value')
+                y = request.POST.get('y_value')
+                result = proc.ttest(data, type, x, y)
+                return JsonResponse({'result':'success',
+                                    'data':result})
+            elif type == '4':
+                x = request.POST.get('x_value')
+                y = request.POST.get('y_value')
+                result = proc.ttest(data, type, x, y)
+                return JsonResponse({'result':'success',
+                                    'data':result})
+        elif request.POST.get('header') == 'logistic':
+            x = request.POST.getlist('x_value')
+            y = request.POST.get('y_value')
+            result = proc.logistic(data, x, y)
+            return JsonResponse({'result':'success',
+                                'data':result})
+    elif user == None:
+        return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
 #------------------------ test.html연결 ------------------------
 def test(request):
     return render(request, "analytics/excel.html") #전송
