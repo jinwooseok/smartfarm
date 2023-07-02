@@ -91,7 +91,7 @@ a {
         width: 150px;
     }
 
-    .container .analyze-wrapper{
+    .container .analyze-setting-wrapper{
         width: 100%;
         margin-bottom: 20px;
 
@@ -103,16 +103,20 @@ a {
         text-align: center;
     }
 
-    .container .analyze-wrapper .flex-start{
+    .container .analyze-setting-wrapper .flex-start{
         align-self: start;
     }
 
-    .container .analyze-wrapper>*{
+    .container .analyze-setting-wrapper>*{
         margin-right: 10px;
     }
 
-    .container .analyze-result{
+    .container .analyze-result-wrapper{
         margin-bottom: 20px;
+    }
+
+    .container .analyze-result-wrapper .analyze{
+        margin-bottom: 10px;
     }
     
     .container .graph-wrapper{
