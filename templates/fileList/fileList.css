@@ -352,21 +352,14 @@ body {
         margin-left: 3px;
     }
 
-    .search_box .delete,
-    .search_box .merge {
-        float: right;
-    }
-
-    .search_box>*:not(:last-child) {
-        margin: 0;
-    }
-
     .search_box button {
         border: 1px solid #007A33;
         margin-right: 5px;
         padding: 3px 8px;
         background-color: #007A33;
         color: #fff;
+
+        float: right;
     }
 
     .search_box button:hover {
@@ -710,21 +703,14 @@ body {
         margin-left: 3px;
     }
 
-    .search_box .delete,
-    .search_box .merge {
-        float: right;
-    }
-
-    .search_box>*:not(:last-child) {
-        margin: 0;
-    }
-
     .search_box button {
         border: 1px solid #007A33;
         margin-right: 5px;
         padding: 3px 8px;
         background-color: #007A33;
         color: #fff;
+
+        float: right;
     }
 
     .search_box button:hover {

@@ -37,28 +37,42 @@
 
     <div class="container">
         <div class="analyze-wrapper">
-            <fieldset>
+            <fieldset class="flex-start">
                 <legend>x 값</legend>
                 <select name="" id="xValue" multiple size="5">
 
                 </select>
             </fieldset>
+
             <button class="x_delete" id="x_delete">&lt= </button>
             <button class="x_move" id="x_move"> =&gt </button>
-            <fieldset>
+
+            <fieldset class="flex-start">
                 <legend>선택된 x 값</legend>
                 <select name="" id="selectedXValue" multiple size="5">
 
                 </select>
             </fieldset>
+
             <fieldset class="flex-start">
                 <legend>y 값</legend>
                 <select name="" id="yValue">
 
                 </select>
             </fieldset>
+
+            <fieldset class="flex-start">
+                <legend>분석 종류</legend>
+                <select name="" id="technique">
+                    <option value="선형회귀분석">선형회귀분석</option>
+                    <option value="로지스틱회귀분석">로지스틱회귀분석</option>
+                </select>
+            </fieldset>
+
+
         </div>
         <div class="analyze-result">
+            <button type="submit" id="analyze" class="analyze" >분석하기</button>
             <fieldset>
                 <legend>분석 결과</legend>
             </fieldset>

@@ -146,8 +146,18 @@ function saveTitle(event) {
     }
     localStorage.setItem("title_list", JSON.stringify(titleList));
     localStorage.setItem('fileTitle', JSON.stringify(event.target.innerHTML));
-    event.target.href = `/revise/${event.target.innerHTML}/`;
+    window.location.href = `/revise/${event.target.innerHTML}/`;
 }
 
+// 다운로드
+const $download = document.querySelector('#download')
+$download.addEventListener('click', () => {
+    const All_Checkbox = document.querySelectorAll('.check'); // check-box
+    let check_count = [...All_Checkbox].filter((v) => v.checked === true).length;
 
+    if (check_count !== 1) {
+        alert('파일은 1개를 선택해야 합니다.')
+        return;
+    }
+})
 
