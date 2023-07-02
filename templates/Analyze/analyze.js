@@ -57,21 +57,24 @@ $x_delete.addEventListener('click', () => {
 })
 
 $analyze.addEventListener('click',() =>{
-
-    $ajax({
+    $.ajax({
         url: `/analyze/${JSON.parse(localStorage.getItem("fileTitle"))}/stat`,
-        type: 'post',
+        type: 'get',
         dataType: 'json',
         data : {
             xValue : JSON.stringify(xValueArr), //x 값 배열임
-            yValue : JSON.stringify($yValue.options[$yValue.selectedIndex].textContent), //y 값
-            technique : JSON.stringify($technique.options[$technique.selectedIndex].textContent), // 분석 종류
+            yValue : $yValue.options[$yValue.selectedIndex].textContent, //y 값
+            technique : $technique.options[$technique.selectedIndex].textContent, // 분석 종류
         },
         success: function (response) {
             if (response.data != null) {
-                $analyze_result.innerHTML=''; // 결과 창 html
+                $analyze_result.innerHTML=response.data; // 결과 창 html
             }
         },
+        error: function (xhr, error) {
+            alert("에러입니다.");
+            console.error("error : " + error);
+        }
     })
 
 })

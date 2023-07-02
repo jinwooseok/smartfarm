@@ -5,7 +5,7 @@ from django.core.files import File
 import pandas as pd
 from users.models import User
 import json
-
+import os
 from . import proc
 
 from config.settings import BASE_DIR
@@ -19,9 +19,10 @@ from .serializers import FileSerializer, UserSerializer
 #-----------------------유틸리티 import-----------------------
 from .decorators import logging_time
 from .validators import loginValidator
-from .utils import FileSystem, DataProcess
+from .utils import FileSystem, DataProcess, cacheGetter
 ##페이지 별로 필요한 request를 컨트롤
-
+#---------------분석도구 import ----------------
+from . import analizer
 #-----------------------메인화면 호출. user정보를 사용
 
 def main(request):
@@ -137,46 +138,58 @@ def analyze(request, file_name):
     user = loginValidator(request)
     if user != None:
         context = FileSystem(user).fileLoad(file_name)
-        print(context)
         return render(request, "Analyze/analyze.html", context) #전송
     elif user == None:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
 
-def useAnalizer(request):
+def useAnalizer(request, file_name):
     user = loginValidator(request)
     if user != None:
-        data = request.POST.get('data')
-        data = pd.read_json(data)
-        print(data)
-        if request.POST.get('header') == 'linear':
+        if cacheGetter(user, file_name) == True:
+            data = cacheGetter(user, file_name)
+            data = pd.read_json(data)
+        else:
+            file_object=File_db.objects.get(user_id=user, file_Title=file_name)
+
+            work_dir = './media/' + str(file_object.file_Root)
+            if os.path.splitext(work_dir)[1] == ".csv":
+                try:
+                    data=pd.read_csv(work_dir,encoding="cp949")
+                except UnicodeDecodeError:
+                    data=pd.read_csv(work_dir,encoding="utf-8")
+            else:
+                data = pd.read_excel(work_dir, sheet_name= 0)
+
+        if request.GET.get('technique') == "선형회귀분석":
+            print("들어왔다")
+            x = json.loads(request.GET.get('xValue'))
+            y = request.GET.get('yValue')
+            result = analizer.linear(data, x, y)
+            print(x,y, result)
+            return JsonResponse({'result':'success','data':result})
+        # elif request.POST.get('header') == 'ttest':
+        #     type = request.POST.get('type')
+        #     if type == '2':
+        #         x = request.POST.get('x_value')
+        #         result = proc.ttest(data, type, x)
+        #         return JsonResponse({'result':'success',
+        #                             'data':result})
+        #     elif type == '3':
+        #         x = request.POST.get('x_value')
+        #         y = request.POST.get('y_value')
+        #         result = proc.ttest(data, type, x, y)
+        #         return JsonResponse({'result':'success',
+        #                             'data':result})
+        #     elif type == '4':
+        #         x = request.POST.get('x_value')
+        #         y = request.POST.get('y_value')
+        #         result = proc.ttest(data, type, x, y)
+        #         return JsonResponse({'result':'success',
+        #                             'data':result})
+        elif request.GET.get('technique') == '선형회귀분석':
             x = request.POST.getlist('x_value')
             y = request.POST.get('y_value')
-            result = proc.linear(data, x, y)
-            return JsonResponse({'result':'success',
-                                'data':result})
-        elif request.POST.get('header') == 'ttest':
-            type = request.POST.get('type')
-            if type == '2':
-                x = request.POST.get('x_value')
-                result = proc.ttest(data, type, x)
-                return JsonResponse({'result':'success',
-                                    'data':result})
-            elif type == '3':
-                x = request.POST.get('x_value')
-                y = request.POST.get('y_value')
-                result = proc.ttest(data, type, x, y)
-                return JsonResponse({'result':'success',
-                                    'data':result})
-            elif type == '4':
-                x = request.POST.get('x_value')
-                y = request.POST.get('y_value')
-                result = proc.ttest(data, type, x, y)
-                return JsonResponse({'result':'success',
-                                    'data':result})
-        elif request.POST.get('header') == 'logistic':
-            x = request.POST.getlist('x_value')
-            y = request.POST.get('y_value')
-            result = proc.logistic(data, x, y)
+            result = analizer.logistic(data, x, y)
             return JsonResponse({'result':'success',
                                 'data':result})
     elif user == None:
@@ -188,9 +201,9 @@ def test(request):
 #------------------------------농업관련 데이터 처리 부분------------------
 #데이터의 형식이나 원하는 전처리에 따라 파이프라인을 설정하는 부분
 @logging_time
-def farm(request):
+def farm(request, file_name):
     user = loginValidator(request)
-    file_name=request.POST.get('file_name')
+    new_file_name=request.POST.get('new_file_name')
     file_type=request.POST.get('file_type','환경')
     date=request.POST.get('date','1')
     lat=request.POST.get('lat','35')
@@ -199,13 +212,12 @@ def farm(request):
     DorW=request.POST.get('DorW','days')
     var=request.POST.get('valueObject')
     var=json.loads(var)
-    data=request.POST['data']
-    print(var)
-        
+    print(file_name)
+    data=FileSystem(user).fileGetter(file_name)
+
     a = ETL_system(data,file_type,date,lat_lon,DorW,var)
     result=a.ETL_stream()
-    print(file_name)
-    FileSystem(user).fileSave(result, file_name)
+    FileSystem(user).fileSave(result, new_file_name)
     result_json=result.to_json(orient="records",force_ascii=False)
     result = {
                 'result':'success',
@@ -219,8 +231,7 @@ def farm(request):
 
 class ETL_system:
     def __init__(self,data,file_type,date,lat_lon,DorW,var):
-        b=pd.read_json(data)
-        self.data = b
+        self.data = data
         self.file_type = file_type
         self.date = int(date) - 1
         self.lat, self.lon=lat_lon
@@ -242,16 +253,17 @@ class ETL_system:
     def Envir(self):
         lon = self.lon
         lat = self.lat
-        dt = DataProcess(self.data, self.date)
-        dt.dateConverter()
+        print(self.data)
+        df = DataProcess(self.data, self.date)
+        df.dateConverter()
         if self.DorW=="weeks":
         #주별데이털로 변환
-            result = proc.making_weekly2(dt.data, dt.date)
+            result = proc.making_weekly2(df.data, df.date)
             result['날짜']=result['날짜'].astype('str')
         elif self.DorW == 'days':
             #시간 구별 데이터프레임 생성
             envir_date = pd.DataFrame()
-            envir_date['날짜'] = dt.getDate()
+            envir_date['날짜'] = df.getDate()
 
             start_month=envir_date['날짜'].astype(str)[0][0:7]
             end_month=envir_date['날짜'].astype(str)[len(envir_date)-1][0:7]
@@ -264,10 +276,10 @@ class ETL_system:
             t_diff=3
             t_div=proc.time_div(sun,afternoon_div, t_diff)
             #일일데이터로 변환
-            generating_data=proc.generating_dailydata(dt.data, dt.date, t_div,t_diff, self.var)
+            generating_data=proc.generating_dailydata(df.data, df.date, t_div,t_diff, self.var)
             result=generating_data
         else:
-            result = proc.making_weekly2(dt.data, dt.date, int(self.DorW))
+            result = proc.making_weekly2(df.data, df.date, int(self.DorW))
             result['날짜']=result['날짜'].astype('str')
         result['날짜']=result['날짜'].astype('str')
         return result

@@ -201,9 +201,9 @@ def generating_variable(data, date_ind, d_ind, kind,t_diff , div_DN=False, tbase
     for ind in ind_name:
         for k in kind:
             if type(k) == list :
-                temp_name.append(k[0]+k[1]+" "+ind)
+                temp_name.append(k[0]+k[1]+ind)
             else:
-                temp_name.append(k+ " " + ind)
+                temp_name.append(k + ind)
     print(kind_ND)
     temp_df.columns = temp_name
     #temp_df에 값 입력과정

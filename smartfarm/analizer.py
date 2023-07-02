@@ -4,15 +4,12 @@ import pandas as pd
 import statsmodels.api as sm  
 def linear(d,x,y):#회귀분석을 실행. 결과표,분산분석표,상관분석표까지 표현
     from sklearn.model_selection import train_test_split
-    import statsmodels.api as sm
     from statsmodels.formula.api import ols 
-    json=request.POST['jsonObject']
-    x=request.POST.getlist('x_value')
-    y=request.POST['y_value']
-    b=pd.read_json(json)
-    b.columns=[i.replace(' ','') for i in b.columns.values]
+    print(d)
+    print(x)
+    d.columns=[i.replace(' ','') for i in d.columns.values]
     x_re=[i.replace(' ','') for i in x]
-    xx=b.loc[:,x_re]
+    xx=d.loc[:,x_re]
     xx_str=""#y~x를 이용한 ols는 anova_lm도 가능하다.
     for i in x_re:
         if i==x[-1]:
@@ -21,7 +18,7 @@ def linear(d,x,y):#회귀분석을 실행. 결과표,분산분석표,상관분�
             xx_str+=(str(i)+"+")
 
     model=str(y)+" ~ "+xx_str
-    result = ols(model,data=b).fit()
+    result = ols(model,data=d).fit()
     corr_html=xx.corr().to_html()
     f_html=sm.stats.anova_lm(result).to_html()
     c_html=result.summary().as_html()+"\n"+corr_html+ "\n"+f_html

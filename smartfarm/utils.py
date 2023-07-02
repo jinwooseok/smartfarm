@@ -66,7 +66,24 @@ class FileSystem:
         f.close()
         os.remove(file_name)
         return 0
+    
+    def fileGetter(self, file_name):
+        if cacheGetter(self.user, file_name) == True:
+                data = cacheGetter(self.user, file_name)
+                data = pd.read_json(data)
+        else:
+            file_object=File_db.objects.get(user_id=self.user, file_Title=file_name)
 
+            work_dir = './media/' + str(file_object.file_Root)
+            if os.path.splitext(work_dir)[1] == ".csv":
+                try:
+                    data=pd.read_csv(work_dir,encoding="cp949")
+                except UnicodeDecodeError:
+                    data=pd.read_csv(work_dir,encoding="utf-8")
+            else:
+                data = pd.read_excel(work_dir, sheet_name= 0)
+        return data
+    
     def fileLoad(self, file_name):
         cacheData = cacheGetter(self.user, file_name)
         if cacheData != False:
@@ -130,7 +147,7 @@ class FileSystem:
     @staticmethod
     def fileNameCheck(id, file_name):
         if file_name.split(".")[-1] in ["xlsx","xls","csv"]:
-            file_name = file_name.split(".")[0]
+            file_name = "".join(file_name.split(".")[0:-1])
         if File_db.objects.filter(user_id=id, file_Title=file_name+".csv"):
                 file_name_copy = copy.copy(file_name)
                 unique = 1
@@ -166,15 +183,17 @@ class DataProcess:
         dateType = self.data.iloc[:, self.date].dtype
         dateColumn = self.data.iloc[:, self.date]
         self.data.rename(columns={self.data.columns[self.date]:'날짜'}, inplace=True)
-        if dateType == str:
+        print(dateType)
+        if dateType == str or dateType == object:
             dateColumn = pd.to_datetime(dateColumn)
         elif dateType in [int, np.int64]:
             dateColumn = pd.to_datetime(dateColumn.astype(str))
         elif dateType == "datetime64[ns]":    
             dateColumn = pd.to_datetime(dateColumn)
         else:
-            print("날짜 형식이 아니거나 이미 판다스 날짜 형식 입니다.")
+            print("날짜 형식이 아닙니다.")
         self.data.iloc[:, self.date] = dateColumn
+        print(self.data.iloc[:, self.date].dtype)
     
     def getDate(self):
         return self.data.iloc[:, self.date]
@@ -208,7 +227,6 @@ class DataProcess:
         for i, k in enumerate(data):
             if data[k].dtype == "datetime64[ns]":
                 return i
-        print("날짜 형식의 열이 존재하지 않습니다. 날짜 열이 문자열로 되어있는지 확인해 주세요.")
         return -1
     #컬럼명 변경
     @staticmethod

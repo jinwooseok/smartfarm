@@ -321,7 +321,7 @@ $submit_data.addEventListener('click', () => {
         }
     }
     console.time("submit_data");
-    let file_name = $('#fileName').val();
+    let new_file_name = $('#fileName').val();
     let file_type = fileType
     let date = $('#columnDate').val();
     let periods = $('#periods').val();
@@ -333,12 +333,12 @@ $submit_data.addEventListener('click', () => {
     const yesOrNo = confirm('파일을 저장합니다.'); // 예, 아니요를 입력 받음
     if (yesOrNo) {
         $.ajax({
-            url: '/farm/',
+            url: 'farm/',
             type: 'post',
             dataType: 'json',
             headers: { 'X-CSRFToken': csrftoken },
             data: {
-                file_name: file_name,
+                new_file_name: new_file_name,
                 file_type: file_type,
                 date: date,
                 DorW: periods,
