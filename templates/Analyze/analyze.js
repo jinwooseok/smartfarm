@@ -14,14 +14,14 @@ const $x_move = document.querySelector('#x_move');
 const $x_delete = document.querySelector('#x_delete');
 const $analyze = document.querySelector('#analyze');
 const $technique = document.querySelector('#technique');
-
+const $analyze_result = document.querySelector('#analyze-result');
 
 let data = JSON.parse(document.getElementById('jsonObject').value);
 let dataColumn = Object.keys(data[0]);
 
 window.onload = () => {
     for (let x of dataColumn) {
-        x=x.replace(' ','');
+        // x=x.replace(' ','');
         $xValue.innerHTML += `<option value=${x}>${x}</option>`
         $yValue.innerHTML += `<option value=${x}>${x}</option>`
         $selectBox.innerHTML += `<option value=${x}>${x}</option>`
@@ -58,10 +58,22 @@ $x_delete.addEventListener('click', () => {
 
 $analyze.addEventListener('click',() =>{
 
-    //analyze/JSON.parse(localStorage.getItem("fileTitle"))/stat
-    //console.log(xValueArr);
-    //console.log($yValue.options[$yValue.selectedIndex].textContent);
-    //console.log($technique.options[$technique.selectedIndex].textContent);
+    $ajax({
+        url: `/analyze/${JSON.parse(localStorage.getItem("fileTitle"))}/stat`,
+        type: 'post',
+        dataType: 'json',
+        data : {
+            xValue : JSON.stringify(xValueArr), //x 값 배열임
+            yValue : JSON.stringify($yValue.options[$yValue.selectedIndex].textContent), //y 값
+            technique : JSON.stringify($technique.options[$technique.selectedIndex].textContent), // 분석 종류
+        },
+        success: function (response) {
+            if (response.data != null) {
+                $analyze_result.innerHTML=''; // 결과 창 html
+            }
+        },
+    })
+
 })
 
 
