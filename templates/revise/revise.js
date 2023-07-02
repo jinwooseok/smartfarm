@@ -27,12 +27,10 @@ $manage_list_menu.addEventListener('change', () => {
     document.body.removeChild(link);
 })
 
-
 //////////////////////////////////////////////
 let excel_data = JSON.parse(document.getElementById('jsonObject').value);
 
 const $spreadsheet = document.querySelector('#spreadsheet'); // 엑셀 창
-const $excel_down = document.querySelector('#excel_down'); // 파일 다운
 const $x_label = document.querySelector('#x_label'); // x값
 //////////////////
 // 초기 설정 -> 데이터 불러오고 그리기
@@ -54,10 +52,6 @@ window.onload = () => {
     document.querySelector('#abmsFileName').value=JSON.parse(localStorage.getItem("fileTitle"))+'_abms'
 }
 
-// downToCSV //////////////////////////////////////////////////
-$excel_down.addEventListener('click', () => {
-    data.download(excel_data);
-});
 
 ///////////////////////////////////////////
 // 엑셀 변수를 가지고 새로운 데이터로 변환 시 사용하는 함수 및 변수
@@ -310,19 +304,6 @@ $periods.addEventListener('change', (event) => {
 const $type = document.querySelectorAll('input[name="type"]'); // 파일 종류 확인
 let fileType; // 파일 종류 전송 변수
 
-// // data 최종 확인
-// $submit_data.addEventListener('click', () => {
-//     for(let i=0; i<$type.length; i++){
-//         if($type[i].checked){
-//             fileType=$type[i].value
-//         }
-//     }
-//     console.log(fileType)
-//     console.log(newDataArr);
-//     console.log('-----------------');
-//     console.log(newData);
-// })
-
 // 초기화
 $reset_data.addEventListener('click', () => {
     newData = [];
@@ -332,8 +313,7 @@ $reset_data.addEventListener('click', () => {
     $fileName.value = '';
 })
 
-//우석추가
-//농업 전처리 클래스와 연결된 함수
+// 저장
 $submit_data.addEventListener('click', () => {
     for (let i = 0; i < $type.length; i++) {
         if ($type[i].checked) {
@@ -367,13 +347,14 @@ $submit_data.addEventListener('click', () => {
             },
             success: function (response) {
                 if (response.data != null) {
-                    console.log(response.data);
-
+                    // console.log(response.data);
                     console.timeEnd("submit_data"); // 측정 종료
+                    window.location.href = "/fileList/";
                 }
                 else {
                     alert('전송할 데이터가 없습니다.')
                 }
+
             },
             error: function (xhr, error) {
                 alert("에러입니다.");

@@ -28,7 +28,6 @@ function makeSelectBox() {
 makeSelectBox(); // selectedBox 데이터 추가
 
 const $merge_button = document.querySelector('#merge_button');
-const $download = document.querySelector('#download');
 const $save = document.querySelector('#save');
 let newData;
 let var1_text = $var1.childNodes[1].textContent;
@@ -101,13 +100,6 @@ $merge_button.addEventListener('click', () => {
     })
 })
 
-$download.addEventListener('click', () => {
-    newData.setFileName($('#fileName').val());
-    setTimeout(() => {
-        newData.download(newData.getData());
-    }, 500)
-}, { once: true })
-
 $save.addEventListener('click', () => {
     $.ajax({
         url: '/mergeView/',
@@ -118,6 +110,13 @@ $save.addEventListener('click', () => {
             header: "save",
             data: JSON.stringify(newData.getData()),
             file_name: $('#fileName').val(),
-        }
+        },
+        success:function(response){
+            if(response.data != null){
+                alert(`${$('#fileName').val()}이 저장되었습니다.`);
+            }
+            window.location.href = "/fileList/";
+        },
     })
+    
 })

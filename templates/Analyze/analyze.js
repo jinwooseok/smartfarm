@@ -12,6 +12,8 @@ const $selectedXValue = document.querySelector('#selectedXValue');
 const $yValue = document.querySelector('#yValue');
 const $x_move = document.querySelector('#x_move');
 const $x_delete = document.querySelector('#x_delete');
+const $analyze = document.querySelector('#analyze');
+const $technique = document.querySelector('#technique');
 
 
 let data = JSON.parse(document.getElementById('jsonObject').value);
@@ -19,6 +21,7 @@ let dataColumn = Object.keys(data[0]);
 
 window.onload = () => {
     for (let x of dataColumn) {
+        x=x.replace(' ','');
         $xValue.innerHTML += `<option value=${x}>${x}</option>`
         $yValue.innerHTML += `<option value=${x}>${x}</option>`
         $selectBox.innerHTML += `<option value=${x}>${x}</option>`
@@ -34,7 +37,7 @@ const xValueArr = []; // 선택한 x값 배열
 // 선택한 x값 이동
 $x_move.addEventListener('click', () => {
     let checked = document.querySelectorAll('#xValue :checked');
-    let selected = [...checked].map(option => option.value);
+    let selected = [...checked].map(option => option.textContent);
 
     for (let x of selected) {
         $selectedXValue.innerHTML += `<option value=${x}>${x}</option>`;
@@ -45,13 +48,22 @@ $x_move.addEventListener('click', () => {
 // x값 삭제
 $x_delete.addEventListener('click', () => {
     let checked = document.querySelectorAll('#selectedXValue :checked');
-    let selected = [...checked].map(option => option.value);
+    let selected = [...checked].map(option => option.textContent);
 
     for (let x of selected) {
         $(`#selectedXValue option[value='${x}']`).remove();
         xValueArr.splice(xValueArr.indexOf(x), 1);
     }
 })
+
+$analyze.addEventListener('click',() =>{
+
+    //analyze/JSON.parse(localStorage.getItem("fileTitle"))/stat
+    //console.log(xValueArr);
+    //console.log($yValue.options[$yValue.selectedIndex].textContent);
+    //console.log($technique.options[$technique.selectedIndex].textContent);
+})
+
 
 /////////////////////////////////////
 // 그래프 //
