@@ -38,7 +38,7 @@ function select_delete() {
         let deleteList = [];
         for (let i = 0; i < All_Checkbox.length; i++) {
             if (All_Checkbox[i].checked) {
-                deleteList.push(titles[i+1].innerText);
+                deleteList.push(titles[i + 1].innerText);
                 All_Checkbox[i].parentElement.remove();
             }
         }
@@ -82,9 +82,9 @@ const $titleAll = document.querySelectorAll('#list_title');
 const $listAll = document.querySelectorAll('.list');
 const $search = document.querySelector('#search');
 
+// 검색용 저장
 let titleList = [];
-
-for(let x of $titleAll){
+for (let x of $titleAll) {
     titleList.push(x.innerText);
 }
 
@@ -99,6 +99,7 @@ $search.addEventListener('keyup', (event) => {
     }
 })
 
+// 병합
 $merge.addEventListener('click', () => {
     const All_Checkbox = document.querySelectorAll('.check'); // check-box
     let check_count = [...All_Checkbox].filter((v) => v.checked === true).length;
@@ -137,21 +138,16 @@ $merge.addEventListener('click', () => {
     })
 })
 
+// 파일 클릭
 function saveTitle(event) {
-    // title 내부 저장
-    titleList=[];
-    const $titleAll = document.querySelectorAll('#list_title');
-    for (let x of $titleAll) {
-        titleList.push(x.innerText);
-    }
-    localStorage.setItem("title_list", JSON.stringify(titleList));
+    localStorage.setItem("title_list", JSON.stringify(titleList)); // 로컬에 저장
     localStorage.setItem('fileTitle', JSON.stringify(event.target.innerHTML));
     window.location.href = `/revise/${event.target.innerHTML}/`;
 }
 
 // 다운로드
 const $download = document.querySelector('#download')
-$download.addEventListener('click', () => {
+$download.addEventListener('click', (event) => {
     const All_Checkbox = document.querySelectorAll('.check'); // check-box
     let check_count = [...All_Checkbox].filter((v) => v.checked === true).length;
 
@@ -159,5 +155,32 @@ $download.addEventListener('click', () => {
         alert('파일은 1개를 선택해야 합니다.')
         return;
     }
+
+    let downloadTitle;
+    for (let i = 0; i < All_Checkbox.length; i++) {
+        if (All_Checkbox[i].checked) {
+            downloadTitle = All_Checkbox[i].parentElement.childNodes[3].innerText;
+        }
+    }
+
+    $.ajax({
+        url: '/download/',
+        type: 'post',
+        dataType: 'json',
+        headers: { 'X-CSRFToken': csrftoken },
+        data: {
+            data: JSON.stringify(downloadTitle),
+        },
+        success: function (response) {
+            if (response.data != null) {
+                console.log(response.data);
+            }
+        },
+        error: function (xhr, error) {
+            alert("에러입니다.");
+            console.error("error : " + error);
+        }
+    })
+
 })
 
