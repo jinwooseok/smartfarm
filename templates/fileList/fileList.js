@@ -38,7 +38,7 @@ function select_delete() {
         let deleteList = [];
         for (let i = 0; i < All_Checkbox.length; i++) {
             if (All_Checkbox[i].checked) {
-                deleteList.push(titles[i+1].innerText);
+                deleteList.push(titles[i + 1].innerText);
                 All_Checkbox[i].parentElement.remove();
             }
         }
@@ -78,8 +78,15 @@ $check_all.addEventListener('change', AllCheck);
 
 
 // 검색
+const $titleAll = document.querySelectorAll('#list_title');
 const $listAll = document.querySelectorAll('.list');
 const $search = document.querySelector('#search');
+
+// 검색용 저장
+let titleList = [];
+for (let x of $titleAll) {
+    titleList.push(x.innerText);
+}
 
 $search.addEventListener('keyup', (event) => {
     let text = event.target.value;
@@ -133,14 +140,8 @@ $merge.addEventListener('click', () => {
 
 // 파일 클릭
 function saveTitle(event) {
-    // title 내부 저장
-    titleList=[];
-    const $titleAll = document.querySelectorAll('#list_title');
-    for (let x of $titleAll) {
-        titleList.push(x.innerText);
-    }
-    localStorage.setItem("title_list", JSON.stringify(titleList));
-    localStorage.setItem('fileTitle', JSON.stringify(event.target.innerHTML.trim().replace(/(.csv|.xlsx|.xls)$/,'')));
+    localStorage.setItem("title_list", JSON.stringify(titleList)); // 로컬에 저장
+    localStorage.setItem('fileTitle', JSON.stringify(event.target.innerHTML));
     window.location.href = `/revise/${event.target.innerHTML}/`;
 }
 
