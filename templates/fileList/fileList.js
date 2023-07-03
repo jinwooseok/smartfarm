@@ -169,7 +169,7 @@ $download.addEventListener('click', (event) => {
         dataType: 'json',
         headers: { 'X-CSRFToken': csrftoken },
         data: {
-            data: JSON.stringify(downloadTitle),
+            data: downloadTitle,
         },
         success: function (response) {
             if (response.data != null) {

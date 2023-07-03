@@ -69,8 +69,9 @@ class FileSystem:
     
     def fileGetter(self, file_name):
         if cacheGetter(self.user, file_name) == True:
-                data = cacheGetter(self.user, file_name)
-                data = pd.read_json(data)
+                cacheData = cacheGetter(self.user, file_name)
+                data = pd.read_json(cacheData)
+                summary=DataProcess(data).makeSummary()
         else:
             file_object=File_db.objects.get(user_id=self.user, file_Title=file_name)
 
@@ -87,7 +88,9 @@ class FileSystem:
     def fileLoad(self, file_name):
         cacheData = cacheGetter(self.user, file_name)
         if cacheData != False:
-            return {'data':str(cacheData)}
+            data = pd.read_json(cacheData)
+            summary=DataProcess(data).makeSummary()
+            data_json = data.to_json(orient="records",force_ascii=False)
         else:
             file_object=File_db.objects.get(user_id=self.user, file_Title=file_name)
 
@@ -101,20 +104,20 @@ class FileSystem:
                 data = pd.read_excel(work_dir, sheet_name= 0)
             summary=DataProcess(data).makeSummary()
             #---------------json생성------------------
-            data=data.replace({np.nan: 0})
-            
+            data=data.replace({np.nan: 0}) 
             dateIndex = DataProcess.dateDetecter(data)
             data = DataProcess.columnToString(data, dateIndex)
             data_json=data.to_json(orient="records",force_ascii=False)#데이터프레임을 json배열형식으로변환(형식은 spreadsheet.js에 맞춰)
             cacheSetter(self.user, file_name, data_json)
-            summary_json = summary.to_json(orient="columns",force_ascii=False)
-            context = {
-                        'user_name':self.user,
-                        'result':'success',
-                        'data' : data_json,
-                        'summarys' : json.loads(summary_json)
-                    }
-            return context
+        
+        summary_json = summary.to_json(orient="columns",force_ascii=False)
+        context = {
+                    'user_name':self.user,
+                    'result':'success',
+                    'data' : data_json,
+                    'summarys' : json.loads(summary_json)
+                }
+        return context
     
     #다중 파일 로드
     def fileLoadMulti(self, file_names):
@@ -157,8 +160,6 @@ class FileSystem:
                 file_name = file_name_copy
         file_name = file_name + ".csv"
         return file_name
-    
-
 
 ## -------------데이터 변경 클래스-----------------
 class DataProcess:

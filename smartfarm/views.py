@@ -54,15 +54,21 @@ def fileUploadView(request):
         user = loginValidator(request)
         FileSystem(user).fileUpload(request)
         return render(request, 'upload/upload.html')
-
+#파일 삭제 함수 - data_list창
 def fileDeleteView(request):
     user = loginValidator(request)
     result = FileSystem(user).fileDelete(request)
             # Redirect to a success page.
     return JsonResponse(result)
 
-#파일 삭제 함수 - data_list창
-    
+#파일 다운로드 함수
+def fileDownloadView(request):
+    user = loginValidator(request)
+    file_name = request.POST.get('data')
+    result = FileSystem(user).fileLoad(file_name)
+    context = {'file_name':file_name,
+                'data':result['data']}
+    return JsonResponse(context)
 #------------------------ revise창 ------------------------
 @logging_time
 def revise(request, file_name):

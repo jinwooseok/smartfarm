@@ -13,7 +13,6 @@ urlpatterns = [
     path('fileList/', views.fileList, name='fileList'),
     path('fileList/upload/',views.fileUploadView, name='upload'),
     path('fileList/delete/', views.fileDeleteView, name="fileDelete"),
-    
     #merge 창
     path('merge/', views.merge, name='merge'),
     path('mergeView/', views.mergeView, name='mergeView'),
@@ -28,7 +27,10 @@ urlpatterns = [
     path('fileList_2/', views.fileList2, name='fileList2'),
     path('analyze/<str:file_name>/', views.analyze, name='analysisView'),
     path("analyze/<str:file_name>/stat", views.useAnalizer, name='stat'),
-
+    
+    #util기능
+    path('download/', views.fileDownloadView, name='download'),
+    #api
     path('api/users/', views.userApiView),
     path('api/files/', views.fileListApiView),
 
