@@ -13,6 +13,7 @@ urlpatterns = [
     path('fileList/', views.fileList, name='fileList'),
     path('fileList/upload/',views.fileUploadView, name='upload'),
     path('fileList/delete/', views.fileDeleteView, name="fileDelete"),
+    
     #merge 창
     path('merge/', views.merge, name='merge'),
     path('mergeView/', views.mergeView, name='mergeView'),
