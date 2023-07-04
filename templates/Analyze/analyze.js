@@ -181,10 +181,11 @@ $down.addEventListener('click', () => {
     }, dataUrl => {
         const link = document.createElement("a");
 
-        link.download = `${Date.now()}.png`;
+        link.download = `${JSON.parse(localStorage.getItem("fileTitle"))}.png`;
         link.href = dataUrl;
-        link.innerHTML = "Download chart as image";
 
         document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     });
 })

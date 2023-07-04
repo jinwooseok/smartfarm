@@ -5,6 +5,7 @@ const $check_all = document.querySelector('#check-all'); // 상단 체크박스
 const $upload = document.querySelector('#upload'); // 등록버튼
 const $merge = document.querySelector('#merge'); // 병합버튼
 const $delete = document.querySelector('#delete'); // 삭제버튼
+
 //토큰
 const csrftoken = $('[name=csrfmiddlewaretoken]').val(); // csrftoken
 
@@ -145,7 +146,7 @@ function saveTitle(event) {
     window.location.href = `/revise/${event.target.innerHTML}/`;
 }
 
-// 다운로드
+// 다운로드 버튼
 const $download = document.querySelector('#download')
 $download.addEventListener('click', (event) => {
     const All_Checkbox = document.querySelectorAll('.check'); // check-box
@@ -156,7 +157,7 @@ $download.addEventListener('click', (event) => {
         return;
     }
 
-    let downloadTitle;
+    let downloadTitle; // 파일 이름
     for (let i = 0; i < All_Checkbox.length; i++) {
         if (All_Checkbox[i].checked) {
             downloadTitle = All_Checkbox[i].parentElement.childNodes[3].innerText;
@@ -173,7 +174,7 @@ $download.addEventListener('click', (event) => {
         },
         success: function (response) {
             if (response.data != null) {
-                console.log(response.data);
+                download(response.data, downloadTitle);
             }
         },
         error: function (xhr, error) {
@@ -184,3 +185,44 @@ $download.addEventListener('click', (event) => {
 
 })
 
+// download 로직, csv로
+const download = function(data, title){
+    const jsonData = data
+    let jsonDataParsing = JSON.parse(jsonData);
+    let toCsv = '';
+    let row="";
+
+    for(let i in jsonDataParsing[0]){
+        row += i+","; // 열 입력
+    }
+    row = row.slice(0,-1);
+    toCsv += row +"\r\n";
+
+    for(let i=0; i<jsonDataParsing.length; i++){
+        row="";
+        for(let j in jsonDataParsing[i]){
+            row += ""+jsonDataParsing[i][j] + ","; // 열 제외 입력
+        }
+        row.slice(0, row.length - 1);
+        toCsv += row + '\r\n';
+    }
+
+    if(toCsv===''){
+        alert("Invalid data");
+        return;
+    }
+
+    let fileName = title; // 다운로드 파일 이름
+
+    //Initialize file format you want csv or xls
+    let uri = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURI(toCsv);
+
+    let link = document.createElement("a");    
+    link.href = uri;
+    link.style = "visibility:hidden";
+    link.download = fileName;
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
