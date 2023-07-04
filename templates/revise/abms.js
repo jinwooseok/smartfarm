@@ -262,8 +262,8 @@ $abms_save.addEventListener('click', () =>{
             file_name : document.querySelector('#abmsFileName').value,
         },
         success:function(response){
-            // location.href='/FileList'
             alert("완료되었습니다.");
+            window.location.href = "/fileList/";
         },
     })
 })

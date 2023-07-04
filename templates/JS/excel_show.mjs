@@ -27,49 +27,7 @@ export class Excel {
             this.excelColumn[i] = ({ title: Object.keys(data[0])[i], width: '150px' })
         }
     }
-
-    // download
-    download(data){
-        const jsonData = JSON.stringify(data);
-        let jsonDataParsing = JSON.parse(jsonData);
-        let toCsv = '';
-        let row="";
-
-        for(let i in jsonDataParsing[0]){
-            row += i+","; // 열 입력
-        }
-        row = row.slice(0,-1);
-        toCsv += row +"\r\n";
-
-        for(let i=0; i<jsonDataParsing.length; i++){
-            row="";
-            for(let j in jsonDataParsing[i]){
-                row += ""+jsonDataParsing[i][j] + ","; // 열 제외 입력
-            }
-            row.slice(0, row.length - 1);
-            toCsv += row + '\r\n';
-        }
-
-        if(toCsv===''){
-            alert("Invalid data");
-            return;
-        }
-
-        let fileName = `${this.fileName}`; // 다운로드 파일 이름
-
-        //Initialize file format you want csv or xls
-        let uri = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURI(toCsv);
-
-        let link = document.createElement("a");    
-        link.href = uri;
-        link.style = "visibility:hidden";
-        link.download = fileName + ".csv";
-        
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-
+    
     // data 참조
     getData(){
         return this.excelData;

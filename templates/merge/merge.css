@@ -15,10 +15,11 @@ a {
 }
 
 /* scroll 디자인 */
-*::-webkit-scrollbar{
-    width : 3px;
+*::-webkit-scrollbar {
+    width: 3px;
 }
-*::-webkit-scrollbar-thumb{
+
+*::-webkit-scrollbar-thumb {
     background-color: #999;
 }
 
@@ -42,7 +43,7 @@ a {
     font-weight: bold;
 }
 
-.nav .login{
+.nav .login {
     padding: 3px 15px;
     text-align: center;
     font-size: 14px;
@@ -54,7 +55,7 @@ a {
     color: #fff;
 }
 
-.nav .logout{
+.nav .logout {
     padding: 3px 10px;
     text-align: center;
     font-size: 14px;
@@ -66,7 +67,7 @@ a {
     color: #fff;
 }
 
-.nav .nav-item:hover{
+.nav .nav-item:hover {
     transform: scale(1.2);
     transition-duration: 0.5s;
 }
@@ -82,7 +83,7 @@ a {
 
 /* merge */
 
-.merge_container{
+.merge_container {
     width: 85%;
     height: 30px;
     margin: 10px auto;
@@ -97,7 +98,7 @@ a {
     text-align: center;
 }
 
-.merge_container >*{
+.merge_container>* {
     margin-left: 5px;
 }
 
@@ -123,7 +124,7 @@ a {
     overflow-y: auto;
 }
 
-.excel .spreadsheet_full{
+.excel .spreadsheet_full {
     position: relative;
     width: 100%;
     height: 300px;
@@ -132,4 +133,10 @@ a {
 
     overflow-x: auto;
     overflow-y: auto;
+}
+
+/* scroll */
+.spreadsheet::-webkit-scrollbar,
+.spreadsheet_full::-webkit-scrollbar {
+    height: 4px;
 }

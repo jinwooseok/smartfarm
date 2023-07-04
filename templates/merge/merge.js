@@ -6,13 +6,13 @@ const $var1 = document.querySelector('#var1');
 const $var2 = document.querySelector('#var2');
 const $fileName = document.querySelector('#fileName')
 
-let dataSet = JSON.parse(localStorage.getItem('mergeData'));
+const $mergeData = JSON.parse(localStorage.getItem('mergeData'));
 
-let excel_data = JSON.parse(dataSet[0]);
-let excel_data2 = JSON.parse(dataSet[1]);
+const excel_data = JSON.parse($mergeData[0]);
+const excel_data2 = JSON.parse($mergeData[1]);
 
-let data1 = new Excel(excel_data, $spreadsheet1);
-let data2 = new Excel(excel_data2, $spreadsheet2);
+const data1 = new Excel(excel_data, $spreadsheet1);
+const data2 = new Excel(excel_data2, $spreadsheet2);
 
 const csrftoken = $('[name=csrfmiddlewaretoken]').val(); // csrftoken
 // Object.keys(data1.getData()[0])[i]
@@ -41,31 +41,6 @@ $var2.addEventListener('click', (event) => {
     var2_text = event.target.value
 })
 
-function mergeData(data1, data2) {
-    let merge = [];
-
-    if (data1.length !== data2.length) {
-        alert(`data1=${data1.length}, data2=${data2.length}로 행 수가 다릅니다.`);
-        return;
-    }
-
-    // 특수문자제거
-    let regExp = /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/ ]/gi;
-
-    for(let i in data2){
-        if(data1[i][var1_text].replace(regExp,'') === data2[i][var2_text].replace(regExp,'')){
-            delete data2[i][column];
-            let obj = {...data1[i], ...data2[i]};
-            merge.push(obj);
-        } else {
-            alert(`${i + 1}번 열의 값이 ${data1[i][var1_text]}, ${data2[i][var2_text]}로 다릅니다.`);
-            return;
-        }
-    }
-
-    return merge;
-}
-
 $merge_button.addEventListener('click', () => {
 
     if (!$fileName.value) {
@@ -74,6 +49,7 @@ $merge_button.addEventListener('click', () => {
     }
 
     alert(`${var1_text}과 ${var2_text}를 기준으로 병합합니다.`)
+
     $.ajax({
         url: '/mergeView/',
         type: 'post',
@@ -81,7 +57,7 @@ $merge_button.addEventListener('click', () => {
         headers: { 'X-CSRFToken': csrftoken },
         data: {
             header: "merge",
-            data: JSON.stringify(dataSet),
+            data: JSON.stringify($mergeData),
             var1: var1_text,
             var2: var2_text,
             file_name: $('#fileName').val(),
@@ -89,7 +65,6 @@ $merge_button.addEventListener('click', () => {
         success:function(response){
             if(response.data != null){
                 newData = new Excel(JSON.parse(response.data), $spreadsheet3)
-                document.querySelector('#download').disabled = false;
                 document.querySelector('#save').disabled = false;
             }
         },
