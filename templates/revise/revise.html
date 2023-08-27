@@ -89,10 +89,16 @@
                 <!-- /* 엑셀 전처리 방법 */ -->
                 <div class="content">
                     <div class="x-container">
-                        x값
-                        <select name="" id="x_label" class="x_label">
-                            <option value="null">값을 선택하세요</option>
-                        </select>
+                        <div style="display: flex; justify-content: flex-start;">
+                            x값
+                            <select name="" id="x_label" class="x_label">
+                                <option value="null">값을 선택하세요</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; justify-content: flex-end;">
+                            <input type="text" name="pretreatmentFileName" class="pretreatmentFileName" id="pretreatmentFileName">
+                            <button class="pretreatmentSave" id="pretreatmentSave">저장하기</button>
+                        </div>
                     </div>
                     <div class="list-container" id="list-container">
                         <div class="list">
@@ -100,7 +106,7 @@
                                 열 이름
                             </div>
                             <div class="Null_count" id="Null_count">
-                                빈셀 수
+                                빈 값
                             </div>
                             <div class="Q1" id="Q1">
                                 1사분위 값
@@ -252,7 +258,7 @@
             <!-- tap4  -->
             <li class="tab">
                 <input type="radio" id="tab-4" name="tab-group-1">
-                <label for="tab-4">abms</label>
+                <label for="tab-4">ABMS</label>
 
                 <div class="abms content">
                     <div class="abms_select" id="abms_select">
@@ -389,5 +395,6 @@
 <script type="module" src="/templates/revise/revise.js"></script>
 <script src="/templates/revise/draw.js"></script>
 <script src="/templates/revise/abms.js"></script>
+<script src="/templates/revise/pretreatment.js"></script>
 
 </html>

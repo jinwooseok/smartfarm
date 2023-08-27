@@ -18,7 +18,7 @@
         </div>
         <form action="/users/login/" method="post" class="login_form">
             {% csrf_token %}
-            <input type="text" id="id" class="id" name="id" placeholder="아이디-이메일 형식">
+            <input type="text" id="id" class="id" name="id" placeholder="이메일">
             <input type="password" id="password" class="password" name="password" placeholder="비밀번호">
             {% if error %}
                 <div id="error" class="error">{{ error }}</div>
