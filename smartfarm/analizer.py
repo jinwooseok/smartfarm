@@ -21,9 +21,12 @@ def linear(d,x,y):#회귀분석을 실행. 결과표,분산분석표,상관분�
     result = ols(model,data=d).fit()
     corr_html=xx.corr().to_html()
     f_html=sm.stats.anova_lm(result).to_html()
-    c_html=result.summary().as_html()+"\n"+corr_html+ "\n"+f_html
+    result_dict = {}
+    for i, table in enumerate(result.summary().tables):
+        result_dict[i] = pd.read_html(table.as_html(),header=0)[0].to_json(orient='values',force_ascii=False)
+    # c_html=result.summary().tables.as_html()+"\n"+corr_html+ "\n"+f_html
     #사후분석
-    return c_html
+    return result_dict
 
 def ttest(request,type):#2번 단일표본 3번 독립표본 4번 대응표본
     import scipy.stats as stats

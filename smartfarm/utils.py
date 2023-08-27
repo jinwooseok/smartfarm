@@ -217,6 +217,13 @@ class DataProcess:
         return summary
     #함수 input과 output은 데이터프레임. json변환은 따로 따로. 초기 변환은 배치처리
 
+    def outLierDropper(self):
+        data = self.data
+        for i in range(len(data.columns)):
+            if data.iloc[:, i].dtype == "int64" or data.iloc[:, i].dtype == "float64":
+                data.drop(DataProcess.outLierDetecter(data.iloc[:, i]))
+        return data
+    
     @staticmethod
     def dataMerger(df1, df2):
         df1 = df1.append(df2)
@@ -229,12 +236,29 @@ class DataProcess:
             if data[k].dtype == "datetime64[ns]":
                 return i
         return -1
+    
+    @staticmethod
+    def intDetecter(data):
+        for i, k in enumerate(data):
+            if data[k].dtype == "int64":
+                return i
+        return -1
+    
     #컬럼명 변경
     @staticmethod
     def columnToString(df, columnIndex):
         if columnIndex != -1:
             df.iloc[:, columnIndex] = df.iloc[:, columnIndex].astype(str)
         return df
+    
+    #하나의 series를 받아서 결측치의 인덱스를 알려줌
+    @staticmethod
+    def outLierDetecter(data):
+        min = data.mean()+3*data.std()
+        max = data.mean()-3*data.std()
+        mask = ((data > min) | (data < max))
+        index = np.where(mask)[0]
+        return index
     
 @staticmethod
 class JsonProcess:

@@ -19,7 +19,7 @@ from .serializers import FileSerializer, UserSerializer
 #-----------------------유틸리티 import-----------------------
 from .decorators import logging_time
 from .validators import loginValidator
-from .utils import FileSystem, DataProcess, cacheGetter
+from .utils import FileSystem, cacheGetter, DataProcess
 ##페이지 별로 필요한 request를 컨트롤
 #---------------분석도구 import ----------------
 from . import analizer
@@ -54,6 +54,7 @@ def fileUploadView(request):
         user = loginValidator(request)
         FileSystem(user).fileUpload(request)
         return render(request, 'upload/upload.html')
+    
 #파일 삭제 함수 - data_list창
 def fileDeleteView(request):
     user = loginValidator(request)
@@ -86,12 +87,24 @@ def revise2(request):
         return render(request, "revise/revise.html", context)
     else:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
-#--------------파일 정보 비동기 불러오기 - revise창-------------
+
+#--------------비동기 - revise창-------------
 def fileLoadView(request):
     user = loginValidator(request)
     context = FileSystem(user).fileLoad(request)
     return JsonResponse(context)
 
+def usePreprocessor(request, file_name):
+    user = loginValidator(request)
+    file = FileSystem(user).fileLoad(file_name)
+    data = pd.read_json(file['data'])
+    result = DataProcess(data).outLierDropper()
+    result_json=result.to_json(orient="records",force_ascii=False)
+    response = {
+                'result':'success',
+                'data' : result_json,
+            }
+    return JsonResponse({'result':'success', 'data':response})
 #------------------------ merge창 ------------------------
 def merge(request):
     user = loginValidator(request)

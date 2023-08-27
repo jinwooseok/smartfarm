@@ -19,6 +19,7 @@ urlpatterns = [
     #데이터수정 창
     path('revise/<str:file_name>/', views.revise, name='revise'),
     path('revise/', views.revise2, name='revise2'),
+    path('revise/preprocess/<str:file_name>/', views.usePreprocessor, name='preprocess'),
 
     #farm
     path('revise/loaddata/',views.fileLoadView,name='loaddata'),
