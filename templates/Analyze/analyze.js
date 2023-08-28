@@ -95,6 +95,7 @@ $add.addEventListener("click", () => {
     let xText = $selectBox.options[$selectBox.selectedIndex].value;
     let yText = $selectBox2.options[$selectBox2.selectedIndex].value;
 
+
     // 처음
     if (graphArr.length === 0) {
         arr.push(xText);
@@ -159,6 +160,17 @@ $add.addEventListener("click", () => {
         columns: graphArr,
     });
 
+})
+
+document.querySelector('#graphType').addEventListener('click', ()=>{
+
+    let type = document.querySelector('#graphType').options[document.querySelector('#graphType').selectedIndex].value;
+    console.log(type);
+    console.log(graphArr);
+    chart.load({
+        type : type,
+        columns: graphArr,
+    })
 })
 
 $delete.addEventListener('click', () => {

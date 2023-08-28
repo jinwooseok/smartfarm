@@ -205,9 +205,17 @@ dialog{
 
 /* 엑셀 데이터 확인, tap2 */
 .content .x-container{
-    text-align: left;
-    float: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
     margin : 10px 2%;
+}
+.content .x_label{
+    margin-left: 20px;
+}
+.content .pretreatmentFileName{
+    margin-right: 20px;
 }
 
 .content .list-container {
