@@ -49,10 +49,11 @@ window.onload = () => {
     document.querySelector('#fileName').value=JSON.parse(localStorage.getItem("fileTitle").replace(/(.csv|.xlsx|.xls)$/, ''))+'_수정'
 
     // abms제목 기본 설정 = 제목+abms
-    document.querySelector('#abmsFileName').value=JSON.parse(localStorage.getItem("fileTitle").replace(/(.csv|.xlsx|.xls)$/, ''))+'_abms'
+    document.querySelector('#abmsFileName').value=JSON.parse(localStorage.getItem("fileTitle").replace(/(.csv|.xlsx|.xls)$/, ''))+'_ABMS'
+    document.querySelector('#pretreatmentFileName').value=JSON.parse(localStorage.getItem("fileTitle").replace(/(.csv|.xlsx|.xls)$/, ''))+'_전처리'
 }
 
-
+ 
 ///////////////////////////////////////////
 // 엑셀 변수를 가지고 새로운 데이터로 변환 시 사용하는 함수 및 변수
 const defaultVar = ['주간_평균_', '주간_최소_', '주간_최대_', '주간_DIF_', '주간_GDD_',
