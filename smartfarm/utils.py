@@ -258,6 +258,7 @@ class DataProcess:
         max = data.mean()-3*data.std()
         mask = ((data > min) | (data < max))
         index = np.where(mask)[0]
+        print(index)
         return index
     
 @staticmethod
