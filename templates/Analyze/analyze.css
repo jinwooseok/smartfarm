@@ -126,6 +126,20 @@ a {
     .graph-wrapper fieldset{
         margin-top: 10px;
     }
+
+    .graph-wrapper .buttonContainer{
+        display: none; 
+        flex-direction: row;
+        justify-content: space-between;
+
+        width: 30%;
+        margin-left: 35%;
+
+    }
+
+    .buttonContainer i {
+        font-size: 30px;
+    }
 }
 
 /* ////////////////////////////////////////// */
