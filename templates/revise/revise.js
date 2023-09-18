@@ -6,6 +6,7 @@ const csrftoken = $('[name=csrfmiddlewaretoken]').val(); // csrftoken
 let localTitleList = JSON.parse(localStorage.getItem("title_list"));
 let $manage_list_menu = document.querySelector('#manage_list_menu');
 let localFIleTitle = JSON.parse(localStorage.getItem("fileTitle"));
+
 for (let x of localTitleList) {
     if(x === localFIleTitle){
         $manage_list_menu.innerHTML += `<Option value= '${x}' selected>` + x + `</option>`;
@@ -364,3 +365,33 @@ $submit_data.addEventListener('click', () => {
         })
     }
 }, { once: true })
+
+const $pretreatmentFileName = document.querySelector('#pretreatmentFileName');
+const $pretreatmentSave = document.querySelector('#pretreatmentSave');
+
+$pretreatmentSave.addEventListener("click", ()=>{
+    console.log(`/revise/preprocess/${JSON.parse(localStorage.getItem("fileTitle"))}`)
+    $.ajax({
+        url:`preprocess/`,
+        type:'post',
+        dataType: 'json',
+        headers: { 'X-CSRFToken': csrftoken },
+        data:{
+            pretreatmentFileName : $pretreatmentFileName.value
+        },
+        success: function (response) {
+            if (response.data != null) {
+                console.log(response.data);
+                window.location.href = "/fileList/";
+            }
+            else {
+                alert('전송할 데이터가 없습니다.')
+            }
+
+        },
+        error: function (xhr, error) {
+            alert("에러입니다.");
+            console.error("error : " + error);
+        }
+    })
+})
