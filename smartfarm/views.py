@@ -99,13 +99,13 @@ def usePreprocessor(request, file_name):
     file = FileSystem(user).fileLoad(file_name)
     data = pd.read_json(file['data'])
     result = DataProcess(data).outLierDropper()
-    FileSystem(user).fileSave(data, file_name)
+    FileSystem(user).fileSave(result, file_name)
     # result_json=result.to_json(orient="records",force_ascii=False)
     # response = {
     #             'result':'success',
     #             'data' : result_json,
     #         }
-    return JsonResponse({'result':'success'})
+    return JsonResponse({'result':'success','data':result.to_json(orient="records",force_ascii=False)})
 #------------------------ merge창 ------------------------
 def merge(request):
     user = loginValidator(request)

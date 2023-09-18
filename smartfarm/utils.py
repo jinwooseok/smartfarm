@@ -221,7 +221,7 @@ class DataProcess:
         data = self.data
         for i in range(len(data.columns)):
             if data.iloc[:, i].dtype == "int64" or data.iloc[:, i].dtype == "float64":
-                data.drop(DataProcess.outLierDetecter(data.iloc[:, i]))
+                data.drop(DataProcess.outLierDetector(data.iloc[:, i]))
         return data
     
     @staticmethod
@@ -253,13 +253,29 @@ class DataProcess:
     
     #하나의 series를 받아서 결측치의 인덱스를 알려줌
     @staticmethod
-    def outLierDetecter(data):
-        min = data.mean()+3*data.std()
-        max = data.mean()-3*data.std()
-        mask = ((data > min) | (data < max))
-        index = np.where(mask)[0]
-        print(index)
-        return index
+    def outLierDetector(data, window_size=10, threshold=3):
+        outlier_indices = []
+        
+        for start in range(0, len(data), window_size):
+            end = start + window_size
+            window_data = data.iloc[start:end]
+            
+            if len(window_data) < window_size:
+                window_data = data.iloc[start:]
+            
+            window_mean = window_data.mean()
+            window_std = window_data.std()
+            
+            lower_bound = window_mean - threshold * window_std
+            upper_bound = window_mean + threshold * window_std
+            
+            mask = (window_data < lower_bound) | (window_data > upper_bound)
+            indices = np.where(mask)[0] + start
+            
+            outlier_indices.extend(indices)
+        
+        print(outlier_indices)
+        return outlier_indices
     
 @staticmethod
 class JsonProcess:
