@@ -84,89 +84,101 @@ $analyze.addEventListener('click',() =>{
 // 그래프 //
 var chart; // 그래프
 let graphArr = []; // 사용한 변수
+let selectArr = []; // 업데이트용 y열 이름만 보관 ["열 이름","열 이름", "열 이름", ..]
 
 // 특수 문자 및 공백 제거 정규 표현식
 let reg = /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/ ]/gim
 
+const $buttonContainer = document.querySelector("#buttonContainer");
+const $dateSelect = document.querySelector("#dateSelect");
+
+let exCount = 30;
+let startIndex = 0;
+let lastIndex = exCount;
+
+
 // 그래프 보여주기
 $add.addEventListener("click", () => {
-    let arr = [];
-
     let xText = $selectBox.options[$selectBox.selectedIndex].value;
     let yText = $selectBox2.options[$selectBox2.selectedIndex].value;
 
-
-    // 처음
-    if (graphArr.length === 0) {
+    // 날짜 열 생성
+    for(let i=0; i<data.length; i++){
+        $dateSelect.innerHTML += `<option value=${data[i][xText]}>${data[i][xText]}</option>`;
+    }
+     // x축 선택 필수
+    if (xText === "notSelect") {
+        alert("날짜를 선택하세요");
+        return;
+    }
+    let arr = []; // 데이터 배열
+    // ["열 이름", data...]
+    
+    // 맨 처음 그림 -> 그냥 다 넣는다.
+    if(graphArr.length === 0){
+        $buttonContainer.style.display = "flex"; // 화살표 생성
+        // x값 설정
         arr.push(xText);
-        // x축 값 넣기
-        for (let i = 0; i < data.length; i++) {
+        selectArr.push(xText);
+        for (let i = startIndex; i < lastIndex; i++) {
             if (reg.test(data[i][xText])) {
-                // arr.push(Number(data[i][xText].replace(reg, "")));
-                arr.push(data[i][xText]);
+                arr.push(Number(data[i][xText].replace(reg, "")));
             } else {
                 arr.push(Number(data[i][xText]));
             }
         }
         graphArr.push(arr);
         arr = [];
-        // y축
+         //y값
         arr.push(yText);
-        for (let i = 0; i < data.length; i++) {
+        selectArr.push(yText);
+        for (let i = startIndex; i < lastIndex; i++) {
             arr.push(Number(data[i][yText]));
         }
         graphArr.push(arr);
-
         chart = bb.generate({
             bindto: "#chart",
             data: {
                 x: xText,
                 // x : "x축",
                 type: "line",
-                columns:
-                    graphArr,
+                columns: graphArr,
             },
             zoom: {
                 enabled: true, // for ESM specify as: zoom()
-                type: "drag"
+                type: "drag",
             },
             axis: {
                 x: {
                     type: "category",
                     tick: {
-                        rotate: 75,
-                        multiline: false,
-                        tooltip: true
-                    },
-                    //height: 130
-                }
+                    rotate: 75,
+                    multiline: false,
+                    tooltip: true,
+                },
+                //height: 130
+            },
             },
         });
-        return;
-    }
-
-    if (graphArr.includes(yText)) {
-        return;
-    }
-
-    // y축
-    arr.push(yText);
-    for (let i = 0; i < data.length; i++) {
+     } else{ // 데이터 추가
+        if(selectArr.includes(yText)){
+            return;
+        }
+        arr.push(yText);
+        selectArr.push(yText);
+        for (let i = startIndex; i < lastIndex; i++) {
         arr.push(Number(data[i][yText]));
+        }
+        graphArr.push(arr);
+        chart.load({
+            columns: graphArr,
+        });
     }
-    graphArr.push(arr);
-
-    chart.load({
-        columns: graphArr,
-    });
-
 })
 
 document.querySelector('#graphType').addEventListener('click', ()=>{
 
     let type = document.querySelector('#graphType').options[document.querySelector('#graphType').selectedIndex].value;
-    console.log(type);
-    console.log(graphArr);
     chart.load({
         type : type,
         columns: graphArr,
@@ -181,6 +193,7 @@ $delete.addEventListener('click', () => {
 
     graphArr.splice(graphArr.indexOf(yText), 1);
     console.log(graphArr);
+    selectArr.splice(selectArr.indexOf(yText), 1);
 })
 
 $down.addEventListener('click', () => {
@@ -200,4 +213,69 @@ $down.addEventListener('click', () => {
         link.click();
         document.body.removeChild(link);
     });
+})
+
+
+const $Prev = document.querySelector("#Prev");
+const $Next = document.querySelector("#Next");
+
+const updateChart = (startIndex,lastIndex)=>{
+    graphArr=[]; // 초기화
+
+    let arr=[];
+    arr.push(selectArr[0]);
+    for (let i = startIndex; i < lastIndex; i++) {
+        if (reg.test(data[i][selectArr[0]])) {
+            arr.push(Number(data[i][selectArr[0]].replace(reg, "")));
+        } else {
+            arr.push(Number(data[i][selectArr[0]]));
+        }
+    }
+    graphArr.push(arr);
+    arr = [];
+
+
+    selectArr.map((value, index) => {
+        if(index!==0){
+            arr.push(value);
+            for (let i = startIndex; i < lastIndex; i++) {
+                arr.push(Number(data[i][value]));
+            }
+            graphArr.push(arr);
+            arr=[];
+        }
+    })
+    chart.load({
+        columns: graphArr,
+    });
+}
+
+$Next.addEventListener("click", () => {
+  startIndex = startIndex + exCount;
+  lastIndex = startIndex + exCount > data.length ? data.length : startIndex + exCount;
+  
+  updateChart(startIndex,lastIndex);
+
+  $Prev.style.visibility = "inherit";
+  if (lastIndex === data.length) {
+    $Next.style.visibility = "hidden";
+  }
+});
+
+$Prev.addEventListener("click", () => {
+  startIndex = startIndex - exCount <= 0 ? 0 : startIndex - exCount;
+  lastIndex = lastIndex - exCount <= exCount ? exCount : lastIndex - exCount;
+
+  updateChart(startIndex,lastIndex);
+
+  $Next.style.visibility = "inherit";
+  if (startIndex === 0) {
+    $Prev.style.visibility = "hidden";
+  }
+});
+
+$dateSelect.addEventListener('click', ()=>{
+  startIndex = $dateSelect.options[$dateSelect.selectedIndex].index;
+  lastIndex = startIndex + exCount > data.length ? data.length : startIndex + exCount;
+  updateChart(startIndex,lastIndex);
 })
