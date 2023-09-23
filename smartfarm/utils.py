@@ -184,7 +184,6 @@ class DataProcess:
         dateType = self.data.iloc[:, self.date].dtype
         dateColumn = self.data.iloc[:, self.date]
         self.data.rename(columns={self.data.columns[self.date]:'날짜'}, inplace=True)
-        print(dateType)
         if dateType == str or dateType == object:
             dateColumn = pd.to_datetime(dateColumn)
         elif dateType in [int, np.int64]:
@@ -219,9 +218,15 @@ class DataProcess:
 
     def outLierDropper(self):
         data = self.data
+        dropIndex = []
         for i in range(len(data.columns)):
             if data.iloc[:, i].dtype == "int64" or data.iloc[:, i].dtype == "float64":
-                data.drop(DataProcess.outLierDetector(data.iloc[:, i]))
+                print(data.columns[i],DataProcess.outLierDetector(data.iloc[:, i]))
+                if len(DataProcess.outLierDetector(data.iloc[:, i])) != 0:
+                    dropIndex = dropIndex+DataProcess.outLierDetector(data.iloc[:, i])
+        dropIndex = list(set(dropIndex))
+        print(dropIndex)
+        data.drop(dropIndex, axis=0, inplace=True)
         return data
     
     @staticmethod
@@ -255,26 +260,46 @@ class DataProcess:
     @staticmethod
     def outLierDetector(data, window_size=10, threshold=3):
         outlier_indices = []
-        
-        for start in range(0, len(data), window_size):
+        index_list = [i for i in range(len(data))]
+        for start in range(0, len(data) - window_size):
             end = start + window_size
-            window_data = data.iloc[start:end]
-            
-            if len(window_data) < window_size:
-                window_data = data.iloc[start:]
-            
-            window_mean = window_data.mean()
-            window_std = window_data.std()
-            
-            lower_bound = window_mean - threshold * window_std
-            upper_bound = window_mean + threshold * window_std
-            
-            mask = (window_data < lower_bound) | (window_data > upper_bound)
-            indices = np.where(mask)[0] + start
-            
-            outlier_indices.extend(indices)
-        
-        print(outlier_indices)
+            if end > len(index_list):
+                window_data = data.iloc[index_list[start:]]
+                window_mean = window_data.mean()
+                window_std = window_data.std()
+                
+                lower_bound = window_mean - threshold * window_std
+                upper_bound = window_mean + threshold * window_std
+                
+                mask = (window_data < lower_bound) | (window_data > upper_bound)
+                indices = np.where(mask)[0]+start
+                if len(indices) == 0:
+                    pass
+                else:
+                    for i in indices:
+                        if i in index_list:
+                            index_list.remove(i)
+                            outlier_indices.extend(indices)
+                        start -= 1
+                break
+            else:
+                window_data = data.iloc[index_list[start:end]]    
+                window_mean = window_data.mean()
+                window_std = window_data.std()
+                
+                lower_bound = window_mean - threshold * window_std
+                upper_bound = window_mean + threshold * window_std
+                
+                mask = (window_data < lower_bound) | (window_data > upper_bound)
+                indices = [index_list[i] for i in np.where(mask)[0]+start]
+                if len(indices) == 0:
+                    continue
+                else:
+                    for i in indices:
+                        if i in index_list:
+                            index_list.remove(i)
+                            outlier_indices.extend(indices)
+                        start -= 1
         return outlier_indices
     
 @staticmethod

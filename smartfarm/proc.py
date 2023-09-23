@@ -271,11 +271,8 @@ def making_weekly2(gdata,date_ind,interval=7):
     if type(date[0]) != type(pd.to_datetime(date)[0]):
         date = pd.to_datetime(date)
     if interval == 7 :
-        print(date[0])
         weeknum = int(datetime.datetime(date[0].year,date[0].month,date[0].day).strftime("%U"))
-        print(weeknum)
         date1 = pd.to_datetime(datetime.datetime.strptime(f"{date[0].year}-W{weeknum}-1", "%G-W%V-%u")) #해당 주차의 마지막 날짜
-        print(date1)
     else:
         date1= date[0] - pd.offsets.YearBegin() # 시작 날이 포함된 년도의 1월 1일 추출 
     while True:
@@ -286,9 +283,11 @@ def making_weekly2(gdata,date_ind,interval=7):
             g = g.apply('mean')
             d.loc[i]=g
             day.append(date1)
-            week.append(weeknum+1)
+            if date1.year > (date1-pd.Timedelta(days=interval)).year:
+                weeknum=0
+            weeknum+=1
+            week.append(weeknum)
             i+=1
-        weeknum+=1
         if lastDate < date1+pd.Timedelta(days=interval):
             break
         date1=date1+pd.Timedelta(days=interval)
