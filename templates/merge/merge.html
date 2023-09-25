@@ -21,8 +21,8 @@
 <body>
     <ul class="nav">
         <li class="nav-item"><a href="/" class="title">전남대학교 </br>농업 빅데이터 연구실</a></li>
-        <li class="nav-item"><a href="/">홈</a></li>
         <li class="nav-item"><a href="/fileList">데이터 수정</a></li>
+        <li class="nav-item"><a href="/merge/">파일 병합</a></li>
         <li class="nav-item"><a href="/fileList_2">데이터 분석</a></li>
         {% if user_name != anonymous %}
         <li class="nav-item"><a href="/users/logout/" class='logout'>로그아웃</a></li>
@@ -31,31 +31,66 @@
         {% endif %}
     </ul>
 
-    <div class="excel">
-        <div id="spreadsheet" class="spreadsheet">
-
-        </div>
-        <div id="spreadsheet2" class="spreadsheet">
-        </div>
-    </div>
-    <div class="merge_container">
-        <select name="excel_var" id="var1" class="data_var">
-        </select>
-        <select name="excel_var" id="var2" class="data_var">
-        </select>
-        <button class="merge_button" id="merge_button">병합하기</button>
-        <input type="text" name="fileName" id="fileName" class="fileName" placeholder="저장할 파일의 이름을 입력하세요">
-        <button class="save" id="save" disabled>저장하기</button>
-    </div>
     {% csrf_token %}
-    <div class="excel">
-        <div id="spreadsheet3" class="spreadsheet_full">
 
+    <div class="selectContainer">
+
+        <div class="card">
+            <p class="cardTitle">생육</p>
+            <div class="cardSelect">
+
+            </div>
+            <select name="growthSelectBox" id="growthSelectBox" class="growthSelectBox">
+                <option value="null"></option>
+            </select>
         </div>
+
+        <p class="text">+</p>
+
+        <div class="card">
+            <p class="cardTitle">환경</p>
+            <div class="cardSelect">
+
+            </div>
+            <select name="environmentSelectBox" id="environmentSelectBox" class="environmentSelectBox">
+                <option value="null"></option>
+            </select>
+        </div>
+
+        <p class="text">+</p>
+
+        <div class="card">
+            <p class="cardTitle">생산량</p>
+            <div class="cardSelect">
+
+            </div>
+            <select name="outputSelectBox" id="outputSelectBox" class="outputSelectBox">
+                <option value="null"></option>
+            </select>
+        </div>
+
+        <p class="text">=</p>
+
+        <div class="card">
+            <p class="cardTitle">결과 확인</p>
+            <div class="cardSelect">
+                <button class="merge" id="merge">병합</button>
+            </div>
+            <input type="text" name="mergeFileName" class="mergeFileName" id="mergeFileName" placeholder="파일 이름을 정해주세요.">
+        </div>
+
+    </div>
+
+
+    <div class="resultContainer">
+
+
     </div>
 
     <!-- new data -->
     <div id="JsonValue" style="display: none;"></div>
+
+
 </body>
 <script type="module" src="/templates/merge/merge.js"></script>
 <script src="/templates/JS/jquery-1.12.4.min.js"></script>

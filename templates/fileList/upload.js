@@ -1,5 +1,5 @@
 // Excel class 불러오기
-import { Excel } from '/templates/JS/excel_show.mjs';
+import  Excel  from '../JS/excel_show.mjs';
 
 const $spreadsheet = document.querySelector('#spreadsheet')
 const $file_drag = document.querySelector('#file_drag'); // 파일 drag 

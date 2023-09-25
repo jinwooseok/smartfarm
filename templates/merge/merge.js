@@ -1,97 +1,93 @@
-import { Excel } from '/templates/JS/excel_show.mjs';
-const $spreadsheet1 = document.querySelector('#spreadsheet');
-const $spreadsheet2 = document.querySelector('#spreadsheet2');
-const $spreadsheet3 = document.querySelector('#spreadsheet3');
-const $var1 = document.querySelector('#var1');
-const $var2 = document.querySelector('#var2');
-const $fileName = document.querySelector('#fileName')
-
-const $mergeData = JSON.parse(localStorage.getItem('mergeData'));
-
-const excel_data = JSON.parse($mergeData[0]);
-const excel_data2 = JSON.parse($mergeData[1]);
-
-const data1 = new Excel(excel_data, $spreadsheet1);
-const data2 = new Excel(excel_data2, $spreadsheet2);
+import Excel from '../JS/excel_show.mjs';
 
 const csrftoken = $('[name=csrfmiddlewaretoken]').val(); // csrftoken
-// Object.keys(data1.getData()[0])[i]
-function makeSelectBox() {
-    for (let x of Object.keys(data1.getData()[0])) {
-        $var1.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
-    }
-    for (let x of Object.keys(data2.getData()[0])) {
-        $var2.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
+let columnName = [];
+
+const localTitleList = JSON.parse(localStorage.getItem("title_list"));
+const $growth = document.querySelector('#growthSelectBox');
+const $environment = document.querySelector('#environmentSelectBox');
+const $output = document.querySelector('#outputSelectBox');
+const $mergeFileName = document.querySelector('#mergeFileName');
+const $merge = document.querySelector('#merge');
+
+// select 박스 내용 추가함수
+const selectOptionAdd = ()=>{
+    for (let x of localTitleList){
+        $growth.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
+        $environment.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
+        $output.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
     }
 }
+selectOptionAdd();
 
-makeSelectBox(); // selectedBox 데이터 추가
+// select 박스 선택 결과 함수
+// columnName에 추가
+$merge.addEventListener('click',()=>{
+    columnName=[];
 
-const $merge_button = document.querySelector('#merge_button');
-const $save = document.querySelector('#save');
-let newData;
-let var1_text = $var1.childNodes[1].textContent;
-let var2_text = $var2.childNodes[1].textContent;
-let isData = false; // 새로운 데이터가 만들어지면 download 버튼 클릭 가능
-
-$var1.addEventListener('click', (event) => {
-    var1_text = event.target.value;
-})
-$var2.addEventListener('click', (event) => {
-    var2_text = event.target.value
-})
-
-$merge_button.addEventListener('click', () => {
-
-    if (!$fileName.value) {
-        alert('파일 제목을 입력하세요')
-        return;
+    if($mergeFileName.value === ''){
+        alert('파일 이름을 정해주세요');
     }
 
-    alert(`${var1_text}과 ${var2_text}를 기준으로 병합합니다.`)
+    let growthTitle = $growth.options[$growth.selectedIndex].value;
+    let environmentTitle = $environment.options[$environment.selectedIndex].value;
+    let outputTitle = $output.options[$output.selectedIndex].value;
+
+    const titleList = [growthTitle,environmentTitle, outputTitle];
+
+    for(let x of titleList){
+        if (x==='null'){
+            continue
+        }
+        columnName.push(x);
+    }
+
+
+    console.log(growthTitle);
 
     $.ajax({
-        url: '/mergeView/',
+        url: '../revise/loaddata/',
         type: 'post',
         dataType: 'json',
         headers: { 'X-CSRFToken': csrftoken },
         data: {
-            header: "merge",
-            data: JSON.stringify($mergeData),
-            var1: var1_text,
-            var2: var2_text,
-            file_name: $('#fileName').val(),
+            fileName : growthTitle,
         },
-        success:function(response){
-            if(response.data != null){
-                newData = new Excel(JSON.parse(response.data), $spreadsheet3)
-                document.querySelector('#save').disabled = false;
+        success: function (response) {
+            if (response.data != null) {
+                console.log(response.data);
             }
+            else {
+                alert('전송할 데이터가 없습니다.')
+            }
+
         },
         error: function (xhr, error) {
             alert("에러입니다.");
             console.error("error : " + error);
         }
     })
-})
 
-$save.addEventListener('click', () => {
-    $.ajax({
-        url: '/mergeView/',
-        type: 'post',
-        dataType: 'json',
-        headers: { 'X-CSRFToken': csrftoken },
-        data: {
-            header: "save",
-            data: JSON.stringify(newData.getData()),
-            file_name: $('#fileName').val(),
-        },
-        success:function(response){
-            if(response.data != null){
-                alert(`${$('#fileName').val()}이 저장되었습니다.`);
-            }
-            window.location.href = "/fileList/";
-        },
-    })
-    
+
+
+    // $.ajax({
+    //     url: '/mergeView/',
+    //     type: 'post',
+    //     dataType: 'json',
+    //     headers: { 'X-CSRFToken': csrftoken },
+    //     data: {
+    //         columnName : columnName,
+    //         file_name: $mergeFileName.value,
+    //     },
+    //     success:function(response){
+    //         if(response.data != null){
+    //             newData = new Excel(JSON.parse(response.data), $spreadsheet3)
+    //             document.querySelector('#save').disabled = false;
+    //         }
+    //     },
+    //     error: function (xhr, error) {
+    //         alert("에러입니다.");
+    //         console.error("error : " + error);
+    //     }
+    // })
 })

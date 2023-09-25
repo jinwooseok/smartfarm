@@ -118,6 +118,7 @@ dialog{
 /* radio 탭 */
 .tabs {
     position: relative;
+    z-index: 1;
 
     width:85%;
     margin: 0 auto;
@@ -468,4 +469,34 @@ input[name="level"]:checked+label+.box{
 }
 .abms .abms_select .abms_save{
     padding: 5px 8px;
+}
+
+.graphContainer{
+    width: 95%;
+
+    display: none;
+    border: 1px solid grey;
+    background-color: 'white';
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    transform:translate(-50%, -50%);
+
+    z-index: 999;
+}
+
+.buttonContainer{
+    display: none; 
+    flex-direction: row;
+    justify-content: space-between;
+
+    width: 30%;
+    margin-left: 35%;
+
+}
+
+.buttonContainer i {
+    font-size: 30px;
 }

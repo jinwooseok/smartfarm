@@ -4,7 +4,7 @@ let sort = function(instance, cellNum, order) {
 }
 
 // import 모듈화
-export class Excel {
+export default class Excel {
     constructor(data, box) { // 데이터와 div를 생성할 때 매개변수로
         this.excelData = data; // 데이터
         this.makeCol(this.excelData); // 열 데이터 만들기

@@ -72,7 +72,7 @@ a {
 }
 
 /* container */
-.container{
+.textContainer{
     background : url(./KakaoTalk_20230423_230138175.jpg) no-repeat center center;
     background-size : cover;
 
@@ -88,24 +88,24 @@ a {
     font-weight: bold;
 }
 
-.container .first{
+.textContainer .first-line{
     font-size: 20px;
 }
 
-.container span{
+.textContainer span{
     color: #007A33;
     font-size: 40px;
 }
 
-.container .second{
+.textContainer .second-line{
     font-size: 40px;
 }
 
-.container .third{
+.textContainer .third-line{
     font-size: 24px;
 }
 
-.container p{
+.textContainer p{
     margin:1px;
     color: #000;
 }

@@ -81,58 +81,73 @@ a {
     color: #000;
 }
 
-/* merge */
-
-.merge_container {
-    width: 85%;
-    height: 30px;
-    margin: 10px auto;
-
-    background-color: antiquewhite;
+.titleContainer{
+    width: 1280px;
+    height: 50px;
+    margin: 0 auto;
+    margin-top: 10px;
 
     display: flex;
+    flex-wrap: nowrap;
     flex-direction: row;
-    justify-content: start;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.selectContainer{
+    width: 1280px;
+    height: 300px;
+    margin: 0 auto;
+    margin-top: 10px;
+
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.selectContainer .card{
+    width: 13%;
+    height: 100%;
+
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.selectContainer .card .cardTitle{
+    font-size: 20px;
+    margin: 7% 0;
+}
+
+.selectContainer .card .cardSelect{
+    border: 1px solid #000;
+    border-radius: 10px;
+
+    width: 100%;
+    height: 70%;
+}
+
+.text{
+    font-size: 40px;
+}
+
+.resultContainer{
+    width: 1280px;
+    height: 300px;
+    margin: 0 auto;
+    margin-top: 10px;
+
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-evenly;
     align-items: center;
 
-    text-align: center;
-}
-
-.merge_container>* {
-    margin-left: 5px;
-}
-
-/* excel */
-.excel {
-    width: 85%;
-    height: 300px;
-    margin: 10px auto;
-
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-.excel .spreadsheet {
-    position: relative;
-    width: 49%;
-    height: 300px;
-    border: 1px solid #000;
-    margin-bottom: 5px;
-
-    overflow-x: auto;
-    overflow-y: auto;
-}
-
-.excel .spreadsheet_full {
-    position: relative;
-    width: 100%;
-    height: 300px;
-    border: 1px solid #000;
-    margin-bottom: 5px;
-
-    overflow-x: auto;
-    overflow-y: auto;
+    background-color: blue;
 }
 
 /* scroll */
