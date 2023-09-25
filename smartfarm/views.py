@@ -20,6 +20,7 @@ from .serializers import FileSerializer, UserSerializer
 from .decorators import logging_time
 from .validators import loginValidator
 from .utils import FileSystem, cacheGetter, DataProcess
+from functools import reduce
 ##페이지 별로 필요한 request를 컨트롤
 #---------------분석도구 import ----------------
 from . import analizer
@@ -96,16 +97,17 @@ def fileLoadView(request):
 
 def usePreprocessor(request, file_name):
     user = loginValidator(request)
+    new_file_name = request.POST.get('pretreatmentFileName')
     file = FileSystem(user).fileLoad(file_name)
     data = pd.read_json(file['data'])
     result = DataProcess(data).outLierDropper()
-    FileSystem(user).fileSave(data, file_name)
+    FileSystem(user).fileSave(result, new_file_name)
     # result_json=result.to_json(orient="records",force_ascii=False)
     # response = {
     #             'result':'success',
     #             'data' : result_json,
     #         }
-    return JsonResponse({'result':'success'})
+    return JsonResponse({'result':'success','data':result.to_json(orient="records",force_ascii=False)})
 #------------------------ merge창 ------------------------
 def merge(request):
     user = loginValidator(request)
@@ -125,16 +127,17 @@ def mergeView(request):
     elif request.method == 'POST':
         if request.POST.get('header') == 'merge':
             data = pd.read_json(request.POST.get('data'))
-            data1 = data.iloc[0,0]
-            data2 = data.iloc[1,0]
-            data1 = pd.read_json(data1) 
-            data2 = pd.read_json(data2)
-            var1, var2 = request.POST.get('var1'), request.POST.get('var2')
-            mergeData = pd.merge(data1, data2, how='outer', left_on=var1, right_on=var2)
+            columnName = request.POST.get('columnName')
+            dfs = []
+            for i in range(len(data)):
+                data.iloc[i,0] = pd.read_json(data.iloc[i,0])
+                data.iloc[i,0].rename(columns={columnName[i]:"날짜"}, inplace=True)
+                dfs.append(data.iloc[i,0])
+            mergeData = reduce(lambda left, right: pd.merge(left, right, on='날짜'), dfs)
             mergeData = mergeData.to_json(orient='records', force_ascii=False)
-            print(mergeData)
             return JsonResponse({'result':'success',
                                 'data':mergeData})
+        
         elif request.POST.get('header') == 'save':
             data = request.POST.get('data')
             print("-------------"+data)
@@ -142,6 +145,8 @@ def mergeView(request):
             data = pd.read_json(data)
             FileSystem(user).fileSave(data, file_name)
             return JsonResponse({'result':'success'})
+        else:
+            return JsonResponse({'result':'fail'})
 
 #------------------------ analysis창 ------------------------
 def fileList2(request):
