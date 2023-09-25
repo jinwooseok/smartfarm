@@ -92,8 +92,15 @@ def revise2(request):
 #--------------비동기 - revise창-------------
 def fileLoadView(request):
     user = loginValidator(request)
-    context = FileSystem(user).fileLoad(request)
-    return JsonResponse(context)
+    if user != None:
+        print("들어왔다")
+        file_name = request.POST.get('fileName')
+        result = FileSystem(user).fileLoad(file_name)
+        context = {'file_name':file_name,
+                'data':result['data']}
+        return JsonResponse(context)
+    else:
+        return JsonResponse({'result':'fail'})
 
 def usePreprocessor(request, file_name):
     user = loginValidator(request)
@@ -102,11 +109,6 @@ def usePreprocessor(request, file_name):
     data = pd.read_json(file['data'])
     result = DataProcess(data).outLierDropper()
     FileSystem(user).fileSave(result, new_file_name)
-    # result_json=result.to_json(orient="records",force_ascii=False)
-    # response = {
-    #             'result':'success',
-    #             'data' : result_json,
-    #         }
     return JsonResponse({'result':'success','data':result.to_json(orient="records",force_ascii=False)})
 #------------------------ merge창 ------------------------
 def merge(request):
@@ -133,7 +135,7 @@ def mergeView(request):
                 data.iloc[i,0] = pd.read_json(data.iloc[i,0])
                 data.iloc[i,0].rename(columns={columnName[i]:"날짜"}, inplace=True)
                 dfs.append(data.iloc[i,0])
-            mergeData = reduce(lambda left, right: pd.merge(left, right, on='날짜'), dfs)
+            mergeData = reduce(lambda left, right: left.join(right, on='날짜'), dfs)
             mergeData = mergeData.to_json(orient='records', force_ascii=False)
             return JsonResponse({'result':'success',
                                 'data':mergeData})

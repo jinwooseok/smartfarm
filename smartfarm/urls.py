@@ -22,7 +22,7 @@ urlpatterns = [
     path('revise/<str:file_name>/preprocess/', views.usePreprocessor, name='preprocess'),
 
     #farm
-    path('revise/loaddata/',views.fileLoadView,name='loaddata'),
+    path('loaddata/',views.fileLoadView,name='loaddata'),
     path('revise/<str:file_name>/farm/', views.farm, name='farm'),
     #분석
     path('fileList_2/', views.fileList2, name='fileList2'),

@@ -46,7 +46,7 @@ $merge.addEventListener('click',()=>{
     console.log(growthTitle);
 
     $.ajax({
-        url: '../revise/loaddata/',
+        url: '../loaddata/',
         type: 'post',
         dataType: 'json',
         headers: { 'X-CSRFToken': csrftoken },
