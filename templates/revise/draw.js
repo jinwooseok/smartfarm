@@ -1,20 +1,31 @@
 // graph ///////////////////////////////////////////////////////
 const $close = document.querySelector('#close'); // dialog 닫기
-const dialog = document.querySelector('dialog'); // dialog 창
+const $buttonContainer = document.querySelector("#buttonContainer");
+const $graphContainer = document.querySelector("#graphContainer");
+
+// 저장된 데이터를 불러옴
+const ex_data = JSON.parse(document.getElementById('jsonObject').value);
+let chart;
+
+let exCount = 40>ex_data.length ? ex_data.length : 40;
+let startIndex = 0;
+let lastIndex = exCount;
+
+let graphArr=[];
+let selectArr = []; // 업데이트용 y열 이름만 보관 ["열 이름","열 이름", "열 이름", ..]
 
 $close.addEventListener('click', () =>{
-    document.querySelector("#myChart").innerHTML = "";
-    dialog.close();
+    graphArr=[];
+    selectArr=[];
+    $graphContainer.style.display = 'none';
 })
 
-let lineDraw = (name) =>{
+const lineDraw = (name) =>{
+
     let showColumnName = name; // 그려줄 열 이름
 
     let yData =[]; // y축 값 배열
     let xData =[]; // x축 값 배열
-
-    // 저장된 데이터를 불러옴
-    let ex_data = JSON.parse(document.getElementById('jsonObject').value);
 
     // x축 열 이름
     let xColumn = document.querySelector('#x_label').options[document.querySelector('#x_label').selectedIndex].value;
@@ -22,68 +33,95 @@ let lineDraw = (name) =>{
     if(xColumn === "null"){
         alert('x축을 선택해 주세요')
         return;
+    } else{
+        xData.push(xColumn);
+        selectArr.push(xColumn);
+        yData.push(showColumnName);
+        selectArr.push(showColumnName);
     }
 
-    for(let i in ex_data){
+    for(let i=startIndex; i<lastIndex; i++){
         xData.push(ex_data[i][xColumn]); // x값
         yData.push(ex_data[i][showColumnName]); // y값
     }
 
+    graphArr=[[...xData],[...yData]];
 
-    // 색 지정
-    let RGB_1 = Math.floor(Math.random() * (255 + 1));
-    let RGB_2 = Math.floor(Math.random() * (255 + 1));
-    let RGB_3 = Math.floor(Math.random() * (255 + 1));
-
-    const draw_data = [{
-        label: showColumnName, // 데이터의 제목
-        borderColor: 'rgba(' + RGB_1 + ',' + RGB_2 + ',' + RGB_3 + ',0.7)', // 색상
-        data: yData, // 데이터
-        pointStyle: false,
-    }]
-
-    const labels = xData;
-
-    // 데이터
-    const showData = {
-        labels: labels,
-        datasets: draw_data,
-    };
-
-    // 설정 값
-    const config = {
-        type: 'line', // 그래프 종류
-        data: showData, // 데이터
-        options: {
-            elements: { // 그래프 pointer 작게 만들어 잘 안보이게 함
-                point: {
-                    borderWidth: 0,
-                    radius: 1,
-                    backgroundColor: 'rgba(0,0,0,0)'
-                }
+    chart = bb.generate({
+        bindto: "#myChart",
+        data: {
+            x: xColumn,
+            // x : "x축",
+            type: "line",
+            columns: graphArr,
+        },
+        zoom: {
+            enabled: true, // for ESM specify as: zoom()
+            type: "drag",
+        },
+        axis: {
+            x: {
+                type: "category",
+                tick: {
+                rotate: 75,
+                multiline: false,
+                tooltip: true,
             },
-            responsive: true, // false=그래프 크기를 css를 이용 지정 가능
-            display: 'true',
-            maintainAspectRatio: false,
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    },
-                    display: true,
-                    // type: 'logarithmic',
-                }],
-                xAxes: [{
-                    barThickness: 10,
-                    gridLines: {
-                        display: false
-                    },
-                    offset: true
-                }],
-            }
-        }
+            //height: 130
+        },
+        },
+    });
+
+    if(exCount < ex_data.length){
+        $buttonContainer.style.display = "flex"; // 화살표 생성
     }
 
-    let chart = new Chart(document.getElementById('myChart'), config);
-    dialog.showModal();
+    $graphContainer.style.display = 'block';
+
 }
+
+const $Prev = document.querySelector("#Prev");
+const $Next = document.querySelector("#Next");
+
+const updateChart = (startIndex,lastIndex)=>{
+    graphArr=[]; // 초기화
+    let arr=[];
+
+    selectArr.map((value, index) => {
+        arr.push(value);
+        for (let i = startIndex; i < lastIndex; i++) {
+            arr.push(Number(ex_data[i][value]));
+        }
+        graphArr.push(arr);
+        arr=[];
+    })
+    chart.load({
+        columns: graphArr,
+    });
+
+    console.log(startIndex, lastIndex);
+    console.log(graphArr);
+}
+
+$Next.addEventListener("click", () => {
+  startIndex = startIndex + exCount;
+  lastIndex = startIndex + exCount > ex_data.length ? ex_data.length : startIndex + exCount;
+  updateChart(startIndex,lastIndex);
+
+  $Prev.style.visibility = "inherit";
+  if (lastIndex === ex_data.length) {
+    $Next.style.visibility = "hidden";
+  }
+});
+
+$Prev.addEventListener("click", () => {
+  lastIndex = lastIndex - exCount <= exCount ? exCount : lastIndex - exCount;
+  startIndex = lastIndex - exCount <= 0 ? 0 : lastIndex - exCount;
+
+  updateChart(startIndex,lastIndex);
+
+  $Next.style.visibility = "inherit";
+  if (startIndex === 0) {
+    $Prev.style.visibility = "hidden";
+  }
+});

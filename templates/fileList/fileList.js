@@ -3,7 +3,6 @@ const $check_all = document.querySelector('#check-all'); // 상단 체크박스
 
 // 버튼
 const $upload = document.querySelector('#upload'); // 등록버튼
-const $merge = document.querySelector('#merge'); // 병합버튼
 const $delete = document.querySelector('#delete'); // 삭제버튼
 
 //토큰
@@ -98,45 +97,6 @@ $search.addEventListener('keyup', (event) => {
             $listAll[i].style.display = 'flex';
         }
     }
-})
-
-// 병합
-$merge.addEventListener('click', () => {
-    const All_Checkbox = document.querySelectorAll('.check'); // check-box
-    let check_count = [...All_Checkbox].filter((v) => v.checked === true).length;
-
-    if (check_count !== 2) {
-        alert('파일은 2개를 선택해야 합니다.')
-        return;
-    }
-    let mergeList = [];
-    for (let i = 0; i < All_Checkbox.length; i++) {
-        if (All_Checkbox[i].checked) {
-            mergeList.push(All_Checkbox[i].parentElement.childNodes[3].innerText);
-        }
-        if (mergeList.length === 2) {
-            break;
-        }
-    }
-    $.ajax({
-        url: '/mergeView/',
-        type: 'get',
-        dataType: 'json',
-        headers: { 'X-CSRFToken': csrftoken },
-        data: {
-            data: JSON.stringify(mergeList),
-        },
-        success: function (response) {
-            if (response.data != null) {
-                localStorage.setItem("mergeData", JSON.stringify(response.data));
-                location.href = "/merge/";
-            }
-        },
-        error: function (xhr, error) {
-            alert("에러입니다.");
-            console.error("error : " + error);
-        }
-    })
 })
 
 // 파일 클릭

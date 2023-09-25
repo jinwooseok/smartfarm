@@ -29,8 +29,8 @@
 <body>
     <ul class="nav">
         <li class="nav-item"><a href="/" class="title">전남대학교 </br>농업 빅데이터 연구실</a></li>
-        <li class="nav-item"><a href="/">홈</a></li>
         <li class="nav-item"><a href="/fileList">데이터 수정</a></li>
+        <li class="nav-item"><a href="/merge/">파일 병합</a></li>
         <li class="nav-item"><a href="/fileList_2">데이터 분석</a></li>
         {% if user_name != anonymous %}
         <li class="nav-item"><a href="/users/logout/" class='logout'>로그아웃</a></li>
@@ -43,24 +43,24 @@
         <div class="analyze-setting-wrapper">
             <fieldset class="flex-start">
                 <legend>x 값</legend>
-                <select name="" id="xValue" multiple size="5">
+                <select name="" id="analyzeValue_x" multiple size="5">
 
                 </select>
             </fieldset>
 
-            <button class="x_delete" id="x_delete">&lt= </button>
-            <button class="x_move" id="x_move"> =&gt </button>
+            <button class="analyzeDeleteX" id="analyzeDeleteX">&lt= </button>
+            <button class="analyzeMoveX" id="analyzeMoveX"> =&gt </button>
 
             <fieldset class="flex-start">
                 <legend>선택된 x 값</legend>
-                <select name="" id="selectedXValue" multiple size="5">
+                <select name="" id="selectedValue_X" multiple size="5">
 
                 </select>
             </fieldset>
 
             <fieldset class="flex-start">
                 <legend>y 값</legend>
-                <select name="" id="yValue">
+                <select name="" id="selectedValue_Y">
 
                 </select>
             </fieldset>
@@ -72,9 +72,8 @@
                     <option value="로지스틱회귀분석">로지스틱회귀분석</option>
                 </select>
             </fieldset>
-
-
         </div>
+        
         <div class="analyze-result-wrapper">
             <button type="submit" id="analyze" class="analyze" >분석하기</button>
             <fieldset class="analyze-result" id="analyze-result">
@@ -84,22 +83,24 @@
 
         <div class="graph-wrapper">
             <!-- 그래프 -->
-            <select name="" id="selectBox">
+            <select name="" id="dataSelectBox">
                 <option value="null"></option>
             </select>
-            <select name="" id="selectBox2">
+
+            <select name="" id="graphValueSelectBox">
     
             </select>
-            <button id="add">추가</button>
-            <button id="delete">제거</button>
-            <button id="down">다운</button>
+
+            <button id="graphAdd">추가</button>
+            <button id="graphDelete">제거</button>
+            <button id="graphDown">다운</button>
 
             <select name="" id="graphType">
                 <option value="line">선</option>
                 <option value="bar">막대</option>
             </select>
 
-            <select name="" id="dateSelect">
+            <select name="" id="SelectedDate">
                 
             </select>
 

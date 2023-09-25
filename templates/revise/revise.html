@@ -10,6 +10,7 @@
 
     <!-- css -->
     <link rel="stylesheet" href="/templates/revise/revise.css">
+    <link rel="stylesheet" href="/templates/revise/billboard.css">
 
     <!-- spreadsheetjs -->
     <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
@@ -17,8 +18,11 @@
     <script src="https://jsuites.net/v4/jsuites.js"></script>
     <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
 
-    <!-- chart.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+    <!-- billboard.ks -->
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+
+    <!-- fontawesome-->
+    <script src="https://kit.fontawesome.com/4c4b76e7c2.js" crossorigin="anonymous"></script>
 
 </head>
 
@@ -26,8 +30,8 @@
 
     <ul class="nav">
         <li class="nav-item"><a href="/" class="title">전남대학교 </br>농업 빅데이터 연구실</a></li>
-        <li class="nav-item"><a href="/">홈</a></li>
         <li class="nav-item"><a href="/fileList">데이터 수정</a></li>
+        <li class="nav-item"><a href="/merge/">파일 병합</a></li>
         <li class="nav-item"><a href="/fileList_2">데이터 분석</a></li>
         {% if user_name != anonymous %}
         <li class="nav-item"><a href="/users/logout/" class='logout'>로그아웃</a></li>
@@ -379,11 +383,15 @@
         </ul>
 
         <!-- 그래프 -->
-        <dialog style="width : 900px; height : 700px; box-sizing: border-box;">
-            <canvas id="myChart" style="margin: 0 auto;">
-            </canvas>
+        <div class="graphContainer", id="graphContainer">
+            <div id="myChart">
+            </div>
+            <div id="buttonContainer" class="buttonContainer">
+                <div id="Prev" style="visibility: hidden;"> <i class="fa-solid fa-arrow-left"></i></div>
+                <div id="Next"> <i class="fa-solid fa-arrow-right"></i></div>
+            </div>
             <button class="close" id="close">닫기</button>
-        </dialog>
+        </div>
 
         <div id="jsonObjects">
             <input id="jsonObject" type="hidden" value="{{data}}"></input>
@@ -395,4 +403,6 @@
 <script type="module" src="/templates/revise/revise.js"></script>
 <script src="/templates/revise/draw.js"></script>
 <script src="/templates/revise/abms.js"></script>
+<script src="/templates/JS/billboard.js"></script>
+
 </html>
