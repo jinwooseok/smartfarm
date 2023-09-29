@@ -120,7 +120,6 @@ a {
 
 .selectContainer .card .cardTitle{
     font-size: 20px;
-    margin: 7% 0;
 }
 
 .selectContainer .card .cardSelect{
@@ -129,6 +128,11 @@ a {
 
     width: 100%;
     height: 70%;
+}
+
+.selectContainer .card select{
+    width: 100%;
+    font-size: 20px;
 }
 
 .text{
