@@ -13,6 +13,7 @@ let data; // 업로드 된 파일 Json
 
 let selectedFile; // 선택 파일 정보
 $file_input.addEventListener('change', (event) => {
+    $spreadsheet.innerHTML = "";
     // 파일 읽기
     selectedFile = event.target.files[0];
 

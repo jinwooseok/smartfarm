@@ -9,6 +9,9 @@ const $environment = document.querySelector('#environmentSelectBox');
 const $output = document.querySelector('#outputSelectBox');
 const $mergeFileName = document.querySelector('#mergeFileName');
 const $merge = document.querySelector('#merge');
+const $growthVariable =document.querySelector('#growthVariable')
+const $environmentVariable =document.querySelector('#environmentVariable')
+const $outputVariable =document.querySelector('#outputVariable')
 
 // select 박스 내용 추가함수
 const selectOptionAdd = ()=>{
@@ -20,6 +23,65 @@ const selectOptionAdd = ()=>{
 }
 selectOptionAdd();
 
+const postFilename = (name)=>{
+    $.ajax({
+        url: '../revise/loaddata/',
+        type: 'post',
+        dataType: 'json',
+        headers: { 'X-CSRFToken': csrftoken },
+        data: {
+            fileName : name,
+        },
+        success: function (response) {
+            if (response.data != null) {
+                console.log(response.data);
+                return(response.data);
+            }
+            else {
+                alert('전송할 데이터가 없습니다.')
+            }
+
+        },
+        error: function (xhr, error) {
+            console.log(growthTitle)
+            alert("에러입니다.");
+            console.error("error : " + error);
+        }
+    })
+}
+
+
+$growth.addEventListener('change', ()=>{
+    const growthTitle = $growth.options[$growth.selectedIndex].value;
+    let data = postFilename(growthTitle);
+    console.log(data);
+    // let dataColumn = Object.keys(data[0]);
+    // for (let x of dataColumn){
+    //     $growthVariable.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
+    // }
+
+})
+
+$environment.addEventListener('change', ()=>{
+    const environmentTitle = $growth.options[$growth.selectedIndex].value;
+    let data =postFilename(environmentTitle);
+    console.log(data);
+    // let dataColumn = Object.keys(data[0]);
+    // for (let x of dataColumn){
+    //     $environmentVariable.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
+    // }
+})
+
+$output.addEventListener('change', ()=>{
+    const outputTitle = $growth.options[$growth.selectedIndex].value;
+    let data =postFilename(outputTitle)
+    console.log(data);
+    // let dataColumn = Object.keys(data[0]);
+    // for (let x of dataColumn){
+    //     $outputVariable.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
+    // }
+})
+
 // select 박스 선택 결과 함수
 // columnName에 추가
 $merge.addEventListener('click',()=>{
@@ -27,6 +89,7 @@ $merge.addEventListener('click',()=>{
 
     if($mergeFileName.value === ''){
         alert('파일 이름을 정해주세요');
+        return;
     }
 
     let growthTitle = $growth.options[$growth.selectedIndex].value;
@@ -42,36 +105,10 @@ $merge.addEventListener('click',()=>{
         columnName.push(x);
     }
 
-
-    console.log(growthTitle);
-
-    $.ajax({
-        url: '../revise/loaddata/',
-        type: 'post',
-        dataType: 'json',
-        headers: { 'X-CSRFToken': csrftoken },
-        data: {
-            fileName : growthTitle,
-        },
-        success: function (response) {
-            if (response.data != null) {
-                console.log(response.data);
-            }
-            else {
-                alert('전송할 데이터가 없습니다.')
-            }
-
-        },
-        error: function (xhr, error) {
-            alert("에러입니다.");
-            console.error("error : " + error);
-        }
-    })
-
-
+    console.log(columnName)
 
     // $.ajax({
-    //     url: '/mergeView/',
+    //     url: '../mergeView/',
     //     type: 'post',
     //     dataType: 'json',
     //     headers: { 'X-CSRFToken': csrftoken },
@@ -81,8 +118,7 @@ $merge.addEventListener('click',()=>{
     //     },
     //     success:function(response){
     //         if(response.data != null){
-    //             newData = new Excel(JSON.parse(response.data), $spreadsheet3)
-    //             document.querySelector('#save').disabled = false;
+    //             console.log(response.data)
     //         }
     //     },
     //     error: function (xhr, error) {
