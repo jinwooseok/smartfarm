@@ -25,7 +25,7 @@ selectOptionAdd();
 
 const postFilename = (name)=>{
     $.ajax({
-        url: '../revise/loaddata/',
+        url: '../loaddata/',
         type: 'post',
         dataType: 'json',
         headers: { 'X-CSRFToken': csrftoken },
