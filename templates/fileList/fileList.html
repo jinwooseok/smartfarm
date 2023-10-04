@@ -40,7 +40,7 @@
     </div>
     
     <div class="container">
-        <form action="{% url 'smartfarm:upload' %}" method="POST" enctype="multipart/form-data" class="upload">
+        <form action="{% url 'smartfarm:fileUpload' %}" method="POST" enctype="multipart/form-data" class="upload">
             {% csrf_token %}
             <div class="excel">
                 <div id="spreadsheet" class="spreadsheet">

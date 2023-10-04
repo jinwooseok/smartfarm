@@ -10,12 +10,15 @@ app_name='smartfarm'
 urlpatterns = [
     #데이터관리 창
     path('', views.main, name='main'),
-    path('fileList/', views.fileList, name='fileList'),
-    path('fileList/upload/',views.fileUploadView, name='upload'),
-    path('fileList/delete/', views.fileDeleteView, name="fileDelete"),
+    #화면 연결
+    path('file-list/', views.fileListView, name='fileList'),
+    #api
+    path('file-list/upload/',views.fileUpload, name='fileUpload'),
+    path('file-list/delete/', views.fileDelete, name="fileDelete"),
+    
     #merge 창
     path('merge/', views.merge, name='merge'),
-    path('mergeView/', views.mergeView, name='mergeView'),
+    path('merge-view/', views.mergeView, name='mergeView'),
     #데이터수정 창
     path('revise/<str:file_name>/', views.revise, name='revise'),
     path('revise/', views.revise2, name='revise2'),

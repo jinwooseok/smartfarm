@@ -1,7 +1,6 @@
 
 from django.shortcuts import render, redirect
-from .models import File_db
-from django.core.files import File
+from .models import File
 import pandas as pd
 from users.models import User
 import json
@@ -24,7 +23,11 @@ from functools import reduce
 ##페이지 별로 필요한 request를 컨트롤
 #---------------분석도구 import ----------------
 from . import analizer
+
+
+from django.views.decorators.csrf import csrf_exempt
 #-----------------------메인화면 호출. user정보를 사용
+
 
 def main(request):
     user = loginValidator(request)
@@ -35,10 +38,10 @@ def main(request):
             return render(request,'main/main.html')
 
 #------------------------ management창 ------------------------
-def fileList(request):
+def fileListView(request):
     user = loginValidator(request)
     if user != None:
-            file_object=File_db.objects.filter(user_id=user.id)
+            file_object=File.objects.filter(user_id=user.id)
             context={'user_name':user.user_name,
                 'files':file_object}
             return render(request,'fileList/fileList.html',context)
@@ -46,7 +49,7 @@ def fileList(request):
             return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
 
 #파일 업로드 함수 - data_list창
-def fileUploadView(request):
+def fileUpload(request):
     if request.method == 'POST':
         user = loginValidator(request)
         FileSystem(user).fileUpload(request)
@@ -57,7 +60,7 @@ def fileUploadView(request):
         return render(request, 'upload/upload.html')
     
 #파일 삭제 함수 - data_list창
-def fileDeleteView(request):
+def fileDelete(request):
     user = loginValidator(request)
     result = FileSystem(user).fileDelete(request)
             # Redirect to a success page.
@@ -122,20 +125,35 @@ def merge(request):
 def mergeView(request):
     user = loginValidator(request)
     if request.method == 'GET':
-        files = request.GET.get('data')
-        files = json.loads(files)
-        context = FileSystem(user).fileLoadMulti(files)
-        return JsonResponse(context)
+        fileNameList = File.objects.filter(user_id=user.id).values_list('file_title',flat=True)
+        print(fileNameList)
+        if request.GET.get('data') == None:
+            context = {'fileNameList':fileNameList}
+            return JsonResponse(context)
+        else:
+            files = request.GET.get('data')
+            files = json.loads(files)
+            context = FileSystem(user).fileLoadMulti(files)
+            context['fileNameList'] = fileNameList
+            print(context)
+            return JsonResponse(context)
     elif request.method == 'POST':
         if request.POST.get('header') == 'merge':
-            data = pd.read_json(request.POST.get('data'))
+           #파일데이터 불러오기
+            data = request.POST.get('data')
             columnName = request.POST.get('columnName')
             dfs = []
+            data = pd.read_json(data)
+            columnName = json.loads(columnName)
             for i in range(len(data)):
                 data.iloc[i,0] = pd.read_json(data.iloc[i,0])
                 data.iloc[i,0].rename(columns={columnName[i]:"날짜"}, inplace=True)
+                print(data.iloc[i,0])
                 dfs.append(data.iloc[i,0])
-            mergeData = reduce(lambda left, right: left.join(right, on='날짜'), dfs)
+            
+
+            mergeData = reduce(lambda left, right: left.join(right, on="날짜", lsuffix="_1", rsuffix="_2"), dfs)
+            mergeData = mergeData.drop('날짜_2', axis=1).rename(columns={"날짜_1":"날짜"})  # 중복된 열 삭제
             mergeData = mergeData.to_json(orient='records', force_ascii=False)
             return JsonResponse({'result':'success',
                                 'data':mergeData})
@@ -154,7 +172,7 @@ def mergeView(request):
 def fileList2(request):
     user = loginValidator(request)
     if user != None:
-        file_object=File_db.objects.filter(user_id=user.id)
+        file_object=File.objects.filter(user_id=user.id)
         context={'user_name':user.user_name,
             'files':file_object}
         return render(request, "fileList_2/fileList_2.html", context) #전송
@@ -176,7 +194,7 @@ def useAnalizer(request, file_name):
             data = cacheGetter(user, file_name)
             data = pd.read_json(data)
         else:
-            file_object=File_db.objects.get(user_id=user, file_Title=file_name)
+            file_object=File.objects.get(user_id=user, file_Title=file_name)
 
             work_dir = './media/' + str(file_object.file_Root)
             if os.path.splitext(work_dir)[1] == ".csv":

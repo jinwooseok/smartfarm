@@ -6,11 +6,10 @@ import copy
 import json
 
 #---------------모델 import---------------------
-from .models import File_db
+from .models import File
 #---------------오류 import---------------------
 from django.utils.datastructures import MultiValueDictKeyError
 ## -------------파일 처리 클래스-----------------
-from django.core.files import File
 #--------------캐시 처리 라이브러리-------------
 from django.core.cache import cache
 class FileSystem:
@@ -19,7 +18,7 @@ class FileSystem:
         self.user = user
 
     def getFileList(self):
-        fileList=File_db.objects.filter(user_id=self.user)
+        fileList=File.objects.filter(user_id=self.user)
         return fileList
     
     #파일 업로드 함수 - 처음 파일을 등록하는 함수
@@ -41,7 +40,7 @@ class FileSystem:
         files = json.loads(files)
         print(files)
         for i in range(len(files)):
-            file_object=File_db.objects.get(user_id=self.user,file_Title=files[i])
+            file_object=File.objects.get(user_id=self.user,file_title=files[i])
             file_object.delete()
             try:
                 os.remove('./media/' + str(file_object.file_Root))
@@ -62,7 +61,7 @@ class FileSystem:
         f = open(file_name,'rb')
         file_open=File(f,name=file_name)
         self.fileSaveForm(user_id=self.user
-                          ,file_Title=file_name,file_Root=file_open)
+                          ,file_title=file_name,file_root=file_open)
         f.close()
         os.remove(file_name)
         return 0
@@ -73,9 +72,9 @@ class FileSystem:
                 data = pd.read_json(cacheData)
                 summary=DataProcess(data).makeSummary()
         else:
-            file_object=File_db.objects.get(user_id=self.user, file_Title=file_name)
+            file_object=File.objects.get(user_id=self.user, file_title=file_name)
 
-            work_dir = './media/' + str(file_object.file_Root)
+            work_dir = './media/' + str(file_object.file_root)
             if os.path.splitext(work_dir)[1] == ".csv":
                 try:
                     data=pd.read_csv(work_dir,encoding="cp949")
@@ -92,9 +91,9 @@ class FileSystem:
             summary=DataProcess(data).makeSummary()
             data_json = data.to_json(orient="records",force_ascii=False)
         else:
-            file_object=File_db.objects.get(user_id=self.user, file_Title=file_name)
+            file_object=File.objects.get(user_id=self.user, file_title=file_name)
 
-            work_dir = './media/' + str(file_object.file_Root)
+            work_dir = './media/' + str(file_object.file_root)
             if os.path.splitext(work_dir)[1] == ".csv":
                 try:
                     data=pd.read_csv(work_dir,encoding="cp949")
@@ -123,7 +122,7 @@ class FileSystem:
     def fileLoadMulti(self, file_names):
         data_json = []
         for file_name in file_names:
-            file_object=File_db.objects.get(user_id=self.user, file_Title=file_name)
+            file_object=File.objects.get(user_id=self.user, file_title=file_name)
             work_dir = './media/' + str(file_object.file_Root)
             if os.path.splitext(work_dir)[1] == ".csv":
                 try:
@@ -139,11 +138,11 @@ class FileSystem:
         return context
     #파일 저장 폼
     @staticmethod
-    def fileSaveForm(user_id, file_Title, file_Root):
-        instance = File_db(
+    def fileSaveForm(user_id, file_title, file_root):
+        instance = File(
                     user_id=user_id,
-                    file_Title=file_Title,
-                    file_Root=file_Root,
+                    file_title=file_title,
+                    file_root=file_root,
                 )
         instance.save()
     #input : id, file이름 output: 중복되지 않는 파일이름
@@ -151,10 +150,10 @@ class FileSystem:
     def fileNameCheck(id, file_name):
         if file_name.split(".")[-1] in ["xlsx","xls","csv"]:
             file_name = "".join(file_name.split(".")[0:-1])
-        if File_db.objects.filter(user_id=id, file_Title=file_name+".csv"):
+        if File.objects.filter(user_id=id, file_title=file_name+".csv"):
                 file_name_copy = copy.copy(file_name)
                 unique = 1
-                while File_db.objects.filter(user_id=id, file_Title=file_name_copy+".csv"):
+                while File.objects.filter(user_id=id, file_title=file_name_copy+".csv"):
                     unique+=1
                     file_name_copy=file_name+"_"+str(unique)
                 file_name = file_name_copy

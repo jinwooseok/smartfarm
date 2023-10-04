@@ -11,8 +11,6 @@ import requests
 import warnings
 warnings.filterwarnings(action='ignore')
 
-#day to week
-from urllib.parse import urlencode, quote_plus, unquote
 # from geopy.geocoders import Nominatim
 from .decorators import logging_time
 
