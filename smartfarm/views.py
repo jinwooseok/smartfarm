@@ -41,7 +41,7 @@ def main(request):
 def fileListView(request):
     user = loginValidator(request)
     if user != None:
-            file_object=File.objects.filter(user_id=user.id)
+            file_object=File.objects.filter(user_id=user.id) 
             context={'user_name':user.user_name,
                 'files':file_object}
             return render(request,'fileList/fileList.html',context)
