@@ -312,11 +312,11 @@ def dataJoiner(df1, df2, left_key, right_key):
     return joinedData
 
 def cacheSetter(user, file_name, data):
-    cacheID = File_db.objects.get(user_id=user, file_Title=file_name).id
+    cacheID = File.objects.get(user_id=user, file_title=file_name).file_id
     cache.set(cacheID, data, timeout=60)
 
 def cacheGetter(user, file_name):
-    cacheID = File_db.objects.get(user_id=user, file_Title=file_name).id
+    cacheID = File.objects.get(user_id=user, file_title=file_name).file_id
     if cache.get(cacheID):
         print("캐싱된 데이터입니다.")
         return cache.get(cacheID)
