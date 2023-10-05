@@ -53,7 +53,7 @@ def fileUpload(request):
     if request.method == 'POST':
         user = loginValidator(request)
         FileSystem(user).fileUpload(request)
-        return redirect('/fileList/')
+        return redirect('/file-list/')
     elif request.method == 'GET':
         user = loginValidator(request)
         FileSystem(user).fileUpload(request)
@@ -78,8 +78,10 @@ def fileDownloadView(request):
 @logging_time
 def revise(request, file_name):
     user = loginValidator(request)
+    fileNameList = File.objects.filter(user_id=user.id).values_list('file_title',flat=True)
     if user != None:
         context = FileSystem(user).fileLoad(file_name)
+        context['fileNameList'] = fileNameList
         return render(request, "revise/revise.html", context) #전송
     else:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")

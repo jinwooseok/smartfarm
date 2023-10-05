@@ -32,7 +32,7 @@ class FileSystem:
 
         if uploadedFile != None:
             self.fileSaveForm(user_id=self.user
-                        ,file_Title=file_name,file_Root=uploadedFile)
+                        ,file_title=file_name,file_root=uploadedFile)
         return 0
     #fileDelete는 무조건 request를 통해 받아야함
     def fileDelete(self, request):
@@ -43,7 +43,7 @@ class FileSystem:
             file_object=File.objects.get(user_id=self.user,file_title=files[i])
             file_object.delete()
             try:
-                os.remove('./media/' + str(file_object.file_Root))
+                os.remove('./media/' + str(file_object.file_root))
             except FileNotFoundError:
                 print("파일이 이미 삭제된 상태입니다.")
         result = {
@@ -123,7 +123,7 @@ class FileSystem:
         data_json = []
         for file_name in file_names:
             file_object=File.objects.get(user_id=self.user, file_title=file_name)
-            work_dir = './media/' + str(file_object.file_Root)
+            work_dir = './media/' + str(file_object.file_root)
             if os.path.splitext(work_dir)[1] == ".csv":
                 try:
                     data=pd.read_csv(work_dir,encoding="cp949")
