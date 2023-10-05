@@ -14,69 +14,136 @@ a {
     padding: 0;
 }
 
-dialog{
+dialog {
     box-sizing: border-box;
 }
-/* nav */
-.nav {
-    width: 1280px;
-    height: 70px;
-    margin: 0 auto;
-    margin-top: 10px;
 
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+/* 1280px 보다 크면 */
+@media (min-width: 1280px) {
+
+    /* nav */
+    .nav {
+        width: 1280px;
+        height: 70px;
+        margin: 0 auto;
+        margin-top: 10px;
+
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .nav .title {
+        color: #007A33;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .nav .login {
+        padding: 3px 15px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 30px;
+
+        background-color: #007A33;
+        border-radius: 8px;
+        color: #fff;
+    }
+
+    .nav .logout {
+        padding: 3px 10px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 30px;
+
+        background-color: #007A33;
+        border-radius: 8px;
+        color: #fff;
+    }
+
+    .nav .nav-item:hover {
+        transform: scale(1.2);
+        transition-duration: 0.5s;
+    }
+
+    .nav .nav-item a:not(:first-child),
+    .nav .nav-item a:not(:last-child) {
+        color: #888;
+    }
+
+    .nav .nav-item a:hover {
+        color: #000;
+    }
 }
 
-.nav .title {
-    color: #007A33;
-    font-size: 18px;
-    font-weight: bold;
+
+/* ////////////////////////////////////////// */
+/* 1280보다 작으면 */
+@media (max-width:1280px) {
+    /* nav */
+    .nav {
+        width: 1000px;
+        height: 70px;
+        margin: 0 auto;
+        margin-top: 10px;
+
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .nav .title {
+        color: #007A33;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .nav .login {
+        padding: 3px 15px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 30px;
+
+        background-color: #007A33;
+        border-radius: 8px;
+        color: #fff;
+    }
+
+    .nav .logout {
+        padding: 3px 10px;
+        text-align: center;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 30px;
+
+        background-color: #007A33;
+        border-radius: 8px;
+        color: #fff;
+    }
+
+    .nav .nav-item:hover {
+        transform: scale(1.1);
+        transition-duration: 0.5s;
+    }
+
+    .nav .nav-item a:not(:first-child),
+    .nav .nav-item a:not(:last-child) {
+        color: #888;
+    }
+
+    .nav .nav-item a:hover {
+        color: #000;
+    }
 }
-
-.nav .login{
-    padding: 3px 15px;
-    text-align: center;
-    font-size: 14px;
-    font-weight: bold;
-    line-height: 30px;
-
-    background-color: #007A33;
-    border-radius: 8px;
-    color: #fff;
-}
-
-.nav .logout{
-    padding: 3px 10px;
-    text-align: center;
-    font-size: 14px;
-    font-weight: bold;
-    line-height: 30px;
-
-    background-color: #007A33;
-    border-radius: 8px;
-    color: #fff;
-}
-
-.nav .nav-item:hover{
-    transform: scale(1.2);
-    transition-duration: 0.5s;
-}
-
-.nav .nav-item a:not(:first-child),
-.nav .nav-item a:not(:last-child) {
-    color: #888;
-}
-
-.nav .nav-item a:hover {
-    color: #000;
-}
-
 /* exp-box */
-.exp-box{
+.exp-box {
     width: 85%;
     margin: 0 auto;
     margin-top: 10px;
@@ -108,10 +175,11 @@ dialog{
 }
 
 /* scroll 디자인 */
-.spreadsheet::-webkit-scrollbar{
-    width : 3px;
+.spreadsheet::-webkit-scrollbar {
+    width: 3px;
 }
-.spreadsheet::-webkit-scrollbar-thumb{
+
+.spreadsheet::-webkit-scrollbar-thumb {
     background-color: #999;
 }
 
@@ -120,7 +188,7 @@ dialog{
     position: relative;
     z-index: 1;
 
-    width:85%;
+    width: 85%;
     margin: 0 auto;
 }
 
@@ -168,9 +236,9 @@ dialog{
 
 .tab [name="tab-group-1"]:checked~label {
     border-bottom: 1px solid white;
-    
+
     background: white;
-    
+
     z-index: 2;
     /* 선택한 탭 헤더를 앞으로 옮겨 컨텐츠 테두리 선에 가려지지 않도록 처리 */
 }
@@ -182,7 +250,7 @@ dialog{
 }
 
 /* 사용 방법 tap1 */
-.tab .content .caution{
+.tab .content .caution {
     margin-top: 10px;
 }
 
@@ -194,28 +262,30 @@ dialog{
     flex-wrap: nowrap;
 }
 
-.tab .content .explain .process_ex{
+.tab .content .explain .process_ex {
     margin-top: 10px;
-    flex : 1 1 48%;
+    flex: 1 1 48%;
 }
 
-.tab .content .explain .process_ex:first-child{
+.tab .content .explain .process_ex:first-child {
     border-right: 1px dashed #000;
 }
 
 
 /* 엑셀 데이터 확인, tap2 */
-.content .x-container{
+.content .x-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
-    margin : 10px 2%;
+
+    margin: 10px 2%;
 }
-.content .x_label{
+
+.content .x_label {
     margin-left: 20px;
 }
-.content .pretreatmentFileName{
+
+.content .pretreatmentFileName {
     margin-right: 20px;
 }
 
@@ -287,7 +357,7 @@ dialog{
 
 
 /* tap3 */
-.tab [name="tab-group-1"]:checked+label+.flex{
+.tab [name="tab-group-1"]:checked+label+.flex {
     height: 230px;
     padding-top: 20px;
 
@@ -299,7 +369,7 @@ dialog{
 }
 
 /* 기간 및 열 지정 */
-.date-container{
+.date-container {
     width: 20%;
     height: 100%;
 
@@ -311,21 +381,22 @@ dialog{
 }
 
 .date-container .columnDate-container,
-.date-container .peri-container{
+.date-container .peri-container {
     width: 60%;
     height: 20px;
 }
 
-.columnDate-container{
+.columnDate-container {
     display: flex;
     flex-direction: column;
 }
 
-.date-container .peri-container .else_peri{
+.date-container .peri-container .else_peri {
     width: 100%;
 }
+
 /* 변수 선택 창 */
-.variables-container{
+.variables-container {
     width: 60%;
     height: 100%;
     position: relative;
@@ -360,7 +431,7 @@ input[name="level"]:checked+label {
     cursor: default;
 }
 
-input[name="level"]:checked+label+.box{
+input[name="level"]:checked+label+.box {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -369,33 +440,33 @@ input[name="level"]:checked+label+.box{
 }
 
 /* easyVersion */
-.easyVersion >*:not(:last-child){
+.easyVersion>*:not(:last-child) {
     margin-right: 15px;
 }
 
-.easyVersion >*:not(button){
-    flex-shrink : 0;
+.easyVersion>*:not(button) {
+    flex-shrink: 0;
     width: 25%;
 }
 
 /* hardVersion */
-.hardVersion >*:not(:last-child){
+.hardVersion>*:not(:last-child) {
     margin-right: 10px;
 }
 
-.hardVersion >*:not(button){
-    flex-shrink : 0;
+.hardVersion>*:not(button) {
+    flex-shrink: 0;
     width: 15%;
 }
 
-.hardVersion .final_var{
-    flex-shrink : 0;
+.hardVersion .final_var {
+    flex-shrink: 0;
     width: 25%;
 }
 
 /* 파일 저장 */
 
-.fileSave-container{
+.fileSave-container {
     width: 20%;
     height: 100%;
 
@@ -405,13 +476,13 @@ input[name="level"]:checked+label+.box{
     align-items: center;
 }
 
-.fileSave-container >*:not(:nth-child(2)){
+.fileSave-container>*:not(:nth-child(2)) {
     margin-top: 30px;
 }
 
 
 /* ABMS */
-.tab [name="tab-group-1"]:checked+label+.abms{
+.tab [name="tab-group-1"]:checked+label+.abms {
     height: 300px;
     padding-top: 20px;
 
@@ -422,7 +493,7 @@ input[name="level"]:checked+label+.box{
     align-items: center;
 }
 
-.abms .abms_text{
+.abms .abms_text {
     width: 90%;
     height: 100%;
 
@@ -435,7 +506,7 @@ input[name="level"]:checked+label+.box{
     overflow-y: auto;
 }
 
-.abms .abms_text >*{
+.abms .abms_text>* {
     width: 18%;
     margin: 5px;
 
@@ -445,12 +516,12 @@ input[name="level"]:checked+label+.box{
     align-items: center;
 }
 
-.abms .abms_text .result:hover{
+.abms .abms_text .result:hover {
     color: #fff;
     background-color: #888;
 }
 
-.abms .abms_select{
+.abms .abms_select {
     width: 10%;
 
     display: flex;
@@ -459,19 +530,20 @@ input[name="level"]:checked+label+.box{
     align-items: center;
 }
 
-.abms .abms_select .abmsFileName{
+.abms .abms_select .abmsFileName {
     width: 80%;
 }
 
-.abms .abms_select .abms_var{
+.abms .abms_select .abms_var {
     width: 80%;
     margin-bottom: 15px;
 }
-.abms .abms_select .abms_save{
+
+.abms .abms_select .abms_save {
     padding: 5px 8px;
 }
 
-.graphContainer{
+.graphContainer {
     width: 95%;
 
     display: none;
@@ -482,13 +554,13 @@ input[name="level"]:checked+label+.box{
     top: 50%;
     left: 50%;
 
-    transform:translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 
     z-index: 999;
 }
 
-.buttonContainer{
-    display: none; 
+.buttonContainer {
+    display: none;
     flex-direction: row;
     justify-content: space-between;
 
