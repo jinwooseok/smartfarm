@@ -35,6 +35,7 @@ $id.onkeyup = function () {
 function strongPassword(str) {
     return /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(str);
 }
+
 $pass.onkeyup = function () {
     if ($pass.value === "") {
         document.querySelector('#passwordError').innerHTML = "비밀번호를 입력해주세요.";
@@ -45,7 +46,11 @@ $pass.onkeyup = function () {
         document.querySelector('#passwordError').innerHTML = '';
         check2 = true;
     }
-
+    if ($pass.value !== $check_pass.value) {
+        document.querySelector('#passwordCheckError').innerHTML = "비밀번호가 동일하지 않습니다.";
+    } else {
+        document.querySelector('#passwordCheckError').innerHTML = "";
+    }
 }
 
 // 비밀번호 확인
@@ -59,7 +64,6 @@ $check_pass.onkeyup = function () {
         } else {
             document.querySelector('#passwordCheckError').innerHTML = "";
             check3 = true;
-            $name.focus();
         }
     }
 }

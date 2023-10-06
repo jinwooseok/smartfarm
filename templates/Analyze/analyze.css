@@ -61,17 +61,6 @@ a {
         color: #fff;
     }
 
-    .nav .nav-item:hover:not(:first-child) {
-        transform: scale(1.2);
-        transition-duration: 0.5s;
-        color: #000;
-    }
-
-    .nav .nav-item a:not(:first-child),
-    .nav .nav-item a:not(:last-child) {
-        color: #888;
-    }
-
     .container {
         width :1280px;
         margin: 0 auto;
@@ -189,19 +178,4 @@ a {
         border-radius: 8px;
         color: #fff;
     }
-
-    .nav .nav-item:hover {
-        transform: scale(1.1);
-        transition-duration: 0.5s;
-    }
-
-    .nav .nav-item a:not(:first-child),
-    .nav .nav-item a:not(:last-child) {
-        color: #888;
-    }
-
-    .nav .nav-item a:hover {
-        color: #000;
-    }
-
 }

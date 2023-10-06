@@ -1,4 +1,5 @@
 import Excel from '../JS/excel_show.mjs';
+import { Loading,CloseLoading } from '../JS/loading.mjs';
 
 const csrftoken = $('[name=csrfmiddlewaretoken]').val(); // csrftoken
 let columnName = [];
@@ -9,11 +10,14 @@ const $environment = document.querySelector('#environmentSelectBox');
 const $output = document.querySelector('#outputSelectBox');
 const $mergeFileName = document.querySelector('#mergeFileName');
 const $merge = document.querySelector('#merge');
+const $save = document.querySelector('#save');
 const $growthVariable =document.querySelector('#growthVariable')
 const $environmentVariable =document.querySelector('#environmentVariable')
-const $outputVariable =document.querySelector('#outputVariable')
+const $outputVariable =document.querySelector('#outputVariable');
+const $spreadsheet = document.querySelector('#spreadsheet'); // 엑셀 창
 
 let mergeDataList=[];
+let mergeCompleteData="";
 
 // select 박스 내용 추가함수
 const selectOptionAdd = ()=>{
@@ -112,8 +116,8 @@ $merge.addEventListener('click',()=>{
         columnName.push(x);
     }
 
-    console.log(columnName)
-    console.log(JSON.stringify(mergeDataList));
+
+    Loading();
 
     $.ajax({
         url: '../merge-view/',
@@ -122,17 +126,46 @@ $merge.addEventListener('click',()=>{
         headers: { 'X-CSRFToken': csrftoken },
         data: {
             header : 'merge',
-            columnName : columnName,
+            columnName : JSON.stringify(columnName),
             fileName: $mergeFileName.value,
             data : JSON.stringify(mergeDataList),
         },
         success:function(response){
             if(response.data != null){
+                console.log(JSON.parse(response.data));
+                mergeCompleteData = new Excel(JSON.parse(response.data), $spreadsheet);
+                CloseLoading()
+            }
+        },
+        error: function (xhr, error) {
+            CloseLoading()
+            alert("에러입니다.");
+            console.error("error : " + error);
+        }
+    })
+})
+
+$save.addEventListener("click", () =>{
+    console.log(mergeCompleteData.getDate());
+    // Loading();
+    $.ajax({
+        url: '../merge-view/',
+        type: 'post',
+        dataType: 'json',
+        headers: { 'X-CSRFToken': csrftoken },
+        data: {
+            header : 'save',
+            fileName: $mergeFileName.value,
+        },
+        success:function(response){
+            if(response.data != null){
                 console.log(response.data)
+                CloseLoading()
             }
         },
         error: function (xhr, error) {
             alert("에러입니다.");
+            CloseLoading()
             console.error("error : " + error);
         }
     })

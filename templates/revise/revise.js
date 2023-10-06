@@ -1,4 +1,5 @@
 import  Excel  from '../JS/excel_show.mjs';
+import { Loading,CloseLoading } from '../JS/loading.mjs';
 
 const csrftoken = $('[name=csrfmiddlewaretoken]').val(); // csrftoken
 
@@ -39,7 +40,7 @@ const $x_label = document.querySelector('#x_label'); // x값
 let data;
 let excel_arr;
 
-window.onload = () => {
+window.onload = async () => {
     data = new Excel(excel_data, $spreadsheet);
     excel_arr = Object.keys(data.getData()[0]);
     for (let x of excel_arr) {
@@ -317,12 +318,16 @@ $reset_data.addEventListener('click', () => {
 
 // 저장
 $submit_data.addEventListener('click', () => {
+
+    $submit_data.disabled = true;
+
     for (let i = 0; i < $type.length; i++) {
         if ($type[i].checked) {
             fileType = $type[i].value; //생육, 환경, 생산량 선택 값
         }
     }
-    console.time("submit_data");
+
+    // console.time("submit_data");
     let new_file_name = $('#fileName').val();
     let file_type = fileType
     let date = $('#columnDate').val();
@@ -333,6 +338,8 @@ $submit_data.addEventListener('click', () => {
         periods = document.getElementById('else_peri').value;
     }
     const yesOrNo = confirm('파일을 저장합니다.'); // 예, 아니요를 입력 받음
+    
+    Loading();
     if (yesOrNo) {
         $.ajax({
             url: 'farm/',
@@ -350,18 +357,25 @@ $submit_data.addEventListener('click', () => {
             success: function (response) {
                 if (response.data != null) {
                     // console.log(response.data);
-                    console.timeEnd("submit_data"); // 측정 종료
+                    // console.timeEnd("submit_data"); // 측정 종료
+                    CloseLoading();
                     window.location.href = "/fileList/";
                 }
                 else {
+                    CloseLoading();
+                    $submit_data.disabled=false;
                     alert('전송할 데이터가 없습니다.')
                 }
 
             },
             error: function (xhr, error) {
+                CloseLoading();
+                $submit_data.disabled=false;
                 alert("에러입니다.");
                 console.error("error : " + error);
             }
         })
     }
-}, { once: true })
+    
+    $submit_data.disabled=false;
+})
