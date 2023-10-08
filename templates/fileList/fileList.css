@@ -64,16 +64,6 @@ body {
         color: #fff;
     }
 
-    .nav .nav-item:hover {
-        transform: scale(1.2);
-        transition-duration: 0.5s;
-    }
-
-    .nav .nav-item a:not(:first-child),
-    .nav .nav-item a:not(:last-child) {
-        color: #888;
-    }
-
     .nav .nav-item a:hover {
         color: #000;
     }
@@ -143,11 +133,11 @@ body {
         position: relative;
     }
 
-    .spreadsheet .file_drag {
+    .spreadsheet .fileUpload_Drag {
         width: 300%;
         height: 300%;
 
-        /* visibility: hidden; */
+        visibility: hidden;
     }
 
     .spreadsheet .icon {
@@ -172,6 +162,10 @@ body {
 
     .spreadsheet span {
         font-size: 18px;
+    }
+
+    .spreadsheet p {
+        font-size: 13px;
     }
 
     .upload .wrap {
@@ -204,7 +198,7 @@ body {
         cursor: pointer;
     }
 
-    .upload .wrap .upload-name {
+    .upload .wrap .fileName {
         display: inline-block;
         padding: 3px 8px;
         border: 1px solid #ebebeb;
@@ -232,7 +226,7 @@ body {
     }
 
     /* fileList */
-    .list-container {
+    .listContainer {
         width: 800px;
         height: 400px;
         border: 1px solid #000;
@@ -241,7 +235,7 @@ body {
         overflow-y: hidden;
     }
 
-    .list-container .list_head {
+    .listContainer .listTitle {
         width: 95%;
         margin: 5px auto;
 
@@ -254,7 +248,7 @@ body {
         text-align: center;
     }
 
-    .list-container .file-container {
+    .listContainer .file-container {
         width: 95%;
         height: calc(400px - 27px);
         margin: 5px auto;
@@ -262,7 +256,7 @@ body {
         overflow-y: auto;
     }
 
-    .list-container .file-container .list {
+    .listContainer .file-container .list {
         width: 100%;
         margin-bottom: 3px;
 
@@ -275,29 +269,29 @@ body {
         text-align: center;
     }
 
-    .list-container .list_head>*,
-    .list-container .list>* {
+    .listContainer .listTitle>*,
+    .listContainer .list>* {
         margin: 0 10px;
     }
 
-    .list-container .list_head {
+    .listContainer .listTitle {
         border-bottom: 1px solid #999;
     }
 
-    .list-container .list>* {
+    .listContainer .list>* {
         border: 1px solid #000;
 
         font-size: 12px;
     }
 
-    .list-container .list_head .check-all,
-    .list-container .list .check {
+    .listContainer .listTitle .checkAll,
+    .listContainer .list .check {
         width: 16px;
         height: 16px;
     }
 
-    .list-container .list_head .list_title,
-    .list-container .list .list_title {
+    .listContainer .listTitle .fileTitle,
+    .listContainer .list .fileTitle {
         width: 500px;
         height: 26px;
         line-height: 26px;
@@ -307,20 +301,20 @@ body {
         white-space: nowrap;
     }
 
-    .list-container .list .list_title {
+    .listContainer .list .fileTitle {
         text-align: left;
         padding-left: 5px;
     }
 
-    .list-container .list .list_title :hover {
+    .listContainer .list .fileTitle :hover {
         cursor: pointer;
         text-decoration: underline;
     }
 
-    .list-container .list_head .date,
-    .list-container .list_head .n_date,
-    .list-container .list .date,
-    .list-container .list .n_date {
+    .listContainer .listTitle .uploadDate,
+    .listContainer .listTitle .lastUpdateDate,
+    .listContainer .list .uploadDate,
+    .listContainer .list .lastUpdateDate {
         width: 150px;
         height: 26px;
         line-height: 26px;
@@ -415,20 +409,6 @@ body {
         color: #fff;
     }
 
-    .nav .nav-item:hover {
-        transform: scale(1.1);
-        transition-duration: 0.5s;
-    }
-
-    .nav .nav-item a:not(:first-child),
-    .nav .nav-item a:not(:last-child) {
-        color: #888;
-    }
-
-    .nav .nav-item a:hover {
-        color: #000;
-    }
-
     /* explain */
     .explain {
         width: 1000px;
@@ -494,7 +474,7 @@ body {
         position: relative;
     }
 
-    .spreadsheet .file_drag {
+    .spreadsheet .fileUpload_Drag {
         width: 300%;
         height: 300%;
     }
@@ -521,6 +501,10 @@ body {
 
     .spreadsheet span {
         font-size: 14px;
+    }
+
+    .spreadsheet p {
+        font-size: 10px;
     }
 
     .upload .wrap {
@@ -555,7 +539,7 @@ body {
 
     }
 
-    .upload .wrap .upload-name {
+    .upload .wrap .fileName {
         display: inline-block;
         padding: 3px 8px;
         border: 1px solid #ebebeb;
@@ -583,7 +567,7 @@ body {
     }
 
     /* fileList */
-    .list-container {
+    .listContainer {
         width: 650px;
         height: 300px;
         border: 1px solid #000;
@@ -592,7 +576,7 @@ body {
         overflow-y: hidden;
     }
 
-    .list-container .list_head {
+    .listContainer .listTitle {
         width: 95%;
         margin: 5px auto;
 
@@ -605,7 +589,7 @@ body {
         text-align: center;
     }
 
-    .list-container .file-container {
+    .listContainer .file-container {
         width: 95%;
         height: calc(400px - 27px);
         margin: 5px auto;
@@ -613,7 +597,7 @@ body {
         overflow-y: auto;
     }
 
-    .list-container .file-container .list {
+    .listContainer .file-container .list {
         width: 100%;
         margin-bottom: 3px;
 
@@ -626,29 +610,29 @@ body {
         text-align: center;
     }
 
-    .list-container .list_head>*,
-    .list-container .list>* {
+    .listContainer .listTitle>*,
+    .listContainer .list>* {
         margin: 0 10px;
     }
 
-    .list-container .list_head {
+    .listContainer .listTitle {
         border-bottom: 1px solid #999;
     }
 
-    .list-container .list>* {
+    .listContainer .list>* {
         border: 1px solid #000;
 
         font-size: 12px;
     }
 
-    .list-container .list_head .check-all,
-    .list-container .list .check {
+    .listContainer .listTitle .checkAll,
+    .listContainer .list .check {
         width: 16px;
         height: 16px;
     }
 
-    .list-container .list_head .list_title,
-    .list-container .list .list_title {
+    .listContainer .listTitle .fileTitle,
+    .listContainer .list .fileTitle {
         width: 380px;
         height: 26px;
         line-height: 26px;
@@ -658,20 +642,20 @@ body {
         white-space: nowrap;
     }
 
-    .list-container .list .list_title {
+    .listContainer .list .fileTitle {
         text-align: left;
         padding-left: 5px;
     }
 
-    .list-container .list .list_title :hover {
+    .listContainer .list .fileTitle :hover {
         cursor: pointer;
         text-decoration: underline;
     }
 
-    .list-container .list_head .date,
-    .list-container .list_head .n_date,
-    .list-container .list .date,
-    .list-container .list .n_date {
+    .listContainer .listTitle .uploadDate,
+    .listContainer .listTitle .lastUpdateDate,
+    .listContainer .list .uploadDate,
+    .listContainer .list .lastUpdateDate {
         width: 100px;
         height: 26px;
         line-height: 26px;

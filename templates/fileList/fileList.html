@@ -44,32 +44,34 @@
             {% csrf_token %}
             <div class="excel">
                 <div id="spreadsheet" class="spreadsheet">
-                    <input type="file" id="file_drag" class="file_drag" name="file_drag" accept=".xls, .xlsx, .csv">
+                    <input type="file" id="fileUpload_Drag" class="fileUpload_Drag" name="fileUpload_Drag" accept=".xls, .xlsx, .csv">
                     <div class="icon">
-                        <i class="fa-solid fa-cloud-arrow-up" id="file_icon"></i>
+                        <i class="fa-solid fa-cloud-arrow-up" id="fileIcon"></i>
                         <span>파일을 드래그하세요</span>
+                    </br>
+                        <p>최대 100줄을 미리 보여줍니다</p>
                     </div>
                 </div>
             </div>
             <div class="wrap">
-                <input type="file" name="file_input" id="file_input" class="file_input" accept=".xls, .xlsx, .csv">
-                <label for="file_input">업로드</label>
-                <input id="file_name" class="upload-name" value="파일선택" disabled="disabled">
+                <input type="file" name="fileUpload_Input" id="fileUpload_Input" class="fileUpload_Input" accept=".xls, .xlsx, .csv">
+                <label for="fileUpload_Input">업로드</label>
+                <input id="fileName" class="fileName" value="파일선택" disabled="disabled">
                 <button id="confirm" class="confirm" type="submit">등록하기</button>
             </div>
         </form>
 
         <div class="Box">
-            <div class="list-container" id="list-container">
-                <div class="list_head">
-                    <input type="checkbox" class="check-all" id="check-all">
-                    <div class="list_title" id="listTitle">
+            <div class="listContainer" id="listContainer">
+                <div class="listTitle">
+                    <input type="checkbox" class="checkAll" id="checkAll">
+                    <div class="fileTitle" id="fileTitle">
                         파일명
                     </div>
-                    <div class="date" id="date">
+                    <div class="uploadDate" id="uploadDate">
                         업로드 날짜
                     </div>
-                    <div class="n_date" id="n_date">
+                    <div class="lastUpdateDate" id="lastUpdateDate">
                         마지막 수정 날짜
                     </div>
                 </div>
@@ -77,13 +79,13 @@
                     {% for file in files %}
                     <div class="list">
                         <input type="checkbox" class="check">
-                        <div class="list_title" id="list_title">
+                        <div class="fileTitle" id="AllTitle">
                             <a onclick="saveTitle(event)">{{file.file_title}}</a>
                         </div>
-                        <div class="date" id="date">
+                        <div class="uploadDate" id="uploadDate">
                             {{file.created_at | date:'Y-m-d'}}
                         </div>
-                        <div class="n_date" id="n_date">
+                        <div class="lastUpdateDate" id="lastUpdateDate">
                             {{file.updated_at | date:'Y-m-d'}}
                         </div>
                     </div>

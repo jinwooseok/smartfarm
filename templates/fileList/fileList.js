@@ -1,32 +1,34 @@
-const $list_container = document.querySelector('#list-container'); // 글 목록 div
-const $check_all = document.querySelector('#check-all'); // 상단 체크박스
+const $checkAll = document.querySelector('#checkAll'); // 전체 선택 버튼
+const $AllCheckBox = document.querySelectorAll('.check');
 
 // 버튼
 const $upload = document.querySelector('#upload'); // 등록버튼
 const $delete = document.querySelector('#delete'); // 삭제버튼
+
+const $AllTitle = document.querySelectorAll('#AllTitle');
+const $listAll = document.querySelectorAll('.list');
+const $search = document.querySelector('#search');
+
 
 //토큰
 const csrftoken = $('[name=csrfmiddlewaretoken]').val(); // csrftoken
 
 // 전체 선택
 function AllCheck() {
-    const All_Checkbox = document.querySelectorAll('.check'); // check-box
     if (this.checked) {
-        for (let i = 0; i < All_Checkbox.length; i++) {
-            All_Checkbox[i].checked = true;
+        for (let i = 0; i < $AllCheckBox.length; i++) {
+            $AllCheckBox[i].checked = true;
         }
     } else {
-        for (let i = 0; i < All_Checkbox.length; i++) {
-            All_Checkbox[i].checked = false;
+        for (let i = 0; i < $AllCheckBox.length; i++) {
+            $AllCheckBox[i].checked = false;
         }
     }
 }
 
 // 삭제
 function select_delete() {
-    const All_Checkbox = document.querySelectorAll('.check'); // check-box
-    let titles = document.querySelectorAll('.list_title');
-    let check_count = [...All_Checkbox].filter((v) => v.checked === true).length; // 체크 수 확인
+    let check_count = [...$AllCheckBox].filter((v) => v.checked === true).length; // 체크 수 확인
 
     if (!check_count) {
         alert('삭제할 파일을 선택하세요');
@@ -36,10 +38,10 @@ function select_delete() {
     const yesOrNo = confirm('정말 삭제하나요?'); // 예, 아니요를 입력 받음
     if (yesOrNo) {
         let deleteList = [];
-        for (let i = 0; i < All_Checkbox.length; i++) {
-            if (All_Checkbox[i].checked) {
-                deleteList.push(titles[i + 1].innerText);
-                All_Checkbox[i].parentElement.remove();
+        for (let i = 0; i < $AllCheckBox.length; i++) {
+            if ($AllCheckBox[i].checked) {
+                deleteList.push($AllTitle[i + 1].innerText);
+                $AllCheckBox[i].parentElement.remove();
             }
         }
         $.ajax({
@@ -62,7 +64,7 @@ function select_delete() {
                 console.error("error : " + error);
             }
         })
-        document.querySelector('.check-all').checked = false;
+        $checkAll.checked = false;
         AllCheck();
     } else {
         alert('삭제를 취소합니다.');
@@ -74,17 +76,11 @@ function select_delete() {
 $delete.addEventListener('click', select_delete);
 
 // 전체 선택
-$check_all.addEventListener('change', AllCheck);
-
-
-// 검색
-const $titleAll = document.querySelectorAll('#list_title');
-const $listAll = document.querySelectorAll('.list');
-const $search = document.querySelector('#search');
+$checkAll.addEventListener('change', AllCheck);
 
 // 검색용 저장
 let titleList = [];
-for (let x of $titleAll) {
+for (let x of $AllTitle) {
     titleList.push(x.innerText);
 }
 
@@ -109,8 +105,7 @@ function saveTitle(event) {
 // 다운로드 버튼
 const $download = document.querySelector('#download')
 $download.addEventListener('click', (event) => {
-    const All_Checkbox = document.querySelectorAll('.check'); // check-box
-    let check_count = [...All_Checkbox].filter((v) => v.checked === true).length;
+    let check_count = [...$AllCheckBox].filter((v) => v.checked === true).length;
 
     if (check_count !== 1) {
         alert('파일은 1개를 선택해야 합니다.')
@@ -118,9 +113,9 @@ $download.addEventListener('click', (event) => {
     }
 
     let downloadTitle; // 파일 이름
-    for (let i = 0; i < All_Checkbox.length; i++) {
-        if (All_Checkbox[i].checked) {
-            downloadTitle = All_Checkbox[i].parentElement.childNodes[3].innerText;
+    for (let i = 0; i < $AllCheckBox.length; i++) {
+        if ($AllCheckBox[i].checked) {
+            downloadTitle = $AllCheckBox[i].parentElement.childNodes[3].innerText;
         }
     }
 

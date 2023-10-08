@@ -64,20 +64,6 @@ dialog {
         border-radius: 8px;
         color: #fff;
     }
-
-    .nav .nav-item:hover {
-        transform: scale(1.2);
-        transition-duration: 0.5s;
-    }
-
-    .nav .nav-item a:not(:first-child),
-    .nav .nav-item a:not(:last-child) {
-        color: #888;
-    }
-
-    .nav .nav-item a:hover {
-        color: #000;
-    }
 }
 
 
@@ -126,20 +112,6 @@ dialog {
         background-color: #007A33;
         border-radius: 8px;
         color: #fff;
-    }
-
-    .nav .nav-item:hover {
-        transform: scale(1.1);
-        transition-duration: 0.5s;
-    }
-
-    .nav .nav-item a:not(:first-child),
-    .nav .nav-item a:not(:last-child) {
-        color: #888;
-    }
-
-    .nav .nav-item a:hover {
-        color: #000;
     }
 }
 /* exp-box */
