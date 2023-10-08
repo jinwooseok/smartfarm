@@ -78,10 +78,10 @@ def fileDownloadView(request):
 @logging_time
 def revise(request, file_name):
     user = loginValidator(request)
-    fileNameList = File.objects.filter(user_id=user.id).values_list('file_title',flat=True)
+    fileNameList = File.objects.filter(user_id=user.id)
     if user != None:
         context = FileSystem(user).fileLoad(file_name)
-        context['fileNameList'] = fileNameList
+        context['files'] = fileNameList
         return render(request, "revise/revise.html", context) #전송
     else:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
@@ -118,8 +118,10 @@ def usePreprocessor(request, file_name):
 #------------------------ merge창 ------------------------
 def merge(request):
     user = loginValidator(request)
+    fileNameList = File.objects.filter(user_id=user.id)
     if user != None:
-        context={'user_name':user.user_name}
+        context={'user_name':user.user_name,'files':fileNameList}
+        print(context)
         return render(request, "merge/merge.html", context) #전송
     else:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
@@ -127,16 +129,16 @@ def merge(request):
 def mergeView(request):
     user = loginValidator(request)
     if request.method == 'GET':
-        fileNameList = File.objects.filter(user_id=user.id).values_list('file_title',flat=True)
-        print(fileNameList)
+        fileNameList = File.objects.filter(user_id=user.id)
         if request.GET.get('data') == None:
-            context = {'fileNameList':fileNameList}
+            context = {'files':fileNameList}
+            print(context)
             return JsonResponse(context)
         else:
             files = request.GET.get('data')
             files = json.loads(files)
             context = FileSystem(user).fileLoadMulti(files)
-            context['fileNameList'] = fileNameList
+            context['files'] = fileNameList
             print(context)
             return JsonResponse(context)
     elif request.method == 'POST':
@@ -150,12 +152,13 @@ def mergeView(request):
             for i in range(len(data)):
                 data.iloc[i,0] = pd.read_json(data.iloc[i,0])
                 data.iloc[i,0].rename(columns={columnName[i]:"날짜"}, inplace=True)
-                print(data.iloc[i,0])
                 dfs.append(data.iloc[i,0])
             
 
-            mergeData = reduce(lambda left, right: left.join(right, on="날짜", lsuffix="_1", rsuffix="_2"), dfs)
-            mergeData = mergeData.drop('날짜_2', axis=1).rename(columns={"날짜_1":"날짜"})  # 중복된 열 삭제
+            mergeData = dfs[0]
+            for i in range(1, len(dfs)):
+                mergeData = pd.merge(mergeData, dfs[i], on="날짜", suffixes=(f'_{i}', f'_{i+1}'))
+            print(mergeData)
             mergeData = mergeData.to_json(orient='records', force_ascii=False)
             return JsonResponse({'result':'success',
                                 'data':mergeData})
@@ -198,7 +201,7 @@ def useAnalizer(request, file_name):
         else:
             file_object=File.objects.get(user_id=user, file_Title=file_name)
 
-            work_dir = './media/' + str(file_object.file_Root)
+            work_dir = './media/' + str(file_object.file_root)
             if os.path.splitext(work_dir)[1] == ".csv":
                 try:
                     data=pd.read_csv(work_dir,encoding="cp949")
@@ -370,7 +373,7 @@ def userApiView(request):
 
 @api_view(['GET'])
 def fileListApiView(request):
-    fileList = File_db.objects.all()
+    fileList = File.objects.all()
     serializer = FileSerializer(fileList, many=True)
     return Response(serializer.data)
 

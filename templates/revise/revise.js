@@ -359,7 +359,7 @@ $submit_data.addEventListener('click', () => {
                     // console.log(response.data);
                     // console.timeEnd("submit_data"); // 측정 종료
                     CloseLoading();
-                    window.location.href = "/fileList/";
+                    window.location.href = "/file-list/";
                 }
                 else {
                     CloseLoading();

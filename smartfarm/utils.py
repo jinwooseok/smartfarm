@@ -7,6 +7,7 @@ import json
 
 #---------------모델 import---------------------
 from .models import File
+from django.core import files
 #---------------오류 import---------------------
 from django.utils.datastructures import MultiValueDictKeyError
 ## -------------파일 처리 클래스-----------------
@@ -28,7 +29,6 @@ class FileSystem:
             file_name=request.POST['upload_title']
         except MultiValueDictKeyError:#파일 이름 미지정
             file_name=str(uploadedFile)
-        file_name = self.fileNameCheck(self.user, file_name)
 
         if uploadedFile != None:
             self.fileSaveForm(user_id=self.user
@@ -59,7 +59,7 @@ class FileSystem:
         result.to_csv(file_name, index = False)
         #--------------------------------------------------
         f = open(file_name,'rb')
-        file_open=File(f,name=file_name)
+        file_open=files.File(f,name=file_name)
         self.fileSaveForm(user_id=self.user
                           ,file_title=file_name,file_root=file_open)
         f.close()
