@@ -1,4 +1,5 @@
 const csrftoken = $('[name=csrfmiddlewaretoken]').val(); // csrftoken
+
 function moveAnalystPage(event) {
     // title 내부 저장
     titleList=[];

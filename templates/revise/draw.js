@@ -14,6 +14,23 @@ let lastIndex = exCount;
 let graphArr=[];
 let selectArr = []; // 업데이트용 y열 이름만 보관 ["열 이름","열 이름", "열 이름", ..]
 
+const buttonShow = (startIndex,lastIndex)=>{
+    if(lastIndex === data.length && startIndex===0){
+        console.log("한번에")
+        $Prev.style.visibility = "hidden";
+        $Next.style.visibility = "hidden";
+    } else if(lastIndex === data.length){
+        console.log("NEXT_H")
+        $Prev.style.visibility = "inherit";
+        $Next.style.visibility = "hidden";
+    
+    } else if(startIndex === 0){
+        console.log("PREV_H")
+        $Prev.style.visibility = "hidden";
+        $Next.style.visibility = "inherit";
+    }
+}
+
 $close.addEventListener('click', () =>{
     graphArr=[];
     selectArr=[];
@@ -72,12 +89,10 @@ const lineDraw = (name) =>{
         },
     });
 
-    if(exCount < ex_data.length){
-        $buttonContainer.style.display = "flex"; // 화살표 생성
-    }
-
+    $buttonContainer.style.display = "flex"; // 화살표 생성
     $graphContainer.style.display = 'block';
 
+    buttonShow(startIndex,lastIndex);
 }
 
 const $Prev = document.querySelector("#Prev");
@@ -98,20 +113,13 @@ const updateChart = (startIndex,lastIndex)=>{
     chart.load({
         columns: graphArr,
     });
-
-    console.log(startIndex, lastIndex);
-    console.log(graphArr);
+    buttonShow(startIndex,lastIndex);
 }
 
 $Next.addEventListener("click", () => {
   startIndex = startIndex + exCount;
   lastIndex = startIndex + exCount > ex_data.length ? ex_data.length : startIndex + exCount;
   updateChart(startIndex,lastIndex);
-
-  $Prev.style.visibility = "inherit";
-  if (lastIndex === ex_data.length) {
-    $Next.style.visibility = "hidden";
-  }
 });
 
 $Prev.addEventListener("click", () => {
@@ -119,9 +127,4 @@ $Prev.addEventListener("click", () => {
   startIndex = lastIndex - exCount <= 0 ? 0 : lastIndex - exCount;
 
   updateChart(startIndex,lastIndex);
-
-  $Next.style.visibility = "inherit";
-  if (startIndex === 0) {
-    $Prev.style.visibility = "hidden";
-  }
 });

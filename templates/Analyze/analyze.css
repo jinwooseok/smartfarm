@@ -80,6 +80,18 @@ a {
         width: 150px;
     }
 
+    .container .normalization{
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .container .normalization label{
+        margin-right: 10px;
+        font-size: 20px;
+        text-align: center;
+        line-height: 20px;
+    }
+
     .container .analyze-setting-wrapper{
         width: 100%;
         margin-bottom: 20px;
@@ -177,5 +189,87 @@ a {
         background-color: #007A33;
         border-radius: 8px;
         color: #fff;
+    }
+
+    .container {
+        width :1000px;
+        margin: 0 auto;
+
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+    }
+
+    .container legend {
+        margin-bottom: 5px;
+        padding: 3px 5px;
+        border: 1px solid #888;
+    }
+
+    .container select{
+        width: 150px;
+    }
+
+    .container .normalization{
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .container .normalization label{
+        margin-right: 10px;
+        font-size: 20px;
+        text-align: center;
+        line-height: 20px;
+    }
+
+    .container .analyze-setting-wrapper{
+        width: 100%;
+        margin-bottom: 20px;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+
+        text-align: center;
+    }
+
+    .container .analyze-setting-wrapper .flex-start{
+        align-self: start;
+    }
+
+    .container .analyze-setting-wrapper>*{
+        margin-right: 10px;
+    }
+
+    .container .analyze-result-wrapper{
+        margin-bottom: 20px;
+    }
+
+    .container .analyze-result-wrapper .analyze{
+        margin-bottom: 10px;
+    }
+    
+    .container .graph-wrapper{
+        width: 100%;
+    }
+
+    .graph-wrapper fieldset{
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .graph-wrapper .buttonContainer{
+        display: none; 
+        flex-direction: row;
+        justify-content: space-between;
+
+        width: 30%;
+        margin-left: 35%;
+
+    }
+
+    .buttonContainer i {
+        font-size: 30px;
     }
 }
