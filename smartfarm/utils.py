@@ -24,9 +24,9 @@ class FileSystem:
     
     #파일 업로드 함수 - 처음 파일을 등록하는 함수
     def fileUpload(self, request):
-        uploadedFile = request.FILES["file_input"]
+        uploadedFile = request.FILES["fileUpload_Input"]
         try:
-            file_name=request.POST['upload_title']
+            file_name=request.POST['fileName']
         except MultiValueDictKeyError:#파일 이름 미지정
             file_name=str(uploadedFile)
 

@@ -158,7 +158,7 @@ def mergeView(request):
             mergeData = dfs[0]
             for i in range(1, len(dfs)):
                 mergeData = pd.merge(mergeData, dfs[i], on="날짜", suffixes=(f'_{i}', f'_{i+1}'))
-            print(mergeData)
+            print("--------------머지?종료")
             mergeData = mergeData.to_json(orient='records', force_ascii=False)
             return JsonResponse({'result':'success',
                                 'data':mergeData})
