@@ -1,9 +1,10 @@
 const csrftoken = $('[name=csrfmiddlewaretoken]').val(); // csrftoken
 
-let data = JSON.parse(document.getElementById('jsonObject').value);
-let dataColumn = Object.keys(data[0]);
+const data = JSON.parse(document.getElementById('jsonObject').value);
+const dataColumn = Object.keys(data[0]);
 
 // 분석
+const $normalization = document.querySelector('#normalization');
 const $analyzeValue_x = document.querySelector('#analyzeValue_x');
 const $selectedValue_X = document.querySelector('#selectedValue_X');
 const $selectedValue_Y = document.querySelector('#selectedValue_Y');
@@ -33,6 +34,13 @@ window.onload = () => {
 
 /////////////////////////////////////
 const xValueArr = []; // 선택한 x값 배열
+let normalizationValue;
+
+// 정규화 선택
+$normalization.addEventListener("click", (event)=>{
+    console.log(event.target.value);
+    normalizationValue = event.target.value;
+})
 
 // 선택한 x값 이동
 $analyzeMoveX.addEventListener('click', () => {
@@ -96,6 +104,26 @@ let exCount = 90>data.length ? data.length : 90;
 let startIndex = 0;
 let lastIndex = exCount;
 
+const buttonShow = (startIndex,lastIndex)=>{
+    console.log(startIndex, lastIndex);
+
+
+    if(lastIndex === data.length && startIndex===0){
+        console.log("한번에")
+        $Prev.style.visibility = "hidden";
+        $Next.style.visibility = "hidden";
+    } else if(lastIndex === data.length){
+        console.log("NEXT_H")
+        $Prev.style.visibility = "inherit";
+        $Next.style.visibility = "hidden";
+    
+    } else if(startIndex === 0){
+        console.log("PREV_H")
+        $Prev.style.visibility = "hidden";
+        $Next.style.visibility = "inherit";
+    }
+}
+
 
 // 그래프 보여주기
 $graphAdd.addEventListener("click", () => {
@@ -106,19 +134,20 @@ $graphAdd.addEventListener("click", () => {
     for(let i=0; i<data.length; i++){
         $SelectedDate.innerHTML += `<option value=${data[i][xText]}>${data[i][xText]}</option>`;
     }
+
      // x축 선택 필수
     if (xText === "notSelect") {
         alert("날짜를 선택하세요");
         return;
     }
+
     let arr = []; // 데이터 배열
     // ["열 이름", data...]
-    
+
+    $buttonContainer.style.display = "flex"; // 화살표 생성
+
     // 맨 처음 그림 -> 그냥 다 넣는다.
     if(graphArr.length === 0){
-        if(exCount < data.length){
-            $buttonContainer.style.display = "flex"; // 화살표 생성
-        }
         // x값 설정
         arr.push(xText);
         selectArr.push(xText);
@@ -176,10 +205,11 @@ $graphAdd.addEventListener("click", () => {
             columns: graphArr,
         });
     }
+
+    buttonShow(startIndex,lastIndex);
 })
 
 document.querySelector('#graphType').addEventListener('click', ()=>{
-
     let type = document.querySelector('#graphType').options[document.querySelector('#graphType').selectedIndex].value;
     chart.load({
         type : type,
@@ -194,7 +224,6 @@ $graphDelete.addEventListener('click', () => {
     });
 
     graphArr.splice(graphArr.indexOf(yText), 1);
-    console.log(graphArr);
     selectArr.splice(selectArr.indexOf(yText), 1);
 })
 
@@ -235,7 +264,6 @@ const updateChart = (startIndex,lastIndex)=>{
     graphArr.push(arr);
     arr = [];
 
-
     selectArr.map((value, index) => {
         if(index!==0){
             arr.push(value);
@@ -246,6 +274,9 @@ const updateChart = (startIndex,lastIndex)=>{
             arr=[];
         }
     })
+
+    buttonShow(startIndex,lastIndex);
+    
     chart.load({
         columns: graphArr,
     });
@@ -254,12 +285,8 @@ const updateChart = (startIndex,lastIndex)=>{
 $Next.addEventListener("click", () => {
   startIndex = startIndex + exCount;
   lastIndex = startIndex + exCount > data.length ? data.length : startIndex + exCount;
+  
   updateChart(startIndex,lastIndex);
-
-  $Prev.style.visibility = "inherit";
-  if (lastIndex === data.length) {
-    $Next.style.visibility = "hidden";
-  }
 });
 
 $Prev.addEventListener("click", () => {
@@ -267,25 +294,11 @@ $Prev.addEventListener("click", () => {
   startIndex = lastIndex - exCount <= 0 ? 0 : lastIndex - exCount;
 
   updateChart(startIndex,lastIndex);
-
-  $Next.style.visibility = "inherit";
-  if (startIndex === 0) {
-    $Prev.style.visibility = "hidden";
-  }
 });
 
 $SelectedDate.addEventListener('change', ()=>{
   startIndex = $SelectedDate.options[$SelectedDate.selectedIndex].index;
   lastIndex = startIndex + exCount > data.length ? data.length : startIndex + exCount;
-  console.log(lastIndex, startIndex);
-
-  if(lastIndex === data.length){
-    $Prev.style.visibility = "inherit";
-    $Next.style.visibility = "hidden";
-  } else if(startIndex === 0){
-    $Prev.style.visibility = "hidden";
-    $Next.style.visibility = "inherit";
-  }
 
   updateChart(startIndex,lastIndex);
 })

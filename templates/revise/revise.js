@@ -40,19 +40,23 @@ const $x_label = document.querySelector('#x_label'); // x값
 let data;
 let excel_arr;
 
-window.onload = async () => {
+const $fileName = document.querySelector('#fileName');
+const $abmsFileName = document.querySelector('#abmsFileName');
+const $pretreatmentFileName = document.querySelector('#pretreatmentFileName');
+
+window.onload = () => {
     data = new Excel(excel_data, $spreadsheet);
     excel_arr = Object.keys(data.getData()[0]);
     for (let x of excel_arr) {
         $excel_var.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
         $x_label.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
     }
-    // 파일 수정 기본 제목  = 제목 + 수정
-    document.querySelector('#fileName').value=JSON.parse(localStorage.getItem("fileTitle").replace(/(.csv|.xlsx|.xls)$/, ''))+'_수정'
 
-    // abms제목 기본 설정 = 제목+abms
-    document.querySelector('#abmsFileName').value=JSON.parse(localStorage.getItem("fileTitle").replace(/(.csv|.xlsx|.xls)$/, ''))+'_ABMS'
-    document.querySelector('#pretreatmentFileName').value=JSON.parse(localStorage.getItem("fileTitle").replace(/(.csv|.xlsx|.xls)$/, ''))+'_전처리'
+    $fileName.value=localStorage.getItem("fileTitle").replace(/(.csv|.xlsx|.xls)/g, '')+'_수정'
+    $abmsFileName.value=JSON.parse(localStorage.getItem("fileTitle").replace(/(.csv|.xlsx|.xls)/g, ''))+'_ABMS'
+    $pretreatmentFileName.value=JSON.parse(localStorage.getItem("fileTitle").replace(/(.csv|.xlsx|.xls)/g, ''))+'_전처리'
+
+    console.log($fileName.value)
 }
 
  
@@ -291,7 +295,6 @@ $optionDelete[1].addEventListener('click', varDelete);
 const $columnDate = document.querySelector('#columnDate'); // 날짜 열 input
 const $periods = document.querySelector('#periods'); // 주기선택, 기타면 값을 직접입력 할 수 있게
 const $reset_data = document.querySelector('#reset_data'); // reset
-const $fileName = document.querySelector("#fileName"); // 저장할 파일 이름
 const $submit_data = document.querySelector('#submit_data');
 
 // 주기 선택 === 기타 true면 직접 입력 가능하게
@@ -305,7 +308,6 @@ $periods.addEventListener('change', (event) => {
 })
 
 const $type = document.querySelectorAll('input[name="type"]'); // 파일 종류 확인
-let fileType; // 파일 종류 전송 변수
 
 // 초기화
 $reset_data.addEventListener('click', () => {
@@ -320,6 +322,7 @@ $reset_data.addEventListener('click', () => {
 $submit_data.addEventListener('click', () => {
 
     $submit_data.disabled = true;
+    let fileType;
 
     for (let i = 0; i < $type.length; i++) {
         if ($type[i].checked) {
@@ -328,11 +331,11 @@ $submit_data.addEventListener('click', () => {
     }
 
     // console.time("submit_data");
-    let new_file_name = $('#fileName').val();
+    let new_file_name = $fileName.value;
     let file_type = fileType
-    let date = $('#columnDate').val();
-    let periods = $('#periods').val();
-    let data = $('#jsonObject').val();
+    let date = $columnDate.value;
+    let periods = $periods.value;
+    let data = excel_data;
     let valueObject = JSON.stringify(newData);
     if (periods == 'else') {
         periods = document.getElementById('else_peri').value;
@@ -354,6 +357,7 @@ $submit_data.addEventListener('click', () => {
                 data: data,
                 valueObject: valueObject,
             },
+            async:false,
             success: function (response) {
                 if (response.data != null) {
                     // console.log(response.data);

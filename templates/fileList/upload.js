@@ -50,8 +50,7 @@ function showFile() {
     $fileIcon.style.display = 'none'; // 파일 이미지 숨김
     $fileUpload_Drag.style.display = 'none'; // 파일 input 숨김
     $spreadsheet.style['align-items'] = 'start';
-    $fileName.value = selectedFile.name;
-
+    $fileName.value = selectedFile.name.replace(/\s/g, '_');
     let reader = new FileReader();
 
     reader.onload = function (evt) { // excel to Json

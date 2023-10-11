@@ -19,24 +19,10 @@ const $spreadsheet = document.querySelector('#spreadsheet'); // 엑셀 창
 let mergeDataList=[];
 let mergeCompleteData="";
 
-// select 박스 내용 추가함수
-const selectOptionAdd = ()=>{
-    for (let x of localTitleList){
-        $growth.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
-        $environment.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
-        $output.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
-    }
-}
-selectOptionAdd();
-
-// 파일 리스트 불러오기
-
-
-
 // 선택한 파일 불러오기
-const postFilename = async(name)=>{
+const postFilename =(name)=>{
     let returnData;
-    await $.ajax({
+    $.ajax({
         url: '../loaddata/',
         type: 'post',
         dataType: 'json',
@@ -44,6 +30,7 @@ const postFilename = async(name)=>{
         data: {
             fileName : name,
         },
+        async:false,
         success: function (response) {
             if (response.data != null) {
                 returnData = response.data;
@@ -63,9 +50,9 @@ const postFilename = async(name)=>{
 }
 
 // 파일 변수 불러오기
-$growth.addEventListener('change', async()=>{
-    const growthTitle = $growth.options[$growth.selectedIndex].value;
-    let data = await postFilename(growthTitle);
+$growth.addEventListener('change', ()=>{
+    const growthTitle = $growth.options[$growth.selectedIndex].textContent;
+    let data = postFilename(growthTitle);
     mergeDataList[0]=data;
     let dataColumn= Object.keys(JSON.parse(data)[0]); 
     for (let x of dataColumn){
@@ -74,9 +61,9 @@ $growth.addEventListener('change', async()=>{
 
 })
 
-$environment.addEventListener('change', async()=>{
-    const environmentTitle = $environment.options[$environment.selectedIndex].value;
-    let data = await postFilename(environmentTitle);
+$environment.addEventListener('change', ()=>{
+    const environmentTitle = $environment.options[$environment.selectedIndex].textContent;
+    let data =  postFilename(environmentTitle);
     mergeDataList[1]=data;
     let dataColumn= Object.keys(JSON.parse(data)[0]); 
     for (let x of dataColumn){
@@ -84,9 +71,9 @@ $environment.addEventListener('change', async()=>{
     }
 })
 
-$output.addEventListener('change', async()=>{
-    const outputTitle = $output.options[$output.selectedIndex].value;
-    let data = await postFilename(outputTitle)
+$output.addEventListener('change', ()=>{
+    const outputTitle = $output.options[$output.selectedIndex].textContent;
+    let data =  postFilename(outputTitle)
     mergeDataList[2]=data;
     let dataColumn= Object.keys(JSON.parse(data)[0]);
     for (let x of dataColumn){
