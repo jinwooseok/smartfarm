@@ -36,11 +36,12 @@ function select_delete() {
     }
 
     const yesOrNo = confirm('정말 삭제하나요?'); // 예, 아니요를 입력 받음
+
     if (yesOrNo) {
         let deleteList = [];
         for (let i = 0; i < $AllCheckBox.length; i++) {
             if ($AllCheckBox[i].checked) {
-                deleteList.push($AllTitle[i + 1].innerText);
+                deleteList.push($AllTitle[i].innerText);
                 $AllCheckBox[i].parentElement.remove();
             }
         }

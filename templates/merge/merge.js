@@ -51,6 +51,7 @@ const postFilename =(name)=>{
 
 // 파일 변수 불러오기
 $growth.addEventListener('change', ()=>{
+    $growthVariable.innerHTML='';
     const growthTitle = $growth.options[$growth.selectedIndex].textContent;
     let data = postFilename(growthTitle);
     mergeDataList[0]=data;
@@ -62,6 +63,7 @@ $growth.addEventListener('change', ()=>{
 })
 
 $environment.addEventListener('change', ()=>{
+    $environmentVariable.innerHTML='';
     const environmentTitle = $environment.options[$environment.selectedIndex].textContent;
     let data =  postFilename(environmentTitle);
     mergeDataList[1]=data;
@@ -72,6 +74,7 @@ $environment.addEventListener('change', ()=>{
 })
 
 $output.addEventListener('change', ()=>{
+    $outputVariable.innerHTML='';
     const outputTitle = $output.options[$output.selectedIndex].textContent;
     let data =  postFilename(outputTitle)
     mergeDataList[2]=data;
@@ -103,7 +106,8 @@ $merge.addEventListener('click',()=>{
         columnName.push(x);
     }
 
-
+    console.log(columnName);
+    console.log(mergeDataList);
     Loading();
 
     $.ajax({
@@ -119,7 +123,7 @@ $merge.addEventListener('click',()=>{
         },
         success:function(response){
             if(response.data != null){
-                console.log(JSON.parse(response.data));
+                console.log( "return",JSON.parse(response.data));
                 mergeCompleteData = new Excel(JSON.parse(response.data), $spreadsheet);
                 CloseLoading()
             }

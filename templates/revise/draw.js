@@ -15,17 +15,14 @@ let graphArr=[];
 let selectArr = []; // 업데이트용 y열 이름만 보관 ["열 이름","열 이름", "열 이름", ..]
 
 const buttonShow = (startIndex,lastIndex)=>{
-    if(lastIndex === data.length && startIndex===0){
-        console.log("한번에")
+    if(lastIndex === ex_data.length && startIndex===0){
         $Prev.style.visibility = "hidden";
         $Next.style.visibility = "hidden";
-    } else if(lastIndex === data.length){
-        console.log("NEXT_H")
+    } else if(lastIndex === ex_data.length){
         $Prev.style.visibility = "inherit";
         $Next.style.visibility = "hidden";
     
     } else if(startIndex === 0){
-        console.log("PREV_H")
         $Prev.style.visibility = "hidden";
         $Next.style.visibility = "inherit";
     }

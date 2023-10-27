@@ -52,11 +52,9 @@ window.onload = () => {
         $x_label.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
     }
 
-    $fileName.value=localStorage.getItem("fileTitle").replace(/(.csv|.xlsx|.xls)/g, '')+'_수정'
+    $fileName.value=JSON.parse(localStorage.getItem("fileTitle").replace(/(.csv|.xlsx|.xls)/g, ''))+'_수정'
     $abmsFileName.value=JSON.parse(localStorage.getItem("fileTitle").replace(/(.csv|.xlsx|.xls)/g, ''))+'_ABMS'
     $pretreatmentFileName.value=JSON.parse(localStorage.getItem("fileTitle").replace(/(.csv|.xlsx|.xls)/g, ''))+'_전처리'
-
-    console.log($fileName.value)
 }
 
  
@@ -341,9 +339,10 @@ $submit_data.addEventListener('click', () => {
         periods = document.getElementById('else_peri').value;
     }
     const yesOrNo = confirm('파일을 저장합니다.'); // 예, 아니요를 입력 받음
-    
-    Loading();
+
+
     if (yesOrNo) {
+        Loading();
         $.ajax({
             url: 'farm/',
             type: 'post',
@@ -357,7 +356,6 @@ $submit_data.addEventListener('click', () => {
                 data: data,
                 valueObject: valueObject,
             },
-            async:false,
             success: function (response) {
                 if (response.data != null) {
                     // console.log(response.data);

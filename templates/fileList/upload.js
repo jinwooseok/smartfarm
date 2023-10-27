@@ -24,14 +24,12 @@ $fileUpload_Input.addEventListener('change', (event) => {
 // drag in 확인
 $fileUpload_Drag.addEventListener('dragenter', function (e) {
     e.preventDefault();
-
     this.style.backgroundColor = '#999';
 });
 
 // drag out 확인
 $fileUpload_Drag.addEventListener('dragleave', function (e) {
     e.preventDefault();
-
     this.style.backgroundColor = '';
 });
 

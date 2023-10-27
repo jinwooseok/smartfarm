@@ -520,7 +520,7 @@ input[name="level"]:checked+label+.box {
 
     display: none;
     border: 1px solid grey;
-    background-color: 'white';
+    background-color: #fff;
 
     position: absolute;
     top: 50%;
@@ -531,7 +531,7 @@ input[name="level"]:checked+label+.box {
     z-index: 999;
 }
 
-.buttonContainer {
+.graphContainer  .buttonContainer {
     display: none;
     flex-direction: row;
     justify-content: space-between;
