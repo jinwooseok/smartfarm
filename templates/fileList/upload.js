@@ -9,14 +9,15 @@ const $fileName = document.querySelector('#fileName'); // 파일 이름
 
 const $confirm = document.querySelector('#confirm'); // dialog 닫기(확인)
 
-let uploadData; // 업로드 된 파일 Json
-
 let selectedFile; // 선택 파일 정보
+
 $fileUpload_Input.addEventListener('change', (event) => {
-    $spreadsheet.innerHTML = "";
     // 파일 읽기
     selectedFile = event.target.files[0];
-
+    if(!selectedFile){
+        return;
+    }
+    $spreadsheet.innerHTML = "";
     // 파일 보여주기
     showFile();
 });
@@ -58,7 +59,7 @@ function showFile() {
         let workbook = XLSX.read(resultData, { type: 'binary' });
         //엑셀파일의 시트 정보를 읽어서 JSON 형태로 변환한다. sheet 하나만 가져옴
         let ex_data = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[workbook.SheetNames[0]]);
-        uploadData = new Excel(ex_data.slice(0,100), $spreadsheet);
+        const uploadData = new Excel(ex_data.slice(0,100), $spreadsheet);
     }
 
     reader.onerror = function (event) { //  읽기 동작에 에러가 생길 때마다 발생합니다.
@@ -70,8 +71,6 @@ function showFile() {
 
 ///////////// 값 초기화 하기
 $confirm.addEventListener('click', () => {
-    // ajax로 저장 후 html 초기화
-
     $spreadsheet.textContent = "";
     $fileIcon.style.display = 'block'; // 파일 이미지 보여줌
     $fileUpload_Drag.style.display = 'block'; // 파일 input 보여줌

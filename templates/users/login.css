@@ -37,13 +37,12 @@ body {
 .login_logo{
     margin: 30px 0;
     font-size: 14px;
-    font-weight: 100px;
-    line-height: 23px;
+    font-weight: bold;
 }
 
-.login_logo a{
+.login_logo>a{
+    margin:  0 10px;
     font-size: 23px;
-    font-weight: 150px;
     color: #007A33;
 }
 
