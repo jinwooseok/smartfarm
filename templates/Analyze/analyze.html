@@ -27,105 +27,108 @@
 </head>
 
 <body>
-    <ul class="nav">
-        <li class="nav-item"><a href="/" class="title">전남대학교 </br>융합 빅데이터 연구실</a></li>
-        <li class="nav-item"><a href="/file-list">데이터 수정</a></li>
-        <li class="nav-item"><a href="/merge/">파일 병합</a></li>
-        <li class="nav-item"><a href="/fileList_2">데이터 분석</a></li>
-        {% if user_name != anonymous %}
-        <li class="nav-item"><a href="/users/logout/" class='logout'>로그아웃</a></li>
-        {% else %}
-        <li class="nav-item"><a href="/users/login/" class='login'>로그인</a></li>
-        {% endif %}
-    </ul>
+	<ul class="nav">
+		<li class="nav-item"><a href="/" class="title">전남대학교 </br>융합 빅데이터 연구실</a></li>
+		<li class="nav-item"><a href="/file-list">데이터 수정</a></li>
+		<li class="nav-item"><a href="/merge/">파일 병합</a></li>
+		<li class="nav-item"><a href="/fileList_2">데이터 분석</a></li>
+		{% if user_name != anonymous %}
+		<li class="nav-item"><a href="/users/logout/" class='logout'>로그아웃</a></li>
+		{% else %}
+		<li class="nav-item"><a href="/users/login/" class='login'>로그인</a></li>
+		{% endif %}
+	</ul>
 
-    <div class="container">
-        <div class="normalization" id="normalization">
-            <label><input type="radio" name="normalization" value="min-max">min-max</label>
-            <label><input type="radio" name="normalization" value="standard">standard</label>
-            <label><input type="radio" name="normalization" value="notUse" selected>notUse</label>
-        </div>
-        <div class="analyze-setting-wrapper">
-            <fieldset class="flex-start">
-                <legend>x 값</legend>
-                <select name="" id="analyzeValue_x" multiple size="5">
+	<div class="container">
+		<div class="analyze-setting-wrapper">
+				<fieldset class="flex-start">
+						<legend>x 값</legend>
+						<select name="" id="analyzeValue_x" multiple size="5">
 
-                </select>
-            </fieldset>
+						</select>
+				</fieldset>
 
-            <button class="analyzeDeleteX" id="analyzeDeleteX">&lt= </button>
-            <button class="analyzeMoveX" id="analyzeMoveX"> =&gt </button>
+				<button class="analyzeDeleteX" id="analyzeDeleteX">&lt= </button>
+				<button class="analyzeMoveX" id="analyzeMoveX"> =&gt </button>
 
-            <fieldset class="flex-start">
-                <legend>선택된 x 값</legend>
-                <select name="" id="selectedValue_X" multiple size="5">
+				<fieldset class="flex-start">
+						<legend>선택된 x 값</legend>
+						<select name="" id="selectedValue_X" multiple size="5">
 
-                </select>
-            </fieldset>
+						</select>
+				</fieldset>
 
-            <fieldset class="flex-start">
-                <legend>y 값</legend>
-                <select name="" id="selectedValue_Y">
+				<fieldset class="flex-start">
+						<legend>y 값</legend>
+						<select name="" id="selectedValue_Y">
 
-                </select>
-            </fieldset>
+						</select>
+				</fieldset>
 
-            <fieldset class="flex-start">
-                <legend>분석 종류</legend>
-                <select name="" id="technique">
-                    <option value="선형회귀분석">선형회귀분석</option>
-                    <option value="로지스틱회귀분석">로지스틱회귀분석</option>
-                </select>
-            </fieldset>
-        </div>
-        
-        <div class="analyze-result-wrapper">
-            <button type="submit" id="analyze" class="analyze" >분석하기</button>
-            <fieldset class="analyze-result" id="analyze-result">
-                <legend>분석 결과</legend>
-            </fieldset>
-        </div>
+				<fieldset class="flex-start">
+						<legend>분석 종류</legend>
+						<select name="" id="technique">
+								<option value="선형회귀분석">선형회귀분석</option>
+								<option value="로지스틱회귀분석">로지스틱회귀분석</option>
+						</select>
+				</fieldset>
+		</div>
 
-        <div class="graph-wrapper">
-            <!-- 그래프 -->
-            <select name="" id="dataSelectBox">
-                <option value="null"></option>
-            </select>
+		<div class="normalization" id="normalization">
+			<fieldset class="flex-start">
+				<legend>정규화</legend>
+				<label><input type="radio" name="normalization" value="min-max"><span>min-max</span></label>
+				<label><input type="radio" name="normalization" value="standard"><span>standard</span></label>
+				<label><input type="radio" name="normalization" value="notUse" checked><span>notUse</span></label>
+				</fieldset>
+		</div>
+		
+		<div class="analyze-result-wrapper">
+			<button type="submit" id="analyze" class="analyze">분석하기</button>
+			<fieldset class="analyze-result" id="analyze-result">
+					<legend>분석 결과</legend>
+			</fieldset>
+		</div>
 
-            <select name="" id="graphValueSelectBox">
-    
-            </select>
+		<div class="graph-wrapper">
+			<!-- 그래프 -->
+			<select name="" id="dataSelectBox">
+					<option value="null"></option>
+			</select>
 
-            <button id="graphAdd">추가</button>
-            <button id="graphDelete">제거</button>
-            <button id="graphDown">다운</button>
+			<select name="" id="graphValueSelectBox">
 
-            <select name="" id="graphType">
-                <option value="line">선</option>
-                <option value="bar">막대</option>
-            </select>
+			</select>
 
-            <select name="" id="SelectedDate">
-                
-            </select>
+			<button id="graphAdd">추가</button>
+			<button id="graphDelete">제거</button>
+			<button id="graphDown">다운</button>
 
-            <fieldset>
-                <legend>그래프</legend>
-                <div id="chart"></div>
-                <div id="buttonContainer" class="buttonContainer">
-                    <div id="Prev" style="visibility: hidden;"> <i class="fa-solid fa-arrow-left"></i></div>
-                    <div id="Next" style="visibility: hidden;"> <i class="fa-solid fa-arrow-right"></i></div>
-                </div>
-            </fieldset>
-        </div>
-    
-    </div>
+			<select name="" id="graphType">
+					<option value="line">선</option>
+					<option value="bar">막대</option>
+			</select>
 
-    <div id="jsonObjects">
-        <input id="jsonObject" type="hidden" value="{{data}}"></input>
-    </div>
+			<select name="" id="SelectedDate">
+					
+			</select>
 
+			<fieldset id="graphContainer">
+					<legend>그래프</legend>
+					<div id="chart"></div>
+					<div id="buttonContainer" class="buttonContainer">
+							<div id="Prev" style="visibility: hidden;"> <i class="fa-solid fa-arrow-left"></i></div>
+							<div id="Next" style="visibility: hidden;"> <i class="fa-solid fa-arrow-right"></i></div>
+					</div>
+			</fieldset>
+		</div>
+	</div>
+
+	<div id="jsonObjects">
+			<input id="jsonObject" type="hidden" value="{{data}}"></input>
+	</div>
 </body>
+
 <script src="/templates/JS/jquery-1.12.4.min.js"></script>
 <script src="/templates/JS/billboard.js"></script>
 <script src="/templates/Analyze/analyze.js"></script>
