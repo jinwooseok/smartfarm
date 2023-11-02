@@ -70,10 +70,10 @@ def fileDownloadApi(request):
 
     file_name = request.POST.get('data')
 
-    result = FileSystem(user).fileLoad(file_name)
+    result, summary = FileSystem(user).fileLoad(file_name)
 
-    context = fileDownLoadApiResponse(file_name, result['data'])
-
+    context = fileDownLoadApiResponse(file_name, result)
+    print(result)
     return JsonResponse(context)
 
 #------------------------ revise창 ------------------------
