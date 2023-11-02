@@ -4,7 +4,6 @@ import os
 from config import settings
 # Create your models here.
 def user_media_path(instance, file_root):
-    print(instance.user_id.id, file_root)
     # 파일이 저장될 경로: media/file/<user_id>/<filename>
     return 'file/{0}/{1}'.format(instance.user_id.id, file_root)
 

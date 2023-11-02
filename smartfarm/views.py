@@ -44,7 +44,7 @@ def fileListView(request):
     file_object=findFileObjectByUserId(user.id)
     
     context=fileListViewResponse(user.user_name, file_object)
-    print(context)
+
     return render(request,'fileList/fileList.html',context)
 
 #파일 업로드 함수 - data_list창
@@ -73,7 +73,7 @@ def fileDownloadApi(request):
     result, summary = FileSystem(user).fileLoad(file_name)
 
     context = fileDownLoadApiResponse(file_name, result)
-    print(result)
+
     return JsonResponse(context)
 
 #------------------------ revise창 ------------------------
@@ -156,14 +156,18 @@ def fileMergeApi(request):
             for i in range(len(data)):
                 data.iloc[i,0] = pd.read_json(data.iloc[i,0])
                 data.iloc[i,0].rename(columns={columnName[i]:"날짜"}, inplace=True)
+                if type(data.iloc[i,0]['날짜']) is not object:
+                    data.iloc[i,0]['날짜'] = data.iloc[i,0]['날짜'].astype('object')
                 dfs.append(data.iloc[i,0])
             
-
+            print(dfs)
             mergeData = dfs[0]
+        
             for i in range(1, len(dfs)):
-                mergeData = pd.merge(mergeData, dfs[i], on="날짜", suffixes=(f'_{i}', f'_{i+1}'))
+                mergeData = pd.merge(mergeData, dfs[i], on="날짜", suffixes=(f'_{i}', f'_{i+1}'), how='outer')
             print("--------------머지?종료")
             mergeData = mergeData.to_json(orient='records', force_ascii=False)
+        
             return JsonResponse({'result':'success',
                                 'data':mergeData})
         

@@ -29,7 +29,7 @@ class FileSystem:
             file_name=request.POST['fileName']
         except MultiValueDictKeyError:#파일 이름 미지정
             file_name=str(uploadedFile)
-
+        file_name = self.fileNameCheck(self.user, file_name)
         if uploadedFile != None:
             self.fileSaveForm(user_id=self.user
                         ,file_title=file_name,file_root=uploadedFile)
@@ -38,7 +38,6 @@ class FileSystem:
     def fileDelete(self, request):
         files = request.POST.get('data')
         files = json.loads(files)
-        print(files)
         for i in range(len(files)):
             file_object=File.objects.get(user_id=self.user,file_title=files[i])
             file_object.delete()
@@ -88,8 +87,11 @@ class FileSystem:
         cacheData = cacheGetter(self.user, file_name)
         if cacheData != False:
             data = pd.read_json(cacheData)
+            print("캐싱된 데이터입니다.")
+            print(data)
             summary=DataProcess(data).makeSummary()
             summary_json = summary.to_json(orient="columns",force_ascii=False)
+            print(data)
             data_json = data.to_json(orient="records",force_ascii=False)
         else:
             file_object=File.objects.get(user_id=self.user, file_title=file_name)
@@ -103,12 +105,15 @@ class FileSystem:
             else:
                 data = pd.read_excel(work_dir, sheet_name= 0)
             #---------------json생성------------------
+            print(data)
             summary=DataProcess(data).makeSummary()
             summary_json = summary.to_json(orient="columns",force_ascii=False)
             data=data.replace({np.nan: 0}) 
             dateIndex = DataProcess.dateDetecter(data)
             data = DataProcess.columnToString(data, dateIndex)
+            print(data)
             data_json=data.to_json(orient="records",force_ascii=False)#데이터프레임을 json배열형식으로변환(형식은 spreadsheet.js에 맞춰)
+            print(data_json)
             cacheSetter(self.user, file_name, data_json)
         return data_json, json.loads(summary_json)
     
@@ -192,18 +197,18 @@ class DataProcess:
         return self.data.iloc[:, self.date]
     
     def makeSummary(self):
-        df = self.data
-        nullCountData=pd.DataFrame(df.isnull().sum()).T
+        print(self.data)
+        nullCountData=pd.DataFrame(self.data.isnull().sum()).T
         nullCountData.index=["Null_count"]
         try:
-            numData = df.describe().iloc[[4,5,6,1,3,7],:]
+            numData = self.data.describe().iloc[[4,5,6,1,3,7],:]
             numData.index = ["Q1","Q2","Q3","mean","min","max"]
             summary = pd.concat([nullCountData,numData], ignore_index=False)
             summary = summary.replace({np.nan: "-"})#결측치를 처리해줌
             summary = summary.round(2)
 
         except IndexError:
-            numData = pd.DataFrame(index = ["Q1","Q2","Q3","mean","min","max"], columns = df.columns)
+            numData = pd.DataFrame(index = ["Q1","Q2","Q3","mean","min","max"], columns = data.columns)
             summary = pd.concat([nullCountData,numData], ignore_index=False)
             summary = summary.replace({np.nan: "-"})#결측치를 처리해줌
         return summary
@@ -312,7 +317,6 @@ def cacheSetter(user, file_name, data):
 def cacheGetter(user, file_name):
     cacheID = File.objects.get(user_id=user, file_title=file_name).file_id
     if cache.get(cacheID):
-        print("캐싱된 데이터입니다.")
         return cache.get(cacheID)
     else:
         return False
