@@ -7,36 +7,23 @@ def linear(d,x,y):#회귀분석을 실행. 결과표,분산분석표,상관분�
     from statsmodels.formula.api import ols 
     print(y)
     print(x)
-    # d.columns=[i.replace(' ','') for i in d.columns.values]
-    # x_re=[i.replace(' ','') for i in x]
-    # xx=d.loc[:,x_re]
-    # xx_str=""#y~x를 이용한 ols는 anova_lm도 가능하다.
-    # for i in x_re:
-    #     if i==x[-1]:
-    #         xx_str+=str(i)
-    #     else:
-    #         xx_str+=(str(i)+"+")
 
-    # model=str(y)+" ~ "+xx_str
-    # result = ols(model,data=d).fit()
-    # corr_html=xx.corr().to_html()
-    
     result = sm.OLS(d[y],d[x]).fit()
     #f_html=result.summary().to_html()
     result_dict = {}
-    for i, table in enumerate(result.summary().tables):
-        df = pd.read_html(table.as_html(),header=0)[0]
-        print(len(df))
-        for j in range(len(df)):
-            df.iloc[j,0] = str(df.iloc[j,0]).replace(":", "")
-            df.iloc[j,2] = str(df.iloc[j,2]).replace(":", "")
+    result_dict = result.summary().as_html()
+    # for i, table in enumerate(result.summary().tables):
+    #     df = pd.read_html(table.as_html(),header=0)[0]
+    #     print(len(df))
+    #     for j in range(len(df)):
+    #         df.iloc[j,0] = str(df.iloc[j,0]).replace(":", "")
+    #         df.iloc[j,2] = str(df.iloc[j,2]).replace(":", "")
                 
-            print(df.iloc[j,0],df.iloc[j,1],df.iloc[j,2],df.iloc[j,3])
-            result_dict[df.iloc[j,0]] = df.iloc[j,1]
-            result_dict[df.iloc[j,2]] = df.iloc[j,3]
-    # c_html=result.summary().tables.as_html()+"\n"+corr_html+ "\n"+f_html
-    #사후분석
-    print(result_dict)
+    #         print(df.iloc[j,0],df.iloc[j,1],df.iloc[j,2],df.iloc[j,3])
+    #         result_dict[df.iloc[j,0]] = df.iloc[j,1]
+    #         result_dict[df.iloc[j,2]] = df.iloc[j,3]
+    # #사후분석
+    # print(result_dict)
     return result_dict
 
 def ttest(request,type):#2번 단일표본 3번 독립표본 4번 대응표본

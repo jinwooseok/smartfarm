@@ -17,17 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from users.models import User
-from rest_framework import routers
-from smartfarm import views, models, serializers
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('smartfarm.urls')),
     path('users/',include('users.urls')),
-    
-    path('api-auth/',include('rest_framework.urls', namespace = "rest_framework")),
+
 ]
 
 if settings.DEBUG: 

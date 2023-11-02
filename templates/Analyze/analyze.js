@@ -75,6 +75,7 @@ $analyzeBtn.addEventListener("click", () => {
       yValue:
         $selectedValue_Y.options[$selectedValue_Y.selectedIndex].textContent, //y 값
       technique: $technique.options[$technique.selectedIndex].textContent, // 분석 종류
+      scaler: normalizationValue, // 정규화 종류
     },
     success: function (response) {
       if (response.data != null) {

@@ -6,108 +6,113 @@ from users.models import User
 import json
 import os
 from . import proc
-
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from config.settings import BASE_DIR
 from django.http import JsonResponse
 from django.http import HttpResponse
 #-----------------------DRF import-----------------------
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.decorators import api_view
-from .serializers import FileSerializer, UserSerializer
+from .response import *
+from .repositorys import findFileObjectByUserId
 #-----------------------유틸리티 import-----------------------
 from .decorators import logging_time
 from .validators import loginValidator
 from .utils import FileSystem, cacheGetter, DataProcess
-from functools import reduce
+
 ##페이지 별로 필요한 request를 컨트롤
 #---------------분석도구 import ----------------
 from . import analizer
 
-
-from django.views.decorators.csrf import csrf_exempt
 #-----------------------메인화면 호출. user정보를 사용
 
 
 def main(request):
     user = loginValidator(request)
-    if user != None:
-            context={'user_name':user.user_name}
-            return render(request,'main/main.html',context)
-    if user == None:
+    if user is None:
             return render(request,'main/main.html')
+    else:
+        context={'user_name':user.user_name}
+        return render(request,'main/main.html',context)
 
 #------------------------ management창 ------------------------
 def fileListView(request):
     user = loginValidator(request)
-    if user != None:
-            file_object=File.objects.filter(user_id=user.id) 
-            context={'user_name':user.user_name,
-                'files':file_object}
-            return render(request,'fileList/fileList.html',context)
-    elif user == None:
-            return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
+    if user is None:
+        return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
+    
+    file_object=findFileObjectByUserId(user.id)
+    
+    context=fileListViewResponse(user.user_name, file_object)
+    print(context)
+    return render(request,'fileList/fileList.html',context)
 
 #파일 업로드 함수 - data_list창
-def fileUpload(request):
-    if request.method == 'POST':
-        user = loginValidator(request)
-        FileSystem(user).fileUpload(request)
-        return redirect('/file-list/')
-    elif request.method == 'GET':
-        user = loginValidator(request)
-        FileSystem(user).fileUpload(request)
-        return render(request, 'upload/upload.html')
+def fileUploadApi(request):
+    user = loginValidator(request)
+
+    FileSystem(user).fileUpload(request)
+    
+    return redirect('/file-list/')
+
     
 #파일 삭제 함수 - data_list창
-def fileDelete(request):
+def fileDeleteApi(request):
     user = loginValidator(request)
+
     result = FileSystem(user).fileDelete(request)
-            # Redirect to a success page.
+
     return JsonResponse(result)
 
 #파일 다운로드 함수
-def fileDownloadView(request):
+def fileDownloadApi(request):
     user = loginValidator(request)
+
     file_name = request.POST.get('data')
+
     result = FileSystem(user).fileLoad(file_name)
-    context = {'file_name':file_name,
-                'data':result['data']}
+
+    context = fileDownLoadApiResponse(file_name, result['data'])
+
     return JsonResponse(context)
+
 #------------------------ revise창 ------------------------
 @logging_time
-def revise(request, file_name):
+def dataEditView(request, file_name):
     user = loginValidator(request)
-    fileNameList = File.objects.filter(user_id=user.id)
-    if user != None:
-        context = FileSystem(user).fileLoad(file_name)
-        context['files'] = fileNameList
-        return render(request, "revise/revise.html", context) #전송
-    else:
-        return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
     
-def revise2(request):
-    user = loginValidator(request)
-    if user != None:
-        context={'user_name':user.user_name}
-        return render(request, "revise/revise.html", context)
-    else:
+    if user is None:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
+    file_name_list = findFileObjectByUserId(user.id).values_list('file_title', flat=True)
+
+    data, summary = FileSystem(user).fileLoad(file_name)
+    context = dataEditViewResponse(data, summary, user.user_name, file_name_list)
+ 
+    return render(request, "revise/revise.html", context) #전송
+
+    
+def dataEditView2(request):
+    user = loginValidator(request)
+    if user is None:
+        return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
+        
+    context=dataEditView2Response(user.user_name)
+    
+    return render(request, "revise/revise.html", context)
 
 #--------------비동기 - revise창-------------
-def fileLoadView(request):
+def dataLoadApi(request):
     user = loginValidator(request)
-    if user != None:
-        print("들어왔다")
-        file_name = request.POST.get('fileName')
-        result = FileSystem(user).fileLoad(file_name)
-        context = {'file_name':file_name,
-                'data':result['data']}
-        return JsonResponse(context)
-    else:
+    if user is None:
         return JsonResponse({'result':'fail'})
 
-def usePreprocessor(request, file_name):
+    file_name = request.POST.get('fileName')
+    data, summary = FileSystem(user).fileLoad(file_name)
+    context = dataLoadApiResponse(file_name, data)
+    return JsonResponse(context)
+
+
+def preprocessorApi(request, file_name):
     user = loginValidator(request)
     new_file_name = request.POST.get('pretreatmentFileName')
     file = FileSystem(user).fileLoad(file_name)
@@ -116,17 +121,16 @@ def usePreprocessor(request, file_name):
     FileSystem(user).fileSave(result, new_file_name)
     return JsonResponse({'result':'success','data':result.to_json(orient="records",force_ascii=False)})
 #------------------------ merge창 ------------------------
-def merge(request):
+def fileMergeView(request):
     user = loginValidator(request)
     fileNameList = File.objects.filter(user_id=user.id)
     if user != None:
         context={'user_name':user.user_name,'files':fileNameList}
-        print(context)
         return render(request, "merge/merge.html", context) #전송
     else:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
 
-def mergeView(request):
+def fileMergeApi(request):
     user = loginValidator(request)
     if request.method == 'GET':
         fileNameList = File.objects.filter(user_id=user.id)
@@ -173,6 +177,27 @@ def mergeView(request):
         else:
             return JsonResponse({'result':'fail'})
 
+def scalerApi(request, file_name):
+    user = loginValidator(request)
+    if user is None:
+        return JsonResponse({'result':'fail'})
+    
+    file = FileSystem(user).fileLoad(file_name)
+    data = pd.read_json(file['data'])
+    method = request.POST.get('method')
+
+    if method == 'minmax':
+        scaler = MinMaxScaler()
+    
+    if method =='standard':
+        scaler = StandardScaler()
+        
+    scaled_data = scaler.fit_transform(data)
+    scaled_data = scaled_data.to_json(orient='records', force_ascii=False)
+    return JsonResponse({'result':'success',
+                        'data':scaled_data})
+
+
 #------------------------ analysis창 ------------------------
 def fileList2(request):
     user = loginValidator(request)
@@ -199,7 +224,7 @@ def useAnalizer(request, file_name):
             data = cacheGetter(user, file_name)
             data = pd.read_json(data)
         else:
-            file_object=File.objects.get(user_id=user, file_Title=file_name)
+            file_object=File.objects.get(user_id=user, file_title=file_name)
 
             work_dir = './media/' + str(file_object.file_root)
             if os.path.splitext(work_dir)[1] == ".csv":
@@ -209,7 +234,21 @@ def useAnalizer(request, file_name):
                     data=pd.read_csv(work_dir,encoding="utf-8")
             else:
                 data = pd.read_excel(work_dir, sheet_name= 0)
-
+        
+        scaler = request.GET.get('scaler')
+        if scaler == 'min-max':
+            scaler = MinMaxScaler()
+            numeric_columns = data.select_dtypes(include=['float64', 'int64']).columns
+            data[numeric_columns] = scaler.fit_transform(data[numeric_columns])
+            print(data)
+            
+        if scaler =='standard':
+            scaler = StandardScaler()
+            numeric_columns = data.select_dtypes(include=['float64', 'int64']).columns
+            data[numeric_columns] = scaler.fit_transform(data[numeric_columns])
+        if scaler == 'notUse':
+            pass    
+        
         if request.GET.get('technique') == "선형회귀분석":
             print("들어왔다")
             x = json.loads(request.GET.get('xValue'))
@@ -217,28 +256,10 @@ def useAnalizer(request, file_name):
             result = analizer.linear(data, x, y)
             print(x,y, result)
             return JsonResponse({'result':'success','data':result})
-        # elif request.POST.get('header') == 'ttest':
-        #     type = request.POST.get('type')
-        #     if type == '2':
-        #         x = request.POST.get('x_value')
-        #         result = proc.ttest(data, type, x)
-        #         return JsonResponse({'result':'success',
-        #                             'data':result})
-        #     elif type == '3':
-        #         x = request.POST.get('x_value')
-        #         y = request.POST.get('y_value')
-        #         result = proc.ttest(data, type, x, y)
-        #         return JsonResponse({'result':'success',
-        #                             'data':result})
-        #     elif type == '4':
-        #         x = request.POST.get('x_value')
-        #         y = request.POST.get('y_value')
-        #         result = proc.ttest(data, type, x, y)
-        #         return JsonResponse({'result':'success',
-        #                             'data':result})
-        elif request.GET.get('technique') == '선형회귀분석':
-            x = request.POST.getlist('x_value')
-            y = request.POST.get('y_value')
+
+        elif request.GET.get('technique') == '로지스틱회귀분석':
+            x = request.GET.getlist('xValue')
+            y = request.GET.get('yValue')
             result = analizer.logistic(data, x, y)
             return JsonResponse({'result':'success',
                                 'data':result})

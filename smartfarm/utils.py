@@ -33,7 +33,7 @@ class FileSystem:
         if uploadedFile != None:
             self.fileSaveForm(user_id=self.user
                         ,file_title=file_name,file_root=uploadedFile)
-        return 0
+        
     #fileDelete는 무조건 request를 통해 받아야함
     def fileDelete(self, request):
         files = request.POST.get('data')
@@ -89,6 +89,7 @@ class FileSystem:
         if cacheData != False:
             data = pd.read_json(cacheData)
             summary=DataProcess(data).makeSummary()
+            summary_json = summary.to_json(orient="columns",force_ascii=False)
             data_json = data.to_json(orient="records",force_ascii=False)
         else:
             file_object=File.objects.get(user_id=self.user, file_title=file_name)
@@ -101,22 +102,15 @@ class FileSystem:
                     data=pd.read_csv(work_dir,encoding="utf-8")
             else:
                 data = pd.read_excel(work_dir, sheet_name= 0)
-            summary=DataProcess(data).makeSummary()
             #---------------json생성------------------
+            summary=DataProcess(data).makeSummary()
+            summary_json = summary.to_json(orient="columns",force_ascii=False)
             data=data.replace({np.nan: 0}) 
             dateIndex = DataProcess.dateDetecter(data)
             data = DataProcess.columnToString(data, dateIndex)
             data_json=data.to_json(orient="records",force_ascii=False)#데이터프레임을 json배열형식으로변환(형식은 spreadsheet.js에 맞춰)
             cacheSetter(self.user, file_name, data_json)
-        
-        summary_json = summary.to_json(orient="columns",force_ascii=False)
-        context = {
-                    'user_name':self.user,
-                    'result':'success',
-                    'data' : data_json,
-                    'summarys' : json.loads(summary_json)
-                }
-        return context
+        return data_json, json.loads(summary_json)
     
     #다중 파일 로드
     def fileLoadMulti(self, file_names):
