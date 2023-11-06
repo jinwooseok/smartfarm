@@ -20,17 +20,17 @@ urlpatterns = [
     path('merge/', views.fileMergeView, name='merge'),
     path('merge-view/', views.fileMergeApi, name='mergeView'),
     #데이터수정 창
-    path('revise/<str:file_name>/', views.dataEditView, name='revise'),
-    path('revise/', views.dataEditView2, name='revise2'),
-    path('revise/<str:file_name>/preprocess/', views.preprocessorApi, name='preprocess'),
-
+    path('revise/<str:file_title>/', views.dataEditView, name='revise'),
+    path('revise/', views.dataEditWithNoFileView, name='revise2'),
+    path('revise/<str:file_title>/preprocess/', views.preprocessorApi, name='preprocess'),
+    path('revise/<str:file_title>/abms/', views.abmsApi, name='abms'),
     #farm
     path('loaddata/',views.dataLoadApi,name='loaddata'),
-    path('revise/<str:file_name>/farm/', views.farm, name='farm'),
+    path('revise/<str:file_title>/farm/', views.farm, name='farm'),
     #분석
     path('fileList_2/', views.fileList2, name='fileList2'),
-    path('analyze/<str:file_name>/', views.analyze, name='analysisView'),
-    path("analyze/<str:file_name>/stat", views.useAnalizer, name='stat'),
+    path('analyze/<str:file_title>/', views.getAnalyzeDataApi, name='getAnalyzeDataApi'),
+    path("analyze/<str:file_title>/stat", views.useAnalizer, name='stat'),
     
     #util기능
     path('download/', views.fileDownloadApi, name='download'),
