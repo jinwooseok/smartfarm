@@ -45,6 +45,7 @@ const $abmsFileName = document.querySelector('#abmsFileName');
 const $pretreatmentFileName = document.querySelector('#pretreatmentFileName');
 
 window.onload = () => {
+    console.log(excel_data)
     data = new Excel(excel_data, $spreadsheet);
     excel_arr = Object.keys(data.getData()[0]);
     for (let x of excel_arr) {
