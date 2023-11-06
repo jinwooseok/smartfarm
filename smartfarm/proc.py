@@ -13,17 +13,89 @@ warnings.filterwarnings(action='ignore')
 
 # from geopy.geocoders import Nominatim
 from .decorators import logging_time
+from .utils.DataProcess import DataProcess
+class ETL_system:
+    def __init__(self,data,file_type,date,lat_lon,DorW,var):
+        self.data = data
+        self.file_type = file_type
+        self.date = int(date) - 1
+        self.lat, self.lon=lat_lon
+        self.DorW = DorW
+        self.var = var
 
-from  .utils import DataProcess
-# def geocoding(address):
-#     geo_local = Nominatim(user_agent='South Korea')
-#     try:
-#         geo = geo_local.geocode(address)
-#         x_y = [geo.latitude, geo.longitude]
-#         return x_y
+    def ETL_stream(self):
+        if self.file_type == '환경':
+            after_d=self.Envir()
+        if self.file_type == '생육':
+            after_d=self.Growth()
+        if self.file_type == '생산량':
+            after_d=self.Crop()
+        return after_d
+    
+    #객체로 들어온 파일을 업데이트하여 저장    
 
-#     except:
-#         return [0,0]
+    #환경데이터 처리함수
+    def Envir(self):
+        lon = self.lon
+        lat = self.lat
+        df = DataProcess(self.data, self.date)
+        df.dateConverter()
+        if self.DorW=="weeks":
+        #주별데이털로 변환
+            result = making_weekly2(df.data, df.date)
+            result['날짜']=result['날짜'].astype('str')
+        elif self.DorW == 'days':
+            #시간 구별 데이터프레임 생성
+            envir_date = pd.DataFrame()
+            envir_date['날짜'] = df.getDateSeries()
+
+            start_month=envir_date['날짜'].astype(str)[0][0:7]
+            end_month=envir_date['날짜'].astype(str)[len(envir_date)-1][0:7]
+            sun = get_sun(round(float(lon)),round(float(lat)),start_month,end_month)
+            #낮밤구분
+            nd_div=ND_div(sun, envir_date)
+            #정오구분
+            after_div =afternoon_div(sun, nd_div, noon=12)
+            #일출일몰t시간전후
+            t_diff=3
+            t_div=time_div(sun,after_div, t_diff)
+            #일일데이터로 변환
+            generating_data=generating_dailydata(df.data, df.date, t_div,t_diff, self.var)
+            result=generating_data
+        else:
+            result = making_weekly2(df.data, df.date, int(self.DorW))
+            result['날짜']=result['날짜'].astype('str')
+        result['날짜']=result['날짜'].astype('str')
+        return result
+    
+    #생육데이터 처리함수
+    def Growth(self):
+        print("--------------생육입니다.-------------------------")
+        dt = DataProcess(self.data, self.date)
+        dt.dateConverter()
+        growth_object = dt.data
+        date = dt.date
+        result=making_weekly2(growth_object,date)
+        result['날짜']=result['날짜'].astype('str')
+        return result
+
+    #생산량데이터 처리함수
+    def Crop(self):
+        crop=self.data
+        date_ind=self.date
+        d_ind=1
+        result=y_split(crop,date_ind,d_ind)
+        result['날짜']=result['날짜'].astype('str')
+        return result
+    
+    #weekly함수 실행 시에 날짜의 열이름이 '날짜'로 통일되는 점을 활용, 주별데이터, 중복없는 일일데이터 가능
+    def join_data(x):
+        env,prod,yld=x[0],x[1],x[2]
+        env_prod=pd.merge(env,prod,left_on="날짜",right_on="날짜",how="outer")
+        env_prod_yld=pd.merge(env_prod,yld,left_on="날짜",right_on="날짜",how="outer")
+        return env_prod_yld
+
+
 @logging_time
 def get_sun(long, lati, st, ed):
     # 일출,일몰 크롤링 모듈
@@ -202,7 +274,6 @@ def generating_variable(data, date_ind, d_ind, kind,t_diff , div_DN=False, tbase
                 temp_name.append(k[0]+k[1]+ind)
             else:
                 temp_name.append(k + ind)
-    print(kind_ND)
     temp_df.columns = temp_name
     #temp_df에 값 입력과정
     for i in range(len(dailyDate)):
@@ -230,7 +301,6 @@ def generating_variable(data, date_ind, d_ind, kind,t_diff , div_DN=False, tbase
                 elif (kind_ND[kind_num] == '일출전후t시간'):
                     temp_df.iloc[i,kind_num] = functions_list[list(functions_list.keys())[kind_div[kind_num]]](data.iloc[thour_ind,j].tolist())
     temp_df = pd.concat([pd.DataFrame(dailyDate, columns=['날짜']),temp_df], axis=1)      
-    print("-------",temp_df)
     return temp_df
 
 @logging_time
@@ -261,7 +331,6 @@ def making_weekly2(gdata,date_ind,interval=7):
     week = []
     i=0
     weeknum=0
-    print(gdata.columns.values[date_ind])
     date=gdata["날짜"]
     lastDate=pd.to_datetime(date.iloc[-1])
     if type(date[0]) != str:
