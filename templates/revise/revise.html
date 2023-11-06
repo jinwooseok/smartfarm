@@ -3,399 +3,397 @@
 {% csrf_token %}
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>데이터 수정</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>데이터 수정</title>
 
-    <!-- css -->
-    <link rel="stylesheet" href="/templates/revise/revise.css">
-    <link rel="stylesheet" href="/templates/revise/billboard.css">
+  <!-- css -->
+  <link rel="stylesheet" href="/templates/revise/revise.css">
+  <link rel="stylesheet" href="/templates/revise/billboard.css">
 
-    <!-- spreadsheetjs -->
-    <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
-    <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
-    <script src="https://jsuites.net/v4/jsuites.js"></script>
-    <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+  <!-- spreadsheetjs -->
+  <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
+  <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
+  <script src="https://jsuites.net/v4/jsuites.js"></script>
+  <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
 
-    <!-- billboard.ks -->
-    <script src="https://d3js.org/d3.v6.min.js"></script>
+  <!-- billboard.ks -->
+  <script src="https://d3js.org/d3.v6.min.js"></script>
 
-    <!-- fontawesome-->
-    <script src="https://kit.fontawesome.com/4c4b76e7c2.js" crossorigin="anonymous"></script>
-
+  <!-- fontawesome-->
+  <script src="https://kit.fontawesome.com/4c4b76e7c2.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
 
-    <ul class="nav">
-        <li class="nav-item"><a href="/" class="title">전남대학교 </br>융합 빅데이터 연구실</a></li>
-        <li class="nav-item"><a href="/file-list">데이터 수정</a></li>
-        <li class="nav-item"><a href="/merge/">파일 병합</a></li>
-        <li class="nav-item"><a href="/fileList_2">데이터 분석</a></li>
-        {% if user_name != anonymous %}
-        <li class="nav-item"><a href="/users/logout/" class='logout'>로그아웃</a></li>
-        {% else %}
-        <li class="nav-item"><a href="/users/login/" class='login'>로그인</a></li>
-        {% endif %}
-    </ul>
+  <ul class="nav">
+    <li class="nav-item"><a href="/" class="title">전남대학교</br>융합 빅데이터 연구실</a></li>
+    <li class="nav-item"><a href="/file-list">데이터 수정</a></li>
+    <li class="nav-item"><a href="/merge/">파일 병합</a></li>
+    <li class="nav-item"><a href="/fileList_2">데이터 분석</a></li>
+    {% if user_name != anonymous %}
+    <li class="nav-item"><a href="/users/logout/" class='logout'>로그아웃</a></li>
+    {% else %}
+    <li class="nav-item"><a href="/users/login/" class='login'>로그인</a></li>
+    {% endif %}
+  </ul>
 
-    <div class="exp-box">
-        <select name="manage_list_menu" id="manage_list_menu" class="manage_list_menu">
+  <div class="exp-box">
+    <select name="manage_list_menu" id="manage_list_menu" class="manage_list_menu">
 
-        </select>
+    </select>
+  </div>
+
+  <div class="excel">
+    <div id="spreadsheet" class="spreadsheet">
     </div>
+  </div>
 
-    <div class="excel">
-        <div id="spreadsheet" class="spreadsheet">
+<form method="post" id="form" onsubmit="return false;">
+  {% csrf_token %}
+
+  <!-- 데이터 처리 탭 -->
+  <ul class="tabs">
+    <li class="tab">
+        <input type="radio" id="tab-1" name="tab-group-1" checked>
+        <label for="tab-1">사용 방법</label>
+
+        <div class="content">
+            <div class="caution">
+                <h3>* &nbsp; 탭을 통한 수정은 각각 이루어져야 합니다. &nbsp; *</h3>
+                <p>전처리를 한 후 반드시 저장을 하고 다음 과정을 진행해야 합니다.</p>
+            </div>
+            <div class="explain">
+                <div class="process_ex">
+                    <h4>결측치 & 이상치 수정</h4>
+                    <br>
+                    <p>결측치 : 엑셀의 빈 값(NULL)을 평균값, 최빈값과 같은 값들로 처리합니다.</p>
+                    <p>엑셀에서 비어있는 칸을 처리할 방법을 고르고 저장버튼을 클릭합니다.</p>
+                    <br>
+                    <p>이상치 : 데이터 분포에서 많이 벗어난 값들을 제거합니다.</p>
+                    <p>변수를 선택하여 사용할 데이터의 범위를 지정해주고 저장버튼을 클릭합니다.</p>
+                </div>
+                <div class="process_ex">
+                    <h4>데이터 값 수정</h4>
+                    <br>
+                    <p>1. 일간, 주간을 선택합니다. (4, 5일 단위의 데이터는 기타를 통해 입력합니다.)</p>
+                    <p>2. 원하는 열의 이름(변수명)을 선택한 후, -> 버튼을 클릭하여 넘겨줍니다.</p>
+                    <p>3. 저장버튼을 클릭합니다.</p>
+                </div>
+            </div>
         </div>
+    </li>
+    <!-- 결측치 이상치  -->
+    <li class="tab">
+      <input type="radio" id="tab-2" name="tab-group-1">
+      <label for="tab-2">결측치 & 이상치</label>
+
+      <!-- /* 엑셀 전처리 방법 */ -->
+      <div class="content">
+        <div class="x-container">
+            <div style="display: flex; justify-content: flex-start;">
+                x값
+                <select name="" id="x_label" class="x_label">
+                    <option value="null">값을 선택하세요</option>
+                </select>
+            </div>
+            <div style="display: flex; justify-content: flex-end;">
+                <input type="text" name="pretreatmentFileName" class="pretreatmentFileName" id="pretreatmentFileName">
+                <button class="pretreatmentSave" id="pretreatmentSave">저장하기</button>
+            </div>
+        </div>
+        <div class="list-container" id="list-container">
+          <div class="list">
+              <div class="col_name" id="col_name">
+                  열 이름
+              </div>
+              <div class="Null_count" id="Null_count">
+                  빈 값
+              </div>
+              <div class="Q1" id="Q1">
+                  1사분위 값
+              </div>
+              <div class="Q2" id="Q2">
+                  중앙값
+              </div>
+              <div class="Q3" id="Q3">
+                  3사분위값
+              </div>
+              <div class="mean" id="mean">
+                  평균
+              </div>
+              <div class="min" id="min">
+                  최소
+              </div>
+              <div class="max" id="max">
+                  최대
+              </div>
+          </div>
+          {% for key, values in summarys.items %}
+          <div class="list">
+              <div class="col_name">
+                  <a href="#" class="draw_col" id="draw_col"
+                      onclick="lineDraw(this.textContent)">{{key}}</a>
+              </div>
+              <div class="Null_count">
+                  {{values.Null_count}}
+              </div>
+              <div class="Q1">
+                  {{values.Q1}}
+              </div>
+              <div class="Q2">
+                  {{values.Q2}}
+              </div>
+              <div class="Q3">
+                  {{values.Q3}}
+              </div>
+              <div class="mean">
+                  {{values.mean}}
+              </div>
+              <div class="min">
+                  {{values.min}}
+              </div>
+              <div class="max">
+                  {{values.max}}
+              </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </li>
+
+    <!-- tap3  -->
+    <li class="tab">
+      <input type="radio" id="tab-3" name="tab-group-1">
+      <label for="tab-3">데이터 수정</label>
+      <div class="flex content">
+
+        <!-- 엑셀 기준 열 지정 및 주기 선택 -->
+        <div class="date-container">
+          <div class="columnDate-container">
+            <span>날짜 열</span>
+            <input type="text" name="columnDate" id="columnDate" class="columnDate" value="1">
+          </div>
+
+          <div class="peri-container">
+            <span>주기선택</span>
+            <select name="periods" id="periods" class="periods" name="periods">
+              <option value="days">일간</option>
+              <option value="weeks">주간</option>
+              <option value="else">기타</option>
+            </select>
+            <input type="text" id="else_peri" class="else_peri" disabled>
+          </div>
+
+            <div class="type-select" id="type-select">
+              <input type="radio" name="type" id="환경" value="환경" checked><label for="환경">환경</label>
+              <input type="radio" name="type" id="생육" value="생육"><label for="생육">생육</label>
+              <input type="radio" name="type" id="생산량" value="생산량"><label for="생산량">생산량</label>
+            </div>
+        </div>
+
+        <div class="variables-container">
+          <input type="radio" name="level" class="easy" id="easy" checked><label for="easy">쉬움</label>
+          <div class="box easyVersion">
+            <select name="excel_var" id="excel_var" class="excel_var" multiple size="5">
+            </select>
+            <select name="default_select" id="default_select" class="default_select" multiple size="5">
+              <option value="temperature">온도</option>
+              <option value="humidity">습도</option>
+              <option value="co2">CO2</option>
+              <option value="insolation">일사량</option>
+              <option value="precipitation">강수량</option>
+            </select>
+            <button class="option_delete" id="option_delete">&lt= </button>
+            <select name="final_var" id="final_var" class="final_var" multiple size="5">
+            </select>
+          </div>
+
+        <input type="radio" name="level" class="hard" id="hard"><label for="hard">어려움</label>
+          <div class="box hardVersion">
+            <select name="ex_var" id="ex_var" class="ex_var" multiple size="5">
+              <option value="temperature">온도</option>
+              <option value="humidity">습도</option>
+              <option value="co2">CO2</option>
+              <option value="insolation">일사량</option>
+              <option value="precipitation">강수량</option>
+            </select>
+            <select name="ex_var1" id="ex_var1" class="ex_var1" multiple size="5">
+                <!-- js를 통해 입력 -->
+            </select>
+            <select name="ex_var2" id="ex_var2" class="ex_var2" multiple size="5">
+              <option value="전체">전체</option>
+              <option value="주간_">주간</option>
+              <option value="야간_">야간</option>
+              <option value="일출부터정오_">일출부터정오</option>
+              <option value="일출전후t시간_">일출전후t시간</option>
+            </select>
+            <select name="ex_var3" id="ex_var3" class="ex_var3" multiple size="5">
+              <option value="평균_">평균</option>
+              <option value="최소_">최소</option>
+              <option value="최대_">최대</option>
+              <option value="누적_">누적</option>
+              <option value="DIF_">DIF</option>
+              <option value="GDD_">GDD</option>
+            </select>
+            <button class="option_delete" id="option_delete">&lt= </button>
+            <button class="option_move" id="option_move"> =&gt </button>
+            <select name="final_var" id="final_var" class="final_var" multiple size="5">
+            </select>
+          </div>
+        </div>
+
+        <!-- 파일 저장 -->
+        <div class="fileSave-container">
+          <span>저장할 파일 이름</span>
+          <input type="text" name="fileName" id="fileName" class="fileName"
+            placeholder="저장할 파일의 이름을 입력하세요">
+          <div class="inline-block">
+            <button id="submit_data">저장</button>
+            <button id="reset_data">초기화</button>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <!-- tap4  -->
+    <li class="tab">
+        <input type="radio" id="tab-4" name="tab-group-1">
+        <label for="tab-4">ABMS</label>
+
+        <div class="abms content">
+            <div class="abms_select" id="abms_select">
+                <select name="abms_var" id="abms_var" class="abms_var">
+                    <option value="완숙토마토">완숙토마토</option>
+                    <option value="방울토마토">방울토마토</option>
+                    <option value="딸기">딸기</option>
+                </select>
+                <span>파일 이름</span>
+                <input type="text" name="abmsFileName" id="abmsFileName" class="abmsFileName">
+                <button id="abms_save" class="abms_save">저장하기</button>
+            </div>
+
+            <div class="abms_text" id="abms_text">
+                <div id="columnBox" class="columnBox">
+                    농가명<select name="농가명" id="FRMHS_NM">
+                        <option value="null"></option>
+                    </select>
+                </div>
+                <div id="columnBox" class="columnBox">
+                    조사일자<select name="조사일자" id="EXAMIN_DATETM">
+                        <option value="null"></option>
+                    </select>
+                </div>
+                <div id="columnBox" class="columnBox">
+                    개체번호<select name="개체번호" id="PPLT_NO">
+                        <option value="null"></option>
+                    </select>
+                </div>
+                <div id="columnBox" class="columnBox">
+                    줄기번호<select name="줄기번호" id="STEM_NO">
+                        <option value="null"></option>
+                    </select>
+                </div>
+                <div id="columnBox" class="columnBox">
+                    초장<select name="초장" id="PLLN">
+                        <option value="null"></option>
+                    </select>
+                </div>
+                <div id="columnBox" class="columnBox">
+                    생장길이<select name="생장길이" id="GRWT_LT">
+                        <option value="null"></option>
+                    </select>
+                </div>
+                <div id="columnBox" class="columnBox">
+                    엽수<select name="엽수" id="FLG_YLD">
+                        <option value="null"></option>
+                    </select>
+                </div>
+                <div id="columnBox" class="columnBox">
+                    엽장<select name="엽장" id="LFLN">
+                        <option value="null"></option>
+                    </select>
+                </div>
+                <div id="columnBox" class="columnBox">
+                    엽폭<select name="엽폭" id="FLG_BT">
+                        <option value="null"></option>
+                    </select>
+                </div>
+                <div id="columnBox" class="columnBox">
+                    줄기굵기<select name="줄기굵기" id="STEM_DMT">
+                        <option value="null"></option>
+                    </select>
+                </div>
+                <div id="columnBox" class="columnBox">
+                    화방높이<select name="화방높이" id="FCLU_HG">
+                        <option value="null"></option>
+                    </select>
+                </div>
+                <div id="columnBox" class="columnBox">
+                    화방번호<select name="화방번호" id="FCLU_NO">
+                        <option value="null"></option>
+                    </select>
+                </div>
+                <div id="columnBox" class="columnBox">
+                    화방별총개수<select name="화방별총개수" id="TOTAL_PER_FCLU">
+                        <option value="null"></option>
+                    </select>
+                </div>
+                <div id="columnBox" class="columnBox">
+                    화방별꽃수<select name="화방별꽃수" id="FCLU_FLWR_CO">
+                        <option value="null"></option>
+                    </select>
+                </div>
+                <div id="columnBox" class="columnBox">
+                    화방별꽃봉오리수<select name="화방별꽃봉오리수" id="FCLU_BLM_CO">
+                        <option value="null"></option>
+                    </select>
+                </div>
+                <div id="columnBox" class="columnBox">
+                    화방별개화수<select name="화방별개화수" id="FCLU_FLAN_CO">
+                        <option value="null"></option>
+                    </select>
+                </div>
+                <div id="columnBox" class="columnBox">
+                    화방별착과수<select name="화방별착과수" id="FCLU_FRTST_CO">
+                        <option value="null"></option>
+                    </select>
+                </div>
+                <div id="columnBox" class="columnBox">
+                    화방별적과수<select name="화방별적과수" id="FCLU_FRTTHIN_CO">
+                        <option value="null"></option>
+                    </select>
+                </div>
+                <div id="columnBox" class="columnBox">
+                    화방별수확수<select name="화방별수확수" id="FCLU_HVST_CO">
+                        <option value="null"></option>
+                    </select>
+                </div>
+                <div id="columnBox" class="columnBox">
+                    비고<select name="비고" id="RM">
+                        <option value="null"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </li>
+  </ul>
+
+  <!-- 그래프 -->
+  <div class="graphContainer", id="graphContainer">
+    <div id="myChart">
     </div>
+    <div id="buttonContainer" class="buttonContainer">
+      <div id="Prev" style="visibility: hidden;"> <i class="fa-solid fa-arrow-left"></i></div>
+      <div id="Next"> <i class="fa-solid fa-arrow-right"></i></div>
+    </div>
+    <button class="close" id="close">닫기</button>
+  </div>
 
-    <form method="post" id="form" onsubmit="return false;">
-        {% csrf_token %}
-
-        <!-- 데이터 처리 탭 -->
-        <ul class="tabs">
-            <li class="tab">
-                <input type="radio" id="tab-1" name="tab-group-1" checked>
-                <label for="tab-1">사용 방법</label>
-
-                <div class="content">
-                    <div class="caution">
-                        <h3>* &nbsp; 탭을 통한 수정은 각각 이루어져야 합니다. &nbsp; *</h3>
-                        <p>전처리를 한 후 반드시 저장을 하고 다음 과정을 진행해야 합니다.</p>
-                    </div>
-                    <div class="explain">
-                        <div class="process_ex">
-                            <h4>결측치 & 이상치 수정</h4>
-                            <br>
-                            <p>결측치 : 엑셀의 빈 값(NULL)을 평균값, 최빈값과 같은 값들로 처리합니다.</p>
-                            <p>엑셀에서 비어있는 칸을 처리할 방법을 고르고 저장버튼을 클릭합니다.</p>
-                            <br>
-                            <p>이상치 : 데이터 분포에서 많이 벗어난 값들을 제거합니다.</p>
-                            <p>변수를 선택하여 사용할 데이터의 범위를 지정해주고 저장버튼을 클릭합니다.</p>
-                        </div>
-                        <div class="process_ex">
-                            <h4>데이터 값 수정</h4>
-                            <br>
-                            <p>1. 일간, 주간을 선택합니다. (4, 5일 단위의 데이터는 기타를 통해 입력합니다.)</p>
-                            <p>2. 원하는 열의 이름(변수명)을 선택한 후, -> 버튼을 클릭하여 넘겨줍니다.</p>
-                            <p>3. 저장버튼을 클릭합니다.</p>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <!-- 결측치 이상치  -->
-            <li class="tab">
-                <input type="radio" id="tab-2" name="tab-group-1">
-                <label for="tab-2">결측치 & 이상치</label>
-
-                <!-- /* 엑셀 전처리 방법 */ -->
-                <div class="content">
-                    <div class="x-container">
-                        <div style="display: flex; justify-content: flex-start;">
-                            x값
-                            <select name="" id="x_label" class="x_label">
-                                <option value="null">값을 선택하세요</option>
-                            </select>
-                        </div>
-                        <div style="display: flex; justify-content: flex-end;">
-                            <input type="text" name="pretreatmentFileName" class="pretreatmentFileName" id="pretreatmentFileName">
-                            <button class="pretreatmentSave" id="pretreatmentSave">저장하기</button>
-                        </div>
-                    </div>
-                    <div class="list-container" id="list-container">
-                        <div class="list">
-                            <div class="col_name" id="col_name">
-                                열 이름
-                            </div>
-                            <div class="Null_count" id="Null_count">
-                                빈 값
-                            </div>
-                            <div class="Q1" id="Q1">
-                                1사분위 값
-                            </div>
-                            <div class="Q2" id="Q2">
-                                중앙값
-                            </div>
-                            <div class="Q3" id="Q3">
-                                3사분위값
-                            </div>
-                            <div class="mean" id="mean">
-                                평균
-                            </div>
-                            <div class="min" id="min">
-                                최소
-                            </div>
-                            <div class="max" id="max">
-                                최대
-                            </div>
-                        </div>
-                        {% for key, values in summarys.items %}
-                        <div class="list">
-                            <div class="col_name">
-                                <a href="#" class="draw_col" id="draw_col"
-                                    onclick="lineDraw(this.textContent)">{{key}}</a>
-                            </div>
-                            <div class="Null_count">
-                                {{values.Null_count}}
-                            </div>
-                            <div class="Q1">
-                                {{values.Q1}}
-                            </div>
-                            <div class="Q2">
-                                {{values.Q2}}
-                            </div>
-                            <div class="Q3">
-                                {{values.Q3}}
-                            </div>
-                            <div class="mean">
-                                {{values.mean}}
-                            </div>
-                            <div class="min">
-                                {{values.min}}
-                            </div>
-                            <div class="max">
-                                {{values.max}}
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </li>
-
-            <!-- tap3  -->
-            <li class="tab">
-
-                <input type="radio" id="tab-3" name="tab-group-1">
-                <label for="tab-3">데이터 수정</label>
-                <div class="flex content">
-
-                    <!-- 엑셀 기준 열 지정 및 주기 선택 -->
-                    <div class="date-container">
-                        <div class="columnDate-container">
-                            <span>날짜 열</span>
-                            <input type="text" name="columnDate" id="columnDate" class="columnDate" value="1">
-                        </div>
-
-                        <div class="peri-container">
-                            <span>주기선택</span>
-                            <select name="periods" id="periods" class="periods" name="periods">
-                                <option value="days">일간</option>
-                                <option value="weeks">주간</option>
-                                <option value="else">기타</option>
-                            </select>
-                            <input type="text" id="else_peri" class="else_peri" disabled>
-                        </div>
-
-                        <div class="type-select" id="type-select">
-                            <input type="radio" name="type" id="환경" value="환경" checked><label for="환경">환경</label>
-                            <input type="radio" name="type" id="생육" value="생육"><label for="생육">생육</label>
-                            <input type="radio" name="type" id="생산량" value="생산량"><label for="생산량">생산량</label>
-                        </div>
-                    </div>
-
-                    <div class="variables-container">
-                        <input type="radio" name="level" class="easy" id="easy" checked><label for="easy">쉬움</label>
-                        <div class="box easyVersion">
-                            <select name="excel_var" id="excel_var" class="excel_var" multiple size="5">
-                            </select>
-                            <select name="default_select" id="default_select" class="default_select" multiple size="5">
-                                <option value="temperature">온도</option>
-                                <option value="humidity">습도</option>
-                                <option value="co2">CO2</option>
-                                <option value="insolation">일사량</option>
-                                <option value="precipitation">강수량</option>
-                            </select>
-                            <button class="option_delete" id="option_delete">&lt= </button>
-                            <select name="final_var" id="final_var" class="final_var" multiple size="5">
-                            </select>
-                        </div>
-
-                        <input type="radio" name="level" class="hard" id="hard"><label for="hard">어려움</label>
-                        <div class="box hardVersion">
-                            <select name="ex_var" id="ex_var" class="ex_var" multiple size="5">
-                                <option value="temperature">온도</option>
-                                <option value="humidity">습도</option>
-                                <option value="co2">CO2</option>
-                                <option value="insolation">일사량</option>
-                                <option value="precipitation">강수량</option>
-                            </select>
-                            <select name="ex_var1" id="ex_var1" class="ex_var1" multiple size="5">
-                                <!-- js를 통해 입력 -->
-                            </select>
-                            <select name="ex_var2" id="ex_var2" class="ex_var2" multiple size="5">
-                                <option value="전체">전체</option>
-                                <option value="주간_">주간</option>
-                                <option value="야간_">야간</option>
-                                <option value="일출부터정오_">일출부터정오</option>
-                                <option value="일출전후t시간_">일출전후t시간</option>
-                            </select>
-                            <select name="ex_var3" id="ex_var3" class="ex_var3" multiple size="5">
-                                <option value="평균_">평균</option>
-                                <option value="최소_">최소</option>
-                                <option value="최대_">최대</option>
-                                <option value="누적_">누적</option>
-                                <option value="DIF_">DIF</option>
-                                <option value="GDD_">GDD</option>
-                            </select>
-                            <button class="option_delete" id="option_delete">&lt= </button>
-                            <button class="option_move" id="option_move"> =&gt </button>
-                            <select name="final_var" id="final_var" class="final_var" multiple size="5">
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- 파일 저장 -->
-                    <div class="fileSave-container">
-                        <span>저장할 파일 이름</span>
-                        <input type="text" name="fileName" id="fileName" class="fileName"
-                            placeholder="저장할 파일의 이름을 입력하세요">
-                        <div class="inline-block">
-                            <button id="submit_data">저장</button>
-                            <button id="reset_data">초기화</button>
-                        </div>
-                    </div>
-                </div>
-            </li>
-
-            <!-- tap4  -->
-            <li class="tab">
-                <input type="radio" id="tab-4" name="tab-group-1">
-                <label for="tab-4">ABMS</label>
-
-                <div class="abms content">
-                    <div class="abms_select" id="abms_select">
-                        <select name="abms_var" id="abms_var" class="abms_var">
-                            <option value="완숙토마토">완숙토마토</option>
-                            <option value="방울토마토">방울토마토</option>
-                            <option value="딸기">딸기</option>
-                        </select>
-                        <span>파일 이름</span>
-                        <input type="text" name="abmsFileName" id="abmsFileName" class="abmsFileName">
-                        <button id="abms_save" class="abms_save">저장하기</button>
-                    </div>
-
-                    <div class="abms_text" id="abms_text">
-                        <div id="columnBox" class="columnBox">
-                            농가명<select name="농가명" id="FRMHS_NM">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                        <div id="columnBox" class="columnBox">
-                            조사일자<select name="조사일자" id="EXAMIN_DATETM">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                        <div id="columnBox" class="columnBox">
-                            개체번호<select name="개체번호" id="PPLT_NO">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                        <div id="columnBox" class="columnBox">
-                            줄기번호<select name="줄기번호" id="STEM_NO">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                        <div id="columnBox" class="columnBox">
-                            초장<select name="초장" id="PLLN">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                        <div id="columnBox" class="columnBox">
-                            생장길이<select name="생장길이" id="GRWT_LT">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                        <div id="columnBox" class="columnBox">
-                            엽수<select name="엽수" id="FLG_YLD">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                        <div id="columnBox" class="columnBox">
-                            엽장<select name="엽장" id="LFLN">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                        <div id="columnBox" class="columnBox">
-                            엽폭<select name="엽폭" id="FLG_BT">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                        <div id="columnBox" class="columnBox">
-                            줄기굵기<select name="줄기굵기" id="STEM_DMT">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                        <div id="columnBox" class="columnBox">
-                            화방높이<select name="화방높이" id="FCLU_HG">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                        <div id="columnBox" class="columnBox">
-                            화방번호<select name="화방번호" id="FCLU_NO">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                        <div id="columnBox" class="columnBox">
-                            화방별총개수<select name="화방별총개수" id="TOTAL_PER_FCLU">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                        <div id="columnBox" class="columnBox">
-                            화방별꽃수<select name="화방별꽃수" id="FCLU_FLWR_CO">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                        <div id="columnBox" class="columnBox">
-                            화방별꽃봉오리수<select name="화방별꽃봉오리수" id="FCLU_BLM_CO">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                        <div id="columnBox" class="columnBox">
-                            화방별개화수<select name="화방별개화수" id="FCLU_FLAN_CO">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                        <div id="columnBox" class="columnBox">
-                            화방별착과수<select name="화방별착과수" id="FCLU_FRTST_CO">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                        <div id="columnBox" class="columnBox">
-                            화방별적과수<select name="화방별적과수" id="FCLU_FRTTHIN_CO">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                        <div id="columnBox" class="columnBox">
-                            화방별수확수<select name="화방별수확수" id="FCLU_HVST_CO">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                        <div id="columnBox" class="columnBox">
-                            비고<select name="비고" id="RM">
-                                <option value="null"></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-
-        <!-- 그래프 -->
-        <div class="graphContainer", id="graphContainer">
-            <div id="myChart">
-            </div>
-            <div id="buttonContainer" class="buttonContainer">
-                <div id="Prev" style="visibility: hidden;"> <i class="fa-solid fa-arrow-left"></i></div>
-                <div id="Next"> <i class="fa-solid fa-arrow-right"></i></div>
-            </div>
-            <button class="close" id="close">닫기</button>
-        </div>
-
-        <div id="jsonObjects">
-            <input id="jsonObject" type="hidden" value="{{data}}"></input>
-        </div>
+  <div id="jsonObjects">
+    <input id="jsonObject" type="hidden" value="{{data}}"></input>
+  </div>
 
 </body>
 
@@ -405,6 +403,8 @@
 <script src="/templates/revise/draw.js"></script>
 <script src="/templates/revise/abms.js"></script>
 <script src="/templates/JS/billboard.js"></script>
+<script src="/templates/revise/pretreatment.js"></script>
+
 
 
 </html>

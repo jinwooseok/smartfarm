@@ -1,16 +1,16 @@
 const $abms_var = document.querySelector('#abms_var');
 const $abms_text = document.querySelector('#abms_text');
 const $abms_save = document.querySelector('#abms_save');
-let abmsData = []; // abms 데이터
+const $abmsFileName = document.querySelector('#abmsFileName');
 
-let excel_data = JSON.parse(document.getElementById('jsonObject').value);
-let excel_col= Object.keys(excel_data[0]);
+const excel_data = JSON.parse(document.getElementById('jsonObject').value);
+const excel_col= Object.keys(excel_data[0]);
 
 const csrftoken = $('[name=csrfmiddlewaretoken]').val();
 
 // 종류 선택
 $abms_var.addEventListener('click', (event) => {
-    let text = $abms_var.options[$abms_var.selectedIndex].value;
+    const text = $abms_var.options[$abms_var.selectedIndex].value;
 
     if (text.includes('토마토')) {
         $abms_text.innerHTML = `
@@ -229,16 +229,14 @@ function setSelectedValue() {
 setSelectedValue();
 let inputValue = []; // 우리가 불러올 열 이름들
 let abmsColumn = []; // abms 열 이름
-// data[abmsColumn] = [inputValue]가 되어야함
 
 
 // abms 데이터 만들기
 $abms_save.addEventListener('click', () =>{
-    abmsData=[];
-    let $columnBox = document.querySelectorAll('#columnBox');
+    const abmsData=[];
+    const $columnBox = document.querySelectorAll('#columnBox');
     const $columnBox_select = document.querySelectorAll('#columnBox > select');
     for (let i = 0; i < $columnBox.length; i++) {
-        // console.log($columnBox[i].childNodes[1].id)
         // abmsColumn.push($columnBox[i].childNodes[0].data.trim()); 한글
         abmsColumn.push($columnBox[i].childNodes[1].id); // 영문
         inputValue.push($columnBox_select[i].value);
@@ -251,15 +249,16 @@ $abms_save.addEventListener('click', () =>{
         abmsData.push(x);
     }
 
+    console.log(JSON.stringify(abmsData));
+    console.log($abmsFileName.value);
+
     $.ajax({
-        url: '/mergeView/',
+        url: `revise/${JSON.parse(localStorage.getItem("title_list"))}/abms/`,
         type:'post',
         dataType: 'json',
         headers: { 'X-CSRFToken': csrftoken },
         data:{
-            header:"save",
-            data: JSON.stringify(abmsData),
-            file_name : document.querySelector('#abmsFileName').value,
+            newFileName : $abmsFileName.value,
         },
         success:function(response){
             alert("완료되었습니다.");

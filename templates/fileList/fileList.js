@@ -159,19 +159,18 @@ const download = function(data, title){
         for(let j in jsonDataParsing[i]){
             row += ""+jsonDataParsing[i][j] + ","; // 열 제외 입력
         }
-        row.slice(0, row.length - 1);
+        row = row.slice(0, -1);
+        console.log(row)
         toCsv += row + '\r\n';
     }
-
+    
     if(toCsv===''){
         alert("Invalid data");
         return;
     }
 
-    let fileName = title; // 다운로드 파일 이름
-
-    //Initialize file format you want csv or xls
-    let uri = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURI(toCsv);
+    const fileName = title; // 다운로드 파일 이름
+    const uri = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURI(toCsv);
 
     let link = document.createElement("a");    
     link.href = uri;
