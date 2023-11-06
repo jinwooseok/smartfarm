@@ -14,12 +14,14 @@ from django.http import HttpResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .response import *
-from .repositorys import findFileObjectByUserId
+from .repositorys import *
 #-----------------------유틸리티 import-----------------------
 from .decorators import logging_time
 from .validators import loginValidator
-from .utils import FileSystem, cacheGetter, DataProcess
-
+from .utils.FileSystem import FileSystem
+from .utils.DataProcess import DataProcess
+from .utils.JsonProcess import JsonProcess
+from .proc import ETL_system
 ##페이지 별로 필요한 request를 컨트롤
 #---------------분석도구 import ----------------
 from . import analizer
@@ -41,7 +43,7 @@ def fileListView(request):
     if user is None:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
     
-    file_object=findFileObjectByUserId(user.id)
+    file_object=findFileObjectListByUserId(user.id)
     
     context=fileListViewResponse(user.user_name, file_object)
 
@@ -50,8 +52,10 @@ def fileListView(request):
 #파일 업로드 함수 - data_list창
 def fileUploadApi(request):
     user = loginValidator(request)
-
-    FileSystem(user).fileUpload(request)
+    file_title = request.POST.get('file_title')
+    file = request.FILES["fileUpload_Input"]
+    #업로드 실행
+    FileSystem(user=user,file_title=file_title,multi_part_file=file).fileUpload()
     
     return redirect('/file-list/')
 
@@ -59,44 +63,47 @@ def fileUploadApi(request):
 #파일 삭제 함수 - data_list창
 def fileDeleteApi(request):
     user = loginValidator(request)
-
-    result = FileSystem(user).fileDelete(request)
-
-    return JsonResponse(result)
+    file_titles = request.POST.get('data')
+    print(json.loads(file_titles))
+    for file_title in json.loads(file_titles):
+        FileSystem(user=user,file_title=file_title).fileDelete()
+    #response
+    context = successResponse()
+    return JsonResponse(context)
 
 #파일 다운로드 함수
 def fileDownloadApi(request):
     user = loginValidator(request)
 
-    file_name = request.POST.get('data')
+    file_title = request.POST.get('data')
+    #파일의 데이터
+    result = FileSystem(user=user,file_title=file_title).fileLoad()
 
-    result, summary = FileSystem(user).fileLoad(file_name)
-
-    context = fileDownLoadApiResponse(file_name, result)
+    context = fileDownLoadApiResponse(file_title, result)
 
     return JsonResponse(context)
 
 #------------------------ revise창 ------------------------
 @logging_time
-def dataEditView(request, file_name):
+def dataEditView(request, file_title):
     user = loginValidator(request)
-    
     if user is None:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
-    file_name_list = findFileObjectByUserId(user.id).values_list('file_title', flat=True)
-
-    data, summary = FileSystem(user).fileLoad(file_name)
-    context = dataEditViewResponse(data, summary, user.user_name, file_name_list)
- 
+    
+    file_title_list = findFileObjectListByUserId(user.id).values_list('file_title', flat=True)
+    data = FileSystem(user=user, file_title=file_title).fileLoad()
+    summary = DataProcess(data).makeSummary()
+    #response dto
+    context = dataEditViewResponse(data, summary, user.user_name, file_title_list)
     return render(request, "revise/revise.html", context) #전송
 
     
-def dataEditView2(request):
+def dataEditWithNoFileView(request):
     user = loginValidator(request)
     if user is None:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
         
-    context=dataEditView2Response(user.user_name)
+    context=dataEditWithNoFileViewResponse(user.user_name)
     
     return render(request, "revise/revise.html", context)
 
@@ -104,28 +111,43 @@ def dataEditView2(request):
 def dataLoadApi(request):
     user = loginValidator(request)
     if user is None:
-        return JsonResponse({'result':'fail'})
+        return JsonResponse(failResponse)
 
-    file_name = request.POST.get('fileName')
-    data, summary = FileSystem(user).fileLoad(file_name)
-    context = dataLoadApiResponse(file_name, data)
+    file_title = request.POST.get('fileName')
+    data = FileSystem(user=user, file_title=file_title).fileLoad()
+    summary = DataProcess(data).makeSummary()
+    #response dto
+    context = dataLoadApiResponse(data, summary, user.user_name)
     return JsonResponse(context)
 
 
-def preprocessorApi(request, file_name):
+def preprocessorApi(request, file_title):
     user = loginValidator(request)
-    new_file_name = request.POST.get('pretreatmentFileName')
-    file = FileSystem(user).fileLoad(file_name)
-    data = pd.read_json(file['data'])
+    new_file_title = request.POST.get('pretreatmentFileName')
+    data = FileSystem(user=user,file_title=file_title).fileLoad()
+
     result = DataProcess(data).outLierDropper()
-    FileSystem(user).fileSave(result, new_file_name)
-    return JsonResponse({'result':'success','data':result.to_json(orient="records",force_ascii=False)})
+    
+    FileSystem(user,file_title=new_file_title,data=result).fileSave()
+
+    context = successDataResponse(result)
+
+    return JsonResponse(context)
+
+def abmsApi(request, file_title):
+    user = loginValidator(request)
+    new_file_title = request.POST.get('new_file_title')
+    data = FileSystem(user=user,file_title=file_title).fileLoad()
+    
+    FileSystem(user,file_title=new_file_title,data=data).fileSave()
+
+    return JsonResponse(successResponse)
 #------------------------ merge창 ------------------------
 def fileMergeView(request):
     user = loginValidator(request)
-    fileNameList = File.objects.filter(user_id=user.id)
+    file_list = FileSystem(user=user).getFileObjectList()
     if user != None:
-        context={'user_name':user.user_name,'files':fileNameList}
+        context=fileMergeViewResponse(user.user_name, file_list)
         return render(request, "merge/merge.html", context) #전송
     else:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
@@ -133,18 +155,19 @@ def fileMergeView(request):
 def fileMergeApi(request):
     user = loginValidator(request)
     if request.method == 'GET':
-        fileNameList = File.objects.filter(user_id=user.id)
+        file_name_list = FileSystem(user=user).getFileObjectList()
         if request.GET.get('data') == None:
-            context = {'files':fileNameList}
-            print(context)
+            context = fileMergeApiResponse(file_name_list)
             return JsonResponse(context)
         else:
             files = request.GET.get('data')
             files = json.loads(files)
-            context = FileSystem(user).fileLoadMulti(files)
-            context['files'] = fileNameList
-            print(context)
+            data_list = []
+            for file_title in files:
+                data_list.append(FileSystem(user,file_title=file_title).fileLoad())
+            context = fileMergeApiResponse(file_name_list, data_list)
             return JsonResponse(context)
+        
     elif request.method == 'POST':
         if request.POST.get('header') == 'merge':
            #파일데이터 불러오기
@@ -155,39 +178,36 @@ def fileMergeApi(request):
             columnName = json.loads(columnName)
             for i in range(len(data)):
                 data.iloc[i,0] = pd.read_json(data.iloc[i,0])
-                data.iloc[i,0].rename(columns={columnName[i]:"날짜"}, inplace=True)
-                if type(data.iloc[i,0]['날짜']) is not object:
-                    data.iloc[i,0]['날짜'] = data.iloc[i,0]['날짜'].astype('object')
+                data.iloc[i,0].rename(columns={columnName[i]:"기준"}, inplace=True)
+                if type(data.iloc[i,0]['기준']) is not object:
+                    data.iloc[i,0]['기준'] = data.iloc[i,0]['기준'].astype('object')
                 dfs.append(data.iloc[i,0])
             
-            print(dfs)
             mergeData = dfs[0]
         
             for i in range(1, len(dfs)):
-                mergeData = pd.merge(mergeData, dfs[i], on="날짜", suffixes=(f'_{i}', f'_{i+1}'), how='outer')
-            print("--------------머지?종료")
+                mergeData = pd.merge(mergeData, dfs[i], on='기준', suffixes=(f'_{i}', f'_{i+1}'), how='outer')
+
             mergeData = mergeData.to_json(orient='records', force_ascii=False)
-        
-            return JsonResponse({'result':'success',
-                                'data':mergeData})
+            context = successDataResponse(mergeData)
+            return JsonResponse(context)
         
         elif request.POST.get('header') == 'save':
             data = request.POST.get('data')
-            print("-------------"+data)
-            file_name = request.POST.get('file_name')
+            file_title = request.POST.get('file_name')
             data = pd.read_json(data)
-            FileSystem(user).fileSave(data, file_name)
-            return JsonResponse({'result':'success'})
+            FileSystem(user,file_title=file_title,data=data).fileSave()
+            return JsonResponse(successResponse)
         else:
-            return JsonResponse({'result':'fail'})
+            return JsonResponse(failResponse)
 
-def scalerApi(request, file_name):
+def scalerApi(request, file_title):
     user = loginValidator(request)
     if user is None:
-        return JsonResponse({'result':'fail'})
+        return JsonResponse(failResponse)
     
-    file = FileSystem(user).fileLoad(file_name)
-    data = pd.read_json(file['data'])
+    file = FileSystem(user,file_title=file_title).fileLoad()
+    data = pd.read_json(file)
     method = request.POST.get('method')
 
     if method == 'minmax':
@@ -198,75 +218,60 @@ def scalerApi(request, file_name):
         
     scaled_data = scaler.fit_transform(data)
     scaled_data = scaled_data.to_json(orient='records', force_ascii=False)
-    return JsonResponse({'result':'success',
-                        'data':scaled_data})
+    return JsonResponse(successDataResponse(scaled_data))
 
 
 #------------------------ analysis창 ------------------------
 def fileList2(request):
     user = loginValidator(request)
+    if user is None:
+        return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
+    
+    file_object=findFileObjectListByUserId(user.id)
+    
+    context=fileListViewResponse(user.user_name, file_object)
+    return render(request, "fileList_2/fileList_2.html", context) #전송
+    
+def getAnalyzeDataApi(request, file_title):
+    user = loginValidator(request)
     if user != None:
-        file_object=File.objects.filter(user_id=user.id)
-        context={'user_name':user.user_name,
-            'files':file_object}
-        return render(request, "fileList_2/fileList_2.html", context) #전송
+        result = FileSystem(user, file_title=file_title).fileLoad()
+        return render(request, "Analyze/analyze.html", successDataResponse(result)) #전송
     elif user == None:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
 
-def analyze(request, file_name):
+def useAnalizer(request, file_title):
     user = loginValidator(request)
     if user != None:
-        context = FileSystem(user).fileLoad(file_name)
-        return render(request, "Analyze/analyze.html", context) #전송
-    elif user == None:
-        return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
+        data = FileSystem(user, file_title=file_title).fileLoad()
+        data = pd.read_json(data)
 
-def useAnalizer(request, file_name):
-    user = loginValidator(request)
-    if user != None:
-        if cacheGetter(user, file_name) == True:
-            data = cacheGetter(user, file_name)
-            data = pd.read_json(data)
-        else:
-            file_object=File.objects.get(user_id=user, file_title=file_name)
-
-            work_dir = './media/' + str(file_object.file_root)
-            if os.path.splitext(work_dir)[1] == ".csv":
-                try:
-                    data=pd.read_csv(work_dir,encoding="cp949")
-                except UnicodeDecodeError:
-                    data=pd.read_csv(work_dir,encoding="utf-8")
-            else:
-                data = pd.read_excel(work_dir, sheet_name= 0)
-        
         scaler = request.GET.get('scaler')
+
         if scaler == 'min-max':
             scaler = MinMaxScaler()
             numeric_columns = data.select_dtypes(include=['float64', 'int64']).columns
             data[numeric_columns] = scaler.fit_transform(data[numeric_columns])
-            print(data)
             
         if scaler =='standard':
             scaler = StandardScaler()
             numeric_columns = data.select_dtypes(include=['float64', 'int64']).columns
             data[numeric_columns] = scaler.fit_transform(data[numeric_columns])
+
         if scaler == 'notUse':
             pass    
         
         if request.GET.get('technique') == "선형회귀분석":
-            print("들어왔다")
             x = json.loads(request.GET.get('xValue'))
             y = request.GET.get('yValue')
             result = analizer.linear(data, x, y)
-            print(x,y, result)
-            return JsonResponse({'result':'success','data':result})
+            return JsonResponse(successDataResponse(result))
 
         elif request.GET.get('technique') == '로지스틱회귀분석':
             x = request.GET.getlist('xValue')
             y = request.GET.get('yValue')
             result = analizer.logistic(data, x, y)
-            return JsonResponse({'result':'success',
-                                'data':result})
+            return JsonResponse(successDataResponse)
     elif user == None:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
 #------------------------ test.html연결 ------------------------
@@ -276,9 +281,9 @@ def test(request):
 #------------------------------농업관련 데이터 처리 부분------------------
 #데이터의 형식이나 원하는 전처리에 따라 파이프라인을 설정하는 부분
 @logging_time
-def farm(request, file_name):
+def farm(request, file_title):
     user = loginValidator(request)
-    new_file_name=request.POST.get('new_file_name')
+    new_file_title=request.POST.get('new_file_name')
     file_type=request.POST.get('file_type','환경')
     date=request.POST.get('date','1')
     lat=request.POST.get('lat','35')
@@ -287,121 +292,16 @@ def farm(request, file_name):
     DorW=request.POST.get('DorW','days')
     var=request.POST.get('valueObject')
     var=json.loads(var)
-    print(file_name)
-    data=FileSystem(user).fileGetter(file_name)
+
+    data=FileSystem(user,file_title=file_title).fileLoad()
 
     a = ETL_system(data,file_type,date,lat_lon,DorW,var)
     result=a.ETL_stream()
-    FileSystem(user).fileSave(result, new_file_name)
+
     result_json=result.to_json(orient="records",force_ascii=False)
-    result = {
-                'result':'success',
-                'data' : result_json,
-            }
+    
+    FileSystem(user,file_title=new_file_title,data=result_json).fileSave()
             # Redirect to a success page.
-    return JsonResponse(result)
-
-
-
-
-class ETL_system:
-    def __init__(self,data,file_type,date,lat_lon,DorW,var):
-        self.data = data
-        self.file_type = file_type
-        self.date = int(date) - 1
-        self.lat, self.lon=lat_lon
-        self.DorW = DorW
-        self.var = var
-
-    def ETL_stream(self):
-        if self.file_type == '환경':
-            after_d=self.Envir()
-        if self.file_type == '생육':
-            after_d=self.Growth()
-        if self.file_type == '생산량':
-            after_d=self.Crop()
-        return after_d
-    
-    #객체로 들어온 파일을 업데이트하여 저장    
-
-    #환경데이터 처리함수
-    def Envir(self):
-        lon = self.lon
-        lat = self.lat
-        print(self.data)
-        df = DataProcess(self.data, self.date)
-        df.dateConverter()
-        if self.DorW=="weeks":
-        #주별데이털로 변환
-            result = proc.making_weekly2(df.data, df.date)
-            result['날짜']=result['날짜'].astype('str')
-        elif self.DorW == 'days':
-            #시간 구별 데이터프레임 생성
-            envir_date = pd.DataFrame()
-            envir_date['날짜'] = df.getDate()
-
-            start_month=envir_date['날짜'].astype(str)[0][0:7]
-            end_month=envir_date['날짜'].astype(str)[len(envir_date)-1][0:7]
-            sun = proc.get_sun(round(float(lon)),round(float(lat)),start_month,end_month)
-            #낮밤구분
-            nd_div=proc.ND_div(sun, envir_date)
-            #정오구분
-            afternoon_div =proc.afternoon_div(sun, nd_div, noon=12)
-            #일출일몰t시간전후
-            t_diff=3
-            t_div=proc.time_div(sun,afternoon_div, t_diff)
-            #일일데이터로 변환
-            generating_data=proc.generating_dailydata(df.data, df.date, t_div,t_diff, self.var)
-            result=generating_data
-        else:
-            result = proc.making_weekly2(df.data, df.date, int(self.DorW))
-            result['날짜']=result['날짜'].astype('str')
-        result['날짜']=result['날짜'].astype('str')
-        return result
-    
-    #생육데이터 처리함수
-    def Growth(self):
-        print("--------------생육입니다.-------------------------")
-        print(self.date)
-        dt = DataProcess(self.data, self.date)
-        dt.dateConverter()
-        growth_object = dt.data
-        date = dt.date
-        result=proc.making_weekly2(growth_object,date)
-        result['날짜']=result['날짜'].astype('str')
-        return result
-
-    #생산량데이터 처리함수
-    def Crop(self):
-        crop=self.data
-        date_ind=self.date
-        d_ind=1
-        result=proc.y_split(crop,date_ind,d_ind)
-        result['날짜']=result['날짜'].astype('str')
-        return result
-    
-    #weekly함수 실행 시에 날짜의 열이름이 '날짜'로 통일되는 점을 활용, 주별데이터, 중복없는 일일데이터 가능
-    def join_data(x):
-        env,prod,yld=x[0],x[1],x[2]
-        env_prod=pd.merge(env,prod,left_on="날짜",right_on="날짜",how="outer")
-        env_prod_yld=pd.merge(env_prod,yld,left_on="날짜",right_on="날짜",how="outer")
-        print(env_prod_yld)
-        return env_prod_yld
-    
-
-#------------------------ APIview ------------------------
-@api_view(['GET'])
-def userApiView(request):
-    user = User.objects.all()
-    serializer = UserSerializer(user, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-def fileListApiView(request):
-    fileList = File.objects.all()
-    serializer = FileSerializer(fileList, many=True)
-    return Response(serializer.data)
-
-
+    return JsonResponse(successDataResponse(result_json))
 
 
