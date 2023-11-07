@@ -1,10 +1,9 @@
 const $pretreatmentFileName = document.querySelector('#pretreatmentFileName');
 const $pretreatmentSave = document.querySelector('#pretreatmentSave');
-const excel_data = JSON.parse(document.getElementById("jsonObject").value);
-
+1
 $pretreatmentSave.addEventListener('click', () => {
 	$.ajax({
-		url: `revise/${JSON.parse(localStorage.getItem("title_list"))}/preprocess/`,
+		url: `revise/${JSON.parse(localStorage.getItem("fileTitle"))}/preprocess/`,
 		type:'post',
 		dataType: 'json',
 		headers: { 'X-CSRFToken': csrftoken },
