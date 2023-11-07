@@ -253,7 +253,7 @@ $abms_save.addEventListener('click', () =>{
     console.log($abmsFileName.value);
 
     $.ajax({
-        url: `revise/${JSON.parse(localStorage.getItem("title_list"))}/abms/`,
+        url: `revise/${JSON.parse(localStorage.getItem("fileTitle"))}/abms/`,
         type:'post',
         dataType: 'json',
         headers: { 'X-CSRFToken': csrftoken },
