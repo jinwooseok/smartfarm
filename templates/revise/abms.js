@@ -253,7 +253,7 @@ $abms_save.addEventListener('click', () =>{
     console.log($abmsFileName.value);
 
     $.ajax({
-        url: `revise/${JSON.parse(localStorage.getItem("fileTitle"))}/abms/`,
+        url: `/revise/${JSON.parse(localStorage.getItem("fileTitle"))}/abms/`,
         type:'post',
         dataType: 'json',
         headers: { 'X-CSRFToken': csrftoken },
@@ -262,7 +262,7 @@ $abms_save.addEventListener('click', () =>{
         },
         success:function(response){
             alert("완료되었습니다.");
-            window.location.href = "/fileList/";
+            window.location.href = "/file-list/";
         },
     })
 })
