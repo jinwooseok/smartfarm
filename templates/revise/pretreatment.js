@@ -1,18 +1,8 @@
 const $pretreatmentFileName = document.querySelector('#pretreatmentFileName');
 const $pretreatmentSave = document.querySelector('#pretreatmentSave');
-<<<<<<< HEAD
-1
-$pretreatmentSave.addEventListener('click', () => {
-	$.ajax({
-		url: `revise/${JSON.parse(localStorage.getItem("fileTitle"))}/preprocess/`,
-=======
 
 $pretreatmentSave.addEventListener('click', () => {
-	$.ajax({
-		url: `/revise/${JSON.parse(localStorage.getItem("fileTitle"))}/preprocess/`,
->>>>>>> 76456d5b10e11562338f115943b10e70be2bb91f
-
-$pretreatmentSave.addEventListener('click', () => {
+	console.log("click");
 	$.ajax({
 		url: `/revise/${JSON.parse(localStorage.getItem("fileTitle"))}/preprocess/`,
 		type:'post',
