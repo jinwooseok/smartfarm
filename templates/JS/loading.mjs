@@ -2,7 +2,6 @@ const screenWidth = window.screen.width;
 const screenHeight = window.screen.height;
 
 export const Loading = () => {
-
   let Div = document.createElement('div')
   Div.id="loadingContainer"
   Div.style.cssText = `
@@ -17,9 +16,10 @@ export const Loading = () => {
   Div.innerHTML=loadingImg;
 
   document.querySelector("body").appendChild(Div);
-
+  console.log("로딩창 열기");
 };
 
-export const CloseLoading = () => {
+export const CloseLoading = async () => {
   document.querySelector('#loadingContainer').style.display='none'
+  console.log("로딩창 닫기");
 };
