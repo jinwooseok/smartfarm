@@ -193,9 +193,8 @@ def fileMergeApi(request):
             return JsonResponse(context)
         
         elif request.POST.get('header') == 'save':
-            data = request.POST.get('data')
-            file_title = request.POST.get('file_name')
-            data = pd.read_json(data)
+            data = request.POST.get('mergedData')
+            file_title = request.POST.get('fileName')
             FileSystem(user,file_title=file_title,data=data).fileSave()
             return JsonResponse(successResponse)
         else:
