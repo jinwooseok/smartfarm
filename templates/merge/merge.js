@@ -2,9 +2,7 @@ import Excel from '../JS/excel_show.mjs';
 import { Loading,CloseLoading } from '../JS/loading.mjs';
 
 const csrftoken = $('[name=csrfmiddlewaretoken]').val(); // csrftoken
-let columnName = [];
 
-const localTitleList = JSON.parse(localStorage.getItem("title_list"));
 const $growth = document.querySelector('#growthSelectBox');
 const $environment = document.querySelector('#environmentSelectBox');
 const $output = document.querySelector('#outputSelectBox');
@@ -17,7 +15,7 @@ const $outputVariable =document.querySelector('#outputVariable');
 const $spreadsheet = document.querySelector('#spreadsheet'); // 엑셀 창
 
 let mergeDataList=[];
-let mergeCompleteData="";
+let mergeCompleteData;;
 
 // 선택한 파일 불러오기
 const postFilename =(name)=>{
@@ -38,7 +36,6 @@ const postFilename =(name)=>{
             else {
                 alert('전송할 데이터가 없습니다.')
             }
-
         },
         error: function (xhr, error) {
             alert("에러입니다.");
@@ -85,8 +82,10 @@ $output.addEventListener('change', ()=>{
 })
 
 // 병합
-$merge.addEventListener('click',()=>{
-    columnName=[];
+$merge.addEventListener('click', async ()=>{
+    const columnName=[];
+
+    $spreadsheet.innerHTML = '';
 
     if($mergeFileName.value === ''){
         alert('파일 이름을 정해주세요');
@@ -106,8 +105,6 @@ $merge.addEventListener('click',()=>{
         columnName.push(x);
     }
 
-    console.log(columnName);
-    console.log(mergeDataList);
     Loading();
 
     $.ajax({
@@ -121,11 +118,11 @@ $merge.addEventListener('click',()=>{
             fileName: $mergeFileName.value,
             data : JSON.stringify(mergeDataList),
         },
+        async:false,
         success:function(response){
             if(response.data != null){
                 console.log( "return",JSON.parse(response.data));
                 mergeCompleteData = new Excel(JSON.parse(response.data), $spreadsheet);
-                CloseLoading()
             }
         },
         error: function (xhr, error) {
@@ -134,11 +131,13 @@ $merge.addEventListener('click',()=>{
             console.error("error : " + error);
         }
     })
+    await CloseLoading();
+    console.log("로딩창 닫기_2");
 })
 
 $save.addEventListener("click", () =>{
-    console.log(mergeCompleteData.getDate());
-    // Loading();
+    console.log(mergeCompleteData.getData());
+    Loading();
     $.ajax({
         url: '../merge-view/',
         type: 'post',
@@ -147,6 +146,7 @@ $save.addEventListener("click", () =>{
         data: {
             header : 'save',
             fileName: $mergeFileName.value,
+            mergedData: mergeCompleteData.getData(),
         },
         success:function(response){
             if(response.data != null){
@@ -156,7 +156,7 @@ $save.addEventListener("click", () =>{
         },
         error: function (xhr, error) {
             alert("에러입니다.");
-            CloseLoading()
+            CloseLoading();
             console.error("error : " + error);
         }
     })
