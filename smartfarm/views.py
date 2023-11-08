@@ -111,7 +111,7 @@ def dataEditWithNoFileView(request):
 def dataLoadApi(request):
     user = loginValidator(request)
     if user is None:
-        return JsonResponse(failResponse)
+        return JsonResponse(failResponse())
 
     file_title = request.POST.get('fileName')
     data = FileSystem(user=user, file_title=file_title).fileLoad()
@@ -141,7 +141,7 @@ def abmsApi(request, file_title):
     
     FileSystem(user,file_title=new_file_title,data=data).fileSave()
 
-    return JsonResponse(successResponse)
+    return JsonResponse(successResponse())
 #------------------------ merge창 ------------------------
 def fileMergeView(request):
     user = loginValidator(request)
@@ -196,14 +196,14 @@ def fileMergeApi(request):
             data = request.POST.get('mergedData')
             file_title = request.POST.get('fileName')
             FileSystem(user,file_title=file_title,data=data).fileSave()
-            return JsonResponse(successResponse)
+            return JsonResponse(successResponse())
         else:
-            return JsonResponse(failResponse)
+            return JsonResponse(failResponse())
 
 def scalerApi(request, file_title):
     user = loginValidator(request)
     if user is None:
-        return JsonResponse(failResponse)
+        return JsonResponse(failResponse())
     
     file = FileSystem(user,file_title=file_title).fileLoad()
     data = pd.read_json(file)
@@ -270,7 +270,7 @@ def useAnalizer(request, file_title):
             x = request.GET.getlist('xValue')
             y = request.GET.get('yValue')
             result = analizer.logistic(data, x, y)
-            return JsonResponse(successDataResponse)
+            return JsonResponse(successDataResponse(result))
     elif user == None:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
 #------------------------ test.html연결 ------------------------
