@@ -349,6 +349,7 @@ $optionDelete[1].addEventListener("click", varDelete);
 //////////////////////
 // 날짜 및 이름 등 기타 정보 입력 변수 및 함수
 const $columnDate = document.querySelector("#columnDate"); // 날짜 열 input
+const $startIndex = document.querySelector("#startIndex"); // 날짜 열 input
 const $periods = document.querySelector("#periods"); // 주기선택, 기타면 값을 직접입력 할 수 있게
 const $reset_data = document.querySelector("#reset_data"); // reset
 const $submit_data = document.querySelector("#submit_data");
@@ -406,6 +407,7 @@ $submit_data.addEventListener("click", () => {
       data: {
         new_file_name: new_file_name,
         file_type: file_type,
+        startIndex: $startIndex.value,
         date: date,
         DorW: periods,
         data: data,
