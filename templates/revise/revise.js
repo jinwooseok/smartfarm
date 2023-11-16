@@ -46,7 +46,8 @@ const $abmsFileName = document.querySelector("#abmsFileName");
 const $pretreatmentFileName = document.querySelector("#pretreatmentFileName");
 
 window.onload = async () => {
-  data = new Excel(excel_data, $spreadsheet);
+  data = new Excel(excel_data.slice(0,100), $spreadsheet);
+  console.log(excel_data);
   excel_arr = Object.keys(data.getData()[0]);
   for (let x of excel_arr) {
     $excel_var.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
