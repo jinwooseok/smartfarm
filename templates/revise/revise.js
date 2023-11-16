@@ -1,5 +1,5 @@
 import Excel from "../JS/excel_show.mjs";
-import { Loading, CloseLoading } from "../JS/loading.mjs";
+// import { Loading, CloseLoading } from "../JS/loading.mjs";
 
 const csrftoken = $("[name=csrfmiddlewaretoken]").val(); // csrftoken
 
@@ -45,7 +45,7 @@ const $fileName = document.querySelector("#fileName");
 const $abmsFileName = document.querySelector("#abmsFileName");
 const $pretreatmentFileName = document.querySelector("#pretreatmentFileName");
 
-window.onload = () => {
+window.onload = async () => {
   data = new Excel(excel_data, $spreadsheet);
   excel_arr = Object.keys(data.getData()[0]);
   for (let x of excel_arr) {
@@ -70,6 +70,7 @@ window.onload = () => {
 ///////////////////////////////////////////
 // 엑셀 변수를 가지고 새로운 데이터로 변환 시 사용하는 함수 및 변수
 const defaultVar = [
+  "전체_평균_",
   "주간_평균_",
   "주간_최소_",
   "주간_최대_",
@@ -217,6 +218,9 @@ $ex_var.addEventListener("click", (event) => {
   $ex_var1.innerHTML = "";
   let text = event.target.textContent;
   for (let i of excel_arr) {
+    if (text === "전체") {
+      $ex_var1.innerHTML += `<Option value= '${i}'>` + i + "</option>";
+    }
     if (text === "온도") {
       if (i.includes(text) || i.includes("기온")) {
         $ex_var1.innerHTML += `<Option value= '${i}'>` + i + "</option>";
@@ -251,54 +255,20 @@ $move.addEventListener("click", () => {
     // ex_var2_text 전체면 default 값을 불러옴
     if (ex_var2_text === "전체") {
       let text = ex_var1_text;
-      for (let string of defaultVar) {
-        // string = '주간_평균_' 구조
-        let inputValue = string.split("_"); // 주간, 평균
-        if (CheckDuplicate(inputValue.join("") + text)) {
-          // 주간평균온도 중복확인
-          if (text.includes("온도")) {
-            // 모든 변수 다넣기
-            $final_var[0].innerHTML +=
-              `<Option value= '${string}${text}'>` +
-              inputValue.join("") +
-              text +
-              `</option>`;
-            $final_var[1].innerHTML +=
-              `<Option value= '${string}${text}'>` +
-              inputValue.join("") +
-              text +
-              `</option>`;
-            newDataArr.push(inputValue.join("") + text);
-            add_Obj(text, inputValue[0], inputValue[1]);
-          } else if (
-            text.includes("습도") ||
-            text.includes("CO2") ||
-            text.includes("co2")
-          ) {
-            if (
-              inputValue[1] === "DIF" ||
-              inputValue[1] === "GDD" ||
-              inputValue[0] === "일출전후t시간"
-            ) {
-              continue;
-            } else {
-              $final_var[0].innerHTML +=
-                `<Option value= '${string}${text}'>` +
-                inputValue.join("") +
-                text +
-                `</option>`;
-              $final_var[1].innerHTML +=
-                `<Option value= '${string}${text}'>` +
-                inputValue.join("") +
-                text +
-                `</option>`;
-              newDataArr.push(inputValue.join("") + text);
-              add_Obj(text, inputValue[0], inputValue[1]);
-            }
-          } else if (text.includes("일사량") || text.includes("강수량")) {
-            console.log("어떻게 넣어야 하는지 잘 모르겠다.");
-          }
-        }
+      if (CheckDuplicate("전체평균" + text)) {
+        // 주간평균온도 중복확인
+        $final_var[0].innerHTML +=
+          `<Option value= '전체_평균_${text}'>` +
+          "전체평균" +
+          text +
+          `</option>`;
+        $final_var[1].innerHTML +=
+          `<Option value= '전체_평균_${text}'>` +
+          "전체평균" +
+          text +
+          `</option>`;
+        newDataArr.push(inputValue.join("") + text);
+        add_Obj(text, inputValue[0], inputValue[1]);
       }
     } else if (ex_var2_text !== "전체" && ex_var3_text) {
       //ex_var2_text가 default값이 아니고 ex_var3_text가 있다면
@@ -379,6 +349,7 @@ $optionDelete[1].addEventListener("click", varDelete);
 //////////////////////
 // 날짜 및 이름 등 기타 정보 입력 변수 및 함수
 const $columnDate = document.querySelector("#columnDate"); // 날짜 열 input
+const $startIndex = document.querySelector("#startIndex"); // 날짜 열 input
 const $periods = document.querySelector("#periods"); // 주기선택, 기타면 값을 직접입력 할 수 있게
 const $reset_data = document.querySelector("#reset_data"); // reset
 const $submit_data = document.querySelector("#submit_data");
@@ -427,7 +398,7 @@ $submit_data.addEventListener("click", () => {
   const yesOrNo = confirm("파일을 저장합니다."); // 예, 아니요를 입력 받음
 
   if (yesOrNo) {
-    Loading();
+    // Loading();
     $.ajax({
       url: "farm/",
       type: "post",
@@ -436,6 +407,7 @@ $submit_data.addEventListener("click", () => {
       data: {
         new_file_name: new_file_name,
         file_type: file_type,
+        startIndex: $startIndex.value,
         date: date,
         DorW: periods,
         data: data,
@@ -443,24 +415,21 @@ $submit_data.addEventListener("click", () => {
       },
       success: function (response) {
         if (response.data != null) {
-          // console.log(response.data);
-          // console.timeEnd("submit_data"); // 측정 종료
-          CloseLoading();
           window.location.href = "/file-list/";
         } else {
-          CloseLoading();
           $submit_data.disabled = false;
           alert("전송할 데이터가 없습니다.");
         }
       },
       error: function (xhr, error) {
-        CloseLoading();
         $submit_data.disabled = false;
         alert("에러입니다.");
         console.error("error : " + error);
       },
     });
   }
+
+  // CloseLoading();
 
   $submit_data.disabled = false;
 });

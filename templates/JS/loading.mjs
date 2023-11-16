@@ -19,7 +19,7 @@ export const Loading = () => {
   console.log("로딩창 열기");
 };
 
-export const CloseLoading = async () => {
+export const CloseLoading = () => {
   document.querySelector('#loadingContainer').style.display='none'
   console.log("로딩창 닫기");
 };

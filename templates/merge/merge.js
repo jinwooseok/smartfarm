@@ -108,7 +108,7 @@ $merge.addEventListener("click", async () => {
     columnName.push(x);
   }
 
-  // Loading();
+  Loading();
   console.log($mergeFileName.value);
   $.ajax({
     url: "../merge-view/",
@@ -134,7 +134,7 @@ $merge.addEventListener("click", async () => {
       console.error("error : " + error);
     },
   });
-  // await CloseLoading();
+  CloseLoading();
 });
 
 $save.addEventListener("click", () => {
