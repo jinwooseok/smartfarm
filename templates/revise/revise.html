@@ -86,77 +86,76 @@
     </li>
     <!-- 결측치 이상치  -->
     <li class="tab">
-    	<input type="radio" id="tab-2" name="tab-group-1">
-    	<label for="tab-2">결측치 & 이상치</label>
+      <input type="radio" id="tab-2" name="tab-group-1">
+      <label for="tab-2">결측치 & 이상치</label>
 
       <!-- /* 엑셀 전처리 방법 */ -->
       <div class="content">
         <div class="x-container">
-            <div style="display: flex; justify-content: flex-start;">
-                x값
-                <select name="" id="x_label" class="x_label">
-                    <option value="null">값을 선택하세요</option>
-                </select>
-            </div>
-            <div style="display: flex; justify-content: flex-end;">
-                <input type="text" name="pretreatmentFileName" class="pretreatmentFileName" id="pretreatmentFileName">
-                <button class="pretreatmentSave" id="pretreatmentSave">저장하기</button>
-            </div>
+          <div style="display: flex; justify-content: flex-start;">
+            x값
+            <select name="" id="x_label" class="x_label">
+              <option value="null">값을 선택하세요</option>
+            </select>
+          </div>
+          <div style="display: flex; justify-content: flex-end;">
+            <input type="text" name="pretreatmentFileName" class="pretreatmentFileName" id="pretreatmentFileName">
+            <button class="pretreatmentSave" id="pretreatmentSave">저장하기</button>
+          </div>
         </div>
         <div class="list-container" id="list-container">
           <div class="list">
-              <div class="col_name" id="col_name">
-                  열 이름
-              </div>
-              <div class="Null_count" id="Null_count">
-                  빈 값
-              </div>
-              <div class="Q1" id="Q1">
-                  1사분위 값
-              </div>
-              <div class="Q2" id="Q2">
-                  중앙값
-              </div>
-              <div class="Q3" id="Q3">
-                  3사분위값
-              </div>
-              <div class="mean" id="mean">
-                  평균
-              </div>
-              <div class="min" id="min">
-                  최소
-              </div>
-              <div class="max" id="max">
-                  최대
-              </div>
+            <div class="col_name" id="col_name">
+              열 이름
+            </div>
+            <div class="Null_count" id="Null_count">
+              빈 값
+            </div>
+            <div class="Q1" id="Q1">
+              1사분위 값
+            </div>
+            <div class="Q2" id="Q2">
+              중앙값
+            </div>
+            <div class="Q3" id="Q3">
+              3사분위값
+            </div>
+            <div class="mean" id="mean">
+              평균
+            </div>
+            <div class="min" id="min">
+              최소
+            </div>
+            <div class="max" id="max">
+              최대
+            </div>
           </div>
           {% for key, values in summarys.items %}
           <div class="list">
-              <div class="col_name">
-                  <a href="#" class="draw_col" id="draw_col"
-                      onclick="lineDraw(this.textContent)">{{key}}</a>
-              </div>
-              <div class="Null_count">
-                  {{values.Null_count}}
-              </div>
-              <div class="Q1">
-                  {{values.Q1}}
-              </div>
-              <div class="Q2">
-                  {{values.Q2}}
-              </div>
-              <div class="Q3">
-                  {{values.Q3}}
-              </div>
-              <div class="mean">
-                  {{values.mean}}
-              </div>
-              <div class="min">
-                  {{values.min}}
-              </div>
-              <div class="max">
-                  {{values.max}}
-              </div>
+            <div class="col_name">
+              <a href="#" class="draw_col" id="draw_col" onclick="lineDraw(this.textContent)">{{key}}</a>
+            </div>
+            <div class="Null_count">
+              {{values.Null_count}}
+            </div>
+            <div class="Q1">
+              {{values.Q1}}
+            </div>
+            <div class="Q2">
+              {{values.Q2}}
+            </div>
+            <div class="Q3">
+              {{values.Q3}}
+            </div>
+            <div class="mean">
+              {{values.mean}}
+            </div>
+            <div class="min">
+              {{values.min}}
+            </div>
+            <div class="max">
+              {{values.max}}
+            </div>
           </div>
           {% endfor %}
         </div>
@@ -212,7 +211,8 @@
 
         <input type="radio" name="level" class="hard" id="hard"><label for="hard">어려움</label>
           <div class="box hardVersion">
-            <select name="ex_var" id="ex_var" class="ex_var" multiple size="5">
+            <select name="ex_var" id="ex_var" class="ex_var" multiple size="6">
+              <option value="all">전체</option>
               <option value="temperature">온도</option>
               <option value="humidity">습도</option>
               <option value="co2">CO2</option>
