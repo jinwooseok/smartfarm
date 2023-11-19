@@ -17,17 +17,17 @@ warnings.filterwarnings(action='ignore')
 from .decorators import logging_time
 from .utils.DataProcess import DataProcess
 class ETL_system:
-    def __init__(self,data,file_type,date,lat_lon,DorW,var, startRow):
+    def __init__(self,data,file_type,date,lat_lon,DorW,var, startIndex):
         self.data = data
         self.file_type = file_type
         self.date = int(date) - 1
         self.lat, self.lon=lat_lon
         self.DorW = DorW
         self.var = var
-        self.startRow = startRow
+        self.startIndex = startIndex
 
     def ETL_stream(self):
-        df = DataProcess(self.data, self.date, self.startRow)
+        df = DataProcess(self.data, self.date, self.startIndex)
         try:
             df.dateConverter()
         except ValueError:
@@ -55,6 +55,7 @@ class ETL_system:
             #시간 구별 데이터프레임 생성
             envir_date = pd.DataFrame()
             envir_date['날짜'] = df.data['날짜']
+            print(envir_date['날짜'].dtype)
             start_month=envir_date['날짜'].astype(str)[0][0:7]
             end_month=envir_date['날짜'].astype(str)[len(envir_date)-1][0:7]
             envir_date['날짜']=pd.to_datetime(envir_date['날짜'])
@@ -214,7 +215,6 @@ def time_div(sun, df, t_diff):
 def generating_variable(data, date_ind, d_ind, kind,t_diff , div_DN=False, tbase=15):        
     kind_div = []
     ment = '일출전후'+ str(t_diff)+'시간'
-
     #호출할 함수 목록
     def DIF(data):
         return max(data) - min(data)
@@ -227,19 +227,25 @@ def generating_variable(data, date_ind, d_ind, kind,t_diff , div_DN=False, tbase
             return 0
 
     def mean(data):
+        if data.dtype == object or data.dtype == str:
+            data = data.astype(float)
         if len(data) == 0:
             return np.nan
         return sum(data)/len(data)
     
     def min(data):
+        if data.dtype == object or data.dtype == str:
+            data = data.astype(float)
         if len(data) == 0:
             return np.nan
-        return np.min(data)
+        return data.min()
     
     def max(data):
+        if data.dtype == object or data.dtype == str:
+            data = data.astype(float)
         if len(data) == 0:
             return np.nan
-        return np.max(data)
+        return data.max()
     
     #입력받았을 때 호출할 함수
     functions_list = {
@@ -296,15 +302,15 @@ def generating_variable(data, date_ind, d_ind, kind,t_diff , div_DN=False, tbase
         for j in d_ind:
             for kind_num in range(len(kind)):
                 if (kind_ND[kind_num] == "주간"):
-                    temp_df.iloc[i,kind_num] = functions_list[list(functions_list.keys())[kind_div[kind_num]]](data.iloc[daytime_ind,j].tolist())
+                    temp_df.iloc[i,kind_num] = functions_list[list(functions_list.keys())[kind_div[kind_num]]](data.iloc[daytime_ind,j])
                 elif (kind_ND[kind_num] == "야간"):
-                    temp_df.iloc[i,kind_num] = functions_list[list(functions_list.keys())[kind_div[kind_num]]](data.iloc[night_ind,j].tolist())
+                    temp_df.iloc[i,kind_num] = functions_list[list(functions_list.keys())[kind_div[kind_num]]](data.iloc[night_ind,j])
                 elif (kind_ND[kind_num] == "전체"):
-                    temp_df.iloc[i,kind_num] = functions_list[list(functions_list.keys())[kind_div[kind_num]]](data.iloc[today_ind,j].tolist())
+                    temp_df.iloc[i,kind_num] = functions_list[list(functions_list.keys())[kind_div[kind_num]]](data.iloc[today_ind,j])
                 elif (kind_ND[kind_num] == "일출부터정오"):
-                    temp_df.iloc[i,kind_num] = functions_list[list(functions_list.keys())[kind_div[kind_num]]](data.iloc[noon_ind,j].tolist())
+                    temp_df.iloc[i,kind_num] = functions_list[list(functions_list.keys())[kind_div[kind_num]]](data.iloc[noon_ind,j])
                 elif (kind_ND[kind_num] == '일출전후t시간'):
-                    temp_df.iloc[i,kind_num] = functions_list[list(functions_list.keys())[kind_div[kind_num]]](data.iloc[thour_ind,j].tolist())
+                    temp_df.iloc[i,kind_num] = functions_list[list(functions_list.keys())[kind_div[kind_num]]](data.iloc[thour_ind,j])
     temp_df = pd.concat([pd.DataFrame(dailyDate, columns=['날짜']),temp_df], axis=1)      
     return temp_df
 
