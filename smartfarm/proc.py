@@ -227,24 +227,39 @@ def generating_variable(data, date_ind, d_ind, kind,t_diff , div_DN=False, tbase
             return 0
 
     def mean(data):
-        if data.dtype == object or data.dtype == str:
-            data = data.astype(float)
+        data.replace('', pd.NA, inplace=True)
+        data.dropna(inplace=True)
+
         if len(data) == 0:
             return np.nan
+        
+        if data.dtype == object or data.dtype == str:
+            data = data.astype(float)
+        
         return sum(data)/len(data)
     
     def min(data):
-        if data.dtype == object or data.dtype == str:
-            data = data.astype(float)
+        data.replace('', pd.NA, inplace=True)
+        data.dropna(inplace=True)
+
         if len(data) == 0:
             return np.nan
+        
+        if data.dtype == object or data.dtype == str:
+            data = data.astype(float)
+        
         return data.min()
     
     def max(data):
-        if data.dtype == object or data.dtype == str:
-            data = data.astype(float)
+        data.replace('', pd.NA, inplace=True)
+        data.dropna(inplace=True)
+
         if len(data) == 0:
             return np.nan
+        
+        if data.dtype == object or data.dtype == str:
+            data = data.astype(float)
+        
         return data.max()
     
     #입력받았을 때 호출할 함수

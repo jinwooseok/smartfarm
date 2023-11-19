@@ -37,7 +37,7 @@ class FileSystem:
         
         
         self.file_title = self.fileNameCheck()
-        print(self.file_title)
+
         self.fileSaveForm(self.user,self.file_title,self.multi_part_file)
         
         if self.multi_part_file.name.split(".")[-1] in ["xlsx","xls"]:
@@ -99,7 +99,7 @@ class FileSystem:
             except:
                 data = pd.read_excel(work_dir, sheet_name= 0, engine='openpyxl')
         #---------------json생성------------------
-        data = data.replace({np.nan: 0}) 
+        data = data.replace({np.nan: ""}) 
         data = DataProcess.roundConverter(data)
         data_json=data.to_json(orient="records",force_ascii=False)#데이터프레임을 json배열형식으로변환(형식은 spreadsheet.js에 맞춰)
         self.cacheSetter(data_json)
