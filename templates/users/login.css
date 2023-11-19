@@ -17,7 +17,7 @@ body {
     background-color: #fafafa;
 }
 
-.login_wrapper{
+.loginContainer{
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -34,27 +34,27 @@ body {
     border: 1px solid #DBDBDB;
 }
 
-.login_logo{
+.loginLogo{
     margin: 30px 0;
     font-size: 14px;
     font-weight: bold;
 }
 
-.login_logo>a{
+.loginLogo>a{
     margin:  0 10px;
     font-size: 23px;
     color: #007A33;
 }
 
-.login_form{
+.loginForm{
     display: flex;
     flex-direction: column;
     width: 280px;
     margin-top: 10px;
 }
 
-.login_form .id,
-.login_form .password{
+.loginForm .id,
+.loginForm .password{
     width: 100%;
     height: 40px;
     margin: 3px 0 0 0;
@@ -64,22 +64,22 @@ body {
     border-radius: 3px;
 }
 
-.login_form .id:focus,
-.login_form .password:focus {
+.loginForm .id:focus,
+.loginForm .password:focus {
     outline: 1px solid #a8a8a8;
 }
 
-.login_form .id::placeholder,
-.login_form .password::placeholder{
+.loginForm .id::placeholder,
+.loginForm .password::placeholder{
     color : #8E8E8E;
 }
 
-.login_form .id::-ms-value,
-.login_form .password::-ms-value{
+.loginForm .id::-ms-value,
+.loginForm .password::-ms-value{
     color : #262626;
 }
 
-.login_form .error{
+.loginForm .error{
     color : #fb0404;
     display : "block";
     padding-bottom: 1px;
@@ -87,7 +87,7 @@ body {
 }
 
 
-.login_form .login_btn{
+.loginForm .login_btn{
     width: 100%;
     height: 33px;
     margin : 3px 0 5px 0;
