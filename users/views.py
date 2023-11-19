@@ -1,10 +1,6 @@
-from http.client import REQUEST_ENTITY_TOO_LARGE
-from django.db import transaction
 from django.shortcuts import render, redirect
-from django.http import HttpRequest, HttpResponse
 from .models import User
 from argon2 import PasswordHasher, exceptions
-from django.http import JsonResponse
 
 # Create your views here.
 
@@ -14,14 +10,14 @@ def register(request):
         return render(request, 'users/register.html')
     
     elif request.method == 'POST' :
-        user_id=request.POST['regi_id']
+        user_id=request.POST['registerId']
         #비밀번호는 argon2의 hash함수를 사용해 db에 저장
-        user_pw=request.POST['regi_pass']
+        user_pw=request.POST['registerPassword']
         user_pw=PasswordHasher().hash(user_pw)
         
         user_name=request.POST['name']
         
-        user_job=request.POST['regi_job']
+        user_job=request.POST['registerJob']
         #phone에서 3개의 요소를 받기 때문에 (###,####,####) getlist로 값을 받음
         user_tel=request.POST.getlist('phone')
         user_tel = ''.join(user_tel)
