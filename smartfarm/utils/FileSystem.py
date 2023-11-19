@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 import os
 import copy
-import json
 from django.http import HttpResponse
 #---------------모델 import---------------------
 from ..models import File
@@ -14,7 +13,7 @@ from django.core import files
 from django.core.cache import cache
 #---------------repository import----------------
 from ..repositorys import *
-from config.settings import MEDIA_ROOT
+from django.conf import settings
 from .DataProcess import DataProcess
 
 class FileSystem:
@@ -54,7 +53,7 @@ class FileSystem:
     def fileDelete(self):
         file_object = findFileObjectByUserIdFileTitle(self.user, self.file_title)
         try:
-            work_dir = os.path.join(MEDIA_ROOT, str(file_object.file_root))
+            work_dir = os.path.join(settings.MEDIA_ROOT, str(file_object.file_root))
             os.remove(work_dir)
             file_object.delete()
         except FileNotFoundError:
