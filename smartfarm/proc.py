@@ -4,9 +4,11 @@ from functools import reduce
 # Datetime
 import datetime
 from dateutil.relativedelta import relativedelta
+from django.http import HttpResponse
 
 # Crolling
 import requests
+import time
 #etc
 import warnings
 warnings.filterwarnings(action='ignore')
@@ -15,31 +17,36 @@ warnings.filterwarnings(action='ignore')
 from .decorators import logging_time
 from .utils.DataProcess import DataProcess
 class ETL_system:
-    def __init__(self,data,file_type,date,lat_lon,DorW,var):
+    def __init__(self,data,file_type,date,lat_lon,DorW,var, startRow):
         self.data = data
         self.file_type = file_type
         self.date = int(date) - 1
         self.lat, self.lon=lat_lon
         self.DorW = DorW
         self.var = var
+        self.startRow = startRow
 
     def ETL_stream(self):
+        df = DataProcess(self.data, self.date, self.startRow)
+        try:
+            df.dateConverter()
+        except ValueError:
+            raise ValueError
         if self.file_type == '환경':
-            after_d=self.Envir()
+            after_d=self.Envir(df)
         if self.file_type == '생육':
-            after_d=self.Growth()
+            after_d=self.Growth(df)
         if self.file_type == '생산량':
-            after_d=self.Crop()
+            after_d=self.Crop(df)
         return after_d
     
     #객체로 들어온 파일을 업데이트하여 저장    
 
     #환경데이터 처리함수
-    def Envir(self):
+    def Envir(self, df):
         lon = self.lon
         lat = self.lat
-        df = DataProcess(self.data, self.date)
-        df.dateConverter()
+    
         if self.DorW=="weeks":
         #주별데이털로 변환
             result = making_weekly2(df.data, df.date)
@@ -47,10 +54,10 @@ class ETL_system:
         elif self.DorW == 'days':
             #시간 구별 데이터프레임 생성
             envir_date = pd.DataFrame()
-            envir_date['날짜'] = df.getDateSeries()
-
+            envir_date['날짜'] = df.data['날짜']
             start_month=envir_date['날짜'].astype(str)[0][0:7]
             end_month=envir_date['날짜'].astype(str)[len(envir_date)-1][0:7]
+            envir_date['날짜']=pd.to_datetime(envir_date['날짜'])
             sun = get_sun(round(float(lon)),round(float(lat)),start_month,end_month)
             #낮밤구분
             nd_div=ND_div(sun, envir_date)
@@ -69,22 +76,21 @@ class ETL_system:
         return result
     
     #생육데이터 처리함수
-    def Growth(self):
+    def Growth(self, df):
         print("--------------생육입니다.-------------------------")
-        dt = DataProcess(self.data, self.date)
-        dt.dateConverter()
-        growth_object = dt.data
-        date = dt.date
+        growth_object = df.data
+        date = df.date
+        
         result=making_weekly2(growth_object,date)
         result['날짜']=result['날짜'].astype('str')
         return result
 
     #생산량데이터 처리함수
-    def Crop(self):
-        crop=self.data
-        date_ind=self.date
+    def Crop(self, df):
+        data = df.data
+        date_ind=df.date
         d_ind=1
-        result=y_split(crop,date_ind,d_ind)
+        result=y_split(data,date_ind,d_ind)
         result['날짜']=result['날짜'].astype('str')
         return result
     
@@ -113,19 +119,19 @@ def get_sun(long, lati, st, ed):
     ed_datetime = ed_datetime+relativedelta(months=1)
 
     # api 서비스 키
-    service_key = "3zMUzXFBb6NM1NuuJ7gtxWOoq5%2FctdtXx8HyBMzAPcE65bev5C6qy9E2e5CJphMtY%2FumqtkPg%2FEmj3OmbJFrdw%3D%3D"
+    service_key = "CHC3lP5ETp1jJorhar3RNwTH3OmFzVEWqFf2jJVkogfdbEMbXMR32QRMF1zP7EiZUsycywUpwbfp9L4nvaY8nA%3D%3D"
     
 
     # st~ed 까지의 일출 일몰시간 계산
     date = []; srise = []; sset = []; long_ = []; lati_ = []
     while( st_datetime != ed_datetime ):
-        
         # api xml 추출
-        URL = "https://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo?serviceKey=" + \
+        URL = "http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo?serviceKey=" + \
                 service_key + "&locdate=" + st_datetime.strftime("%Y%m%d") + \
                 "&longitude=" + str(long) + "&latitude=" + str(lati) + "&dnYn=N"
-        xml = requests.get(URL,verify=False).text
         
+        xml = requests.get(URL,verify=False).text
+
         # 일출 일몰 시간 추출
         sunrise = xml[xml.find('sunrise')+8:xml.find('sunrise')+12]
         sunset = xml[xml.find('sunset')+7:xml.find('sunset')+11]
@@ -252,8 +258,6 @@ def generating_variable(data, date_ind, d_ind, kind,t_diff , div_DN=False, tbase
     kind_ND = ["전체"] * len(kind)
     for i,k in enumerate(kind):
         kind_ND[i] = k[0]     
-    
-    hourDate = data.iloc[:,date_ind]
     dailyDate = data.iloc[:,date_ind].dt.date.unique()
     # 만약 div_DN이 있을 시의 코드
     # if ("야간" in kind_ND):
@@ -277,8 +281,9 @@ def generating_variable(data, date_ind, d_ind, kind,t_diff , div_DN=False, tbase
     temp_df.columns = temp_name
     #temp_df에 값 입력과정
     for i in range(len(dailyDate)):
+
         if ('전체' in kind_ND):
-            today_ind = div_DN.index[ div_DN['div'].dt.date==dailyDate[i] ].tolist()
+            today_ind = div_DN.index[ div_DN['날짜'].dt.date==dailyDate[i] ].tolist()
         if ('주간' in kind_ND):
             daytime_ind = div_DN.index[(div_DN['div']=='주간') & (div_DN['날짜'].dt.date==dailyDate[i])].tolist()
         if ('야간' in kind_ND):
