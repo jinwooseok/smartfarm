@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import User
 from argon2 import PasswordHasher, exceptions
-
+from django.http import HttpResponse
 # Create your views here.
 
 #회원가입 버튼을 누르면 작동하는 함수
@@ -10,7 +10,9 @@ def register(request):
         return render(request, 'users/register.html')
     
     elif request.method == 'POST' :
-        user_id=request.POST['registerId']
+        user_id=request.POST['registerID']
+        if duplicatedEmail(user_id):
+            return HttpResponse("<script>alert('이미 존재하는 이메일입니다.');location.href='.';</script>")
         #비밀번호는 argon2의 hash함수를 사용해 db에 저장
         user_pw=request.POST['registerPassword']
         user_pw=PasswordHasher().hash(user_pw)
@@ -77,3 +79,13 @@ def logout(request):
     return redirect('/')
 
 # Create your views here.
+def validEmail(request):
+    register_id = request.POST.get('registerID')
+    if duplicatedEmail(register_id):
+        return HttpResponse("<script>alert('이미 존재하는 이메일입니다.');location.href='.';</script>")
+    return HttpResponse("<script>alert('사용가능한 이메일입니다.');location.href='.';</script>")
+    
+def duplicatedEmail(email):
+    if User.objects.filter(user_id=email).exists():
+        return True
+    return False
