@@ -235,7 +235,7 @@ def getAnalyzeDataApi(request, file_title):
     if user != None:
         result = FileSystem(user, file_title=file_title).fileLoad()
         context = analysisViewResponse(user.user_name,result)
-        return render(request, "Analyze/analyze.html", successDataResponse(result)) #전송
+        return render(request, "Analyze/analyze.html", context) #전송
     elif user == None:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
 
