@@ -2,63 +2,63 @@
 <html lang="ko">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>회원가입</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입</title>
 
-    <link rel="stylesheet" href="/templates/users/register.css">
-
+  <link rel="stylesheet" href="/templates/users/register.css">
 </head>
 
 <body>
-    <div class="header">
-        <a href="/" class="title">전남대학교 </br>농업 빅데이터 연구실</a>
+  <div class="header">
+    <a href="/" class="title">전남대학교 </br>융합 빅데이터 연구실</a>
+  </div>
+  <div class="registerContainer">
+    <div class="registerLogo">
+      <h1>회원가입</h1>
     </div>
-    <div class="register_wrapper">
-        <div class="regi_logo">
-            <h1>회원가입</h1>
-        </div>
-        <form method="POST" class="regi_form" id="regi_form" onsubmit="return false;">
-            {% csrf_token %}
-            <div class="email">
-                <input type="text" class="form_text regi_id" id="regi_id" name="regi_id" placeholder="이메일">
-                <div id="emailError" class="error"></div>
-            </div>
+    <form method="POST" class="registerForm" id="registerForm" onsubmit="return false;">
+      {% csrf_token %}
+      <div class="email">
+        <input type="text" class="formText registerID" id="registerID" name="registerID" placeholder="이메일">
+        <div id="emailError" class="error"></div>
+      </div>
 
-            <div class="password">
-                <input type="password" class="form_text regi_pass" id="regi_pass" name="regi_pass" placeholder="비밀번호">
-                <div id="passwordError" class="error"></div>
-            </div>
+      <div class="password">
+        <input type="password" class="formText registerPassword" id="registerPassword" name="registerPassword" placeholder="비밀번호">
+        <div id="passwordError" class="error"></div>
+      </div>
 
-            <div class="re_pass">
-                <input type="password" class="form_text regi_re_pass" id="regi_re_pass" placeholder="비밀번호 확인">
-                <div id="passwordCheckError" class="error"></div>
-            </div>
+      <div class="checkPassword">
+        <input type="password" class="formText registerCheckPassword" id="registerCheckPassword" placeholder="비밀번호 확인">
+        <div id="passwordCheckError" class="error"></div>
+      </div>
 
-            <div class="name">
-                <input type="text" class="form_text name" id="name" name="name" placeholder="이름">
-                <div id="nameError" class="error"></div>
-            </div>
+      <div class="name">
+        <input type="text" class="formText name" id="name" name="name" placeholder="이름">
+        <div id="nameError" class="error"></div>
+      </div>
 
-            <div class="job">
-                <input type="text" class="form_text regi_job" id="regi_job" name="regi_job" placeholder="직업">
-            </div>
+      <div class="job">
+        <input type="text" class="formText registerJob" id="registerJob" name="registerJob" placeholder="직업">
+      </div>
 
-            <div class="phone">
-                <label for="phone1">전화번호</label>
-                <input type="tel" class="phone1" id="phone1" name="phone" maxlength="3" pattern="[0-9]{3}"  oninput="check_phone1()">-
-                <input type="tel" class="phone2" id="phone2" name="phone" maxlength="4" pattern="[0-9]{4}"  oninput="check_phone2()">-
-                <input type="tel" class="phone3" id="phone3" name="phone" maxlength="4" pattern="[0-9]{4}" >
-            </div>
+      <div class="phone">
+        <label for="phoneFront">전화번호</label>
+        <input type="tel" class="phoneFront" id="phoneFront" name="phone" maxlength="3" pattern="[0-9]{3}" >-
+        <input type="tel" class="phoneMiddle" id="phoneMiddle" name="phone" maxlength="4" pattern="[0-9]{4}">-
+        <input type="tel" class="phoneLast" id="phoneLast" name="phone" maxlength="4" pattern="[0-9]{4}" >
+      </div>
 
-            <div class="btn">
-                <button class="regi_btn" id="regi_btn" type="submit" disabled >제출하기</button>
-                <button class="backToLogin" id="backToLogin" type="button">취소</button>
-            </div>
-        </form>
-    </div>
+      <div class="buttonContainer">
+        <button class="registerButton" id="registerButton" type="submit" disabled >제출하기</button>
+        <button class="backToLogin" id="backToLogin" type="button">취소</button>
+      </div>
+    </form>
+  </div>
 </body>
+
 <script src="/templates/users/register.js"></script>
 <script src="/templates/JS/jquery-1.12.4.min.js"></script>
 

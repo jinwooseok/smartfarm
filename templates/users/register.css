@@ -1,150 +1,147 @@
-ul,li {
-    list-style : none;
+ul,
+li {
+  list-style: none;
 }
 
-*{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
-a{
-    text-decoration: none;
-    color : #000;
+a {
+  text-decoration: none;
+  color: #000;
 }
 
 body {
-    background-color: #fafafa;
+  background-color: #fafafa;
 }
 
 /* header */
-.header{
-    width: 95%;
-    height: 70px;
-    margin: 0 auto;
-    margin-top: 10px;
+.header {
+  width: 95%;
+  height: 70px;
+  margin: 0 auto;
+  margin-top: 10px;
 
-    display: flex;
-    flex-wrap: nowrap;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.header .title{
-    color: #007A33;
-    font-size: 18px;
-    font-weight: bold;
+.header .title {
+  color: #007A33;
+  font-size: 18px;
+  font-weight: bold;
 }
 
-.hide{
-    display: none;
+.hide {
+  display: none;
 }
 
-.error{
-    font-size: 10px;
-    color : red;
+.registerContainer {
+  width: 350px;
+  height: 550px;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background-color: #FFF;
+  border: 1px solid #DBDBDB;
+
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.register_wrapper{
-    width : 350px;
-    height: 550px;
+.registerContainer .registerLogo {
+  margin-bottom: 15px;
 
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    background-color: #FFF;
-    border: 1px solid #DBDBDB;
-
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  color: #007A33;
+  font-size: 18px;
+  font-weight: bold;
 }
 
-.register_wrapper .regi_logo{
-    margin-bottom: 15px;
+.registerContainer .registerForm {
+  width: 280px;
+  height: auto;
 
-    color: #007A33;
-    font-size: 18px;
-    font-weight: bold;
-}
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: nowrap;
 
-.register_wrapper  .regi_form{
-    width: 280px;
-    height: auto;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    flex-wrap: nowrap;
-
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .email,
 .password,
-.re_pass,
+.checkPassword,
 .name,
-.job{
-    width: 100%;
-    height: 60px;
+.job {
+  width: 100%;
+  height: 60px;
 }
 
-.form_text{
-    width: 100%;
-    height: 40px;
-    padding: 0 10px;
-    background-color: #FAFAFA;
-    border : 1px solid #DBDBDB;
-    border-radius: 3px;
+.formText {
+  width: 100%;
+  height: 40px;
+  padding: 0 10px;
+  background-color: #FAFAFA;
+  border: 1px solid #DBDBDB;
+  border-radius: 3px;
 }
 
-.phone{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: 100%;
-    height: 20px;
+.phone {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: 20px;
 }
 
-.phone >label{
-    margin-right: 10px;
+.phone>label {
+  margin-right: 10px;
 }
 
-.phone1{
-    width: 18%;
+.phoneFront {
+  width: 18%;
 }
 
-.phone2, .phone3{
-    width: 25%;
+.phoneMiddle,
+.phoneLast {
+  width: 25%;
 }
 
-.btn{
-    margin-top: 30px;
-    width: 100%;
-    height: 60px;
+.buttonContainer {
+  margin-top: 30px;
+  width: 100%;
+  height: 60px;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.btn .regi_btn,
-.btn .backToLogin{
-    width: 100%;
-    height: 250px;
-    margin-bottom: 5px;
-    cursor: pointer;
+.buttonContainer .registerButton,
+.buttonContainer .backToLogin {
+  width: 100%;
+  height: 250px;
+  margin-bottom: 5px;
+  cursor: pointer;
 }
 
-.error{
-    font-size: 10px;
-    color : red;
+.error {
+  font-size: 10px;
+  color: red;
 }
 
-.form_text::placeholder{
-    color : #000;
+.formText::placeholder {
+  color: #000;
 }
