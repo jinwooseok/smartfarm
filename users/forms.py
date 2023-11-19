@@ -1,5 +1,3 @@
-from distutils.command.clean import clean
-from tkinter import E
 from django import forms
 from .models import User
 from argon2 import PasswordHasher, exceptions

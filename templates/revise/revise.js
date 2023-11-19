@@ -411,7 +411,6 @@ $submit_data.addEventListener("click", () => {
         startIndex: $startIndex.value,
         date: date,
         DorW: periods,
-        data: data,
         valueObject: valueObject,
       },
       success: function (response) {
