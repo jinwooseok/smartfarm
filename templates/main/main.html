@@ -2,75 +2,75 @@
 <html lang="ko">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>전남대학교 융합 빅데이터 연구실</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>전남대학교 융합 빅데이터 연구실</title>
 
-    <!-- css -->
-    <link rel="stylesheet" href="templates/main/main.css">
+	<!-- css -->
+  <link rel="stylesheet" href="templates/main/main.css">
 </head>
 
 <body>
-    <ul class="nav">
-        <li class="nav-item"><a href="/" class="title">전남대학교 </br>융합 빅데이터 연구실</a></li>
-        <li class="nav-item"><a href="/file-list">데이터 수정</a></li>
-        <li class="nav-item"><a href="/merge/">파일 병합</a></li>
-        <li class="nav-item"><a href="/fileList_2">데이터 분석</a></li>
-        {% if user_name != anonymous %}
-        <li class="nav-item"><a href="/users/logout/" class='logout'>로그아웃</a></li>
-        {% else %}
-        <li class="nav-item"><a href="/users/login/" class='login'>로그인</a></li>
-        {% endif %}
-    </ul>
+	<ul class="nav">
+		<li><a href="/" class="title">전남대학교</br>융합 빅데이터 연구실</a></li>
+		<li><a href="/file-list">데이터 수정</a></li>
+		<li><a href="/merge/">파일 병합</a></li>
+		<li><a href="/fileList_2">데이터 분석</a></li>
+		{% if user_name != anonymous %}
+		<li><a href="/users/logout/" class='logout'>로그아웃</a></li>
+		{% else %}
+		<li><a href="/users/login/" class='login'>로그인</a></li>
+		{% endif %}
+	</ul>
 
-    <div class="textContainer">
-        <p class="first-line">데이터 기반 산업 발전에 기여하는</p>
-        <p class="second-line"><span>전남대학교 융합빅데이터</span> 연구실</p>
-        <p class="third-line">Chonnam National University Conversions Data Laboratory</p>
-    </div>
+	<div class="imgContainer">
+		<p class="firstLine">데이터 기반 산업 발전에 기여하는</p>
+		<p class="secondLine"><span>전남대학교 융합빅데이터</span> 연구실</p>
+		<p class="thirdLine">Chonnam National University Conversions Data Laboratory</p>
+	</div>
 
-    <div class="service">
-        <div class="service-item">
-            <div class="item-title">데이터 수정</div>
-            <div class="item-content">
-                기존에 등록했던 파일과</br>
-                신규 등록한 파일을</br>
-                관리할 수 있습니다.
-            </div>
-            <button class="item-btn">
-                <a href="/file-list">바로가기</a>
-            </button>
-        </div>
+	<div class="serviceContainer">
+		<div class="service">
+			<div class="serviceTitle">데이터 수정</div>
+			<div class="serviceContent">
+				기존에 등록했던 파일과</br>
+				신규 등록한 파일을</br>
+				관리할 수 있습니다.
+			</div>
+			<button class="serviceButton">
+				<a href="/file-list">바로가기</a>
+			</button>
+		</div>
 
-        <div class="service-item">
-            <div class="item-title">파일 병합</div>
-            <div class="item-content">
-                아직 미정</br>
-                아직 미정</br>
-                아직 미정
-            </div>
-            <button class="item-btn">
-                <a href="/merge/">바로가기</a>
-            </button>
-        </div>
+		<div class="service">
+			<div class="serviceTitle">파일 병합</div>
+			<div class="serviceContent">
+				아직 미정</br>
+				아직 미정</br>
+				아직 미정
+			</div>
+			<button class="serviceButton">
+				<a href="/merge/">바로가기</a>
+			</button>
+		</div>
 
-        <div class="service-item">
-            <div class="item-title">데이터 분석</div>
-            <div class="item-content">
-                원하는 데이터의 그래프를</br>
-                제작하고 시각화하고,</br>
-                분석을 할 수 있습니다.
-            </div>
-            <button class="item-btn">
-                <a href="/fileList_2">바로가기</a>
-            </button>
-        </div>
-    </div>
-
+		<div class="service">
+			<div class="serviceTitle">데이터 분석</div>
+			<div class="serviceContent">
+				원하는 데이터의 그래프를</br>
+				제작하고 시각화하고,</br>
+				분석을 할 수 있습니다.
+			</div>
+			<button class="serviceButton">
+				<a href="/fileList_2">바로가기</a>
+			</button>
+		</div>
+	</div>
 </body>
+
 <script>
-    localStorage.clear();
+  localStorage.clear();
 </script>
 
 </html>

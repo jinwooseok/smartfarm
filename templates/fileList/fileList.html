@@ -2,105 +2,105 @@
 <html lang="ko">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>파일 목록 - 데이터 수정</title>
-    <!-- css -->
-    <link rel="stylesheet" href="/templates/fileList/fileList.css">
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>파일 목록 - 데이터 수정</title>
+	<!-- css -->
+	<link rel="stylesheet" href="/templates/fileList/fileList.css">
 
-    <!-- spreadsheetjs -->
-    <script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
-    <link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
-    <script src="https://jsuites.net/v4/jsuites.js"></script>
-    <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+	<!-- spreadsheetjs -->
+	<script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
+	<link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
+	<script src="https://jsuites.net/v4/jsuites.js"></script>
+	<link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
 
-    <!-- fontawesome-->
-    <script src="https://kit.fontawesome.com/4c4b76e7c2.js" crossorigin="anonymous"></script>
+	<!-- fontawesome-->
+	<script src="https://kit.fontawesome.com/4c4b76e7c2.js" crossorigin="anonymous"></script>
 
 </head>
 
 <body>
-    <ul class="nav">
-        <li class="nav-item"><a href="/" class="title">전남대학교 </br>융합 빅데이터 연구실</a></li>
-        <li class="nav-item"><a href="/file-list">데이터 수정</a></li>
-        <li class="nav-item"><a href="/merge/">파일 병합</a></li>
-        <li class="nav-item"><a href="/fileList_2">데이터 분석</a></li>
-        {% if user_name != anonymous %}
-        <li class="nav-item"><a href="/users/logout/" class='logout'>로그아웃</a></li>
-        {% else %}
-        <li class="nav-item"><a href="/users/login/" class='login'>로그인</a></li>
-        {% endif %}
-    </ul>
+	<ul class="nav">
+		<li><a href="/" class="title">전남대학교</br>융합 빅데이터 연구실</a></li>
+		<li><a href="/file-list">데이터 수정</a></li>
+		<li><a href="/merge/">파일 병합</a></li>
+		<li><a href="/fileList_2">데이터 분석</a></li>
+		{% if user_name != anonymous %}
+		<li><a href="/users/logout/" class='logout'>로그아웃</a></li>
+		{% else %}
+		<li><a href="/users/login/" class='login'>로그인</a></li>
+		{% endif %}
+	</ul>
 
-    <div class="explain">
-        <h3>데이터 수정 및 업로드</h3>
-        <p>업로드 버튼을 통해 .xls .xlsx .csv 파일을 저장 할 수 있습니다.</p>
-        <p>파일을 선택하면 파일 데이터를 수정할 수 있는 창으로 이동합니다.</p>
-    </div>
-    
-    <div class="container">
-        <form action="{% url 'smartfarm:fileUpload' %}" method="POST" enctype="multipart/form-data" class="upload">
-            {% csrf_token %}
-            <div class="excel">
-                <div id="spreadsheet" class="spreadsheet">
-                    <input type="file" id="fileUpload_Drag" class="fileUpload_Drag" name="fileUpload_Drag" accept=".xls, .xlsx, .csv">
-                    <div class="icon">
-                        <i class="fa-solid fa-cloud-arrow-up" id="fileIcon"></i>
-                        <span>파일을 드래그하세요</span>
-                    </br>
-                        <p>최대 100줄을 미리 보여줍니다</p>
-                    </div>
-                </div>
-            </div>
-            <div class="wrap">
-                <input type="file" name="fileUpload_Input" id="fileUpload_Input" class="fileUpload_Input" accept=".xls, .xlsx, .csv">
-                <label for="fileUpload_Input">업로드</label>
-                <input id="fileName" name="fileName" class="fileName" value="파일선택" disabled="disabled">
-                <button id="confirm" class="confirm" type="submit">등록하기</button>
-            </div>
-        </form>
+	<div class="explain">
+		<h3>데이터 수정 및 업로드</h3>
+		<p>업로드 버튼을 통해 .xls .xlsx .csv 파일을 저장 할 수 있습니다.</p>
+		<p>파일을 선택하면 파일 데이터를 수정할 수 있는 창으로 이동합니다.</p>
+	</div>
+	
+	<div class="container">
+		<form action="{% url 'smartfarm:fileUpload' %}" method="POST" enctype="multipart/form-data" class="upload">
+			{% csrf_token %}
+			<div class="excel">
+				<div id="spreadsheet" class="spreadsheet">
+					<input type="file" id="fileUploadDrag" class="fileUploadDrag" name="fileUploadDrag" accept=".xls, .xlsx, .csv">
+					<div class="icon">
+						<i class="fa-solid fa-cloud-arrow-up" id="fileIcon"></i>
+						<span>파일을 드래그하세요</span>
+					</br>
+						<p>최대 100줄을 미리 보여줍니다.</p>
+					</div>
+				</div>
+			</div>
+			<div class="wrap">
+					<input type="file" name="fileUploadInput" id="fileUploadInput" class="fileUploadInput" accept=".xls, .xlsx, .csv">
+					<label for="fileUploadInput">업로드</label>
+					<input id="fileName" name="fileName" class="fileName" value="파일선택" disabled="disabled">
+					<button id="upload" class="upload" type="submit">등록하기</button>
+			</div>
+		</form>
 
-        <div class="Box">
-            <div class="listContainer" id="listContainer">
-                <div class="listTitle">
-                    <input type="checkbox" class="checkAll" id="checkAll">
-                    <div class="fileTitle" id="fileTitle">
-                        파일명
-                    </div>
-                    <div class="uploadDate" id="uploadDate">
-                        업로드 날짜
-                    </div>
-                    <div class="lastUpdateDate" id="lastUpdateDate">
-                        마지막 수정 날짜
-                    </div>
-                </div>
-                <div class="file-container">
-                    {% for file in files %}
-                    <div class="list">
-                        <input type="checkbox" class="check">
-                        <div class="fileTitle" id="AllTitle">
-                            <a onclick="saveTitle(event)">{{file.file_title}}</a>
-                        </div>
-                        <div class="uploadDate" id="uploadDate">
-                            {{file.created_at | date:'Y-m-d'}}
-                        </div>
-                        <div class="lastUpdateDate" id="lastUpdateDate">
-                            {{file.updated_at | date:'Y-m-d'}}
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="search_box">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input id="search" type="text" placeholder="입력">
+			<div class="Box">
+					<div class="listContainer" id="listContainer">
+							<div class="listTitle">
+									<input type="checkbox" class="checkAll" id="checkAll">
+									<div class="fileTitle" id="fileTitle">
+											파일명
+									</div>
+									<div class="uploadDate" id="uploadDate">
+											업로드 날짜
+									</div>
+									<div class="lastUpdateDate" id="lastUpdateDate">
+											마지막 수정 날짜
+									</div>
+							</div>
+							<div class="file-container">
+									{% for file in files %}
+									<div class="list">
+											<input type="checkbox" class="check">
+											<div class="fileTitle" id="AllTitle">
+													<a onclick="saveTitle(event)">{{file.file_title}}</a>
+											</div>
+											<div class="uploadDate" id="uploadDate">
+													{{file.created_at | date:'Y-m-d'}}
+											</div>
+											<div class="lastUpdateDate" id="lastUpdateDate">
+													{{file.updated_at | date:'Y-m-d'}}
+											</div>
+									</div>
+									{% endfor %}
+							</div>
+					</div>
+					<div class="search_box">
+							<i class="fa-solid fa-magnifying-glass"></i>
+							<input id="search" type="text" placeholder="입력">
 
-                <button class="delete" id="delete">파일 삭제</button>
-                <button class="download" id="download">파일 다운</button>
-            </div>
-        </div>
-    </div>
+							<button class="delete" id="delete">파일 삭제</button>
+							<button class="download" id="download">파일 다운</button>
+					</div>
+			</div>
+	</div>
 </body>
 <!-- js -->
 <script type="module" src="/templates/fileList/upload.js"></script>

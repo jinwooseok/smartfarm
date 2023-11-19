@@ -62,8 +62,8 @@ a {
     }
 
     /* container */
-    .textContainer {
-        background: url(./KakaoTalk_20230423_230138175.jpg) no-repeat center center;
+    .imgContainer {
+        background: url(./Main_IMG.jpg) no-repeat center center;
         background-size: cover;
 
         width: 100%;
@@ -78,30 +78,30 @@ a {
         font-weight: bold;
     }
 
-    .textContainer .first-line {
+    .imgContainer .firstLine {
         font-size: 20px;
     }
 
-    .textContainer span {
+    .imgContainer span {
         color: #007A33;
         font-size: 40px;
     }
 
-    .textContainer .second-line {
+    .imgContainer .secondLine {
         font-size: 40px;
     }
 
-    .textContainer .third-line {
+    .imgContainer .thirdLine {
         font-size: 24px;
     }
 
-    .textContainer p {
+    .imgContainer p {
         margin: 1px;
         color: #000;
     }
 
-    /* service */
-    .service {
+    /* serviceContainer */
+    .serviceContainer {
         width: 100%;
         height: 350px;
         margin-top: 30px;
@@ -113,7 +113,7 @@ a {
         align-items: center;
     }
 
-    .service .service-item {
+    .serviceContainer .service {
         width: 20%;
         height: 230px;
         border-radius: 20px;
@@ -128,15 +128,15 @@ a {
         text-align: center;
     }
 
-    .service .service-item .item-title {
+    .serviceContainer .service .serviceTitle {
         font-weight: bold;
     }
 
-    .service .service-item .item-content {
+    .serviceContainer .service .serviceContent {
         margin: 10px 0;
     }
 
-    .service .service-item .item-btn {
+    .serviceContainer .service .serviceButton {
         width: 40%;
         height: 30px;
 
@@ -147,13 +147,13 @@ a {
         background-color: #007A33;
     }
 
-    .service .service-item .item-btn:hover {
+    .serviceContainer .service .serviceButton:hover {
         transform: scale(1.1);
         transition-duration: 0.5s;
         font-size: 16px;
     }
 
-    .service .service-item .item-btn a {
+    .serviceContainer .service .serviceButton a {
         color: #fff;
     }
 }
@@ -206,8 +206,8 @@ a {
     }
 
     /* container */
-    .textContainer {
-        background: url(./KakaoTalk_20230423_230138175.jpg) no-repeat center center;
+    .imgContainer {
+        background: url(./Main_IMG.jpg) no-repeat center center;
         background-size: cover;
 
         width: 100%;
@@ -222,30 +222,30 @@ a {
         font-weight: bold;
     }
 
-    .textContainer .first-line {
+    .imgContainer .firstLine {
         font-size: 20px;
     }
 
-    .textContainer span {
+    .imgContainer span {
         color: #007A33;
         font-size: 40px;
     }
 
-    .textContainer .second-line {
+    .imgContainer .secondLine {
         font-size: 40px;
     }
 
-    .textContainer .third-line {
+    .imgContainer .thirdLine {
         font-size: 24px;
     }
 
-    .textContainer p {
+    .imgContainer p {
         margin: 1px;
         color: #000;
     }
 
-    /* service */
-    .service {
+    /* serviceContainer */
+    .serviceContainer {
         width: 100%;
         height: 350px;
         margin-top: 30px;
@@ -257,7 +257,7 @@ a {
         align-items: center;
     }
 
-    .service .service-item {
+    .serviceContainer .service {
         width: 20%;
         height: 230px;
         border-radius: 20px;
@@ -272,15 +272,15 @@ a {
         text-align: center;
     }
 
-    .service .service-item .item-title {
+    .serviceContainer .service .serviceTitle {
         font-weight: bold;
     }
 
-    .service .service-item .item-content {
+    .serviceContainer .service .serviceContent {
         margin: 10px 0;
     }
 
-    .service .service-item .item-btn {
+    .serviceContainer .service .serviceButton {
         width: 40%;
         height: 30px;
 
@@ -291,13 +291,13 @@ a {
         background-color: #007A33;
     }
 
-    .service .service-item .item-btn:hover {
+    .serviceContainer .service .serviceButton:hover {
         transform: scale(1.1);
         transition-duration: 0.5s;
         font-size: 16px;
     }
 
-    .service .service-item .item-btn a {
+    .serviceContainer .service .serviceButton a {
         color: #fff;
     }
 }

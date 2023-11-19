@@ -2,16 +2,16 @@
 import  Excel  from '../JS/excel_show.mjs';
 
 const $spreadsheet = document.querySelector('#spreadsheet')
-const $fileUpload_Drag = document.querySelector('#fileUpload_Drag'); // 파일 drag 
-const $fileUpload_Input = document.querySelector('#fileUpload_Input'); // 파일 선택 
+const $fileUploadDrag = document.querySelector('#fileUploadDrag'); // 파일 drag 
+const $fileUploadInput = document.querySelector('#fileUploadInput'); // 파일 선택 
 const $fileIcon = document.querySelector('#fileIcon'); // 엑셀 icon 
 const $fileName = document.querySelector('#fileName'); // 파일 이름
 
-const $confirm = document.querySelector('#confirm'); // dialog 닫기(확인)
+const $upload = document.querySelector('#upload'); // dialog 닫기(확인)
 
 let selectedFile; // 선택 파일 정보
 
-$fileUpload_Input.addEventListener('change', (event) => {
+$fileUploadInput.addEventListener('change', (event) => {
     // 파일 읽기
     selectedFile = event.target.files[0];
     if(!selectedFile){
@@ -23,19 +23,19 @@ $fileUpload_Input.addEventListener('change', (event) => {
 });
 
 // drag in 확인
-$fileUpload_Drag.addEventListener('dragenter', function (e) {
+$fileUploadDrag.addEventListener('dragenter', function (e) {
     e.preventDefault();
     this.style.backgroundColor = '#999';
 });
 
 // drag out 확인
-$fileUpload_Drag.addEventListener('dragleave', function (e) {
+$fileUploadDrag.addEventListener('dragleave', function (e) {
     e.preventDefault();
     this.style.backgroundColor = '';
 });
 
 // drag로 파일 올리기
-$fileUpload_Drag.addEventListener('drop', (event) => {
+$fileUploadDrag.addEventListener('drop', (event) => {
     event.preventDefault();
     // 파일 읽기
     selectedFile = event.dataTransfer.files[0];
@@ -57,8 +57,8 @@ function showFile() {
 
         //바이너리 형태로 엑셀파일을 읽는다.
         let workbook = XLSX.read(resultData, { type: 'binary' });
-        //엑셀파일의 시트 정보를 읽어서 JSON 형태로 변환한다. sheet 하나만 가져옴
         let ex_data = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[workbook.SheetNames[0]]);
+        // 100줄을 미리 보여줌
         const uploadData = new Excel(ex_data.slice(0,100), $spreadsheet);
     }
 
@@ -70,7 +70,7 @@ function showFile() {
 }
 
 ///////////// 값 초기화 하기
-$confirm.addEventListener('click', () => {
+$upload.addEventListener('click', () => {
     $spreadsheet.textContent = "";
     $fileIcon.style.display = 'block'; // 파일 이미지 보여줌
     $fileUpload_Drag.style.display = 'block'; // 파일 input 보여줌
