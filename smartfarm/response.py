@@ -52,3 +52,8 @@ def fileMergeApiResponse(file_name_list,files = None):
             'files':files,   
             'fileNameList': file_name_list}
     return context
+
+def analysisViewResponse(user_name, data):
+    context={'user_name':user_name,
+            'data': data}
+    return context

@@ -234,6 +234,7 @@ def getAnalyzeDataApi(request, file_title):
     user = loginValidator(request)
     if user != None:
         result = FileSystem(user, file_title=file_title).fileLoad()
+        context = analysisViewResponse(user.user_name,result)
         return render(request, "Analyze/analyze.html", successDataResponse(result)) #전송
     elif user == None:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
@@ -291,11 +292,11 @@ def farm(request, file_title):
     DorW=request.POST.get('DorW','days')
     var=request.POST.get('valueObject')
     var=json.loads(var)
-    startRow = request.POST.get('startRow', "1")
+    startIndex = request.POST.get('startIndex', "1")
 
     data=FileSystem(user,file_title=file_title).fileLoad()
 
-    a = ETL_system(data,file_type,date,lat_lon,DorW,var,startRow)
+    a = ETL_system(data,file_type,date,lat_lon,DorW,var,startIndex)
 
     result=a.ETL_stream()
 
