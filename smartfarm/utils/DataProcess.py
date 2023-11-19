@@ -1,14 +1,12 @@
-from ..decorators import logging_time
 import pandas as pd
 import numpy as np
 
 import json
 ## -------------데이터 변경 클래스-----------------
 class DataProcess:
-    def __init__(self, data, date = 0):
-        self.data = pd.read_json(data)
+    def __init__(self, data, date = 0, startRow = 1):
+        self.data = pd.read_json(data).iloc[int(startRow)-1:,:]
         self.date = int(date)
-
     
     #실수 자료를 소수점 2자리 수로 반올림
     @staticmethod
@@ -19,31 +17,31 @@ class DataProcess:
         data[data.select_dtypes(include=['object','datetime64[ns]']).columns] = data.select_dtypes(include=['object','datetime64[ns]']).astype(str)
         return data
 
-    
+    @staticmethod
+    def dataIntegrator(data1, data2):
+        data1 = data1.append(data2)
+        return data1
     #데이터 변경, 결측치,이상치 처리
 
 
     #다양한 날짜 형식 처리, 타입 처리 전엔 항상 날짜의 형태의 문자열로 처리, 날짜 열만 따로 호출함.
     def dateConverter(self):
         date_type = self.getDateSeries().dtype
-        date_series = self.getDateSeries()
-        
-        #str, object, int, int64, datetime64의 경우 pandas to_datetime을 통해 datetime64[ns]로 변환
-        if date_type == str or date_type == object:
-           date_series = pd.to_datetime(date_series)
-        elif date_type in [int, np.int64]:
-            date_series = pd.to_datetime(date_series.astype(str))
-        elif date_type == "datetime64[ns]":    
-            date_series = pd.to_datetime(date_series)
-        else:
-            print("날짜 형식이 아닙니다.")
-            return 0
-        
         self.data.rename(columns={self.data.columns[self.date]:'날짜'}, inplace=True)
-        self.setDateSeries(date_series)
-    
-    def setDateSeries(self, date_series):
-        self.data.iloc[:, self.date] = date_series
+        #str, object, int, int64, datetime64의 경우 pandas to_datetime을 통해 datetime64[ns]로 변환
+        try:
+            if date_type == str or date_type == object:
+                self.data["날짜"] = pd.to_datetime(self.data["날짜"])
+            elif date_type in [int, np.int64]:
+                self.data["날짜"] = pd.to_datetime(self.data["날짜"].astype(str))
+            elif date_type == "datetime64[ns]" or date_type == "<M8[ns]":    
+                self.data["날짜"] = pd.to_datetime(self.data["날짜"])
+            else:
+                print("날짜 형식이 아닙니다.")
+                raise ValueError
+        except:
+            print("날짜 형식이 아닙니다.")
+            raise ValueError
 
     def getDateSeries(self):
         return self.data.iloc[:, self.date]
@@ -73,11 +71,11 @@ class DataProcess:
         dropIndex = []
         for i in range(len(data.columns)):
             if data.iloc[:, i].dtype == "int64" or data.iloc[:, i].dtype == "float64":
-                print(data.columns[i],self.outLierDetector(data.iloc[:, i]))
+
                 if len(self.outLierDetector(data.iloc[:, i])) != 0:
                     dropIndex = dropIndex+self.outLierDetector(data.iloc[:, i])
         dropIndex = list(set(dropIndex))
-        print(dropIndex)
+
         self.data.drop(dropIndex, axis=0, inplace=True)
         return self.data.to_json(orient="records",force_ascii=False)
     
@@ -103,7 +101,6 @@ class DataProcess:
     #컬럼명 변경
     @staticmethod
     def columnToString(df, columnIndex):
-        print(df)
         if columnIndex != -1:
             df.iloc[:, columnIndex] = df.iloc[:, columnIndex].astype(str)
         return df
