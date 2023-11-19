@@ -17,19 +17,16 @@ function fileSetting() {
   $fileName.value = selectedFile.name.replace(/\s/g, "_");
 }
 
-function showFileContent(fileContent) {
-  const workbook = XLSX.read(fileContent, { type: "binary" });
-  const sheetData = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[workbook.SheetNames[0]]);
-  new Excel(sheetData.slice(0, 100), $spreadsheet);
-  CloseLoading();
-}
-
-function readFileContent(file, callback) {
+function readFileContent(file) {
   const reader = new FileReader();
   Loading();
 
   reader.onload = function (event) {
-    callback(event.target.result);
+    const fileContent =  event.target.result;
+    const workbook = XLSX.read(fileContent, { type: "binary" });
+    const sheetData = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[workbook.SheetNames[0]]);
+    new Excel(sheetData.slice(0, 100), $spreadsheet);
+    CloseLoading();
   };
 
   reader.onerror = function (event) {
@@ -67,7 +64,7 @@ $fileUploadDrag.addEventListener("drop", (event) => {
 
 function showFile() {
   fileSetting();
-  readFileContent(selectedFile, showFileContent);
+  readFileContent(selectedFile);
 }
 
 $uploadFile.addEventListener("click", () => {
