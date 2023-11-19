@@ -3,10 +3,6 @@ import pandas as pd
 #분석도구들을 모아놓은 파일
 import statsmodels.api as sm  
 def linear(d,x,y):#회귀분석을 실행. 결과표,분산분석표,상관분석표까지 표현
-    from sklearn.model_selection import train_test_split
-    from statsmodels.formula.api import ols 
-    print(y)
-    print(x)
 
     result = sm.OLS(d[y],d[x]).fit()
     #f_html=result.summary().to_html()
