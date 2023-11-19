@@ -133,11 +133,9 @@ body {
         position: relative;
     }
 
-    .spreadsheet .fileUpload_Drag {
+    .spreadsheet .fileUploadDrag {
         width: 300%;
         height: 300%;
-
-        visibility: hidden;
     }
 
     .spreadsheet .icon {
@@ -474,7 +472,7 @@ body {
         position: relative;
     }
 
-    .spreadsheet .fileUpload_Drag {
+    .spreadsheet .fileUploadDrag {
         width: 300%;
         height: 300%;
     }
