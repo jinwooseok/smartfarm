@@ -30,6 +30,4 @@ export const CloseLoading = () => {
   if ($loadingImg) {
     $loadingImg.parentNode.removeChild($loadingImg);
   }
-
-  console.log("로딩창 닫기");
 };

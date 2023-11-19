@@ -136,8 +136,6 @@ body {
     .spreadsheet .fileUploadDrag {
         width: 300%;
         height: 300%;
-
-        visibility: hidden;
     }
 
     .spreadsheet .icon {
