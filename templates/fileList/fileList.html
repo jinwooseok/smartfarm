@@ -54,52 +54,52 @@
 				</div>
 			</div>
 			<div class="wrap">
-					<input type="file" name="fileUploadInput" id="fileUploadInput" class="fileUploadInput" accept=".xls, .xlsx, .csv">
-					<label for="fileUploadInput">업로드</label>
-					<input id="fileName" name="fileName" class="fileName" value="파일선택" disabled="disabled">
-					<button id="uploadFile" class="uploadFile" type="submit">등록하기</button>
+				<input type="file" name="fileUploadInput" id="fileUploadInput" class="fileUploadInput" accept=".xls, .xlsx, .csv">
+				<label for="fileUploadInput">업로드</label>
+				<input id="fileName" name="fileName" class="fileName" value="파일선택" disabled="disabled">
+				<button id="uploadFile" class="uploadFile" type="submit">등록하기</button>
 			</div>
 		</form>
 
-			<div class="Box">
-					<div class="listContainer" id="listContainer">
-							<div class="listTitle">
-									<input type="checkbox" class="checkAll" id="checkAll">
-									<div class="fileTitle" id="fileTitle">
-											파일명
-									</div>
-									<div class="uploadDate" id="uploadDate">
-											업로드 날짜
-									</div>
-									<div class="lastUpdateDate" id="lastUpdateDate">
-											마지막 수정 날짜
-									</div>
-							</div>
-							<div class="file-container">
-									{% for file in files %}
-									<div class="list">
-											<input type="checkbox" class="check">
-											<div class="fileTitle" id="AllTitle">
-													<a onclick="saveTitle(event)">{{file.file_title}}</a>
-											</div>
-											<div class="uploadDate" id="uploadDate">
-													{{file.created_at | date:'Y-m-d'}}
-											</div>
-											<div class="lastUpdateDate" id="lastUpdateDate">
-													{{file.updated_at | date:'Y-m-d'}}
-											</div>
-									</div>
-									{% endfor %}
-							</div>
+		<div class="Box">
+			<div class="listContainer" id="listContainer">
+				<div class="listTitle">
+					<input type="checkbox" class="checkAll" id="checkAll">
+					<div class="fileTitle" id="fileTitle">
+						파일명
 					</div>
-					<div class="search_box">
-							<i class="fa-solid fa-magnifying-glass"></i>
-							<input id="search" type="text" placeholder="입력">
-
-							<button class="delete" id="delete">파일 삭제</button>
-							<button class="download" id="download">파일 다운</button>
+					<div class="uploadDate" id="uploadDate">
+						업로드 날짜
 					</div>
+					<div class="lastUpdateDate" id="lastUpdateDate">
+						마지막 수정 날짜
+					</div>
+				</div>
+				<div class="file-container">
+					{% for file in files %}
+					<div class="list">
+						<input type="checkbox" class="check">
+						<div class="fileTitle" id="AllTitle">
+							<a onclick="moveRevisePage(event)">{{file.file_title}}</a>
+						</div>
+						<div class="uploadDate" id="uploadDate">
+							{{file.created_at | date:'Y-m-d'}}
+						</div>
+						<div class="lastUpdateDate" id="lastUpdateDate">
+							{{file.updated_at | date:'Y-m-d'}}
+						</div>
+					</div>
+					{% endfor %}
+				</div>
 			</div>
+			<div class="search_box">
+				<i class="fa-solid fa-magnifying-glass"></i>
+				<input id="search" type="text" placeholder="입력">
+
+				<button class="delete" id="delete">파일 삭제</button>
+				<button class="download" id="download">파일 다운</button>
+			</div>
+		</div>
 	</div>
 </body>
 <!-- js -->

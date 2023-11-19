@@ -1,426 +1,435 @@
 ul,
 li {
-    list-style: none;
+  list-style: none;
 }
 
 a {
-    text-decoration: none;
-    color: #000;
+  text-decoration: none;
+  color: #000;
 }
 
 *:not(dialog) {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 
 /* 1280px 보다 크면 */
 @media (min-width: 1280px) {
 
-    /* nav */
-    .nav {
-        width: 1280px;
-        height: 70px;
-        margin: 0 auto;
-        margin-top: 10px;
+  /* nav */
+  .nav {
+    width: 1280px;
+    height: 70px;
+    margin: 0 auto;
+    margin-top: 10px;
 
-        display: flex;
-        flex-wrap: nowrap;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-    .nav .title {
-        color: #007A33;
-        font-size: 18px;
-        font-weight: bold;
-    }
+  .nav .title {
+    color: #007A33;
+    font-size: 18px;
+    font-weight: bold;
+  }
 
-    .nav .login {
-        padding: 3px 15px;
-        text-align: center;
-        font-size: 14px;
-        font-weight: bold;
-        line-height: 30px;
+  .nav .login {
+    padding: 3px 15px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 30px;
 
-        background-color: #007A33;
-        border-radius: 8px;
-        color: #fff;
-    }
+    background-color: #007A33;
+    border-radius: 8px;
+    color: #fff;
+  }
 
-    .nav .logout{
-        padding: 3px 10px;
-        text-align: center;
-        font-size: 14px;
-        font-weight: bold;
-        line-height: 30px;
-    
-        background-color: #007A33;
-        border-radius: 8px;
-        color: #fff;
-    }
+  .nav .logout {
+    padding: 3px 10px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 30px;
 
-    /* explain */
-    .explain {
-        width: 1280px;
-        margin: 0 auto;
-        margin-top: 15px;
+    background-color: #007A33;
+    border-radius: 8px;
+    color: #fff;
+  }
 
-        text-align: center;
-    }
+  /* explain */
+  .explain {
+    width: 1280px;
+    margin: 0 auto;
+    margin-top: 15px;
 
-    .explain h3 {
-        font-size: 30px;
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
+    text-align: center;
+  }
 
-    .explain p {
-        font-size: 15px;
-    }
+  .explain h3 {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
 
-    .container {
-        width: 1280px;
-        margin: 20px auto;
-    }
+  .explain p {
+    font-size: 15px;
+  }
 
-    .Box{
-        width: 1000px;
-        height: 480px;
-        margin: 0 auto;
-        
-        display: flex;
-        flex-direction: column;
-    }
+  .container {
+    width: 1280px;
+    margin: 20px auto;
+  }
 
-    /* fileList */
-    .list-container {
-        width: 1000px;
-        height: 400px;
-        border: 1px solid #000;
-        border-radius: 10px;
+  .Box {
+    width: 1000px;
+    height: 480px;
+    margin: 0 auto;
 
-        overflow-y: hidden;
-    }
+    display: flex;
+    flex-direction: column;
+  }
 
-    .list-container .list_head {
-        width: 95%;
-        margin: 5px auto;
+  /* fileList */
+  .listContainer {
+    width: 1000px;
+    height: 400px;
+    border: 1px solid #000;
+    border-radius: 10px;
 
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: center;
-        align-items: center;
+    overflow-y: hidden;
+  }
 
-        text-align: center;
-    }
+  .listContainer .listTitle {
+    width: 95%;
+    margin: 5px auto;
 
-    .list-container .file-container {
-        width: 95%;
-        height: calc(400px - 27px);
-        margin: 5px auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
 
-        overflow-y: auto;
-    }
+    text-align: center;
+  }
 
-    .list-container .file-container .list {
-        width: 100%;
-        margin-bottom: 3px;
+  .listContainer .file-container {
+    width: 95%;
+    height: calc(400px - 27px);
+    margin: 5px auto;
 
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: center;
-        align-items: center;
+    overflow-y: auto;
+  }
 
-        text-align: center;
-    }
+  .listContainer .file-container .list {
+    width: 100%;
+    margin-bottom: 3px;
 
-    .list-container .list_head>*,
-    .list-container .list>* {
-        margin: 0 10px;
-    }
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
 
-    .list-container .list_head {
-        border-bottom: 1px solid #999;
-    }
+    text-align: center;
+  }
 
-    .list-container .list>* {
-        border: 1px solid #000;
+  .listContainer .listTitle>*,
+  .listContainer .list>* {
+    margin: 0 10px;
+  }
 
-        font-size: 12px;
-    }
+  .listContainer .listTitle {
+    border-bottom: 1px solid #999;
+  }
 
-    .list-container .list_head .check-all,
-    .list-container .list .check {
-        width: 16px;
-        height: 16px;
-    }
+  .listContainer .list>* {
+    border: 1px solid #000;
 
-    .list-container .list_head .list_title,
-    .list-container .list .list_title {
-        width: 500px;
-        height: 26px;
-        line-height: 26px;
+    font-size: 12px;
+  }
 
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-    }
+  .listContainer .listTitle .checkAll{
+    visibility: hidden;
+  }
 
-    .list-container .list .list_title {
-        text-align: left;
-        padding-left: 5px;
-    }
+  .listContainer .listTitle .checkAll,
+  .listContainer .list .check {
+    width: 16px;
+    height: 16px;
+  }
 
-    .list-container .list .list_title :hover{
-        cursor: pointer;
-        text-decoration: underline;
-    }
+  .listContainer .listTitle .fileTitle,
+  .listContainer .list .fileTitle {
+    width: 500px;
+    height: 26px;
+    line-height: 26px;
 
-    .list-container .list_head .date,
-    .list-container .list_head .n_date,
-    .list-container .list .date,
-    .list-container .list .n_date {
-        width: 150px;
-        height: 26px;
-        line-height: 26px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-    }
+  .listContainer .list .fileTitle {
+    text-align: left;
+    padding-left: 5px;
+  }
 
-    /* scroll */
-    .file-container::-webkit-scrollbar {
-        width: 1px;
-    }
+  .listContainer .list .fileTitle :hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
 
-    .file-container::-webkit-scrollbar-thumb {
-        background-color: #999;
-    }
+  .listContainer .listTitle .uploadDate,
+  .listContainer .listTitle .lastUpdateDate,
+  .listContainer .list .uploadDate,
+  .listContainer .list .lastUpdateDate {
+    width: 150px;
+    height: 26px;
+    line-height: 26px;
 
-    .search_box{
-        width: 800px;
-        margin-top: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 
-        display: inline-block;
-    }
+  /* scroll */
+  .file-container::-webkit-scrollbar {
+    width: 1px;
+  }
 
-    .search_box input[type=text] {
-        width: 180px;
-        height: 20px;
-        margin-left: 3px;
-    }
+  .file-container::-webkit-scrollbar-thumb {
+    background-color: #999;
+  }
+
+  .search_box {
+    width: 800px;
+    margin-top: 10px;
+
+    display: inline-block;
+  }
+
+  .search_box input[type=text] {
+    width: 180px;
+    height: 20px;
+    margin-left: 3px;
+  }
 }
 
 
 /* ////////////////////////////////////////// */
 /* 1280보다 작으면 */
 @media (max-width:1280px) {
-    /* nav */
-    .nav {
-        width: 1000px;
-        height: 70px;
-        margin: 0 auto;
-        margin-top: 10px;
 
-        display: flex;
-        flex-wrap: nowrap;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
+  /* nav */
+  .nav {
+    width: 1000px;
+    height: 70px;
+    margin: 0 auto;
+    margin-top: 10px;
 
-    .nav .title {
-        color: #007A33;
-        font-size: 18px;
-        font-weight: bold;
-    }
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-    .nav .login {
-        padding: 3px 15px;
-        text-align: center;
-        font-size: 14px;
-        font-weight: bold;
-        line-height: 30px;
+  .nav .title {
+    color: #007A33;
+    font-size: 18px;
+    font-weight: bold;
+  }
 
-        background-color: #007A33;
-        border-radius: 8px;
-        color: #fff;
-    }
+  .nav .login {
+    padding: 3px 15px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 30px;
 
-    .nav .logout {
-        padding: 3px 10px;
-        text-align: center;
-        font-size: 14px;
-        font-weight: bold;
-        line-height: 30px;
+    background-color: #007A33;
+    border-radius: 8px;
+    color: #fff;
+  }
 
-        background-color: #007A33;
-        border-radius: 8px;
-        color: #fff;
-    }
+  .nav .logout {
+    padding: 3px 10px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 30px;
 
-    /* explain */
-    .explain {
-        width: 1000px;
-        margin: 0 auto;
-        margin-top: 15px;
+    background-color: #007A33;
+    border-radius: 8px;
+    color: #fff;
+  }
 
-        text-align: center;
-    }
+  /* explain */
+  .explain {
+    width: 1000px;
+    margin: 0 auto;
+    margin-top: 15px;
 
-    .explain h3 {
-        font-size: 30px;
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
+    text-align: center;
+  }
 
-    .explain p {
-        font-size: 15px;
-    }
+  .explain h3 {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
 
-    .container {
-        width: 1000px;
-        margin: 20px auto;
+  .explain p {
+    font-size: 15px;
+  }
 
-    }
+  .container {
+    width: 1000px;
+    margin: 20px auto;
 
-    .Box{
-        width: 650px;
-        height: 380px;
-        margin: 0 auto;
+  }
 
-        display: flex;
-        flex-direction: column;
+  .Box {
+    width: 650px;
+    height: 380px;
+    margin: 0 auto;
 
-    }
+    display: flex;
+    flex-direction: column;
 
-    /* fileList */
-    .list-container {
-        width: 650px;
-        height: 300px;
-        border: 1px solid #000;
-        border-radius: 10px;
+  }
 
-        overflow-y: hidden;
-    }
+  /* fileList */
+  .listContainer {
+    width: 650px;
+    height: 300px;
+    border: 1px solid #000;
+    border-radius: 10px;
 
-    .list-container .list_head {
-        width: 95%;
-        margin: 5px auto;
+    overflow-y: hidden;
+  }
 
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: center;
-        align-items: center;
+  .listContainer .listTitle {
+    width: 95%;
+    margin: 5px auto;
 
-        text-align: center;
-    }
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
 
-    .list-container .file-container {
-        width: 95%;
-        height: calc(400px - 27px);
-        margin: 5px auto;
+    text-align: center;
+  }
 
-        overflow-y: auto;
-    }
+  .listContainer .file-container {
+    width: 95%;
+    height: calc(400px - 27px);
+    margin: 5px auto;
 
-    .list-container .file-container .list {
-        width: 100%;
-        margin-bottom: 3px;
+    overflow-y: auto;
+  }
 
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: center;
-        align-items: center;
+  .listContainer .file-container .list {
+    width: 100%;
+    margin-bottom: 3px;
 
-        text-align: center;
-    }
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
 
-    .list-container .list_head>*,
-    .list-container .list>* {
-        margin: 0 10px;
-    }
+    text-align: center;
+  }
 
-    .list-container .list_head {
-        border-bottom: 1px solid #999;
-    }
+  .listContainer .listTitle>*,
+  .listContainer .list>* {
+    margin: 0 10px;
+  }
 
-    .list-container .list>* {
-        border: 1px solid #000;
+  .listContainer .listTitle {
+    border-bottom: 1px solid #999;
+  }
 
-        font-size: 12px;
-    }
+  .listContainer .list>* {
+    border: 1px solid #000;
 
-    .list-container .list_head .check-all,
-    .list-container .list .check {
-        width: 16px;
-        height: 16px;
-    }
+    font-size: 12px;
+  }
+  
+  .listContainer .listTitle .checkAll{
+    visibility: hidden;
+  }
 
-    .list-container .list_head .list_title,
-    .list-container .list .list_title {
-        width: 380px;
-        height: 26px;
-        line-height: 26px;
+  .listContainer .listTitle .checkAll,
+  .listContainer .list .check {
+    width: 16px;
+    height: 16px;
+  }
 
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-    }
+  .listContainer .list_head .fileTitle,
+  .listContainer .list .fileTitle {
+    width: 380px;
+    height: 26px;
+    line-height: 26px;
 
-    .list-container .list .list_title {
-        text-align: left;
-        padding-left: 5px;
-    }
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 
-    .list-container .list .list_title :hover{
-        cursor: pointer;
-        text-decoration: underline;
-    }
+  .listContainer .list .fileTitle {
+    text-align: left;
+    padding-left: 5px;
+  }
 
-    .list-container .list_head .date,
-    .list-container .list_head .n_date,
-    .list-container .list .date,
-    .list-container .list .n_date {
-        width: 100px;
-        height: 26px;
-        line-height: 26px;
+  .listContainer .list .fileTitle :hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
 
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-    }
+  .listContainer .listTitle .uploadDate,
+  .listContainer .listTitle .lastUpdateDate,
+  .listContainer .list .uploadDate,
+  .listContainer .list .lastUpdateDate {
+    width: 100px;
+    height: 26px;
+    line-height: 26px;
 
-    /* scroll */
-    .file-container::-webkit-scrollbar {
-        width: 1px;
-    }
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 
-    .file-container::-webkit-scrollbar-thumb {
-        background-color: #999;
-    }
+  /* scroll */
+  .file-container::-webkit-scrollbar {
+    width: 1px;
+  }
 
-    .search_box{
-        width: 650px;
-        margin-top: 10px;
+  .file-container::-webkit-scrollbar-thumb {
+    background-color: #999;
+  }
 
-        display: inline-block;
-    }
+  .search_box {
+    width: 650px;
+    margin-top: 10px;
 
-    .search_box input[type=text] {
-        width: 180px;
-        height: 20px;
-        margin-left: 3px;
-    }
+    display: inline-block;
+  }
+
+  .search_box input[type=text] {
+    width: 180px;
+    height: 20px;
+    margin-left: 3px;
+  }
 }

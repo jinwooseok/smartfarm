@@ -15,60 +15,61 @@
 </head>
 
 <body>
-    <ul class="nav">
-        <li class="nav-item"><a href="/" class="title">전남대학교 </br>융합 빅데이터 연구실</a></li>
-        <li class="nav-item"><a href="/file-list">데이터 수정</a></li>
-        <li class="nav-item"><a href="/merge/">파일 병합</a></li>
-        <li class="nav-item"><a href="/fileList_2">데이터 분석</a></li>
-        {% if user_name != anonymous %}
-        <li class="nav-item"><a href="/users/logout/" class='logout'>로그아웃</a></li>
-        {% else %}
-        <li class="nav-item"><a href="/users/login/" class='login'>로그인</a></li>
-        {% endif %}
-    </ul>
+  <ul class="nav">
+    <li><a href="/" class="title">전남대학교 </br>융합 빅데이터 연구실</a></li>
+    <li><a href="/file-list">데이터 수정</a></li>
+    <li><a href="/merge/">파일 병합</a></li>
+    <li><a href="/fileList_2">데이터 분석</a></li>
+    {% if user_name != anonymous %}
+    <li><a href="/users/logout/" class='logout'>로그아웃</a></li>
+    {% else %}
+    <li><a href="/users/login/" class='login'>로그인</a></li>
+    {% endif %}
+  </ul>
 
-    <div class="explain">
-        <h3>데이터 분석</h3>
-        <p>원하는 파일을 클릭하면 파일 데이터를 분석할 수 있는 창으로 이동합니다.</p>
-    </div>
-    <div class="container">
-        <div class="Box">
-            <div class="list-container" id="list-container">
-                <div class="list_head">
-                    <input type="checkbox" class="check-all" id="check-all">
-                    <div class="list_title" id="listTitle">
-                        파일명
-                    </div>
-                    <div class="date" id="date">
-                        업로드 날짜
-                    </div>
-                    <div class="n_date" id="n_date">
-                        마지막 수정 날짜
-                    </div>
-                </div>
-                <div class="file-container">
-                    {% for file in files %}
-                    <div class="list">
-                        <input type="checkbox" class="check">
-                        <div class="list_title" id="list_title">
-                            <a onclick="moveAnalystPage(event)">{{file.file_title}}</a>
-                        </div>
-                        <div class="date" id="date">
-                            {{file.created_at | date:'Y-m-d'}}
-                        </div>
-                        <div class="n_date" id="n_date">
-                            {{file.updated_at | date:'Y-m-d'}}
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="search_box">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input id="search" type="text" placeholder="입력">
-            </div>
+  <div class="explain">
+    <h3>데이터 분석</h3>
+    <p>원하는 파일을 클릭하면 파일 데이터를 분석할 수 있는 창으로 이동합니다.</p>
+  </div>
+  
+  <div class="container">
+    <div class="Box">
+      <div class="listContainer" id="llistContainer">
+        <div class="listTitle">
+          <input type="checkbox" class="checkAll" id="checkAll">
+          <div class="fileTitle" id="fileTitle">
+              파일명
+          </div>
+          <div class="uploadDate" id="uploadDate">
+              업로드 날짜
+          </div>
+          <div class="lastUpdateDate" id="lastUpdateDate">
+              마지막 수정 날짜
+          </div>
         </div>
+        <div class="file-container">
+          {% for file in files %}
+          <div class="list">
+            <input type="checkbox" class="check">
+            <div class="fileTitle" id="fileTitle">
+              <a onclick="moveAnalystPage(event)">{{file.file_title}}</a>
+            </div>
+            <div class="uploadDate" id="uploadDate">
+              {{file.created_at | date:'Y-m-d'}}
+            </div>
+            <div class="lastUpdateDate" id="lastUpdateDate">
+              {{file.updated_at | date:'Y-m-d'}}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="search_box">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input id="search" type="text" placeholder="입력">
+      </div>
     </div>
+  </div>
 </body>
 <!-- js -->
 <script src="/templates/fileList_2/fileList_2.js"></script>
