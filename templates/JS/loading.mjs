@@ -5,8 +5,8 @@ export const Loading = () => {
   let Div = document.createElement('div')
   Div.id="loadingContainer"
   Div.style.cssText = `
-  width:${screenWidth}px; height:${screenHeight}px; opacity:0.3; position:absolute; z-index:9000; background-color:#fff; display:block; left:0; top:0;
-  `
+  width:${screenWidth}px; height:${screenHeight}px; opacity:0.3; position:absolute; z-index:9000; background-color:#fff; display:block; left:0; top:0;`
+
   let loadingImg = "";
   loadingImg += "<div id='loadingImg'>";
   loadingImg +=
@@ -16,10 +16,20 @@ export const Loading = () => {
   Div.innerHTML=loadingImg;
 
   document.querySelector("body").appendChild(Div);
-  console.log("로딩창 열기");
 };
 
 export const CloseLoading = () => {
-  document.querySelector('#loadingContainer').style.display='none'
+  const $loadingContainer = document.querySelector('#loadingContainer');
+  const $loadingImg = document.querySelector('#loadingImg');
+
+  // 엘리먼트 제거
+  if ($loadingContainer) {
+    $loadingContainer.parentNode.removeChild($loadingContainer);
+  }
+
+  if ($loadingImg) {
+    $loadingImg.parentNode.removeChild($loadingImg);
+  }
+
   console.log("로딩창 닫기");
 };
