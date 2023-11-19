@@ -1,18 +1,11 @@
 
 from django.shortcuts import render, redirect
-from .models import File
 import pandas as pd
-from users.models import User
 import json
-import os
-from . import proc
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
-from config.settings import BASE_DIR
 from django.http import JsonResponse
 from django.http import HttpResponse
 #-----------------------DRF import-----------------------
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
 from .response import *
 from .repositorys import *
 #-----------------------유틸리티 import-----------------------
@@ -20,13 +13,12 @@ from .decorators import logging_time
 from .validators import loginValidator
 from .utils.FileSystem import FileSystem
 from .utils.DataProcess import DataProcess
-from .utils.JsonProcess import JsonProcess
 from .proc import ETL_system
 ##페이지 별로 필요한 request를 컨트롤
 #---------------분석도구 import ----------------
 from . import analizer
 
-#-----------------------메인화면 호출. user정보를 사용
+from django.utils.datastructures import MultiValueDictKeyError
 
 
 def main(request):
@@ -53,8 +45,10 @@ def fileListView(request):
 def fileUploadApi(request):
     user = loginValidator(request)
     file_title = request.POST.get('file_title')
-    file = request.FILES["fileUpload_Input"]
-    #업로드 실행
+    try:
+        file = request.FILES["fileUploadInput"]
+    except MultiValueDictKeyError:
+        file = request.FILES["fileUploadDrag"]
     FileSystem(user=user,file_title=file_title,multi_part_file=file).fileUpload()
     
     return redirect('/file-list/')
@@ -64,7 +58,6 @@ def fileUploadApi(request):
 def fileDeleteApi(request):
     user = loginValidator(request)
     file_titles = request.POST.get('data')
-    print(json.loads(file_titles))
     for file_title in json.loads(file_titles):
         FileSystem(user=user,file_title=file_title).fileDelete()
     #response
@@ -115,6 +108,7 @@ def dataLoadApi(request):
 
     file_title = request.POST.get('fileName')
     data = FileSystem(user=user, file_title=file_title).fileLoad()
+
     summary = DataProcess(data).makeSummary()
     #response dto
     context = dataLoadApiResponse(data, summary, user.user_name)
@@ -125,7 +119,6 @@ def preprocessorApi(request, file_title):
     user = loginValidator(request)
     new_file_title = request.POST.get('newFileName')
     data = FileSystem(user=user,file_title=file_title).fileLoad()
-
     result = DataProcess(data).outLierDropper()
     
     FileSystem(user,file_title=new_file_title,data=result).fileSave()
@@ -172,24 +165,30 @@ def fileMergeApi(request):
         if request.POST.get('header') == 'merge':
            #파일데이터 불러오기
             data = request.POST.get('data')
-            columnName = request.POST.get('columnName')
+            column_name = request.POST.get('columnName')
             dfs = []
             data = pd.read_json(data)
-            columnName = json.loads(columnName)
-            for i in range(len(data)):
-                data.iloc[i,0] = pd.read_json(data.iloc[i,0])
-                data.iloc[i,0].rename(columns={columnName[i]:"기준"}, inplace=True)
-                if type(data.iloc[i,0]['기준']) is not object:
-                    data.iloc[i,0]['기준'] = data.iloc[i,0]['기준'].astype('object')
-                dfs.append(data.iloc[i,0])
+            column_name = json.loads(column_name)
             
-            mergeData = dfs[0]
+            for i in range(len(data)):
+                df = pd.read_json(data.iloc[i,0])
+                df.rename(columns={column_name[i]:"기준"}, inplace=True)
+                if type(df['기준']) is not object:
+                    df['기준'] = df['기준'].astype('object')
+                dfs.append(df)
+            #data의 메모리 삭제
+            del(data)
+
+            merge_data = dfs[0]
         
             for i in range(1, len(dfs)):
-                mergeData = pd.merge(mergeData, dfs[i], on='기준', suffixes=(f'_{i}', f'_{i+1}'), how='outer')
+                merge_data.info(memory_usage=True)
+                dfs[i].info(memory_usage=True)
+                merge_data = pd.merge(merge_data, dfs[i], on='기준', suffixes=(f'_{i}', f'_{i+1}'), how='outer', sort=True)
 
-            mergeData = mergeData.to_json(orient='records', force_ascii=False)
-            context = successDataResponse(mergeData)
+            merge_json_objects = merge_data.apply(lambda row: json.loads(row.to_json(force_ascii=False)), axis=1).tolist()
+            merge_json_string =  json.dumps(merge_json_objects)
+            context = successDataResponse(merge_json_string)
             return JsonResponse(context)
         
         elif request.POST.get('header') == 'save':
@@ -282,6 +281,7 @@ def test(request):
 @logging_time
 def farm(request, file_title):
     user = loginValidator(request)
+
     new_file_title=request.POST.get('new_file_name')
     file_type=request.POST.get('file_type','환경')
     date=request.POST.get('date','1')
@@ -291,10 +291,12 @@ def farm(request, file_title):
     DorW=request.POST.get('DorW','days')
     var=request.POST.get('valueObject')
     var=json.loads(var)
+    startRow = request.POST.get('startRow', "1")
 
     data=FileSystem(user,file_title=file_title).fileLoad()
 
-    a = ETL_system(data,file_type,date,lat_lon,DorW,var)
+    a = ETL_system(data,file_type,date,lat_lon,DorW,var,startRow)
+
     result=a.ETL_stream()
 
     result_json=result.to_json(orient="records",force_ascii=False)
