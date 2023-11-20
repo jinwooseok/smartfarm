@@ -72,7 +72,6 @@ class ETL_system:
             result=generating_data
         else:
             result = making_weekly2(df.data, df.date, int(self.DorW))
-            result['날짜']=result['날짜'].astype('str')
         result['날짜']=result['날짜'].astype('str')
         return result
     
@@ -373,7 +372,7 @@ def making_weekly2(gdata,date_ind,interval=7):
         g = gdata.loc[mask,:]
         if len(g) != 0:
             g = g.iloc[:,1:]
-            g = g.apply('mean')
+            g = g.apply(pd.to_numeric, errors='coerce').mean()
             d.loc[i]=g
             day.append(date1)
             if date1.year > (date1-pd.Timedelta(days=interval)).year:
@@ -389,14 +388,15 @@ def making_weekly2(gdata,date_ind,interval=7):
     return d
 
 def y_split(df,date_ind,d_ind):
-        if df.isnull().sum != 0:
-            df.dropna()
-        everyday=pd.date_range(df.iloc[0,date_ind],df.iloc[-1,date_ind])
-        df2=pd.DataFrame(everyday)
-        date_temp=pd.to_datetime(df.iloc[:,date_ind])#date_temp type:datetime, serialize, 2020-11-03,...
-        date1=date_temp[0]#2020-11-03  #2columns dataframe
-        for i in range(0,len(date_temp)-1):#serialize
-            mask = (df2.iloc[:,0] > date_temp[i]) & (df2.iloc[:,0] <= date_temp[i+1])#행추출
-            yield_data=df.iloc[i+1,d_ind]
-            df2.loc[mask,1]=yield_data/((date_temp[i+1]-date_temp[i]).days)
-        return df2
+    if df.isnull().sum != 0:
+        df.dropna()
+    everyday=pd.date_range(df.iloc[0,date_ind],df.iloc[-1,date_ind])
+    df2=pd.DataFrame({"날짜":everyday})
+    date_temp=pd.to_datetime(df.iloc[:,date_ind])#date_temp type:datetime, serialize, 2020-11-03,...
+    for i in range(0,len(date_temp)-1):#serialize
+        mask = (df2.iloc[:,0] > date_temp[i]) & (df2.iloc[:,0] <= date_temp[i+1])#행추출
+        yield_data=df.iloc[i+1,d_ind]
+        print(yield_data)
+        df2.loc[mask,"생산량"]=int(yield_data)/((date_temp[i+1]-date_temp[i]).days)
+
+    return df2
