@@ -22,6 +22,7 @@
       {% csrf_token %}
       <div class="email">
         <input type="text" class="formText registerID" id="registerID" name="registerID" placeholder="이메일">
+        <button id="checkEmail" class="checkEmail">중복확인</button>
         <div id="emailError" class="error"></div>
       </div>
 
@@ -41,14 +42,28 @@
       </div>
 
       <div class="job">
-        <input type="text" class="formText registerJob" id="registerJob" name="registerJob" placeholder="직업">
+        <input type="text" class="formText registerJob" id="registerJob" name="registerJob" placeholder="소속">
       </div>
 
       <div class="phone">
-        <label for="phoneFront">전화번호</label>
-        <input type="tel" class="phoneFront" id="phoneFront" name="phone" maxlength="3" pattern="[0-9]{3}" >-
-        <input type="tel" class="phoneMiddle" id="phoneMiddle" name="phone" maxlength="4" pattern="[0-9]{4}">-
-        <input type="tel" class="phoneLast" id="phoneLast" name="phone" maxlength="4" pattern="[0-9]{4}" >
+        <p>전화번호</p>
+        <div class="phoneNumber">
+          <input type="tel" class="phoneFront" id="phoneFront" name="phone" maxlength="3" pattern="[0-9]{3}" >
+          <span>-</span>
+          <input type="tel" class="phoneMiddle" id="phoneMiddle" name="phone" maxlength="4" pattern="[0-9]{4}">
+          <span>-</span>
+          <input type="tel" class="phoneLast" id="phoneLast" name="phone" maxlength="4" pattern="[0-9]{4}" >
+          <button id="postCertificationNumber" class="postCertificationNumber">인증하기</button>
+        </div>
+      </div>
+
+      <div class="checkCertificationNumberContainer">
+        <p>인증번호</p>
+        <div>
+          <input type="text" placeholder="인증번호 입력">
+          <button id="checkCertificationNumber" class="checkCertificationNumber">확인하기</button>
+          <span class="timer" id="timer">5:00</span>
+        </div>
       </div>
 
       <div class="buttonContainer">
@@ -58,8 +73,7 @@
     </form>
   </div>
 </body>
-
-<script src="/templates/users/register.js"></script>
-<script src="/templates/JS/jquery-1.12.4.min.js"></script>
-
 </html>
+
+<script type="module" src="/templates/users/register.js"></script>
+<script src="/templates/JS/jquery-1.12.4.min.js"></script>

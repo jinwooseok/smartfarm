@@ -4,6 +4,7 @@ const $loginId = document.querySelector('#id');
 const $loginPassword = document.querySelector('#password');
 const $loginBtn = document.querySelector('#loginButton');
 
+// const idPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
 const idPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]/;
 
 function isValid(){

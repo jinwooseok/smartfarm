@@ -377,7 +377,7 @@ body {
     height: 16px;
   }
 
-  .listContainer .list_head .fileTitle,
+  .listContainer .listTitle .fileTitle,
   .listContainer .list .fileTitle {
     width: 380px;
     height: 26px;
