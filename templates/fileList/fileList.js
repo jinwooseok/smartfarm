@@ -158,22 +158,20 @@ const download = function (data, title) {
     return csv + row;
   }, "");
 
-  console.log(toCsv);
-
   if (toCsv === "") {
     alert("Invalid data");
     return;
   }
 
-  // const fileName = title;
-  // const uri = "data:text/csv;charset=utf-8,\uFEFF" + encodeURI(toCsv);
+  const fileName = title;
+  const uri = "data:text/csv;charset=utf-8,\uFEFF" + encodeURI(toCsv);
 
-  // const link = document.createElement("a");
-  // link.href = uri;
-  // link.style.visibility = "hidden";
-  // link.download = fileName;
+  const link = document.createElement("a");
+  link.href = uri;
+  link.style.visibility = "hidden";
+  link.download = fileName;
 
-  // document.body.appendChild(link);
-  // link.click();
-  // document.body.removeChild(link);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 };
