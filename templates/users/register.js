@@ -1,3 +1,6 @@
+
+import cookies from "/templates/JS/csrfToken.js";
+
 const $id = document.querySelector("#registerID");
 const $pass = document.querySelector("#registerPassword");
 const $checkPassword = document.querySelector("#registerCheckPassword");
@@ -10,9 +13,58 @@ const $registerForm = document.getElementById("registerForm");
 const $registerButton = document.querySelector("#registerButton");
 const $backToLogin = document.querySelector("#backToLogin");
 
-function isValidEmail(email) {
-  const reg = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]/;
+const $checkEmail = document.querySelector("#checkEmail");
+const $checkCertificationNumber = document.querySelector("#checkCertificationNumber");
+const $postCertificationNumber = document.querySelector("#postCertificationNumber");
+
+let emailValid;
+
+async function checkDuplicateEmail(email) {
+  try {
+    const response = await $.ajax({
+      url: "./email/",
+      type: "post",
+      dataType: "json",
+      headers: { "X-CSRFToken": cookies['csrftoken'] },
+      data: { email },
+      async: false,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("error: " + error);
+    throw error; // rethrow the error for the caller to handle
+  }
+}
+
+function regEmail() {
+  const email=$id.value;
+  const reg = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
   return reg.test(email);
+}
+
+async function isValidEmail() {
+  const email = $id.value;
+  const reg = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
+
+  if (regEmail()) {
+    try {
+      const isDuplicate = await checkDuplicateEmail(email);
+      if (isDuplicate) {
+        alert("중복된 아이디 입니다.");
+      } else {
+        alert('사용가능한 아이디 입니다.');
+      }
+      return !isDuplicate;
+    } catch (error) {
+      alert(error);
+      console.log("error: " + await error);
+      return false;
+    }
+  } else {
+    alert("올바른 이메일 형식이 아닙니다.");
+    return false;
+  }
 }
 
 function isValidPassword(password) {
@@ -30,7 +82,7 @@ function isValidPhone() {
 
 function updateButtonState() {
   const isValid =
-    isValidEmail($id.value) &&
+    emailValid &&
     isValidPassword($pass.value) &&
     $pass.value === $checkPassword.value &&
     $name.value.trim() !== "" &&
@@ -39,12 +91,12 @@ function updateButtonState() {
   $registerButton.disabled = !isValid;
 }
 
-function handleKeyUp(event) {
+function showKeyUpError(event) {
   const id = event.target.id;
 
   switch (id) {
     case "registerID":
-      document.querySelector("#emailError").innerHTML = isValidEmail($id.value)
+      document.querySelector("#emailError").innerHTML = regEmail()
         ? ""
         : "이메일이 올바르지 않습니다.";
       break;
@@ -88,6 +140,11 @@ function moveMain() {
   location.href = "/";
 }
 
-$registerForm.addEventListener("keyup", handleKeyUp);
+$checkEmail.addEventListener("click", async () => {
+  emailValid = await isValidEmail();
+  // Now you can use the 'isValid' variable for further processing
+  console.log("Is email valid?", emailValid)
+});
+$registerForm.addEventListener("keyup", showKeyUpError);
 $registerButton.addEventListener("click", moveLogin);
 $backToLogin.addEventListener("click", moveMain);

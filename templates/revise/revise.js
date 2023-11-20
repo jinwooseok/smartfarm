@@ -47,7 +47,6 @@ const $pretreatmentFileName = document.querySelector("#pretreatmentFileName");
 
 window.onload = async () => {
   data = new Excel(excel_data.slice(0,100), $spreadsheet);
-  console.log(excel_data);
   excel_arr = Object.keys(data.getData()[0]);
   for (let x of excel_arr) {
     $excel_var.innerHTML += `<Option value= '${x}'>` + x + `</option>`;
@@ -138,6 +137,7 @@ $excel_var.addEventListener("click", (event) => {
   excel_var_text = event.target.textContent;
 });
 
+
 // 디폴드 선택에 따른 default_value 창 변동
 $default_select.addEventListener("click", (event) => {
   if (!excel_var_text) {
@@ -146,6 +146,7 @@ $default_select.addEventListener("click", (event) => {
   }
 
   const text = event.target.textContent; // 클릭한 option의 글자
+  console.log(text, excel_var_text)
 
   for (let string of defaultVar) {
     // string = '주간_평균_' 구조

@@ -1,7 +1,9 @@
 import Excel from "../JS/excel_show.mjs";
+import cookies from "/templates/JS/csrfToken.js";
 import { Loading, CloseLoading } from "../JS/loading.mjs";
 
-const csrftoken = $("[name=csrfmiddlewaretoken]").val(); // csrftoken
+// const csrftoken = $("[name=csrfmiddlewaretoken]").val(); // csrftoken
+const csrftoken = cookies['csrftoken'] // csrftoken
 
 const $selectBoxes = {
   growth: document.querySelector("#growthSelectBox"),
