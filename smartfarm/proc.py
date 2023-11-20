@@ -227,7 +227,7 @@ def generating_variable(data, date_ind, d_ind, kind,t_diff , div_DN=False, tbase
             return 0
 
     def mean(data):
-        data.replace('', pd.NA, inplace=True)
+        data = pd.to_numeric(data, errors='coerce')
         data.dropna(inplace=True)
 
         if len(data) == 0:
@@ -239,7 +239,7 @@ def generating_variable(data, date_ind, d_ind, kind,t_diff , div_DN=False, tbase
         return sum(data)/len(data)
     
     def min(data):
-        data.replace('', pd.NA, inplace=True)
+        data = pd.to_numeric(data, errors='coerce')
         data.dropna(inplace=True)
 
         if len(data) == 0:
@@ -251,7 +251,7 @@ def generating_variable(data, date_ind, d_ind, kind,t_diff , div_DN=False, tbase
         return data.min()
     
     def max(data):
-        data.replace('', pd.NA, inplace=True)
+        data = pd.to_numeric(data, errors='coerce')
         data.dropna(inplace=True)
 
         if len(data) == 0:
