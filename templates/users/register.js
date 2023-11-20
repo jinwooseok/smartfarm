@@ -57,8 +57,8 @@ async function isValidEmail() {
       }
       return !isDuplicate;
     } catch (error) {
-      alert("에러입니다.");
-      console.error("error: " + error);
+      alert(error);
+      console.log("error: " + await error);
       return false;
     }
   } else {

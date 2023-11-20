@@ -141,27 +141,39 @@ $download.addEventListener("click", () => {
 
 // download 로직, csv로
 const download = function (data, title) {
-  const jsonDataParsing = JSON.parse(data);
+  const jsonData = data
+  let jsonDataParsing = JSON.parse(jsonData);
 
-  const toCsv = jsonDataParsing.reduce((csv, rowObject) => {
+  let toCsv = '';
+  let row="";
+
+  for(let i in jsonDataParsing[0]){
+    row += i+","; // 열 입력
+  }
+  row = row.slice(0,-1);
+  toCsv += row +"\r\n";
+
+  toCsv += jsonDataParsing.reduce((csv, rowObject) => {
     const row = Object.values(rowObject).join(",") + "\r\n";
     return csv + row;
   }, "");
+
+  console.log(toCsv);
 
   if (toCsv === "") {
     alert("Invalid data");
     return;
   }
 
-  const fileName = title;
-  const uri = "data:text/csv;charset=utf-8,\uFEFF" + encodeURI(toCsv);
+  // const fileName = title;
+  // const uri = "data:text/csv;charset=utf-8,\uFEFF" + encodeURI(toCsv);
 
-  const link = document.createElement("a");
-  link.href = uri;
-  link.style.visibility = "hidden";
-  link.download = fileName;
+  // const link = document.createElement("a");
+  // link.href = uri;
+  // link.style.visibility = "hidden";
+  // link.download = fileName;
 
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  // document.body.appendChild(link);
+  // link.click();
+  // document.body.removeChild(link);
 };
