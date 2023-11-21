@@ -46,6 +46,7 @@ const $abmsFileName = document.querySelector("#abmsFileName");
 const $pretreatmentFileName = document.querySelector("#pretreatmentFileName");
 
 window.onload = async () => {
+  Loading();
   data = new Excel(excel_data.slice(0,100), $spreadsheet);
   excel_arr = Object.keys(data.getData()[0]);
   for (let x of excel_arr) {
@@ -65,6 +66,8 @@ window.onload = async () => {
     JSON.parse(
       localStorage.getItem("fileTitle").replace(/(.csv|.xlsx|.xls)/g, "")
     ) + "_전처리";
+
+  CloseLoading();
 };
 
 ///////////////////////////////////////////
@@ -398,8 +401,6 @@ $submit_data.addEventListener("click", () => {
     periods = document.getElementById("else_peri").value;
   }
   const yesOrNo = confirm("파일을 저장합니다."); // 예, 아니요를 입력 받음
-
-  console.log(valueObject);
 
   if (yesOrNo) {
     Loading();
