@@ -80,7 +80,6 @@ class ETL_system:
         print("--------------생육입니다.-------------------------")
         growth_object = df.data
         date = df.date
-        
         result=making_weekly2(growth_object,date)
         result['날짜']=result['날짜'].astype('str')
         return result
@@ -357,14 +356,12 @@ def making_weekly2(gdata,date_ind,interval=7):
     i=0
     weeknum=0
     date=gdata["날짜"]
-    lastDate=pd.to_datetime(date.iloc[-1])
-    if type(date[0]) != str:
-        date = date.astype('str')
-    if type(date[0]) != type(pd.to_datetime(date)[0]):
-        date = pd.to_datetime(date)
+    lastDate=pd.to_datetime(date.dropna().iloc[-1])
+    print(date)
     if interval == 7 :
         weeknum = int(datetime.datetime(date[0].year,date[0].month,date[0].day).strftime("%U"))
         date1 = pd.to_datetime(datetime.datetime.strptime(f"{date[0].year}-W{weeknum}-1", "%G-W%V-%u")) #해당 주차의 마지막 날짜
+        print(date1)
     else:
         date1= date[0] - pd.offsets.YearBegin() # 시작 날이 포함된 년도의 1월 1일 추출 
     while True:
@@ -375,11 +372,13 @@ def making_weekly2(gdata,date_ind,interval=7):
             g = g.apply(pd.to_numeric, errors='coerce').mean()
             d.loc[i]=g
             day.append(date1)
+            print(type(date1))
             if date1.year > (date1-pd.Timedelta(days=interval)).year:
                 weeknum=0
             weeknum+=1
             week.append(weeknum)
             i+=1
+            print(date1, lastDate)
         if lastDate < date1+pd.Timedelta(days=interval):
             break
         date1=date1+pd.Timedelta(days=interval)

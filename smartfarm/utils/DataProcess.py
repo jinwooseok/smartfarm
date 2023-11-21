@@ -31,11 +31,11 @@ class DataProcess:
         #str, object, int, int64, datetime64의 경우 pandas to_datetime을 통해 datetime64[ns]로 변환
         try:
             if date_type == str or date_type == object:
-                self.data["날짜"] = pd.to_datetime(self.data["날짜"])
+                self.data["날짜"] = pd.to_datetime(self.data["날짜"],format='mixed')
             elif date_type in [int, np.int64]:
-                self.data["날짜"] = pd.to_datetime(self.data["날짜"].astype(str))
+                self.data["날짜"] = pd.to_datetime(self.data["날짜"].astype(str),format='mixed')
             elif date_type == "datetime64[ns]" or date_type == "<M8[ns]":    
-                self.data["날짜"] = pd.to_datetime(self.data["날짜"])
+                self.data["날짜"] = pd.to_datetime(self.data["날짜"],format='mixed')
             else:
                 print("날짜 형식이 아닙니다.")
                 raise ValueError
