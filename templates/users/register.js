@@ -137,7 +137,7 @@ function moveLogin() {
 }
 
 function moveMain() {
-  location.href = "/";
+  location.replace("/");
 }
 
 $checkEmail.addEventListener("click", async () => {

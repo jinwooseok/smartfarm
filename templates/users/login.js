@@ -19,7 +19,7 @@ function isValid(){
 }
 
 function moveMain(){
-    location.href="../main/main.html";
+    location.replace("../main/main.html");
 }
 
 $loginBtn.addEventListener('click', moveMain);

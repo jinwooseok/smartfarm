@@ -1,5 +1,5 @@
 import Excel from "../JS/excel_show.mjs";
-// import { Loading, CloseLoading } from "../JS/loading.mjs";
+import { Loading, CloseLoading } from "../JS/loading.mjs";
 
 const csrftoken = $("[name=csrfmiddlewaretoken]").val(); // csrftoken
 
@@ -399,8 +399,10 @@ $submit_data.addEventListener("click", () => {
   }
   const yesOrNo = confirm("파일을 저장합니다."); // 예, 아니요를 입력 받음
 
+  console.log(valueObject);
+
   if (yesOrNo) {
-    // Loading();
+    Loading();
     $.ajax({
       url: "farm/",
       type: "post",
@@ -416,14 +418,17 @@ $submit_data.addEventListener("click", () => {
       },
       success: function (response) {
         if (response.data != null) {
-          window.location.href = "/file-list/";
+          CloseLoading();
+          window.location.replace("/file-list/");
         } else {
           $submit_data.disabled = false;
+          CloseLoading();
           alert("전송할 데이터가 없습니다.");
         }
       },
       error: function (xhr, error) {
         $submit_data.disabled = false;
+        CloseLoading();
         alert("에러입니다.");
         console.error("error : " + error);
       },

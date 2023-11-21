@@ -97,7 +97,8 @@ $search.addEventListener("keyup", (event) => {
 function moveRevisePage(event) {
   localStorage.setItem("title_list", JSON.stringify(titleList)); // 로컬에 저장
   localStorage.setItem("fileTitle", JSON.stringify(event.target.innerHTML));
-  window.location.href = `/revise/${event.target.innerHTML}/`;
+  console.log()
+  location.href = `/revise/${event.target.innerHTML}/`;
 }
 
 const setDownloadFile = () =>{
