@@ -1,4 +1,3 @@
-
 import cookies from "/templates/JS/csrfToken.js";
 
 const $id = document.querySelector("#registerID");
@@ -45,7 +44,6 @@ function regEmail() {
 
 async function isValidEmail() {
   const email = $id.value;
-  const reg = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
 
   if (regEmail()) {
     try {

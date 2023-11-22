@@ -1,5 +1,5 @@
-import Excel from "./excel_show.mjs";
-import { Loading, CloseLoading } from "./loading.mjs";
+import Excel from "/templates/JS/Utils/Excel.mjs";
+import Loading from "/templates/JS/Utils/Loading.mjs";
 
 const $spreadsheet = document.querySelector("#spreadsheet");
 const $fileUploadDrag = document.querySelector("#fileUploadDrag");
@@ -19,19 +19,19 @@ function fileSetting() {
 
 function readFileContent(file) {
   const reader = new FileReader();
-  Loading();
+  Loading.StartLoading();
 
   reader.onload = function (event) {
     const fileContent =  event.target.result;
     const workbook = XLSX.read(fileContent, { type: "binary" });
     const sheetData = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[workbook.SheetNames[0]]);
     new Excel(sheetData.slice(0, 100), $spreadsheet);
-    CloseLoading();
+   Loading.CloseLoading();
   };
 
   reader.onerror = function (event) {
     console.error(event.target.error);
-    CloseLoading();
+    Loading.CloseLoading();
   };
 
   reader.readAsBinaryString(file);

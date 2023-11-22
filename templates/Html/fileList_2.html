@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>파일 목록 - 분석</title>
     <!-- css -->
-    <link rel="stylesheet" href="/templates/fileList_2/fileList_2.css">
+    <link rel="stylesheet" href="/templates/Css/fileList_2.css">
     <link rel="stylesheet" href="/templates/Css/nav.css">
 
     <!-- fontawesome-->
@@ -16,17 +16,17 @@
 </head>
 
 <body>
-  <ul class="nav">
-    <li><a href="/" class="title">전남대학교 </br>융합 빅데이터 연구실</a></li>
-    <li><a href="/file-list">데이터 수정</a></li>
-    <li><a href="/merge/">파일 병합</a></li>
-    <li><a href="/fileList_2">데이터 분석</a></li>
-    {% if user_name != anonymous %}
-    <li><a href="/users/logout/" class='logout'>로그아웃</a></li>
-    {% else %}
-    <li><a href="/users/login/" class='login'>로그인</a></li>
-    {% endif %}
-  </ul>
+	<ul class="nav">
+		<li><a href="/" class="title">전남대학교</br>융합 빅데이터 연구실</a></li>
+		<li><a href="/file-list">데이터 수정</a></li>
+		<li><a href="/merge/">파일 병합</a></li>
+		<li><a href="/fileList_2">데이터 분석</a></li>
+		{% if user_name != anonymous %}
+		<li><a href="/users/logout/" class='logout' id="logout">로그아웃</a></li>
+		{% else %}
+		<li><a href="/users/login/" class='login' id="login">로그인</a></li>
+		{% endif %}
+	</ul>
 
   <div class="explain">
     <h3>데이터 분석</h3>
@@ -73,8 +73,8 @@
   </div>
 </body>
 <!-- js -->
-<script src="/templates/fileList_2/fileList_2.js"></script>
-<script src="/templates/JS/jquery-1.12.4.min.js"></script>
+<script src="/templates/JS/fileList_2.js"></script>
+<script src="/templates/JS/Utils/jquery-1.12.4.min.js"></script>
 
 
 </html>

@@ -8,7 +8,7 @@
   <title>전남대학교 융합 빅데이터 연구실</title>
 
 	<!-- css -->
-  <link rel="stylesheet" href="/templates/main/main.css">
+  <link rel="stylesheet" href="/templates/Css/main.css">
 	<link rel="stylesheet" href="/templates/Css/nav.css">
 </head>
 
@@ -19,9 +19,9 @@
 		<li><a href="/merge/">파일 병합</a></li>
 		<li><a href="/fileList_2">데이터 분석</a></li>
 		{% if user_name != anonymous %}
-		<li><a href="/users/logout/" class='logout'>로그아웃</a></li>
+		<li><a href="/users/logout/" class='logout' id="logout">로그아웃</a></li>
 		{% else %}
-		<li><a href="/users/login/" class='login'>로그인</a></li>
+		<li><a href="/users/login/" class='login' id="login">로그인</a></li>
 		{% endif %}
 	</ul>
 
@@ -70,8 +70,7 @@
 	</div>
 </body>
 
-<script>
-  localStorage.clear();
-</script>
+<script src="/templates/JS/Utils/href.js"></script>
+<script type="module" src="/templates/JS/main.js"></script>
 
 </html>

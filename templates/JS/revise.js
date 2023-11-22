@@ -1,5 +1,5 @@
-import Excel from "./excel_show.mjs";
-import { Loading, CloseLoading } from "./loading.mjs";
+import Excel from "/templates/JS/Utils/Excel.mjs";
+import Loading from "/templates/JS/Utils/Loading.mjs";
 
 const csrftoken = $("[name=csrfmiddlewaretoken]").val(); // csrftoken
 
@@ -46,7 +46,7 @@ const $abmsFileName = document.querySelector("#abmsFileName");
 const $pretreatmentFileName = document.querySelector("#pretreatmentFileName");
 
 window.onload = async () => {
-  Loading();
+  Loading.StartLoading();
   data = new Excel(excel_data.slice(0,100), $spreadsheet);
   excel_arr = Object.keys(data.getData()[0]);
   for (let x of excel_arr) {
@@ -67,7 +67,7 @@ window.onload = async () => {
       localStorage.getItem("fileTitle").replace(/(.csv|.xlsx|.xls)/g, "")
     ) + "_전처리";
 
-  CloseLoading();
+  Loading.CloseLoading();
 };
 
 ///////////////////////////////////////////
@@ -403,7 +403,7 @@ $submit_data.addEventListener("click", () => {
   const yesOrNo = confirm("파일을 저장합니다."); // 예, 아니요를 입력 받음
 
   if (yesOrNo) {
-    Loading();
+    Loading.StartLoading();
     $.ajax({
       url: "farm/",
       type: "post",
@@ -419,24 +419,22 @@ $submit_data.addEventListener("click", () => {
       },
       success: function (response) {
         if (response.data != null) {
-          CloseLoading();
+          Loading.CloseLoading();
           window.location.replace("/file-list/");
         } else {
           $submit_data.disabled = false;
-          CloseLoading();
+          Loading.CloseLoading();
           alert("전송할 데이터가 없습니다.");
         }
       },
       error: function (xhr, error) {
         $submit_data.disabled = false;
-        CloseLoading();
+        Loading.CloseLoading();
         alert("에러입니다.");
         console.error("error : " + error);
       },
     });
   }
-
-  // CloseLoading();
 
   $submit_data.disabled = false;
 });

@@ -1,198 +1,200 @@
 /* 1280px 보다 크면 */
 @media (min-width: 1280px) {
-    /* container */
-    .imgContainer {
-        background: url(./Main_IMG.jpg) no-repeat center center;
-        background-size: cover;
 
-        width: 100%;
-        height: 250px;
-        margin-top: 10px;
+  /* container */
+  .imgContainer {
+    background: url(../IMG/Main_IMG.jpg) no-repeat center center;
+    background-size: cover;
 
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+    width: 100%;
+    height: 250px;
+    margin-top: 10px;
 
-        text-align: center;
-        font-weight: bold;
-    }
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
-    .imgContainer .firstLine {
-        font-size: 20px;
-    }
+    text-align: center;
+    font-weight: bold;
+  }
 
-    .imgContainer span {
-        color: #007A33;
-        font-size: 40px;
-    }
+  .imgContainer .firstLine {
+    font-size: 20px;
+  }
 
-    .imgContainer .secondLine {
-        font-size: 40px;
-    }
+  .imgContainer span {
+    color: #007A33;
+    font-size: 40px;
+  }
 
-    .imgContainer .thirdLine {
-        font-size: 24px;
-    }
+  .imgContainer .secondLine {
+    font-size: 40px;
+  }
 
-    .imgContainer p {
-        margin: 1px;
-        color: #000;
-    }
+  .imgContainer .thirdLine {
+    font-size: 24px;
+  }
 
-    /* serviceContainer */
-    .serviceContainer {
-        width: 100%;
-        height: 350px;
-        margin-top: 30px;
+  .imgContainer p {
+    margin: 1px;
+    color: #000;
+  }
 
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: space-evenly;
-        align-items: center;
-    }
+  /* serviceContainer */
+  .serviceContainer {
+    width: 100%;
+    height: 350px;
+    margin-top: 30px;
 
-    .serviceContainer .service {
-        width: 20%;
-        height: 230px;
-        border-radius: 20px;
-        box-shadow: 0px 0px 9px 9px #e1e1e1;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+  }
 
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+  .serviceContainer .service {
+    width: 20%;
+    height: 230px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 9px 9px #e1e1e1;
 
-        font-size: 15px;
-        text-align: center;
-    }
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
-    .serviceContainer .service .serviceTitle {
-        font-weight: bold;
-    }
+    font-size: 15px;
+    text-align: center;
+  }
 
-    .serviceContainer .service .serviceContent {
-        margin: 10px 0;
-    }
+  .serviceContainer .service .serviceTitle {
+    font-weight: bold;
+  }
 
-    .serviceContainer .service .serviceButton {
-        width: 40%;
-        height: 30px;
+  .serviceContainer .service .serviceContent {
+    margin: 10px 0;
+  }
 
-        border: none;
-        border-radius: 10px;
-        box-shadow: 0px 0px 3px 3px #e1e1e1;
+  .serviceContainer .service .serviceButton {
+    width: 40%;
+    height: 30px;
 
-        background-color: #007A33;
-    }
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px 3px #e1e1e1;
 
-    .serviceContainer .service .serviceButton:hover {
-        transform: scale(1.1);
-        transition-duration: 0.5s;
-        font-size: 16px;
-    }
+    background-color: #007A33;
+  }
 
-    .serviceContainer .service .serviceButton a {
-        color: #fff;
-    }
+  .serviceContainer .service .serviceButton:hover {
+    transform: scale(1.1);
+    transition-duration: 0.5s;
+    font-size: 16px;
+  }
+
+  .serviceContainer .service .serviceButton a {
+    color: #fff;
+  }
 }
 
 /* ////////////////////////////////////////// */
 /* 1280보다 작으면 */
 @media (max-width:1280px) {
-    /* container */
-    .imgContainer {
-        background: url(./Main_IMG.jpg) no-repeat center center;
-        background-size: cover;
 
-        width: 100%;
-        height: 250px;
-        margin-top: 10px;
+  /* container */
+  .imgContainer {
+    background: url(../IMG/Main_IMG.jpg) no-repeat center center;
+    background-size: cover;
 
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+    width: 100%;
+    height: 250px;
+    margin-top: 10px;
 
-        text-align: center;
-        font-weight: bold;
-    }
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
-    .imgContainer .firstLine {
-        font-size: 20px;
-    }
+    text-align: center;
+    font-weight: bold;
+  }
 
-    .imgContainer span {
-        color: #007A33;
-        font-size: 40px;
-    }
+  .imgContainer .firstLine {
+    font-size: 20px;
+  }
 
-    .imgContainer .secondLine {
-        font-size: 40px;
-    }
+  .imgContainer span {
+    color: #007A33;
+    font-size: 40px;
+  }
 
-    .imgContainer .thirdLine {
-        font-size: 24px;
-    }
+  .imgContainer .secondLine {
+    font-size: 40px;
+  }
 
-    .imgContainer p {
-        margin: 1px;
-        color: #000;
-    }
+  .imgContainer .thirdLine {
+    font-size: 24px;
+  }
 
-    /* serviceContainer */
-    .serviceContainer {
-        width: 100%;
-        height: 350px;
-        margin-top: 30px;
+  .imgContainer p {
+    margin: 1px;
+    color: #000;
+  }
 
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        justify-content: space-evenly;
-        align-items: center;
-    }
+  /* serviceContainer */
+  .serviceContainer {
+    width: 100%;
+    height: 350px;
+    margin-top: 30px;
 
-    .serviceContainer .service {
-        width: 20%;
-        height: 230px;
-        border-radius: 20px;
-        box-shadow: 0px 0px 9px 9px #e1e1e1;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+  }
 
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+  .serviceContainer .service {
+    width: 20%;
+    height: 230px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 9px 9px #e1e1e1;
 
-        font-size: 15px;
-        text-align: center;
-    }
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 
-    .serviceContainer .service .serviceTitle {
-        font-weight: bold;
-    }
+    font-size: 15px;
+    text-align: center;
+  }
 
-    .serviceContainer .service .serviceContent {
-        margin: 10px 0;
-    }
+  .serviceContainer .service .serviceTitle {
+    font-weight: bold;
+  }
 
-    .serviceContainer .service .serviceButton {
-        width: 40%;
-        height: 30px;
+  .serviceContainer .service .serviceContent {
+    margin: 10px 0;
+  }
 
-        border: none;
-        border-radius: 10px;
-        box-shadow: 0px 0px 3px 3px #e1e1e1;
+  .serviceContainer .service .serviceButton {
+    width: 40%;
+    height: 30px;
 
-        background-color: #007A33;
-    }
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 0px 3px 3px #e1e1e1;
 
-    .serviceContainer .service .serviceButton:hover {
-        transform: scale(1.1);
-        transition-duration: 0.5s;
-        font-size: 16px;
-    }
+    background-color: #007A33;
+  }
 
-    .serviceContainer .service .serviceButton a {
-        color: #fff;
-    }
+  .serviceContainer .service .serviceButton:hover {
+    transform: scale(1.1);
+    transition-duration: 0.5s;
+    font-size: 16px;
+  }
+
+  .serviceContainer .service .serviceButton a {
+    color: #fff;
+  }
 }
