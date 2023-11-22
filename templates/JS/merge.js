@@ -1,8 +1,7 @@
-import Excel from "./excel_show.mjs";
-import cookies from "/templates/JS/csrfToken.js";
-import { Loading, CloseLoading } from "./loading.mjs";
+import Excel from "/templates/JS/Utils/excel_show.mjs";
+import cookies from "/templates/JS/Utils/csrfToken.js";
+import { Loading, CloseLoading } from "/templates/JS/Utils/loading.mjs";
 
-// const csrftoken = $("[name=csrfmiddlewaretoken]").val(); // csrftoken
 const csrftoken = cookies['csrftoken'] // csrftoken
 
 const $selectBoxes = {

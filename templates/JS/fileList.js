@@ -1,3 +1,5 @@
+import cookies from "/templates/JS/Utils/csrfToken.js";
+
 const $checkAll = document.querySelector("#checkAll"); // 전체 선택 버튼
 const $AllCheckBox = document.querySelectorAll(".check");
 
@@ -8,7 +10,7 @@ const $listAll = document.querySelectorAll(".list");
 const $search = document.querySelector("#search");
 
 //토큰
-const csrftoken = $("[name=csrfmiddlewaretoken]").val(); // csrftoken
+const csrftoken = cookies['csrftoken'] // csrftoken
 
 // 전체 선택
 function setAllCheckStatus(status) {
