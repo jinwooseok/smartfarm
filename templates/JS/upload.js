@@ -1,5 +1,5 @@
-import Excel from "../JS/excel_show.mjs";
-import { Loading, CloseLoading } from "../JS/loading.mjs";
+import Excel from "./excel_show.mjs";
+import { Loading, CloseLoading } from "./loading.mjs";
 
 const $spreadsheet = document.querySelector("#spreadsheet");
 const $fileUploadDrag = document.querySelector("#fileUploadDrag");

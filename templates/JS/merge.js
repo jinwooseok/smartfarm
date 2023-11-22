@@ -1,6 +1,6 @@
-import Excel from "../JS/excel_show.mjs";
+import Excel from "./excel_show.mjs";
 import cookies from "/templates/JS/csrfToken.js";
-import { Loading, CloseLoading } from "../JS/loading.mjs";
+import { Loading, CloseLoading } from "./loading.mjs";
 
 // const csrftoken = $("[name=csrfmiddlewaretoken]").val(); // csrftoken
 const csrftoken = cookies['csrftoken'] // csrftoken
