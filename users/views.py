@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect
 from .models import User
 from argon2 import PasswordHasher, exceptions
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 # Create your views here.
 
 #회원가입 버튼을 누르면 작동하는 함수
 def register(request):
     if request.method == 'GET': 
-        return render(request, 'users/register.html')
+        return render(request, 'Html/register.html')
     
     elif request.method == 'POST' :
         user_id=request.POST['registerID']
@@ -37,7 +37,7 @@ def register(request):
 def login(request):
     #처음 로그인 화면으로 들어올 때는 get방식이므로 핸들링
     if request.method == "GET":
-        return render(request, 'users/login.html' )
+        return render(request, 'Html/login.html' )
 
     #post방식을 받은 경우 로그인 유효성 인증 실시
     elif request.method == "POST":
@@ -51,7 +51,7 @@ def login(request):
             context = {
                 'error' : '계정이 존재하지 않습니다.'
             }
-            return render(request, 'users/login.html', context)
+            return render(request, 'Html/login.html', context)
         
         try :
             PasswordHasher().verify(user.user_pw.encode(), login_user_pw.encode())
@@ -60,7 +60,7 @@ def login(request):
             context = {
                 'error' : '비밀번호가 일치하지 않습니다.'
             }
-            return render(request, 'users/login.html', context)
+            return render(request, 'Html/login.html', context)
         
         if user != None:
             request.session['user'] = user.id
@@ -72,7 +72,7 @@ def login(request):
             context = {
                 'error' : '로그인에 실패하였습니다.'
             }
-            return render(request, 'users/login.html', context)
+            return render(request, 'Html/login.html', context)
 
 def logout(request):
     request.session.flush()
@@ -82,8 +82,8 @@ def logout(request):
 def validEmail(request):
     register_id = request.POST.get('registerID')
     if duplicatedEmail(register_id):
-        return HttpResponse("<script>alert('이미 존재하는 이메일입니다.');location.href='.';</script>")
-    return HttpResponse("<script>alert('사용가능한 이메일입니다.');location.href='.';</script>")
+        return JsonResponse({'data':False})
+    return JsonResponse({'data':True})
     
 def duplicatedEmail(email):
     if User.objects.filter(user_id=email).exists():

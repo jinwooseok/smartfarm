@@ -24,10 +24,10 @@ from django.utils.datastructures import MultiValueDictKeyError
 def main(request):
     user = loginValidator(request)
     if user is None:
-            return render(request,'main/main.html')
+            return render(request,'Html/main.html')
     else:
         context={'user_name':user.user_name}
-        return render(request,'main/main.html',context)
+        return render(request,'Html/main.html',context)
 
 #------------------------ management창 ------------------------
 def fileListView(request):
@@ -39,7 +39,7 @@ def fileListView(request):
     
     context=fileListViewResponse(user.user_name, file_object)
 
-    return render(request,'fileList/fileList.html',context)
+    return render(request,'Html/fileList.html',context)
 
 #파일 업로드 함수 - data_list창
 def fileUploadApi(request):
@@ -88,7 +88,7 @@ def dataEditView(request, file_title):
     summary = DataProcess(data).makeSummary()
     #response dto
     context = dataEditViewResponse(data, summary, user.user_name, file_title_list)
-    return render(request, "revise/revise.html", context) #전송
+    return render(request, "Html/revise.html", context) #전송
 
     
 def dataEditWithNoFileView(request):
@@ -98,7 +98,7 @@ def dataEditWithNoFileView(request):
         
     context=dataEditWithNoFileViewResponse(user.user_name)
     
-    return render(request, "revise/revise.html", context)
+    return render(request, "Html/revise.html", context)
 
 #--------------비동기 - revise창-------------
 def dataLoadApi(request):
@@ -141,7 +141,7 @@ def fileMergeView(request):
     file_list = FileSystem(user=user).getFileObjectList()
     if user != None:
         context=fileMergeViewResponse(user.user_name, file_list)
-        return render(request, "merge/merge.html", context) #전송
+        return render(request, "Html/merge.html", context) #전송
     else:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
 
@@ -228,14 +228,14 @@ def fileList2(request):
     file_object=findFileObjectListByUserId(user.id)
     
     context=fileListViewResponse(user.user_name, file_object)
-    return render(request, "fileList_2/fileList_2.html", context) #전송
+    return render(request, "Html/fileList_2.html", context) #전송
     
 def getAnalyzeDataApi(request, file_title):
     user = loginValidator(request)
     if user != None:
         result = FileSystem(user, file_title=file_title).fileLoad()
         context = analysisViewResponse(user.user_name,result)
-        return render(request, "Analyze/analyze.html", context) #전송
+        return render(request, "Html/analyze.html", context) #전송
     elif user == None:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
 
@@ -275,7 +275,7 @@ def useAnalizer(request, file_title):
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
 #------------------------ test.html연결 ------------------------
 def test(request):
-    return render(request, "analytics/excel.html") #전송
+    return render(request, "Html/excel.html") #전송
 
 #------------------------------농업관련 데이터 처리 부분------------------
 #데이터의 형식이나 원하는 전처리에 따라 파이프라인을 설정하는 부분
