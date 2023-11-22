@@ -1,6 +1,6 @@
-import Excel from "/templates/JS/Utils/excel_show.mjs";
+import Excel from "/templates/JS/Utils/Excel.mjs";
 import cookies from "/templates/JS/Utils/csrfToken.js";
-import { Loading, CloseLoading } from "/templates/JS/Utils/loading.mjs";
+import Loading from "/templates/JS/Utils/Loading.mjs";
 
 const csrftoken = cookies['csrftoken'] // csrftoken
 
@@ -86,7 +86,7 @@ $merge.addEventListener("click", async () => {
   $spreadsheet.innerHTML = "";
   const mergeColumn = setMergeColumn();
 
-  Loading();
+  Loading.StartLoading();
 
   try {
     const response = await $.ajax({
@@ -103,10 +103,10 @@ $merge.addEventListener("click", async () => {
 
     if (response.data != null) {
       mergeCompleteData = new Excel(JSON.parse(response.data).slice(0, 200), $spreadsheet); // 200개만 보여줌
-      CloseLoading();
+      Loading.CloseLoading();
     }
   } catch (error) {
-    CloseLoading();
+    Loading.CloseLoading();
     alert("에러입니다.");
     console.error("error : " + error);
   }
@@ -124,7 +124,7 @@ const checkFileName = () => {
 $save.addEventListener("click", async () => {
   if (!checkFileName()) return;
 
-  Loading();
+  Loading.StartLoading();
 
   const mergedFileName = $mergeFileName.value;
   const mergeData = JSON.stringify(mergeCompleteData.getData());
@@ -144,11 +144,11 @@ $save.addEventListener("click", async () => {
 
     if (response.data != null) {
       window.location.href = "/file-list/";
-      CloseLoading();
+      Loading.CloseLoading();
     }
   } catch (error) {
     alert("에러입니다.");
-    CloseLoading();
+    Loading.CloseLoading();
     console.error("error : " + error);
   }
 });

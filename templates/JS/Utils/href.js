@@ -1,4 +1,7 @@
-export const replaceHref = (event, value='') => {
+const $login = document.querySelector("#login");
+const $logout = document.querySelector("#logout");
+
+const replaceHref = (event, value='') => {
 	event.preventDefault();
 	
 	if (value !== '') {
@@ -12,4 +15,11 @@ export const replaceHref = (event, value='') => {
 		location.replace(href);
 		return;
 	}
+}
+
+if ($login) {
+	$login.addEventListener("click" , replaceHref);
+}
+if ($logout) {
+	$logout.addEventListener("click" , replaceHref);
 }

@@ -1,5 +1,4 @@
 "use strick";
-import { replaceHref } from "./Utils/href.js";
 
 const $loginId = document.querySelector("#id");
 const $loginPassword = document.querySelector("#password");

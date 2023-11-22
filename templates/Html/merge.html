@@ -19,17 +19,17 @@
 </head>
 
 <body>
-  <ul class="nav">
-    <li><a href="/" class="title">전남대학교</br>융합 빅데이터 연구실</a></li>
-    <li><a href="/file-list">데이터 수정</a></li>
-    <li><a href="/merge/">파일 병합</a></li>
-    <li><a href="/fileList_2">데이터 분석</a></li>
-    {% if user_name != anonymous %}
-    <li><a href="/users/logout/" class='logout'>로그아웃</a></li>
-    {% else %}
-    <li><a href="/users/login/" class='login'>로그인</a></li>
-    {% endif %}
-  </ul>
+	<ul class="nav">
+		<li><a href="/" class="title">전남대학교</br>융합 빅데이터 연구실</a></li>
+		<li><a href="/file-list">데이터 수정</a></li>
+		<li><a href="/merge/">파일 병합</a></li>
+		<li><a href="/fileList_2">데이터 분석</a></li>
+		{% if user_name != anonymous %}
+		<li><a href="/users/logout/" class='logout' id="logout">로그아웃</a></li>
+		{% else %}
+		<li><a href="/users/login/" class='login' id="login">로그인</a></li>
+		{% endif %}
+	</ul>
 
   {% csrf_token %}
   <div class="selectContainer">

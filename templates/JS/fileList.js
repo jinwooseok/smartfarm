@@ -78,12 +78,6 @@ $delete.addEventListener("click", clickDeleteButton);
 // 전체 선택 이벤트
 $checkAll.addEventListener("change", AllCheck);
 
-// 검색용 저장
-const titleList = [];
-for (let title of $AllTitle) {
-  titleList.push(title.innerText);
-}
-
 $search.addEventListener("keyup", (event) => {
   let text = event.target.value;
   for (let i = 0; i < titleList.length; i++) {
@@ -95,12 +89,6 @@ $search.addEventListener("keyup", (event) => {
   }
 });
 
-// 파일 클릭
-function moveRevisePage(event) {
-  localStorage.setItem("title_list", JSON.stringify(titleList)); // 로컬에 저장
-  localStorage.setItem("fileTitle", JSON.stringify(event.target.innerHTML));
-  location.href = `/revise/${event.target.innerHTML}/`;
-}
 
 const setDownloadFile = () =>{
   const DownloadFile = getCheckedItems();
