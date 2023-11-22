@@ -97,19 +97,21 @@ $search.addEventListener("keyup", (event) => {
 function moveRevisePage(event) {
   localStorage.setItem("title_list", JSON.stringify(titleList)); // 로컬에 저장
   localStorage.setItem("fileTitle", JSON.stringify(event.target.innerHTML));
-  console.log()
   location.href = `/revise/${event.target.innerHTML}/`;
 }
 
 const setDownloadFile = () =>{
   const DownloadFile = getCheckedItems();
 
-  if (DownloadFile.length !== 1) {
-    alert("파일은 1개를 선택해야 합니다.");
+  const downloadTitle = [];
+  DownloadFile.map((file) => {
+    downloadTitle.push(file.parentElement.childNodes[3].innerText);
+  });
+
+  if (downloadTitle.length === 0) {
+    alert('파일을 선택해주세요');
     return;
   }
-
-  const downloadTitle = DownloadFile[0].parentElement.childNodes[3].innerText;; // 파일 이름
 
   return downloadTitle;
 }
@@ -117,27 +119,30 @@ const setDownloadFile = () =>{
 // 다운로드 버튼
 const $download = document.querySelector("#download");
 $download.addEventListener("click", () => {
-
+  
   const downloadTitle = setDownloadFile();
 
-  $.ajax({
-    url: "/download/",
-    type: "post",
-    dataType: "json",
-    headers: { "X-CSRFToken": csrftoken },
-    data: {
-      data: downloadTitle,
-    },
-    success: function (response) {
-      if (response.data != null) {
-        download(response.data, downloadTitle);
-      }
-    },
-    error: function (xhr, error) {
-      alert("에러입니다.");
-      console.error("error : " + error);
-    },
-  });
+  downloadTitle?.map((title) => {
+    $.ajax({
+      url: "/download/",
+      type: "post",
+      dataType: "json",
+      headers: { "X-CSRFToken": csrftoken },
+      data: {
+        data: title,
+      },
+      async :false,
+      success: function (response) {
+        if (response.data != null) {
+          download(response.data, title);
+        }
+      },
+      error: function (xhr, error) {
+        alert("에러입니다.");
+        console.error("error : " + error);
+      },
+    });
+  }); 
 });
 
 // download 로직, csv로
