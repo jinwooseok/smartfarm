@@ -1,66 +1,5 @@
-ul,
-li {
-    list-style: none;
-}
-
-a {
-    text-decoration: none;
-    color: #000;
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
 /* 1280px 보다 크면 */
 @media (min-width: 1280px) {
-
-    /* nav */
-    .nav {
-        width: 1280px;
-        height: 70px;
-        margin: 0 auto;
-        margin-top: 10px;
-
-        display: flex;
-        flex-wrap: nowrap;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .nav .title {
-        color: #007A33;
-        font-size: 18px;
-        font-weight: bold;
-    }
-
-    .nav .login {
-        padding: 3px 15px;
-        text-align: center;
-        font-size: 14px;
-        font-weight: bold;
-        line-height: 30px;
-
-        background-color: #007A33;
-        border-radius: 8px;
-        color: #fff;
-    }
-
-    .nav .logout {
-        padding: 3px 10px;
-        text-align: center;
-        font-size: 14px;
-        font-weight: bold;
-        line-height: 30px;
-
-        background-color: #007A33;
-        border-radius: 8px;
-        color: #fff;
-    }
-
     /* container */
     .imgContainer {
         background: url(./Main_IMG.jpg) no-repeat center center;
@@ -161,50 +100,6 @@ a {
 /* ////////////////////////////////////////// */
 /* 1280보다 작으면 */
 @media (max-width:1280px) {
-    /* nav */
-    .nav {
-        width: 1000px;
-        height: 70px;
-        margin: 0 auto;
-        margin-top: 10px;
-
-        display: flex;
-        flex-wrap: nowrap;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .nav .title {
-        color: #007A33;
-        font-size: 18px;
-        font-weight: bold;
-    }
-
-    .nav .login {
-        padding: 3px 15px;
-        text-align: center;
-        font-size: 14px;
-        font-weight: bold;
-        line-height: 30px;
-
-        background-color: #007A33;
-        border-radius: 8px;
-        color: #fff;
-    }
-
-    .nav .logout {
-        padding: 3px 10px;
-        text-align: center;
-        font-size: 14px;
-        font-weight: bold;
-        line-height: 30px;
-
-        background-color: #007A33;
-        border-radius: 8px;
-        color: #fff;
-    }
-
     /* container */
     .imgContainer {
         background: url(./Main_IMG.jpg) no-repeat center center;
