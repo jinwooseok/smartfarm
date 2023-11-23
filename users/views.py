@@ -66,7 +66,7 @@ def login(request):
             request.session['user'] = user.id
         
             # Redirect to a success page.
-            return redirect('/')
+            return JsonResponse({'result':'success'})
             
         else:
             context = {
