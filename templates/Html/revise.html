@@ -39,50 +39,47 @@
 		{% endif %}
 	</ul>
 
-  <div class="exp-box">
-    <select name="manage_list_menu" id="manage_list_menu" class="manage_list_menu">
-
+  <div class="fileSelectContainer">
+    <select name="fileListSelectBox" id="fileListSelectBox" class="fileListSelectBox">
     </select>
   </div>
 
-  <div class="excel">
+  <div class="spreadsheetContainer">
     <div id="spreadsheet" class="spreadsheet">
     </div>
   </div>
 
-<form method="post" id="form" onsubmit="return false;">
   {% csrf_token %}
-
   <!-- 데이터 처리 탭 -->
   <ul class="tabs">
     <li class="tab">
-        <input type="radio" id="tab-1" name="tab-group-1" checked>
-        <label for="tab-1">사용 방법</label>
+      <input type="radio" id="tab-1" name="tab-group-1" checked>
+      <label for="tab-1">사용 방법</label>
 
-        <div class="content">
-            <div class="caution">
-                <h3>* &nbsp; 탭을 통한 수정은 각각 이루어져야 합니다. &nbsp; *</h3>
-                <p>전처리를 한 후 반드시 저장을 하고 다음 과정을 진행해야 합니다.</p>
-            </div>
+      <div class="content">
+        <div class="caution">
+          <h3>* &nbsp; 탭을 통한 수정은 각각 이루어져야 합니다. &nbsp; *</h3>
+          <p>전처리를 한 후 반드시 저장을 하고 다음 과정을 진행해야 합니다.</p>
+        </div>
+        <div class="explainContainer">
+          <div class="explain">
+            <h4>결측치 & 이상치 수정</h4>
+            <br>
+            <p>결측치 : 엑셀의 빈 값(NULL)을 평균값, 최빈값과 같은 값들로 처리합니다.</p>
+            <p>엑셀에서 비어있는 칸을 처리할 방법을 고르고 저장버튼을 클릭합니다.</p>
+            <br>
+            <p>이상치 : 데이터 분포에서 많이 벗어난 값들을 제거합니다.</p>
+            <p>변수를 선택하여 사용할 데이터의 범위를 지정해주고 저장버튼을 클릭합니다.</p>
+          </div>
             <div class="explain">
-                <div class="process_ex">
-                    <h4>결측치 & 이상치 수정</h4>
-                    <br>
-                    <p>결측치 : 엑셀의 빈 값(NULL)을 평균값, 최빈값과 같은 값들로 처리합니다.</p>
-                    <p>엑셀에서 비어있는 칸을 처리할 방법을 고르고 저장버튼을 클릭합니다.</p>
-                    <br>
-                    <p>이상치 : 데이터 분포에서 많이 벗어난 값들을 제거합니다.</p>
-                    <p>변수를 선택하여 사용할 데이터의 범위를 지정해주고 저장버튼을 클릭합니다.</p>
-                </div>
-                <div class="process_ex">
-                    <h4>데이터 값 수정</h4>
-                    <br>
-                    <p>1. 일간, 주간을 선택합니다. (4, 5일 단위의 데이터는 기타를 통해 입력합니다.)</p>
-                    <p>2. 원하는 열의 이름(변수명)을 선택한 후, -> 버튼을 클릭하여 넘겨줍니다.</p>
-                    <p>3. 저장버튼을 클릭합니다.</p>
-                </div>
+              <h4>데이터 값 수정</h4>
+              <br>
+              <p>1. 일간, 주간을 선택합니다. (4, 5일 단위의 데이터는 기타를 통해 입력합니다.)</p>
+              <p>2. 원하는 열의 이름(변수명)을 선택한 후, -> 버튼을 클릭하여 넘겨줍니다.</p>
+              <p>3. 저장버튼을 클릭합니다.</p>
             </div>
         </div>
+      </div>
     </li>
     <!-- 결측치 이상치  -->
     <li class="tab">
@@ -91,24 +88,25 @@
 
       <!-- /* 엑셀 전처리 방법 */ -->
       <div class="content">
-        <div class="x-container">
-          <div style="display: flex; justify-content: flex-start;">
-            x값
+        <div class="upperContainer">
+          <div class="xAxisContainer">
+            선택한 x값
             <select name="" id="x_label" class="x_label">
-              <option value="null">값을 선택하세요</option>
+              <option value="null">x 값을 선택하세요</option>
             </select>
           </div>
-          <div style="display: flex; justify-content: flex-end;">
+          <div class="pretreatmentContainer">
             <input type="text" name="pretreatmentFileName" class="pretreatmentFileName" id="pretreatmentFileName">
             <button class="pretreatmentSave" id="pretreatmentSave">저장하기</button>
           </div>
         </div>
-        <div class="list-container" id="list-container">
-          <div class="list">
-            <div class="col_name" id="col_name">
+
+        <div class="columnListContainer" id="columnListContainer">
+          <div class="columnList">
+            <div class="columnName" id="columnName">
               열 이름
             </div>
-            <div class="Null_count" id="Null_count">
+            <div class="nullCount" id="nullCount">
               빈 값
             </div>
             <div class="Q1" id="Q1">
@@ -131,11 +129,11 @@
             </div>
           </div>
           {% for key, values in summarys.items %}
-          <div class="list">
-            <div class="col_name">
-              <a href="#" class="draw_col" id="draw_col" onclick="lineDraw(this.textContent)">{{key}}</a>
+          <div class="columnList">
+            <div class="columnName">
+              <a href="#" onclick="lineDraw(this.textContent)">{{key}}</a>
             </div>
-            <div class="Null_count">
+            <div class="nullCount">
               {{values.Null_count}}
             </div>
             <div class="Q1">
@@ -162,7 +160,7 @@
       </div>
     </li>
 
-    <!-- tap3  -->
+    <!-- 수정  -->
     <li class="tab">
       <input type="radio" id="tab-3" name="tab-group-1">
       <label for="tab-3">데이터 수정</label>
@@ -402,13 +400,13 @@
 
 </body>
 
-<script src="/templates/JS/Utils/jquery-1.12.4.min.js"></script>
-<script src="/templates/JS/Utils/xlsx.full.min.js"></script>
-<script type="module" src="/templates/JS/revise.js"></script>
-<script src="/templates/JS/draw.js"></script>
-<script src="/templates/JS/abms.js"></script>
-<script src="/templates/JS/Utils/billboard.js"></script>
-<script src="/templates/JS/pretreatment.js"></script>
+<script src="/templates/JS/CDN/jquery-1.12.4.min.js"></script>
+<script src="/templates/JS/CDN/xlsx.full.min.js"></script>
+<script src="/templates/JS/CDN/billboard.js"></script>
+<script type="module" src="/templates/JS/revise/revise.js"></script>
+<script src="/templates/JS/revise/draw.js"></script>
+<script src="/templates/JS/revise/abms.js"></script>
+<script src="/templates/JS/revise/pretreatment.js"></script>
 
 
 
