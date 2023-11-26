@@ -1,6 +1,6 @@
 /* fileSelectContainer */
 .fileSelectContainer {
-  width: 85%;
+  width: 1280px;
   margin: 0 auto;
   margin-top: 10px;
 
@@ -10,9 +10,9 @@
 
 /* spreadsheetContainer */
 .spreadsheetContainer {
-  width: 85%;
+  width: 1280px;
   height: 250px;
-  margin: 3px auto;
+  margin: 0 auto;
 
   display: flex;
   flex-direction: column;
@@ -21,7 +21,7 @@
 
 .spreadsheetContainer .spreadsheet {
   position: relative;
-  width: 100%;
+  width: 1280px;
   height: 230px;
   border: 1px solid #000;
   margin-bottom: 10px;
@@ -44,7 +44,7 @@
   position: relative;
   z-index: 1;
 
-  width: 85%;
+  width: 1280px;
   margin: 0 auto;
 }
 
@@ -74,7 +74,7 @@
 .tab .content {
   position: absolute;
 
-  width: 100%;
+  width: 1280px;
   height: auto;
   top: 39px;
   left: 0;
@@ -218,7 +218,7 @@
 
 /* tap3 */
 .tab [name="tab-group-1"]:checked+label+.flex {
-  height: 230px;
+  height: 280px;
   padding-top: 20px;
 
   display: flex;
@@ -229,35 +229,47 @@
 }
 
 /* 기간 및 열 지정 */
-.date-container {
+.settingContainer {
   width: 20%;
   height: 100%;
 
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
   align-items: center;
-
 }
 
-.date-container .columnDate-container,
-.date-container .peri-container {
-  width: 60%;
-  height: 20px;
+.settingContainer .dateContainer,
+.settingContainer .startContainer,
+.settingContainer .periodContainer,
+.settingContainer .typeSelectContainer {
+  width: 70%;
+  margin-top: 10px;
 }
 
-.columnDate-container {
+.settingContainer .radioContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  font-size: 15px;
+}
+
+.dateContainer {
   display: flex;
   flex-direction: column;
 }
 
-.date-container .peri-container .else_peri {
+.settingContainer input[type="text"] {
   width: 100%;
 }
 
+.settingContainer input[type="radio"]:hover,
+label[for] {
+  text-decoration: none;
+}
+
 /* 변수 선택 창 */
-.variables-container {
-  width: 60%;
+.variablesContainer {
+  width: 40%;
   height: 100%;
   position: relative;
   text-align: center;
@@ -268,7 +280,7 @@ input[name="level"] {
   display: none;
 }
 
-.variables-container>label {
+.variablesContainer>label {
   display: inline-block;
   margin: 0 15px;
 }
@@ -295,38 +307,33 @@ input[name="level"]:checked+label+.box {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
 }
 
-/* easyVersion */
-.easyVersion>*:not(:last-child) {
-  margin-right: 15px;
-}
-
-.easyVersion>*:not(button) {
-  flex-shrink: 0;
+.easyVersion select {
   width: 25%;
 }
 
-/* hardVersion */
-.hardVersion>*:not(:last-child) {
-  margin-right: 10px;
-}
-
-.hardVersion>*:not(button) {
-  flex-shrink: 0;
+.hardVersion select {
   width: 15%;
 }
 
-.hardVersion .final_var {
-  flex-shrink: 0;
-  width: 25%;
+.totalVariableContainer{
+  width: 20%;
+  height: 100%;
+
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.totalVariableContainer select{
+  width: 50%;
 }
 
 /* 파일 저장 */
-
-.fileSave-container {
+.fileSaveContainer {
   width: 20%;
   height: 100%;
 
@@ -336,7 +343,7 @@ input[name="level"]:checked+label+.box {
   align-items: center;
 }
 
-.fileSave-container>*:not(:nth-child(2)) {
+.fileSaveContainer>*:not(:nth-child(2)) {
   margin-top: 30px;
 }
 
@@ -353,7 +360,7 @@ input[name="level"]:checked+label+.box {
   align-items: center;
 }
 
-.abms .abms_text {
+.abms .abmsText {
   width: 90%;
   height: 100%;
 
@@ -366,7 +373,7 @@ input[name="level"]:checked+label+.box {
   overflow-y: auto;
 }
 
-.abms .abms_text>* {
+.abms .abmsText>* {
   width: 18%;
   margin: 5px;
 
@@ -376,12 +383,7 @@ input[name="level"]:checked+label+.box {
   align-items: center;
 }
 
-.abms .abms_text .result:hover {
-  color: #fff;
-  background-color: #888;
-}
-
-.abms .abms_select {
+.abms .abmsTypeSelect {
   width: 10%;
 
   display: flex;
@@ -390,21 +392,22 @@ input[name="level"]:checked+label+.box {
   align-items: center;
 }
 
-.abms .abms_select .abmsFileName {
+.abms .abmsTypeSelect .abmsFileName {
   width: 80%;
 }
 
-.abms .abms_select .abms_var {
+.abms .abmsTypeSelect .abmsType {
   width: 80%;
   margin-bottom: 15px;
 }
 
-.abms .abms_select .abms_save {
+.abms .abmsTypeSelect .abmsSave {
   padding: 5px 8px;
 }
 
 .graphContainer {
-  width: 95%;
+  width: 1280px;
+  margin: 0 auto;
 
   display: none;
   border: 1px solid grey;
