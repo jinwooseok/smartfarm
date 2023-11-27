@@ -129,12 +129,11 @@ def preprocessorApi(request, file_title):
 
 def abmsApi(request, file_title):
     user = loginValidator(request)
-    new_file_title = request.POST.get('newFileName')
-    data = FileSystem(user=user,file_title=file_title).fileLoad()
-    
-    FileSystem(user,file_title=new_file_title,data=data).fileSave()
-
+    data = request.POST.get('ABMSData')
+    file_title = request.POST.get('newFileName')
+    FileSystem(user,file_title=file_title,data=data).fileSave()
     return JsonResponse(successResponse())
+
 #------------------------ merge창 ------------------------
 def fileMergeView(request):
     user = loginValidator(request)
