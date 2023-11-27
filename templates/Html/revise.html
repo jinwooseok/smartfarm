@@ -180,7 +180,7 @@
 
           <div class="periodContainer">
             <span>주기 선택</span>
-            <div class="radioContainer">
+            <div class="radioContainer" id="periodContainer">
               <input type="radio" name="period" id="days" value="days" checked><label for="days">일간</label>
               <input type="radio" name="period" id="weeks" value="weeks"><label for="weeks">주간</label>
               <input type="radio" name="period" id="else" value="else"><label for="else">기타</label>
@@ -190,7 +190,7 @@
 
           <div class="typeSelectContainer" id="typeSelectContainer">
             <span>종류 선택</span>
-            <div class="radioContainer">
+            <div class="radioContainer" id="typeContainer">
               <input type="radio" name="type" id="환경" value="환경" checked><label for="환경">환경</label>
               <input type="radio" name="type" id="생육" value="생육"><label for="생육">생육</label>
               <input type="radio" name="type" id="생산량" value="생산량"><label for="생산량">생산량</label>
@@ -241,7 +241,7 @@
             <select name="thirdText" id="thirdText" class="thirdText" multiple size="6">
               <!-- js를 통해 입력 -->
           </select>
-            <button class="option_delete" id="option_delete">삭제</button>
+            <button class="optionDelete" id="optionDelete">삭제</button>
             <button class="optionSelect" id="optionSelect">이동</button>
           </div>
         </div>
@@ -413,7 +413,7 @@
 <script src="/templates/JS/CDN/jquery-1.12.4.min.js"></script>
 <script src="/templates/JS/CDN/xlsx.full.min.js"></script>
 <script src="/templates/JS/CDN/billboard.js"></script>
-<!-- <script type="module" src="/templates/JS/revise/revise.js"></script> -->
+<script type="module" src="/templates/JS/revise/revise.js"></script>
 <script src="/templates/JS/revise/draw.js"></script>
 <script type="module" src="/templates/JS/revise/abms.js"></script>
 <script src="/templates/JS/revise/pretreatment.js"></script>
