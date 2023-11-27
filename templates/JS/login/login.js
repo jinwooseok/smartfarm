@@ -18,9 +18,8 @@ function isValid() {
   }
 }
 
-$loginBtn.addEventListener('click', (event) => {
-  // replaceHref(event, "/");
-  location.replace("/")
+$loginBtn.addEventListener('click', () => {
+  location.replace("/");
 });
 $loginId.addEventListener("keyup", isValid);
 $loginPassword.addEventListener("keyup", isValid);

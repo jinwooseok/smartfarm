@@ -10,6 +10,10 @@ export default class Excel {
     this.box.innerHTML = ""; // 이전 데이터 excel 초기화
 
     // excel 그리기
+    this.#showExcelTable();
+  }
+
+  #showExcelTable() {
     jspreadsheet(this.box, {
       data: this.#excelData,
       columns: this.excelColumn,

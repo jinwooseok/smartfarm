@@ -3,7 +3,7 @@ const $logout = document.querySelector("#logout");
 
 const replaceHref = (event, value='') => {
 	event.preventDefault();
-	
+	console.log(value);
 	if (value !== '') {
 		// location.replace(value);
 		location.href=value;
