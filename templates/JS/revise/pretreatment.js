@@ -2,7 +2,6 @@ const $pretreatmentFileName = document.querySelector('#pretreatmentFileName');
 const $pretreatmentSave = document.querySelector('#pretreatmentSave');
 
 $pretreatmentSave.addEventListener('click', () => {
-	console.log("click");
 	$.ajax({
 		url: `/revise/${JSON.parse(localStorage.getItem("fileTitle"))}/preprocess/`,
 		type:'post',
