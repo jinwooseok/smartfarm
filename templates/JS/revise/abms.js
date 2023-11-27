@@ -1,4 +1,4 @@
-import abmsTextValue from "/templates/JS/revise/abmsTextValue.js";
+import { abmsTextValue } from "/templates/JS/revise/constantValue.js";
 
 const $abmsType = document.querySelector("#abmsType");
 const $abmsText = document.querySelector("#abmsText");
@@ -72,7 +72,6 @@ setSelectedValue();
 // abms 데이터 만들기
 $abmsSave.addEventListener("click", () => {
   const ABMSdata = setABMSdata();
-
   $.ajax({
     url: `/revise/${JSON.parse(localStorage.getItem("fileTitle"))}/abms/`,
     type: "post",
@@ -80,10 +79,15 @@ $abmsSave.addEventListener("click", () => {
     headers: { "X-CSRFToken": csrftoken },
     data: {
       newFileName: $abmsFileName.value,
+      ABMSData : ABMSdata,
     },
     success: function (response) {
       alert("완료되었습니다.");
       window.location.href = "/file-list/";
+    },
+    error : function(xhr, ajaxSettings, thrownError) 
+    {
+        alert("수정하는데 오류가 발생하였습니다.");
     },
   });
 });
