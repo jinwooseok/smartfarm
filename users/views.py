@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from .models import User
 from argon2 import PasswordHasher, exceptions
 from django.http import HttpResponse, JsonResponse
+#캐시 차단 라이브러리
+from django.views.decorators.cache import never_cache
 # Create your views here.
 
 #회원가입 버튼을 누르면 작동하는 함수
@@ -32,15 +34,20 @@ def register(request):
         )
         user.save()
         return redirect('users:login')
- 
 
+@never_cache
 def login(request):
     #처음 로그인 화면으로 들어올 때는 get방식이므로 핸들링
     if request.method == "GET":
+        if request.session.get('user'):
+            return redirect('/')
         return render(request, 'Html/login.html' )
 
     #post방식을 받은 경우 로그인 유효성 인증 실시
     elif request.method == "POST":
+        if request.session.get('user'):
+            return redirect('/')
+
         login_user_id=request.POST['id']
         login_user_pw=request.POST['password']
 
@@ -66,7 +73,7 @@ def login(request):
             request.session['user'] = user.id
         
             # Redirect to a success page.
-            return JsonResponse({'result':'success'})
+            return redirect('/')
             
         else:
             context = {
