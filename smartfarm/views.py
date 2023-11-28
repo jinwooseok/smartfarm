@@ -44,11 +44,17 @@ def fileListView(request):
 #파일 업로드 함수 - data_list창
 def fileUploadApi(request):
     user = loginValidator(request)
-    file_title = request.POST.get('file_title')
+    try:
+        file_title = request.POST.get('file_title')
+    except MultiValueDictKeyError:
+        return HttpResponse("<script>alert('파일명을 선택해주세요');location.href='..';</script>")
     try:
         file = request.FILES["fileUploadInput"]
     except MultiValueDictKeyError:
-        file = request.FILES["fileUploadDrag"]
+        try:
+            file = request.FILES["fileUploadDrag"]
+        except MultiValueDictKeyError:
+            return HttpResponse("<script>alert('파일을 선택해주세요');location.href='..';</script>")
     FileSystem(user=user,file_title=file_title,multi_part_file=file).fileUpload()
     
     return redirect('/file-list/')
@@ -57,7 +63,10 @@ def fileUploadApi(request):
 #파일 삭제 함수 - data_list창
 def fileDeleteApi(request):
     user = loginValidator(request)
-    file_titles = request.POST.get('data')
+    try:
+        file_titles = request.POST.get('data')
+    except MultiValueDictKeyError:
+        return HttpResponse("<script>alert('파일명을 선택해주세요');location.href='.';</script>")
     for file_title in json.loads(file_titles):
         FileSystem(user=user,file_title=file_title).fileDelete()
     #response
@@ -68,7 +77,10 @@ def fileDeleteApi(request):
 def fileDownloadApi(request):
     user = loginValidator(request)
 
-    file_title = request.POST.get('data')
+    try:
+        file_title = request.POST.get('data')
+    except MultiValueDictKeyError:
+        return HttpResponse("<script>alert('파일명을 선택해주세요');location.href='..';</script>")
     #파일의 데이터
     result = FileSystem(user=user,file_title=file_title).fileLoad()
 
@@ -105,8 +117,10 @@ def dataLoadApi(request):
     user = loginValidator(request)
     if user is None:
         return JsonResponse(failResponse())
-
-    file_title = request.POST.get('fileName')
+    try:
+        file_title = request.POST.get('fileName')
+    except:
+        return HttpResponse("<script>alert('파일명을 선택해주세요');location.href='..';</script>")
     data = FileSystem(user=user, file_title=file_title).fileLoad()
 
     summary = DataProcess(data).makeSummary()
@@ -117,7 +131,10 @@ def dataLoadApi(request):
 
 def preprocessorApi(request, file_title):
     user = loginValidator(request)
-    new_file_title = request.POST.get('newFileName')
+    try:
+        new_file_title = request.POST.get('newFileName')
+    except:
+        return HttpResponse("<script>alert('파일명을 선택해주세요');location.href='..';</script>")
     data = FileSystem(user=user,file_title=file_title).fileLoad()
     result = DataProcess(data).outLierDropper()
     
@@ -129,8 +146,14 @@ def preprocessorApi(request, file_title):
 
 def abmsApi(request, file_title):
     user = loginValidator(request)
-    data = request.POST.get('ABMSData')
-    file_title = request.POST.get('newFileName')
+    try:
+        data = request.POST.get('ABMSData')
+    except:
+        return HttpResponse("<script>alert('데이터를 선택해주세요');location.href='..';</script>")
+    try:
+        file_title = request.POST.get('newFileName')
+    except:
+        return HttpResponse("<script>alert('파일명을 선택해주세요');location.href='..';</script>")
     FileSystem(user,file_title=file_title,data=data).fileSave()
     return JsonResponse(successResponse())
 
@@ -152,7 +175,10 @@ def fileMergeApi(request):
             context = fileMergeApiResponse(file_name_list)
             return JsonResponse(context)
         else:
-            files = request.GET.get('data')
+            try:
+                files = request.GET.get('data')
+            except:
+                return HttpResponse("<script>alert('데이터를 선택해주세요');location.href='..';</script>")
             files = json.loads(files)
             data_list = []
             for file_title in files:
@@ -163,8 +189,14 @@ def fileMergeApi(request):
     elif request.method == 'POST':
         if request.POST.get('header') == 'merge':
            #파일데이터 불러오기
-            data = request.POST.get('data')
-            column_name = request.POST.get('columnName')
+            try:
+                data = request.POST.get('data')
+            except:
+                return HttpResponse("<script>alert('데이터를 선택해주세요');location.href='..';</script>")
+            try:
+                column_name = request.POST.get('columnName')
+            except:
+                return HttpResponse("<script>alert('기준 열을 선택해주세요');location.href='..';</script>")
             dfs = []
             data = pd.read_json(data)
             column_name = json.loads(column_name)
@@ -191,8 +223,14 @@ def fileMergeApi(request):
             return JsonResponse(context)
         
         elif request.POST.get('header') == 'save':
-            data = request.POST.get('mergedData')
-            file_title = request.POST.get('fileName')
+            try:
+                data = request.POST.get('mergedData')
+            except:
+                return HttpResponse("<script>alert('데이터를 선택해주세요');location.href='..';</script>")
+            try:
+                file_title = request.POST.get('fileName')
+            except:
+                return HttpResponse("<script>alert('파일명을 선택해주세요');location.href='..';</script>")
             FileSystem(user,file_title=file_title,data=data).fileSave()
             return JsonResponse(successResponse())
         else:
@@ -243,9 +281,10 @@ def useAnalizer(request, file_title):
     if user != None:
         data = FileSystem(user, file_title=file_title).fileLoad()
         data = pd.read_json(data)
-
-        scaler = request.GET.get('scaler')
-
+        try:
+            scaler = request.GET.get('scaler')
+        except:
+            return HttpResponse("<script>alert('정규화 방식을 선택해주세요');location.href='..';</script>")
         if scaler == 'min-max':
             scaler = MinMaxScaler()
             numeric_columns = data.select_dtypes(include=['float64', 'int64']).columns
@@ -260,14 +299,20 @@ def useAnalizer(request, file_title):
             pass    
         
         if request.GET.get('technique') == "선형회귀분석":
-            x = json.loads(request.GET.get('xValue'))
-            y = request.GET.get('yValue')
+            try:
+                x = json.loads(request.GET.get('xValue'))
+                y = request.GET.get('yValue')
+            except:
+                return HttpResponse("<script>alert('잘못된 x값 혹은 y값 입니다.');location.href='..';</script>")
             result = analizer.linear(data, x, y)
             return JsonResponse(successDataResponse(result))
 
         elif request.GET.get('technique') == '로지스틱회귀분석':
-            x = request.GET.getlist('xValue')
-            y = request.GET.get('yValue')
+            try:
+                x = request.GET.getlist('xValue')
+                y = request.GET.get('yValue')
+            except:
+                return HttpResponse("<script>alert('잘못된 x값 혹은 y값 입니다.');location.href='..';</script>")
             result = analizer.logistic(data, x, y)
             return JsonResponse(successDataResponse(result))
     elif user == None:
@@ -281,18 +326,19 @@ def test(request):
 @logging_time
 def farm(request, file_title):
     user = loginValidator(request)
-
-    new_file_title=request.POST.get('new_file_name')
-    file_type=request.POST.get('file_type','환경')
-    date=request.POST.get('date','1')
-    lat=request.POST.get('lat','35')
-    lon=request.POST.get('lon','126')
-    lat_lon=[lat,lon]
-    DorW=request.POST.get('DorW','days')
-    var=request.POST.get('valueObject')
-    var=json.loads(var)
-    startIndex = request.POST.get('startIndex', "1")
-
+    try:
+        new_file_title=request.POST.get('new_file_name')
+        file_type=request.POST.get('file_type','환경')
+        date=request.POST.get('date','1')
+        lat=request.POST.get('lat','35')
+        lon=request.POST.get('lon','126')
+        lat_lon=[lat,lon]
+        DorW=request.POST.get('DorW','days')
+        var=request.POST.get('valueObject')
+        var=json.loads(var)
+        startIndex = request.POST.get('startIndex', "1")
+    except:
+        return HttpResponse("<script>alert('필수 입력값을 입력해주세요');location.href='..';</script>")
     data=FileSystem(user,file_title=file_title).fileLoad()
 
     a = ETL_system(data,file_type,date,lat_lon,DorW,var,startIndex)
