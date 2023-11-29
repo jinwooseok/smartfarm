@@ -62,6 +62,8 @@ const lineDraw = (name) => {
 
   graphArr = [[...xData], [...yData]];
 
+  console.log(graphArr)
+
   chart = bb.generate({
     bindto: "#myChart",
     data: {
@@ -108,6 +110,7 @@ const updateChart = (startIndex, lastIndex) => {
     graphArr.push(arr);
     arr = [];
   });
+  console.log(graphArr);
   chart.load({
     columns: graphArr,
   });

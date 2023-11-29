@@ -39,6 +39,7 @@ const $spreadsheet = document.querySelector("#spreadsheet"); // 엑셀 창
 const $fileName = document.querySelector("#fileName");
 const $abmsFileName = document.querySelector("#abmsFileName");
 const $pretreatmentFileName = document.querySelector("#pretreatmentFileName");
+const $x_label = document.querySelector("#x_label");
 const $dataColumnList = document.querySelector("#dataColumnList");
 
 const setFileName = () => {
@@ -74,6 +75,7 @@ const start = () => {
   settingDate();
   setFileName();
   addColumn($dataColumnList);
+  addColumn($x_label);
   Loading.CloseLoading();
 };
 

@@ -141,6 +141,7 @@ $save.addEventListener("click", async () => {
         mergedData: mergeData,
       },
     });
+    // response.data가 없음
     window.location.href = "/file-list/";
     Loading.CloseLoading();
   } catch (error) {

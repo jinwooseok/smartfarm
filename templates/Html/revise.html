@@ -266,130 +266,150 @@
 
     <!-- tap4  -->
     <li class="tab">
-        <input type="radio" id="tab-4" name="tab-group-1">
-        <label for="tab-4">ABMS</label>
+      <input type="radio" id="tab-4" name="tab-group-1">
+      <label for="tab-4">ABMS</label>
 
-        <div class="abms content">
-            <div class="abmsTypeSelect" id="abmsTypeSelect">
-                <select name="abmsType" id="abmsType" class="abmsType">
-                    <option value="완숙토마토">완숙토마토</option>
-                    <option value="방울토마토">방울토마토</option>
-                    <option value="참외">참외</option>
-                    <option value="파프리카">파프리카</option>
-                    <option value="오이">오이</option>
-                    <option value="가지">가지</option>
-                    <option value="국화">국화</option>
-                    <option value="수박">수박</option>
-                    <option value="레드향">레드향</option>
-                </select>
-                <span>파일 이름</span>
-                <input type="text" name="abmsFileName" id="abmsFileName" class="abmsFileName">
-                <button id="abmsSave" class="abmsSave">저장하기</button>
-            </div>
-
-            <div class="abmsText" id="abmsText">
-                <div id="columnBox" class="columnBox">
-                    농가명<select name="농가명" id="FRMHS_NM">
-                        <option value="null"></option>
-                    </select>
-                </div>
-                <div id="columnBox" class="columnBox">
-                    조사일자<select name="조사일자" id="EXAMIN_DATETM">
-                        <option value="null"></option>
-                    </select>
-                </div>
-                <div id="columnBox" class="columnBox">
-                    개체번호<select name="개체번호" id="PPLT_NO">
-                        <option value="null"></option>
-                    </select>
-                </div>
-                <div id="columnBox" class="columnBox">
-                    줄기번호<select name="줄기번호" id="STEM_NO">
-                        <option value="null"></option>
-                    </select>
-                </div>
-                <div id="columnBox" class="columnBox">
-                    초장<select name="초장" id="PLLN">
-                        <option value="null"></option>
-                    </select>
-                </div>
-                <div id="columnBox" class="columnBox">
-                    생장길이<select name="생장길이" id="GRWT_LT">
-                        <option value="null"></option>
-                    </select>
-                </div>
-                <div id="columnBox" class="columnBox">
-                    엽수<select name="엽수" id="FLG_YLD">
-                        <option value="null"></option>
-                    </select>
-                </div>
-                <div id="columnBox" class="columnBox">
-                    엽장<select name="엽장" id="LFLN">
-                        <option value="null"></option>
-                    </select>
-                </div>
-                <div id="columnBox" class="columnBox">
-                    엽폭<select name="엽폭" id="FLG_BT">
-                        <option value="null"></option>
-                    </select>
-                </div>
-                <div id="columnBox" class="columnBox">
-                    줄기굵기<select name="줄기굵기" id="STEM_DMT">
-                        <option value="null"></option>
-                    </select>
-                </div>
-                <div id="columnBox" class="columnBox">
-                    화방높이<select name="화방높이" id="FCLU_HG">
-                        <option value="null"></option>
-                    </select>
-                </div>
-                <div id="columnBox" class="columnBox">
-                    화방번호<select name="화방번호" id="FCLU_NO">
-                        <option value="null"></option>
-                    </select>
-                </div>
-                <div id="columnBox" class="columnBox">
-                    화방별총개수<select name="화방별총개수" id="TOTAL_PER_FCLU">
-                        <option value="null"></option>
-                    </select>
-                </div>
-                <div id="columnBox" class="columnBox">
-                    화방별꽃수<select name="화방별꽃수" id="FCLU_FLWR_CO">
-                        <option value="null"></option>
-                    </select>
-                </div>
-                <div id="columnBox" class="columnBox">
-                    화방별꽃봉오리수<select name="화방별꽃봉오리수" id="FCLU_BLM_CO">
-                        <option value="null"></option>
-                    </select>
-                </div>
-                <div id="columnBox" class="columnBox">
-                    화방별개화수<select name="화방별개화수" id="FCLU_FLAN_CO">
-                        <option value="null"></option>
-                    </select>
-                </div>
-                <div id="columnBox" class="columnBox">
-                    화방별착과수<select name="화방별착과수" id="FCLU_FRTST_CO">
-                        <option value="null"></option>
-                    </select>
-                </div>
-                <div id="columnBox" class="columnBox">
-                    화방별적과수<select name="화방별적과수" id="FCLU_FRTTHIN_CO">
-                        <option value="null"></option>
-                    </select>
-                </div>
-                <div id="columnBox" class="columnBox">
-                    화방별수확수<select name="화방별수확수" id="FCLU_HVST_CO">
-                        <option value="null"></option>
-                    </select>
-                </div>
-                <div id="columnBox" class="columnBox">
-                    비고<select name="비고" id="RM">
-                        <option value="null"></option>
-                    </select>
-                </div>
-            </div>
+      <div class="abms content">
+        <div class="abmsTypeSelect" id="abmsTypeSelect">
+          <select name="abmsType" id="abmsType" class="abmsType">
+            <option value="완숙토마토">완숙토마토</option>
+            <option value="방울토마토">방울토마토</option>
+            <option value="참외">참외</option>
+            <option value="파프리카">파프리카</option>
+            <option value="오이">오이</option>
+            <option value="가지">가지</option>
+            <option value="국화">국화</option>
+            <option value="수박">수박</option>
+            <option value="레드향">레드향</option>
+          </select>
+          <span>파일 이름</span>
+          <input type="text" name="abmsFileName" id="abmsFileName" class="abmsFileName">
+          <button id="abmsSave" class="abmsSave">저장하기</button>
         </div>
+
+        <div class="abmsText" id="abmsText">
+          <div id="columnBox" class="columnBox">
+            농가명
+            <select name="농가명" id="FRMHS_NM">
+              <option value="null"></option>
+            </select>
+          </div>
+          <div id="columnBox" class="columnBox">
+            조사일자
+            <select name="조사일자" id="EXAMIN_DATETM">
+              <option value="null"></option>
+            </select>
+          </div>
+          <div id="columnBox" class="columnBox">
+            개체번호
+            <select name="개체번호" id="PPLT_NO">
+              <option value="null"></option>
+            </select>
+          </div>
+          <div id="columnBox" class="columnBox">
+            줄기번호
+            <select name="줄기번호" id="STEM_NO">
+              <option value="null"></option>
+            </select>
+          </div>
+          <div id="columnBox" class="columnBox">
+            초장
+            <select name="초장" id="PLLN">
+              <option value="null"></option>
+            </select>
+          </div>
+          <div id="columnBox" class="columnBox">
+            생장길이
+            <select name="생장길이" id="GRWT_LT">
+              <option value="null"></option>
+            </select>
+          </div>
+          <div id="columnBox" class="columnBox">
+            엽수
+            <select name="엽수" id="FLG_YLD">
+              <option value="null"></option>
+            </select>
+          </div>
+          <div id="columnBox" class="columnBox">
+            엽장
+            <select name="엽장" id="LFLN">
+              <option value="null"></option>
+            </select>
+          </div>
+          <div id="columnBox" class="columnBox">
+            엽폭
+            <select name="엽폭" id="FLG_BT">
+              <option value="null"></option>
+            </select>
+          </div>
+          <div id="columnBox" class="columnBox">
+            줄기굵기
+            <select name="줄기굵기" id="STEM_DMT">
+              <option value="null"></option>
+            </select>
+          </div>
+          <div id="columnBox" class="columnBox">
+            화방높이
+            <select name="화방높이" id="FCLU_HG">
+              <option value="null"></option>
+            </select>
+          </div>
+          <div id="columnBox" class="columnBox">
+            화방번호
+            <select name="화방번호" id="FCLU_NO">
+              <option value="null"></option>
+            </select>
+          </div>
+          <div id="columnBox" class="columnBox">
+            화방별총개수
+            <select name="화방별총개수" id="TOTAL_PER_FCLU">
+              <option value="null"></option>
+            </select>
+          </div>
+          <div id="columnBox" class="columnBox">
+            화방별꽃수
+            <select name="화방별꽃수" id="FCLU_FLWR_CO">
+              <option value="null"></option>
+            </select>
+          </div>
+          <div id="columnBox" class="columnBox">
+            화방별꽃봉오리수
+            <select name="화방별꽃봉오리수" id="FCLU_BLM_CO">
+              <option value="null"></option>
+            </select>
+          </div>
+          <div id="columnBox" class="columnBox">
+            화방별개화수
+            <select name="화방별개화수" id="FCLU_FLAN_CO">
+              <option value="null"></option>
+            </select>
+          </div>
+          <div id="columnBox" class="columnBox">
+            화방별착과수
+            <select name="화방별착과수" id="FCLU_FRTST_CO">
+              <option value="null"></option>
+            </select>
+          </div>
+          <div id="columnBox" class="columnBox">
+            화방별적과수
+            <select name="화방별적과수" id="FCLU_FRTTHIN_CO">
+              <option value="null"></option>
+            </select>
+          </div>
+          <div id="columnBox" class="columnBox">
+            화방별수확수
+            <select name="화방별수확수" id="FCLU_HVST_CO">
+                <option value="null"></option>
+            </select>
+          </div>
+          <div id="columnBox" class="columnBox">
+            비고
+            <select name="비고" id="RM">
+                <option value="null"></option>
+            </select>
+          </div>
+        </div>
+      </div>
     </li>
   </ul>
 

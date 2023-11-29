@@ -91,12 +91,12 @@ $analyzeBtn.addEventListener("click", () => {
 
 /////////////////////////////////////
 
-var chart; // 그래프
+let chart; // 그래프
 let graphArr = []; // 사용한 변수
 let selectArr = []; // 업데이트용 y열 이름만 보관 ["열 이름","열 이름", "열 이름", ..]
 
 // 특수 문자 및 공백 제거 정규 표현식
-let reg = /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/ ]/gim;
+const reg = /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/ ]/gim;
 
 const $buttonContainer = document.querySelector("#buttonContainer");
 const $SelectedDate = document.querySelector("#SelectedDate");
