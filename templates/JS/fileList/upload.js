@@ -12,7 +12,7 @@ let selectedFile;
 
 function fileSetting() {
   $fileIcon.style.display = "none";
-  $fileUploadDrag.style.display = "none";
+  // $fileUploadDrag.style.display = "none";
   $spreadsheet.style["align-items"] = "start";
   $fileName.value = selectedFile.name.replace(/\s/g, "_");
 }

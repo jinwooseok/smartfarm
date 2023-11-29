@@ -72,7 +72,7 @@ body {
 
     .spreadsheet .fileUploadDrag {
         width: 300%;
-        height: 300%;
+        height: 100%;
     }
 
     .spreadsheet .icon {
@@ -367,7 +367,7 @@ body {
 
     .spreadsheet .fileUploadDrag {
         width: 300%;
-        height: 300%;
+        height: 100%;
     }
 
     .spreadsheet .icon{
