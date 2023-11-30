@@ -89,8 +89,8 @@ def logout(request):
 def validEmail(request):
     register_id = request.POST.get('registerID')
     if duplicatedEmail(register_id):
-        return JsonResponse({'data':False})
-    return JsonResponse({'data':True})
+        return JsonResponse({'data':True})
+    return JsonResponse({'data':False})
     
 def duplicatedEmail(email):
     if User.objects.filter(user_id=email).exists():
