@@ -13,7 +13,7 @@ let selectedFile;
 function fileSetting() {
   $fileIcon.style.display = "none";
   // $fileUploadDrag.style.display = "none";
-  $spreadsheet.style["align-items"] = "start";
+  // $spreadsheet.style["align-items"] = "start";
   $fileName.value = selectedFile.name.replace(/\s/g, "_");
 }
 
@@ -25,8 +25,8 @@ function readFileContent(file) {
     const fileContent =  event.target.result;
     const workbook = XLSX.read(fileContent, { type: "binary" });
     const sheetData = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[workbook.SheetNames[0]]);
-    $fileUploadDrag.innerHTML += new Excel(sheetData.slice(0, 100), $spreadsheet);
-   Loading.CloseLoading();
+    // $fileUploadDrag.innerHTML += new Excel(sheetData.slice(0, 100), $spreadsheet);
+    Loading.CloseLoading();
   };
 
   reader.onerror = function (event) {

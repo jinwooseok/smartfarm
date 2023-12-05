@@ -44,8 +44,9 @@
 		<form action="{% url 'smartfarm:fileUpload' %}" method="POST" enctype="multipart/form-data" class="upload">
 			{% csrf_token %}
 			<div class="excel">
+				<input type="file" id="fileUploadDrag" class="fileUploadDrag" name="fileUploadDrag" accept=".xls, .xlsx, .csv">
+
 				<div id="spreadsheet" class="spreadsheet">
-					<input type="file" id="fileUploadDrag" class="fileUploadDrag" name="fileUploadDrag" accept=".xls, .xlsx, .csv">
 					<div class="icon">
 						<i class="fa-solid fa-cloud-arrow-up" id="fileIcon"></i>
 						<span>파일을 드래그하세요</span>
