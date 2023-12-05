@@ -1,4 +1,4 @@
-import cookies from "/templates/JS/Utils/csrfToken.js";
+import cookies from "/templates/JS/Utils/csrfToken.mjs";
 
 const $id = document.querySelector("#registerID");
 const $pass = document.querySelector("#registerPassword");
