@@ -17,7 +17,8 @@ const $checkEmail = document.querySelector("#checkEmail");
 const $checkCertificationNumber = document.querySelector("#checkCertificationNumber");
 const $postCertificationNumber = document.querySelector("#postCertificationNumber");
 
-let emailValid;
+let emailValid = false;
+let checkCertificationNumber = false;
 
 async function checkDuplicateEmail(email) {
   try {
@@ -85,7 +86,8 @@ function updateButtonState() {
     isValidPassword($pass.value) &&
     $pass.value === $checkPassword.value &&
     $name.value.trim() !== "" &&
-    isValidPhone();
+    isValidPhone() &&
+    checkCertificationNumber;
 
   $registerButton.disabled = !isValid;
 }
@@ -138,10 +140,9 @@ function moveMain() {
   location.replace("/");
 }
 
-
 let timerInterval;
 
-$postCertificationNumber.addEventListener('click', () => {
+function timer() {
   const endTime = (+new Date) + 1000 * 181;
   let msLeft = endTime - (+new Date);
   let time = new Date( msLeft );
@@ -159,6 +160,7 @@ $postCertificationNumber.addEventListener('click', () => {
     if ( msLeft < 0 ) {
       alert('done');
       $postCertificationNumber.disabled = false;
+      clearInterval(timerInterval); 
     } else {
       time = new Date( msLeft );
       hours = time.getUTCHours();
@@ -166,16 +168,21 @@ $postCertificationNumber.addEventListener('click', () => {
       element.innerHTML = (hours ? hours + ':' + ('0' + mins).slice(-2) : mins) + ':' + ('0' + time.getUTCSeconds()).slice(-2);
     }
   }, time.getUTCMilliseconds());
+}
 
-});
+$postCertificationNumber.addEventListener('click', timer);
 
 $checkCertificationNumber.addEventListener('click', () => {
-  clearInterval(timerInterval);
+  clearInterval(timerInterval); 
   $postCertificationNumber.disabled = false;
+  checkCertificationNumber = true;
+  updateButtonState();
+  // timer();
 })
 
 $checkEmail.addEventListener("click", async () => {
   emailValid = await isValidEmail();
+  updateButtonState();
 });
 
 $registerForm.addEventListener("keyup", showKeyUpError);
