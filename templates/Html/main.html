@@ -68,9 +68,15 @@
 			</button>
 		</div>
 	</div>
+
+	{% if user_name != anonymous %}
+	<div class="downloadContainer">
+		<a href="/download/guidebook/" class="download" id="download">사용법 다운로드</a>
+	</div>
+	{% endif %}
 </body>
 
 <script src="/templates/JS/Utils/href.js"></script>
-<script src="/templates/JS/main.js"></script>
+<script type="module" src="/templates/JS/main.js"></script>
 
 </html>

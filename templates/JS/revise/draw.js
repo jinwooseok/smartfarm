@@ -34,7 +34,7 @@ $close.addEventListener("click", () => {
 });
 
 const lineDraw = (name) => {
-  let showColumnName = name; // 그려줄 열 이름
+  const showColumnName = name; // 그려줄 열 이름
 
   let yData = []; // y축 값 배열
   let xData = []; // x축 값 배열
@@ -68,14 +68,13 @@ const lineDraw = (name) => {
     bindto: "#myChart",
     data: {
       x: xColumn,
-      // x : "x축",
       type: "line",
       columns: graphArr,
     },
-    zoom: {
-      enabled: true, // for ESM specify as: zoom()
-      type: "drag",
-    },
+    // zoom: {
+    //   enabled: true, // for ESM specify as: zoom()
+    //   type: "drag",
+    // },
     axis: {
       x: {
         type: "category",
