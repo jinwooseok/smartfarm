@@ -7,6 +7,7 @@ const $name = document.querySelector("#name");
 const $phoneFront = document.querySelector("#phoneFront");
 const $phoneMiddle = document.querySelector("#phoneMiddle");
 const $phoneLast = document.querySelector("#phoneLast");
+const $timer = document.querySelector("#timer");
 
 const $registerForm = document.getElementById("registerForm");
 const $registerButton = document.querySelector("#registerButton");
@@ -16,7 +17,8 @@ const $checkEmail = document.querySelector("#checkEmail");
 const $checkCertificationNumber = document.querySelector("#checkCertificationNumber");
 const $postCertificationNumber = document.querySelector("#postCertificationNumber");
 
-let emailValid;
+let emailValid = false;
+let checkCertificationNumber = false;
 
 async function checkDuplicateEmail(email) {
   try {
@@ -25,14 +27,14 @@ async function checkDuplicateEmail(email) {
       type: "post",
       dataType: "json",
       headers: { "X-CSRFToken": cookies['csrftoken'] },
-      data: { email },
+      data: { registerID : email },
       async: false,
     });
 
     return response.data;
   } catch (error) {
     console.error("error: " + error);
-    throw error; // rethrow the error for the caller to handle
+    throw error;
   }
 }
 
@@ -84,7 +86,8 @@ function updateButtonState() {
     isValidPassword($pass.value) &&
     $pass.value === $checkPassword.value &&
     $name.value.trim() !== "" &&
-    isValidPhone();
+    isValidPhone() &&
+    checkCertificationNumber;
 
   $registerButton.disabled = !isValid;
 }
@@ -127,7 +130,6 @@ function showKeyUpError(event) {
   updateButtonState();
 }
 
-
 function moveLogin() {
   $registerForm.action = "/users/register/";
   $registerForm.method = "POST";
@@ -138,11 +140,51 @@ function moveMain() {
   location.replace("/");
 }
 
+let timerInterval;
+
+function timer() {
+  const endTime = (+new Date) + 1000 * 181;
+  let msLeft = endTime - (+new Date);
+  let time = new Date( msLeft );
+  let hours = time.getUTCHours();
+  let mins = time.getUTCMinutes();
+
+  $postCertificationNumber.disabled = true;
+
+  alert("인증번호를 전송합니다.");
+
+  timerInterval = setInterval( () => {
+    const element = $timer;
+  
+    msLeft = endTime - (+new Date);
+    if ( msLeft < 0 ) {
+      alert('done');
+      $postCertificationNumber.disabled = false;
+      clearInterval(timerInterval); 
+    } else {
+      time = new Date( msLeft );
+      hours = time.getUTCHours();
+      mins = time.getUTCMinutes();
+      element.innerHTML = (hours ? hours + ':' + ('0' + mins).slice(-2) : mins) + ':' + ('0' + time.getUTCSeconds()).slice(-2);
+    }
+  }, time.getUTCMilliseconds());
+}
+
+$postCertificationNumber.addEventListener('click', timer);
+
+$checkCertificationNumber.addEventListener('click', () => {
+  clearInterval(timerInterval); 
+  $postCertificationNumber.disabled = false;
+  checkCertificationNumber = true;
+  updateButtonState();
+  // timer();
+})
+
 $checkEmail.addEventListener("click", async () => {
   emailValid = await isValidEmail();
-  // Now you can use the 'isValid' variable for further processing
-  console.log("Is email valid?", emailValid)
+  updateButtonState();
 });
+
 $registerForm.addEventListener("keyup", showKeyUpError);
 $registerButton.addEventListener("click", moveLogin);
 $backToLogin.addEventListener("click", moveMain);
