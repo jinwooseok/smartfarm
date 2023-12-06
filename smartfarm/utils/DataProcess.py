@@ -48,6 +48,11 @@ class DataProcess:
     
     def makeSummary(self):
         df = self.data.copy()
+        for i in df.columns:
+            numeric_series = pd.to_numeric(df[i], errors='coerce').astype(float)
+            df[i] = numeric_series
+            if df[i].notnull().sum() <= 1:
+                df.drop(i, axis=1, inplace=True)
         null_count=pd.DataFrame(df.isnull().sum()).T
         null_count.index=["Null_count"]
         try:
@@ -70,11 +75,13 @@ class DataProcess:
         data = self.data
         dropIndex = []
         for i in range(len(data.columns)):
-            if data.iloc[:, i].dtype == "int64" or data.iloc[:, i].dtype == "float64":
-
-                if len(self.outLierDetector(data.iloc[:, i])) != 0:
-                    dropIndex = dropIndex+self.outLierDetector(data.iloc[:, i])
+            numeric_rows = pd.to_numeric(data.iloc[:, i], errors='coerce')
+            if len(numeric_rows.notnull()) == 0:
+                continue
+            if len(self.outLierDetector(numeric_rows)) != 0:
+                dropIndex = dropIndex+self.outLierDetector(data.iloc[:, i])
         dropIndex = list(set(dropIndex))
+
 
         self.data.drop(dropIndex, axis=0, inplace=True)
         return self.data.to_json(orient="records",force_ascii=False)

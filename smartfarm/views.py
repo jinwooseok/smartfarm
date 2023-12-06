@@ -120,7 +120,7 @@ def dataEditWithNoFileView(request):
 def dataLoadApi(request):
     user = loginValidator(request)
     if user is None:
-        return JsonResponse(failResponse())
+        return JsonResponse(failResponse("로그인을 해주세요"), status=403)
     try:
         file_title = request.POST.get('fileName')
     except:
@@ -155,10 +155,12 @@ def abmsApi(request, file_title):
     except:
         return HttpResponse("<script>alert('데이터를 선택해주세요');location.href='..';</script>")
     try:
-        file_title = request.POST.get('newFileName')
+        new_file_title = request.POST.get('newFileName')
     except:
         return HttpResponse("<script>alert('파일명을 선택해주세요');location.href='..';</script>")
-    FileSystem(user,file_title=file_title,data=data).fileSave()
+    if data.empty:
+        return JsonResponse(failResponse("저장할 데이터가 비어있습니다."), status=400)
+    FileSystem(user,file_title=new_file_title,data=data).fileSave()
     return JsonResponse(successResponse())
 
 #------------------------ merge창 ------------------------
@@ -238,12 +240,12 @@ def fileMergeApi(request):
             FileSystem(user,file_title=file_title,data=data).fileSave()
             return JsonResponse(successResponse())
         else:
-            return JsonResponse(failResponse())
+            return JsonResponse(failResponse("잘못된 입력입니다."), status=400)
 
 def scalerApi(request, file_title):
     user = loginValidator(request)
     if user is None:
-        return JsonResponse(failResponse())
+        return JsonResponse(failResponse("로그인을 해주세요"), status=403)
     
     file = FileSystem(user,file_title=file_title).fileLoad()
     data = pd.read_json(file)
@@ -284,6 +286,8 @@ def useAnalizer(request, file_title):
     if user != None:
         data = FileSystem(user, file_title=file_title).fileLoad()
         data = pd.read_json(data)
+        for i in data.columns:
+            data[i] = pd.to_numeric(data[i], errors='coerce').astype(float)
         try:
             scaler = request.GET.get('scaler')
         except:
@@ -306,17 +310,21 @@ def useAnalizer(request, file_title):
                 x = json.loads(request.GET.get('xValue'))
                 y = request.GET.get('yValue')
             except:
-                return HttpResponse("<script>alert('잘못된 x값 혹은 y값 입니다.');location.href='..';</script>")
+                return JsonResponse(failResponse("잘못된 x값 혹은 y값 입니다."), status=400)
             result = analizer.linear(data, x, y)
+            if result == 400:
+                return JsonResponse(failResponse("숫자가 아닌 잘못된 열이거나 값이 없습니다."), status=400)
             return JsonResponse(successDataResponse(result))
 
         elif request.GET.get('technique') == '로지스틱회귀분석':
             try:
-                x = request.GET.getlist('xValue')
+                x = json.loads(request.GET.get('xValue'))
                 y = request.GET.get('yValue')
             except:
                 return HttpResponse("<script>alert('잘못된 x값 혹은 y값 입니다.');location.href='..';</script>")
             result = analizer.logistic(data, x, y)
+            if result == 400:
+                return HttpResponse("<script>alert('숫자가 아닌 잘못된 열이거나 값이 없습니다.');location.href='..';</script>")
             return JsonResponse(successDataResponse(result))
     elif user == None:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
