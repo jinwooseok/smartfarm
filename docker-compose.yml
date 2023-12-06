@@ -1,0 +1,46 @@
+version: '3'
+services:
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django
+    command: gunicorn --env DJANGO_SETTINGS_MODULE=config.settings.prod config.wsgi:application --bind 0.0.0.0:8000 --timeout 300
+    volumes:
+      - .:/app
+    expose:
+      - 8000:8000
+    ports:
+      - 8000:8000
+    env_file:
+      - ./secrets.yaml
+    networks:
+      - nmh_network
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./templates:/templates
+      - ./media:/media
+    ports:
+      - 80:80
+    depends_on:
+      - django
+    networks:
+      - nmh_network
+
+  redis:
+    image: "redis:latest"
+    container_name: redis
+    command: redis-server --port 6379
+    ports:
+      - "6379:6379"
+    networks:
+      - nmh_network
+
+networks:
+  nmh_network:
+
+
