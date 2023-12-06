@@ -33,8 +33,8 @@ def successResponse():
     context = {'result':'success'}
     return context
 
-def failResponse():
-    context = {'result':'fail'}
+def failResponse(error_message=None):
+    context = {'result':'fail', 'error':error_message}
     return context
 
 def successDataResponse(data):
