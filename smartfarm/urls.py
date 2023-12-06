@@ -35,6 +35,7 @@ urlpatterns = [
     #util기능
     path('download/', views.fileDownloadApi, name='download'),
     path('scaler/', views.scalerApi, name='scaler'),
+    path('download/guidebook/',views.guideBookDownloadApi, name='guidebook'),
     #test url 추가
     path('test/', views.test, name='test'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

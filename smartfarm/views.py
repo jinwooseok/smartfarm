@@ -5,6 +5,7 @@ import json
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from django.http import JsonResponse
 from django.http import HttpResponse
+from django.http import FileResponse
 #-----------------------DRF import-----------------------
 from .response import *
 from .repositorys import *
@@ -14,6 +15,9 @@ from .validators import loginValidator
 from .utils.FileSystem import FileSystem
 from .utils.DataProcess import DataProcess
 from .proc import ETL_system
+import os
+from django.conf import settings
+
 ##페이지 별로 필요한 request를 컨트롤
 #---------------분석도구 import ----------------
 from . import analizer
@@ -255,7 +259,6 @@ def scalerApi(request, file_title):
     scaled_data = scaled_data.to_json(orient='records', force_ascii=False)
     return JsonResponse(successDataResponse(scaled_data))
 
-
 #------------------------ analysis창 ------------------------
 def fileList2(request):
     user = loginValidator(request)
@@ -352,3 +355,29 @@ def farm(request, file_title):
     return JsonResponse(successDataResponse(result_json))
 
 
+def guideBookDownloadApi(request):
+    file_name = 'smartfarm_guidebook.pdf'
+    file_path = os.path.join(settings.MEDIA_ROOT, file_name)
+
+    content_types = {
+        "zip": "application/zip",
+        "jpeg": "image/jpeg",
+        "jpg": "image/jpeg",
+        "pdf": "application/pdf",
+        "ppt": "application/vnd.ms-powerpoint",
+        "xls": "application/vnd.ms-excel",
+        "7z": "application/x-7z-compressed",
+        "gif": "image/gif",
+        "others": "application/octet-stream"
+    }
+    c = content_types["others"]
+    if file_name.split(".")[1] in content_types:
+        c = content_types[file_name.split(".")[1]]
+
+    if os.path.exists(file_path):
+         with open(file_path, 'rb') as file:
+            response = HttpResponse(file.read())
+            response['Content-Disposition'] = 'attachment; filename="{}"'.format(file_name)
+            return response
+    else:
+        return JsonResponse(status=404, data={"message": "File not found"})
