@@ -167,7 +167,6 @@ $graphAdd.addEventListener("click", () => {
       bindto: "#chart",
       data: {
         x: xText,
-        // x : "x축",
         type: "line",
         columns: graphArr,
       },
@@ -202,7 +201,7 @@ $graphAdd.addEventListener("click", () => {
       columns: graphArr,
     });
   }
-
+console.log(graphArr)
   buttonShow(startIndex, lastIndex);
 });
 
