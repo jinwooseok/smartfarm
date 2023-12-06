@@ -28,17 +28,18 @@ const generateColumnHTML = (columnSet) => {
 };
 
 // selectBox 초기값
-function setSelectedValue() {
+const setSelectedValue = () => {
   const $columnBox = document.querySelectorAll("#columnBox");
   const $columnBoxSelect = document.querySelectorAll("#columnBox > select");
 
   for (let i=0; i < $columnBox.length; i++) {
     $columnBoxSelect[i].innerHTML = '<option value="null"></option>';
     excelCol.map((column) => {
-      if ($columnBox[i].childNodes[0].data.trim() === column) {
-        $columnBoxSelect[i].innerHTML += `<Option value='${column}' selected>` + column + `</option>`;
+      const value = column.trim();
+      if ($columnBox[i].childNodes[0].data.trim() === value) {
+        $columnBoxSelect[i].innerHTML += `<option value='${value}' selected>` + value + `</option>`;
       } else {
-        $columnBoxSelect[i].innerHTML += `<Option value='${column}'>` + column + `</option>`;
+        $columnBoxSelect[i].innerHTML += `<option value='${value}'>` + value + `</option>`;
       }
     });
   }
@@ -56,13 +57,13 @@ const setABMSdata = () =>{
     inputValue.push($columnBoxSelect[i].value);
   }
 
-  for (let i = 0; i < excelData.length; i++) {
-    let x = {};
-    for (let j in abmsColumn) {
-      x[abmsColumn[j]] = excelData[i][inputValue[j]] ?? "";
-    }
-    abmsData.push(x);
-  }
+  excelData.map((row) => {
+    let addObjectToABMSData = {};
+    inputValue.map((value, index) => {
+      addObjectToABMSData[abmsColumn[index]] = (row[value] || row[`${value} `]) ?? 'null';
+    });
+    abmsData.push(addObjectToABMSData);
+  })
 
   return abmsData;
 };
@@ -79,15 +80,15 @@ $abmsSave.addEventListener("click", () => {
     headers: { "X-CSRFToken": csrftoken },
     data: {
       newFileName: $abmsFileName.value,
-      ABMSData : ABMSdata,
+      ABMSData : JSON.stringify(ABMSdata),
     },
     success: function (response) {
       alert("완료되었습니다.");
       window.location.href = "/file-list/";
     },
-    error : function(xhr, ajaxSettings, thrownError) 
+    error : function() 
     {
-        alert("수정하는데 오류가 발생하였습니다.");
+      alert("수정하는데 오류가 발생하였습니다.");
     },
   });
 });

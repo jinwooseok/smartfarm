@@ -1,4 +1,3 @@
-// graph ///////////////////////////////////////////////////////
 const $close = document.querySelector("#close"); // dialog 닫기
 const $buttonContainer = document.querySelector("#buttonContainer");
 const $graphContainer = document.querySelector("#graphContainer");
@@ -12,7 +11,7 @@ let startIndex = 0;
 let lastIndex = exCount;
 
 let graphArr = [];
-let selectArr = []; // 업데이트용 y열 이름만 보관 ["열 이름","열 이름", "열 이름", ..]
+let selectArr = [];
 
 const buttonShow = (startIndex, lastIndex) => {
   if (lastIndex === ex_data.length && startIndex === 0) {
@@ -34,13 +33,17 @@ $close.addEventListener("click", () => {
 });
 
 const lineDraw = (name) => {
+
+  // alert("에러 수정 중 입니다.");
+  // return;
+
   const showColumnName = name; // 그려줄 열 이름
 
-  let yData = []; // y축 값 배열
-  let xData = []; // x축 값 배열
+  const yData = []; // y축 값 배열
+  const xData = []; // x축 값 배열
 
   // x축 열 이름
-  let xColumn =
+  const xColumn =
     document.querySelector("#x_label").options[
       document.querySelector("#x_label").selectedIndex
     ].value;
@@ -62,8 +65,10 @@ const lineDraw = (name) => {
 
   graphArr = [[...xData], [...yData]];
 
-  console.log(graphArr)
+  showGraph(xColumn);
+};
 
+const showGraph = (xColumn) => {
   chart = bb.generate({
     bindto: "#myChart",
     data: {
@@ -71,10 +76,6 @@ const lineDraw = (name) => {
       type: "line",
       columns: graphArr,
     },
-    // zoom: {
-    //   enabled: true, // for ESM specify as: zoom()
-    //   type: "drag",
-    // },
     axis: {
       x: {
         type: "category",
@@ -83,13 +84,9 @@ const lineDraw = (name) => {
           multiline: false,
           tooltip: true,
         },
-        //height: 130
       },
     },
   });
-
-  $buttonContainer.style.display = "flex"; // 화살표 생성
-  $graphContainer.style.display = "block";
 
   buttonShow(startIndex, lastIndex);
 };

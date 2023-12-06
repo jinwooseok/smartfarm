@@ -13,8 +13,9 @@ const checkNowFileTitle = () => {
   fileListTitles.map( (title) => {
     if (title === selectedFileTitle) {
       $fileListSelectBox.innerHTML += `<Option value= '${title}' selected>` + title + `</option>`;
+    } else {
+      $fileListSelectBox.innerHTML += `<Option value= '${title}'>` + title + `</option>`;
     }
-    $fileListSelectBox.innerHTML += `<Option value= '${title}'>` + title + `</option>`;
   });
 };
 
@@ -183,14 +184,14 @@ const createEasyVersionData  = (event) => {
         }
       }
       if (selectedDefaultValue === "일사량") {
-        alert("어떻게 넣어야 하는지 잘 모르겠다.");
+        alert("미완.");
         // $selectedValueList.innerHTML += 
         // `<Option value= '${defaultValue}${selectedValue}'>` +
         //   value.join("") + selectedValue +
         // `</option>`;
       } 
       if (selectedDefaultValue === "강수량") {
-        alert("어떻게 넣어야 하는지 잘 모르겠다.");
+        alert("미완.");
         // $selectedValueList.innerHTML += 
         // `<Option value= '${defaultValue}${selectedValue}'>` +
         //   value.join("") + selectedValue +
@@ -246,7 +247,6 @@ const createHardVersionData = () => {
 
   const value = text.first+text.second+text.third;
   if (checkDuplicate(value)) {
-    console.log("XXX")
     $selectedValueList.innerHTML += `<Option value= '${text.first}_${text.second}_${text.third}'>` + value + `</option>`;
     newDataArr.push(value);
     addObject(text.third, text.first, text.second);
