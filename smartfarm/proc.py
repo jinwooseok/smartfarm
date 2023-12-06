@@ -55,7 +55,6 @@ class ETL_system:
             #시간 구별 데이터프레임 생성
             envir_date = pd.DataFrame()
             envir_date['날짜'] = df.data['날짜']
-            print(envir_date['날짜'].dtype)
             start_month=envir_date['날짜'].astype(str)[0][0:7]
             end_month=envir_date['날짜'].astype(str)[len(envir_date)-1][0:7]
             envir_date['날짜']=pd.to_datetime(envir_date['날짜'])
@@ -78,19 +77,24 @@ class ETL_system:
     #생육데이터 처리함수
     def Growth(self, df):
         print("--------------생육입니다.-------------------------")
-        growth_object = df.data
+        data = df.data
         date = df.date
-        result=making_weekly2(growth_object,date)
+        result=making_weekly2(data,date)
         result['날짜']=result['날짜'].astype('str')
         return result
 
     #생산량데이터 처리함수
     def Crop(self, df):
         data = df.data
-        date_ind=df.date
+        date=df.date
         d_ind=1
-        result=y_split(data,date_ind,d_ind)
-        result['날짜']=result['날짜'].astype('str')
+        if self.DorW=="days":
+            result=y_split(data,date,d_ind)
+            result['날짜']=result['날짜'].astype('str')
+        if self.DorW=="weeks":
+            result=y_split(data,date,d_ind)
+            result = making_weekly2(data, date)
+            result['날짜']=result['날짜'].astype('str')
         return result
     
     #weekly함수 실행 시에 날짜의 열이름이 '날짜'로 통일되는 점을 활용, 주별데이터, 중복없는 일일데이터 가능
