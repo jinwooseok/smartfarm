@@ -1,5 +1,9 @@
+import cookies from "/templates/JS/Utils/csrfToken.js";
+
 const $pretreatmentFileName = document.querySelector('#pretreatmentFileName');
 const $pretreatmentSave = document.querySelector('#pretreatmentSave');
+
+const csrftoken = cookies['csrftoken'] // csrftoken
 
 $pretreatmentSave.addEventListener('click', () => {
 	$.ajax({
