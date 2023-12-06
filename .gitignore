@@ -4,3 +4,4 @@ secrets.json
 *.csv
 *.xlsx
 *.xls
+secrets.yaml
