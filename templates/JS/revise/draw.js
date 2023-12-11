@@ -34,8 +34,8 @@ $close.addEventListener("click", () => {
 
 const lineDraw = (name) => {
 
-  // alert("에러 수정 중 입니다.");
-  // return;
+  alert("에러 수정 중 입니다.");
+  return;
 
   const showColumnName = name; // 그려줄 열 이름
 
@@ -65,31 +65,33 @@ const lineDraw = (name) => {
 
   graphArr = [[...xData], [...yData]];
 
-  showGraph(xColumn);
+  // return xColumn;
 };
 
-const showGraph = (xColumn) => {
-  chart = bb.generate({
-    bindto: "#myChart",
-    data: {
-      x: xColumn,
-      type: "line",
-      columns: graphArr,
-    },
-    axis: {
-      x: {
-        type: "category",
-        tick: {
-          rotate: 75,
-          multiline: false,
-          tooltip: true,
-        },
-      },
-    },
-  });
+// const showGraph = (name) => {
+//   const xColumn = lineDraw(name);
 
-  buttonShow(startIndex, lastIndex);
-};
+//   chart = bb.generate({
+//     bindto: "#myChart",
+//     data: {
+//       x: xColumn,
+//       type: "line",
+//       columns: graphArr,
+//     },
+//     axis: {
+//       x: {
+//         type: "category",
+//         tick: {
+//           rotate: 75,
+//           multiline: false,
+//           tooltip: true,
+//         },
+//       },
+//     },
+//   });
+
+//   buttonShow(startIndex, lastIndex);
+// };
 
 const $Prev = document.querySelector("#Prev");
 const $Next = document.querySelector("#Next");
