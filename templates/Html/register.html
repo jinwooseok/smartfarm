@@ -22,7 +22,10 @@
       {% csrf_token %}
       <div class="email">
         <input type="text" class="formText registerID" id="registerID" name="registerID" placeholder="이메일">
-        <button id="checkEmail" class="checkEmail">중복확인</button>
+        <div class="duplicateBox">
+          <button id="checkEmail" class="checkEmail">중복확인</button>
+          <div id="idDuplicate" class="error">중복 체크를 해주세요.</div>
+        </div>
         <div id="emailError" class="error"></div>
       </div>
 

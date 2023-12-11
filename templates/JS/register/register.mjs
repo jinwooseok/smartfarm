@@ -54,6 +54,7 @@ async function isValidEmail() {
         alert("중복된 아이디 입니다.");
       } else {
         alert('사용가능한 아이디 입니다.');
+        document.querySelector('#idDuplicate').innerHTML = '';
       }
       return !isDuplicate;
     } catch (error) {
