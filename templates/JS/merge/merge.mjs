@@ -21,7 +21,7 @@ const $merge = document.querySelector("#merge");
 const $save = document.querySelector("#save");
 const $spreadsheet = document.querySelector("#spreadsheet"); // 엑셀 창
 
-let mergeDataList = []; // 병합 파일 데이터
+let mergeDataList = Array(3).fill('');
 let mergeCompleteData; // 
 
 // 선택한 파일 불러오기
@@ -48,13 +48,19 @@ const postFilename = async (name) => {
 };
 
 // 파일 변수 불러오기
-const updateVariableOptions = async ($selectBox, $variable) => {
+const updateVariableOptions = async ($selectBox, $variable, index) => {
   $variable.innerHTML = "";
   const title = $selectBox.options[$selectBox.selectedIndex].textContent;
 
+  if (title === '') {
+    $variable.innerHTML = "";
+    mergeDataList[index] = '';
+    return;
+  }
+
   try {
     const data = await postFilename(title);
-    mergeDataList.push(data);
+    mergeDataList[index] = data;
 
     const dataColumn = Object.keys(JSON.parse(data)[0]);
     for (let x of dataColumn) {
@@ -67,7 +73,7 @@ const updateVariableOptions = async ($selectBox, $variable) => {
 
 Object.values($selectBoxes).forEach(($selectBox, index) => {
   $selectBox.addEventListener("change", () => {
-    updateVariableOptions($selectBox, Object.values($variables)[index]);
+    updateVariableOptions($selectBox, Object.values($variables)[index], index);
   });
 });
 
@@ -75,7 +81,7 @@ const setMergeColumn = () => {
   const $variableSelectBoxes = [$variables.growth, $variables.environment, $variables.output];
 
   const columnName = $variableSelectBoxes
-    .map($selectBox => $selectBox.options[$selectBox.selectedIndex].value)
+    .map($selectBox => $selectBox.options[$selectBox.selectedIndex]?.value)
     .filter(title => title !== "null");
 
   return columnName;
@@ -85,6 +91,10 @@ const setMergeColumn = () => {
 $merge.addEventListener("click", async () => {
   $spreadsheet.innerHTML = "";
   const mergeColumn = setMergeColumn();
+
+  while (mergeDataList.indexOf('') > -1) {
+    mergeDataList.splice(mergeDataList.indexOf(''), 1);
+  }
 
   Loading.StartLoading();
 
