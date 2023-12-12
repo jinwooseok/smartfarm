@@ -145,7 +145,8 @@ const createEasyVersionData  = (event) => {
     return;
   };
 
-  reviseDefaultValue.map( (defaultValue) => {
+  for (let i=0; i<reviseDefaultValue.length; i++) {
+    const defaultValue = reviseDefaultValue[i];
     const value = defaultValue.split("_");
 
     if (checkDuplicate(value.join("") + selectedValue)) {
@@ -185,6 +186,8 @@ const createEasyVersionData  = (event) => {
       }
       if (selectedDefaultValue === "일사량") {
         alert("미완.");
+        console.log(value.join("") + selectedValue)
+        break;
         // $selectedValueList.innerHTML += 
         // `<Option value= '${defaultValue}${selectedValue}'>` +
         //   value.join("") + selectedValue +
@@ -192,13 +195,15 @@ const createEasyVersionData  = (event) => {
       } 
       if (selectedDefaultValue === "강수량") {
         alert("미완.");
+        break;
         // $selectedValueList.innerHTML += 
         // `<Option value= '${defaultValue}${selectedValue}'>` +
         //   value.join("") + selectedValue +
         // `</option>`;
       }
     }
-  })
+  }
+
 
   if (duplicateArr.length) {
     alert(`${duplicateArr}은 중복 값이라 제거했습니다.`);
