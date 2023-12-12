@@ -51,14 +51,14 @@ def fileUploadApi(request):
     try:
         file_title = request.POST.get('file_title')
     except MultiValueDictKeyError:
-        return HttpResponse("<script>alert('파일명을 선택해주세요');location.href='..';</script>")
+        return JsonResponse(failResponse("파일명을 선택해주세요."), status=400)
     try:
         file = request.FILES["fileUploadInput"]
     except MultiValueDictKeyError:
         try:
             file = request.FILES["fileUploadDrag"]
         except MultiValueDictKeyError:
-            return HttpResponse("<script>alert('파일을 선택해주세요');location.href='..';</script>")
+            return JsonResponse(failResponse("파일명을 선택해주세요."), status=400)
     FileSystem(user=user,file_title=file_title,multi_part_file=file).fileUpload()
     
     return redirect('/file-list/')
@@ -70,7 +70,7 @@ def fileDeleteApi(request):
     try:
         file_titles = request.POST.get('data')
     except MultiValueDictKeyError:
-        return HttpResponse("<script>alert('파일명을 선택해주세요');location.href='.';</script>")
+        return JsonResponse(failResponse("파일명을 선택해주세요."), status=400)
     for file_title in json.loads(file_titles):
         FileSystem(user=user,file_title=file_title).fileDelete()
     #response
@@ -84,7 +84,7 @@ def fileDownloadApi(request):
     try:
         file_title = request.POST.get('data')
     except MultiValueDictKeyError:
-        return HttpResponse("<script>alert('파일명을 선택해주세요');location.href='..';</script>")
+        return JsonResponse(failResponse("파일명을 선택해주세요."), status=400)
     #파일의 데이터
     result = FileSystem(user=user,file_title=file_title).fileLoad()
 
@@ -124,7 +124,7 @@ def dataLoadApi(request):
     try:
         file_title = request.POST.get('fileName')
     except:
-        return HttpResponse("<script>alert('파일명을 선택해주세요');location.href='..';</script>")
+        return JsonResponse(failResponse("파일명을 선택해주세요."), status=400)
     data = FileSystem(user=user, file_title=file_title).fileLoad()
 
     summary = DataProcess(data).makeSummary()
@@ -138,7 +138,7 @@ def preprocessorApi(request, file_title):
     try:
         new_file_title = request.POST.get('newFileName')
     except:
-        return HttpResponse("<script>alert('파일명을 선택해주세요');location.href='..';</script>")
+        return JsonResponse(failResponse("파일명을 선택해주세요."), status=400)
     data = FileSystem(user=user,file_title=file_title).fileLoad()
     result = DataProcess(data).outLierDropper()
     
@@ -153,12 +153,13 @@ def abmsApi(request, file_title):
     try:
         data = request.POST.get('ABMSData')
     except:
-        return HttpResponse("<script>alert('데이터를 선택해주세요');location.href='..';</script>")
+        JsonResponse(failResponse("데이터를 선택해주세요."), status=400)
     try:
         new_file_title = request.POST.get('newFileName')
     except:
-        return HttpResponse("<script>alert('파일명을 선택해주세요');location.href='..';</script>")
-    if data.empty:
+        return JsonResponse(failResponse("파일명을 선택해주세요."), status=400)
+    if not data:
+        print(data)
         return JsonResponse(failResponse("저장할 데이터가 비어있습니다."), status=400)
     FileSystem(user,file_title=new_file_title,data=data).fileSave()
     return JsonResponse(successResponse())
@@ -184,7 +185,7 @@ def fileMergeApi(request):
             try:
                 files = request.GET.get('data')
             except:
-                return HttpResponse("<script>alert('데이터를 선택해주세요');location.href='..';</script>")
+                return JsonResponse(failResponse("데이터를 선택해주세요."), status=400)
             files = json.loads(files)
             data_list = []
             for file_title in files:
@@ -198,15 +199,15 @@ def fileMergeApi(request):
             try:
                 data = request.POST.get('data')
             except:
-                return HttpResponse("<script>alert('데이터를 선택해주세요');location.href='..';</script>")
+                return JsonResponse(failResponse("데이터를 선택해주세요."), status=400)
             try:
                 column_name = request.POST.get('columnName')
             except:
-                return HttpResponse("<script>alert('기준 열을 선택해주세요');location.href='..';</script>")
+                return JsonResponse(failResponse("기준 열을 입력해주세요."), status=400)
             dfs = []
             data = pd.read_json(data)
             column_name = json.loads(column_name)
-            
+            print(data, column_name)
             for i in range(len(data)):
                 df = pd.read_json(data.iloc[i,0])
                 df.rename(columns={column_name[i]:"기준"}, inplace=True)
@@ -291,7 +292,7 @@ def useAnalizer(request, file_title):
         try:
             scaler = request.GET.get('scaler')
         except:
-            return HttpResponse("<script>alert('정규화 방식을 선택해주세요');location.href='..';</script>")
+            return JsonResponse(failResponse("정규화 방식을 선택해주세요."), status=400)
         if scaler == 'min-max':
             scaler = MinMaxScaler()
             numeric_columns = data.select_dtypes(include=['float64', 'int64']).columns
@@ -321,10 +322,10 @@ def useAnalizer(request, file_title):
                 x = json.loads(request.GET.get('xValue'))
                 y = request.GET.get('yValue')
             except:
-                return HttpResponse("<script>alert('잘못된 x값 혹은 y값 입니다.');location.href='..';</script>")
+                return JsonResponse(failResponse("잘못된 x값 혹은 y값 입니다."), status=400)
             result = analizer.logistic(data, x, y)
             if result == 400:
-                return HttpResponse("<script>alert('숫자가 아닌 잘못된 열이거나 값이 없습니다.');location.href='..';</script>")
+                return JsonResponse(failResponse("숫자가 아닌 잘못된 열이거나 값이 없습니다."), status=400)
             return JsonResponse(successDataResponse(result))
     elif user == None:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n\\n이전 페이지로 돌아갑니다.');location.href='/';</script>")
@@ -349,7 +350,7 @@ def farm(request, file_title):
         var=json.loads(var)
         startIndex = request.POST.get('startIndex', "1")
     except:
-        return HttpResponse("<script>alert('필수 입력값을 입력해주세요');location.href='..';</script>")
+        return JsonResponse(failResponse("필수 입력값을 입력해주세요."), status=400)
     data=FileSystem(user,file_title=file_title).fileLoad()
 
     a = ETL_system(data,file_type,date,lat_lon,DorW,var,startIndex)
@@ -388,4 +389,4 @@ def guideBookDownloadApi(request):
             response['Content-Disposition'] = 'attachment; filename="{}"'.format(file_name)
             return response
     else:
-        return JsonResponse(status=404, data={"message": "File not found"})
+        return JsonResponse(failResponse("파일을 찾을 수 없습니다."), status=400)
