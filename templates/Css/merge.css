@@ -111,7 +111,7 @@
 	/* scroll */
 	.spreadsheet::-webkit-scrollbar,
 	.spreadsheet_full::-webkit-scrollbar {
-		height: 4px;
+		height: 14px;
 	}
 }
 
