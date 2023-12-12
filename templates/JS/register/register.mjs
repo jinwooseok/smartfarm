@@ -144,6 +144,9 @@ function moveMain() {
 let timerInterval;
 
 function timer() {
+
+  $checkCertificationNumber.disabled =false;
+
   const endTime = (+new Date) + 1000 * 181;
   let msLeft = endTime - (+new Date);
   let time = new Date( msLeft );
