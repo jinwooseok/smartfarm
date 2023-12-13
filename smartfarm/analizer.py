@@ -5,10 +5,13 @@ import statsmodels.api as sm
 def linear(d,x,y):#회귀분석을 실행. 결과표,분산분석표,상관분석표까지 표현
     all_value = x+[y]
     d = d[all_value]
-    d=d.dropna()
+    d=d.fillna(0)
     if d.shape[0] == 0 :  
         return 400 
-    result = sm.OLS(d[y],d[x]).fit()
+
+    X = sm.add_constant(d)
+    
+    result = sm.OLS(d[y],X).fit()
     #f_html=result.summary().to_html()
     result_dict = {}
     result_dict = result.summary().as_html()
