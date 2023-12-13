@@ -112,7 +112,7 @@ $merge.addEventListener("click", async () => {
     });
 
     if (response.data != null) {
-      mergeCompleteData = new Excel(JSON.parse(response.data).slice(0, 200), $spreadsheet); // 200개만 보여줌
+      mergeCompleteData = new Excel(JSON.parse(response.data).slice(0, 500), $spreadsheet); // 200개만 보여줌
       Loading.CloseLoading();
     }
   } catch (error) {

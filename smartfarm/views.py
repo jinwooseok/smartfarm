@@ -190,6 +190,7 @@ def fileMergeApi(request):
             data_list = []
             for file_title in files:
                 data_list.append(FileSystem(user,file_title=file_title).fileLoad())
+
             context = fileMergeApiResponse(file_name_list, data_list)
             return JsonResponse(context)
         
@@ -207,12 +208,11 @@ def fileMergeApi(request):
             dfs = []
             data = pd.read_json(data)
             column_name = json.loads(column_name)
-            print(data, column_name)
             for i in range(len(data)):
                 df = pd.read_json(data.iloc[i,0])
                 df.rename(columns={column_name[i]:"기준"}, inplace=True)
                 if type(df['기준']) is not object:
-                    df['기준'] = df['기준'].astype('object')
+                    df['기준'] = df['기준'].astype(str)
                 dfs.append(df)
             #data의 메모리 삭제
             del(data)
@@ -223,7 +223,7 @@ def fileMergeApi(request):
                 merge_data.info(memory_usage=True)
                 dfs[i].info(memory_usage=True)
                 merge_data = pd.merge(merge_data, dfs[i], on='기준', suffixes=(f'_{i}', f'_{i+1}'), how='outer', sort=True)
-
+                print(merge_data)
             merge_json_objects = merge_data.apply(lambda row: json.loads(row.to_json(force_ascii=False)), axis=1).tolist()
             merge_json_string =  json.dumps(merge_json_objects)
             context = successDataResponse(merge_json_string)

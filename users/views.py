@@ -25,6 +25,8 @@ def register(request):
         #phone에서 3개의 요소를 받기 때문에 (###,####,####) getlist로 값을 받음
         user_tel=request.POST.getlist('phone')
         user_tel = ''.join(user_tel)
+        if User.objects.filter(user_tel=user_tel).exists():
+            return HttpResponse("<script>alert('이미 존재하는 전화번호입니다.');location.href='.';</script>")
         user=User(
             user_id = user_id,
             user_pw = user_pw,
