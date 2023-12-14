@@ -64,7 +64,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     #cors header 
     "corsheaders.middleware.CorsMiddleware",
 ]
@@ -186,3 +185,15 @@ CACHES = {
         }
     }
 }
+
+SESSION_COOKIE_AGE = 600
+SESSION_SAVE_EVERY_REQUEST = True
+
+# SESSION_EXPIRE_SECONDS = 600
+
+# SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
+
+# SESSION_EXPIRE_AFTER_LAST_ACTIVITY_GRACE_PERIOD = 10
+
+# SESSION_TIMEOUT_REDIRECT = '/'
+
