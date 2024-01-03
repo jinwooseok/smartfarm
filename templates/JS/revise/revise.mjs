@@ -168,13 +168,13 @@ const createEasyVersionData  = (event) => {
       }
       if (
         selectedDefaultValue === "습도" ||
-        selectedDefaultValue === "CO2"||
-        selectedDefaultValue === "co2"
+        selectedDefaultValue === "CO2"
       ) {
         if (
-          value[1] !== "DIF" ||
-          value[1] !== "GDD" ||
-          value[0] !== "일출전후t시간"
+          value[1] !== "DIF" &&
+          value[1] !== "GDD" &&
+          value[0] !== "일출전후t시간" &&
+          value[0] !== "일출부터정오"
         ) {
           $selectedValueList.innerHTML += 
           `<Option value= '${defaultValue}${selectedValue}'>` +
@@ -186,7 +186,6 @@ const createEasyVersionData  = (event) => {
       }
       if (selectedDefaultValue === "일사량") {
         alert("미완.");
-        console.log(value.join("") + selectedValue)
         break;
         // $selectedValueList.innerHTML += 
         // `<Option value= '${defaultValue}${selectedValue}'>` +
