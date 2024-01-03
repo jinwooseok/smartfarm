@@ -25,9 +25,8 @@ function readFileContent(file) {
     const fileContent =  event.target.result;
     const workbook = XLSX.read(fileContent, { type: "binary" });
     const sheetData = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[workbook.SheetNames[0]]);
-    console.log(sheetData)
-    new Excel(sheetData.slice(0, 100), $spreadsheet);
-   Loading.CloseLoading();
+    new Excel(sheetData, $spreadsheet);
+    Loading.CloseLoading();
   };
 
   reader.onerror = function (event) {

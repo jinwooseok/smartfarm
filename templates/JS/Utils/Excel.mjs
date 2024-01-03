@@ -15,6 +15,7 @@ export default class Excel {
       data: this.#excelData,
       columns: this.#excelColumn,
       tableOverflow: true,
+      lazyLoading:true,
     });
   }
 
