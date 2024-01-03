@@ -1,5 +1,5 @@
 import Excel from "/templates/JS/Utils/Excel.mjs";
-import cookies from "/templates/JS/Utils/csrfToken.js";
+import cookies from "/templates/JS/Utils/csrfToken.mjs";
 import Loading from "/templates/JS/Utils/Loading.mjs";
 
 const csrftoken = cookies['csrftoken'] // csrftoken

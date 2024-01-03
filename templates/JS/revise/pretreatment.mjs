@@ -1,4 +1,4 @@
-import cookies from "/templates/JS/Utils/csrfToken.js";
+import cookies from "/templates/JS/Utils/csrfToken.mjs";
 import Loading from "/templates/JS/Utils/Loading.mjs";
 
 const $pretreatmentFileName = document.querySelector('#pretreatmentFileName');
