@@ -1,4 +1,4 @@
-import { abmsTextValue } from "/templates/JS/revise/constantValue.mjs";
+import { abmsTextValue } from "/templates/JS/revise/abmsTextValue.mjs";
 
 const $abmsType = document.querySelector("#abmsType");
 const $abmsText = document.querySelector("#abmsText");

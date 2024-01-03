@@ -1,6 +1,6 @@
 import Excel from "/templates/JS/Utils/Excel.mjs";
 import Loading from "/templates/JS/Utils/Loading.mjs";
-import { reviseDefaultValue } from "/templates/JS/revise/constantValue.mjs";
+import { reviseDefaultValue } from "/templates/JS/revise/reviseDefaultValue.mjs";
 
 const csrftoken = $("[name=csrfmiddlewaretoken]").val(); // csrftoken
 
@@ -51,7 +51,7 @@ const setFileName = () => {
 };
 
 const settingDate = () => {
-  data = new Excel(JSON.parse(document.getElementById("jsonObject").value).slice(0,100), $spreadsheet);
+  data = new Excel(JSON.parse(document.getElementById("jsonObject").value), $spreadsheet);
 };
 
 const addColumn = (htmlTag, text="") => {

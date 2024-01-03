@@ -1,4 +1,7 @@
 export const abmsTextValue = {
+  환경: {
+    
+  },
   완숙토마토: {
     농가명: FRMHS_NM,
     조사일자: EXAMIN_DATETM,
@@ -202,27 +205,3 @@ export const abmsTextValue = {
     비고: "RM",
   },
 };
-
-export const reviseDefaultValue = Object.freeze( [
-  "전체_평균_",
-  "주간_평균_",
-  "주간_최소_",
-  "주간_최대_",
-  "주간_DIF_",
-  "주간_GDD_",
-  "야간_평균_",
-  "야간_최소_",
-  "야간_최대_",
-  "야간_DIF_",
-  "야간_GDD_",
-  "일출전후t시간_평균_",
-  "일출전후t시간_최소_",
-  "일출전후t시간_최대_",
-  "일출전후t시간_DIF_",
-  "일출전후t시간_GDD_",
-  "일출부터정오_평균_",
-  "일출부터정오_최소_",
-  "일출부터정오_최대_",
-  "일출부터정오_DIF_",
-  "일출부터정오_GDD_",
-]);
