@@ -69,6 +69,8 @@ class ETL_system:
             #일일데이터로 변환
             generating_data=generating_dailydata(df.data, df.date, t_div,t_diff, self.var)
             result=generating_data
+        elif self.DorW == 'hours':
+            0
         else:
             result = making_weekly2(df.data, df.date, int(self.DorW))
         result['날짜']=result['날짜'].astype('str')
@@ -335,13 +337,11 @@ def generating_variable(data, date_ind, d_ind, kind,t_diff , div_DN=False, tbase
 def generating_dailydata(df, date_ind, t_div, t_diff, var, elsewhere=None):
 
     for i in range(len(var)):
+        k=list(df.columns).index(list(var[i].keys())[0])
+        v=list(var[i].values())[0]
         if i == 0:
-            k=list(df.columns).index(list(var[i].keys())[0])
-            v=list(var[i].values())[0]
             full_data = generating_variable(df, date_ind, [k], v,t_diff, t_div)
         elif i > 0:
-            k=list(df.columns).index(list(var[i].keys())[0])
-            v=list(var[i].values())[0]
             t = generating_variable(df, date_ind, [k], v,t_diff, t_div)
             full_data = pd.merge(full_data, t, 'right')
     
@@ -361,11 +361,9 @@ def making_weekly2(gdata,date_ind,interval=7):
     weeknum=0
     date=gdata["날짜"]
     lastDate=pd.to_datetime(date.dropna().iloc[-1])
-    print(date)
     if interval == 7 :
         weeknum = int(datetime.datetime(date[0].year,date[0].month,date[0].day).strftime("%U"))
         date1 = pd.to_datetime(datetime.datetime.strptime(f"{date[0].year}-W{weeknum}-1", "%G-W%V-%u")) #해당 주차의 마지막 날짜
-        print(date1)
     else:
         date1= date[0] - pd.offsets.YearBegin() # 시작 날이 포함된 년도의 1월 1일 추출 
     while True:
@@ -403,3 +401,10 @@ def y_split(df,date_ind,d_ind):
         df2.loc[mask,"생산량"]=int(yield_data)/((date_temp[i+1]-date_temp[i]).days)
 
     return df2
+
+def abms_env(df, date_ind):
+    #날짜 열이 아닐 경우 리턴
+    #날짜 열이 맞을 경우 시간? 분? 일? 일주일? 단위인지 판별
+    #단위를 시간으로 변경
+
+    return 0

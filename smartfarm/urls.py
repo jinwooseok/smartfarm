@@ -23,7 +23,8 @@ urlpatterns = [
     path('revise/<str:file_title>/', views.dataEditView, name='revise'),
     path('revise/', views.dataEditWithNoFileView, name='revise2'),
     path('revise/<str:file_title>/preprocess/', views.preprocessorApi, name='preprocess'),
-    path('revise/<str:file_title>/abms/', views.abmsApi, name='abms'),
+    path('revise/<str:file_title>/abms/growth/', views.abms_growth_api, name='abms_growth'),
+    path('revise/<str:file_title>/abms/env/', views.abms_env_api, name='abms_env'),
     #farm
     path('loaddata/',views.dataLoadApi,name='loaddata'),
     path('revise/<str:file_title>/farm/', views.farm, name='farm'),
@@ -31,7 +32,7 @@ urlpatterns = [
     path('fileList_2/', views.fileList2, name='fileList2'),
     path('analyze/<str:file_title>/', views.getAnalyzeDataApi, name='getAnalyzeDataApi'),
     path("analyze/<str:file_title>/stat", views.useAnalizer, name='stat'),
-    
+    #a
     #util기능
     path('download/', views.fileDownloadApi, name='download'),
     path('scaler/', views.scalerApi, name='scaler'),

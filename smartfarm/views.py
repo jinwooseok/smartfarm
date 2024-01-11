@@ -148,7 +148,7 @@ def preprocessorApi(request, file_title):
 
     return JsonResponse(context)
 
-def abmsApi(request, file_title):
+def abms_growth_api(request, file_title):
     user = loginValidator(request)
     try:
         data = request.POST.get('ABMSData')
@@ -163,6 +163,23 @@ def abmsApi(request, file_title):
         return JsonResponse(failResponse("저장할 데이터가 비어있습니다."), status=400)
     FileSystem(user,file_title=new_file_title,data=data).fileSave()
     return JsonResponse(successResponse())
+
+def abms_env_api(request, file_title):
+    user = loginValidator(request)
+    try:
+        file_title = request.POST.get('fileName')
+    except:
+        return JsonResponse(failResponse("파일명을 선택해주세요."), status=400)
+    date = request.POST.get('date','0')
+    data = FileSystem(user=user, file_title=file_title).fileLoad()
+    df = DataProcess(data,date)
+    #날짜열을 날짜형식으로 변환
+    df.dateConverter()
+    #분단위라면 시간별로 변환. mask를 사용
+    if df.isMinute():
+        dateSeries = df.getDateSeries()
+    #주간과 야간으로 변환
+    return 0
 
 #------------------------ merge창 ------------------------
 def fileMergeView(request):
@@ -390,3 +407,5 @@ def guideBookDownloadApi(request):
             return response
     else:
         return JsonResponse(failResponse("파일을 찾을 수 없습니다."), status=400)
+
+#def dataShift(request):

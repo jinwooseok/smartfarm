@@ -42,6 +42,14 @@ class DataProcess:
         except:
             print("날짜 형식이 아닙니다.")
             raise ValueError
+    
+    def isMinute(self):
+        #분 단위인지 판별
+        dateSeries = self.getDateSeries()
+        if dateSeries[1] - dateSeries[0] == pd.Timedelta('0 days 00:01:00'):
+            return True
+        else:
+            return False
 
     def getDateSeries(self):
         return self.data.iloc[:, self.date]
