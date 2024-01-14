@@ -1,9 +1,10 @@
-import cookies from "/templates/JS/Utils/csrfToken.mjs";
+import API from "../../Utils/API.mjs";
 
 const $id = document.querySelector("#registerID");
-const $pass = document.querySelector("#registerPassword");
+const $password = document.querySelector("#registerPassword");
 const $checkPassword = document.querySelector("#registerCheckPassword");
 const $name = document.querySelector("#name");
+const $job = document.querySelector("#registerJob");
 const $phoneFront = document.querySelector("#phoneFront");
 const $phoneMiddle = document.querySelector("#phoneMiddle");
 const $phoneLast = document.querySelector("#phoneLast");
@@ -21,21 +22,9 @@ let emailValid = false;
 let checkCertificationNumber = false;
 
 async function checkDuplicateEmail(email) {
-  try {
-    const response = await $.ajax({
-      url: "./email/",
-      type: "post",
-      dataType: "json",
-      headers: { "X-CSRFToken": cookies['csrftoken'] },
-      data: { registerID : email },
-      async: false,
-    });
-
-    return response.data;
-  } catch (error) {
-    console.error("error: " + error);
-    throw error;
-  }
+  const data = { registerID : email };
+  const response = await API("./email/", "post", data);
+  return response.status;
 }
 
 function regEmail() {
@@ -50,16 +39,15 @@ async function isValidEmail() {
   if (regEmail()) {
     try {
       const isDuplicate = await checkDuplicateEmail(email);
-      if (isDuplicate) {
-        alert("중복된 아이디 입니다.");
-      } else {
+      if (isDuplicate === "success") {
         alert('사용가능한 아이디 입니다.');
         document.querySelector('#idDuplicate').innerHTML = '';
+        return true;
+      } else {
+        alert("중복된 아이디 입니다.");
+        return false;
       }
-      return !isDuplicate;
     } catch (error) {
-      alert(error);
-      console.log("error: " + await error);
       return false;
     }
   } else {
@@ -84,8 +72,8 @@ function isValidPhone() {
 function updateButtonState() {
   const isValid =
     emailValid &&
-    isValidPassword($pass.value) &&
-    $pass.value === $checkPassword.value &&
+    isValidPassword($password.value) &&
+    $password.value === $checkPassword.value &&
     $name.value.trim() !== "" &&
     isValidPhone() &&
     checkCertificationNumber;
@@ -103,19 +91,19 @@ function showKeyUpError(event) {
         : "이메일이 올바르지 않습니다.";
       break;
     case "registerPassword":
-      document.querySelector("#passwordError").innerHTML = $pass.value
-        ? isValidPassword($pass.value)
+      document.querySelector("#passwordError").innerHTML = $password.value
+        ? isValidPassword($password.value)
           ? ""
           : "비밀번호는 8~15자리 숫자/문자/특수문자를 포함해야합니다."
         : "비밀번호를 입력해주세요.";
       document.querySelector("#passwordCheckError").innerHTML =
-        $pass.value !== $checkPassword.value
+        $password.value !== $checkPassword.value
           ? "비밀번호가 동일하지 않습니다."
           : "";
       break;
     case "registerCheckPassword":
       document.querySelector("#passwordCheckError").innerHTML =
-        $pass.value !== $checkPassword.value
+        $password.value !== $checkPassword.value
           ? "비밀번호가 동일하지 않습니다."
           : "";
       break;
@@ -131,14 +119,32 @@ function showKeyUpError(event) {
   updateButtonState();
 }
 
-function moveLogin() {
-  $registerForm.action = "/users/register/";
-  $registerForm.method = "POST";
-  $registerForm.submit();
+async function submitUserInfo() {
+
+  const data = {
+    email: $id.value,
+    password: $password.value,
+    name: $name.value,
+    job: $job.value,
+    phone: [$phoneFront, $phoneMiddle, $phoneLast],
+  };
+
+  const response = await API("/users/sign-up/", "post", data);
+
+  if (response.status === "success") {
+    alert("회원가입 감사합니다.");
+    location.replace("/users/sign-in/");
+  }
+
+  if (response.status === 1002) {
+    alert(response.message);
+  }
+  
+
 }
 
-function moveMain() {
-  location.replace("/");
+function locationLogin() {
+  location.replace("/users/sign-in");
 }
 
 let timerInterval;
@@ -190,5 +196,5 @@ $checkEmail.addEventListener("click", async () => {
 });
 
 $registerForm.addEventListener("keyup", showKeyUpError);
-$registerButton.addEventListener("click", moveLogin);
-$backToLogin.addEventListener("click", moveMain);
+$registerButton.addEventListener("click", submitUserInfo);
+$backToLogin.addEventListener("click", locationLogin);
