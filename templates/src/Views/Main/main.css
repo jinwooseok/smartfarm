@@ -1,0 +1,24 @@
+/* 1280px 보다 크면 */
+@media (min-width: 1280px) {
+  .downloadContainer {
+    width: 100%;
+    text-align: center;
+  }
+
+  .download:hover {
+    cursor: pointer;
+  }
+}
+
+/* ////////////////////////////////////////// */
+/* 1280보다 작으면 */
+@media (max-width:1280px) {
+  .downloadContainer {
+    width: 100%;
+    text-align: center;
+  }
+
+  .download:hover {
+    cursor: pointer;
+  }
+}

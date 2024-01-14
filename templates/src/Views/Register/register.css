@@ -1,0 +1,191 @@
+ul,
+li {
+  list-style: none;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: #000;
+}
+
+body {
+  background-color: #fafafa;
+}
+
+/* header */
+.header {
+  width: 95%;
+  height: 70px;
+  margin: 0 auto;
+  margin-top: 10px;
+
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header .title {
+  color: #007A33;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.hide {
+  display: none;
+}
+
+.registerContainer {
+  width: 350px;
+  height: 600px;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background-color: #FFF;
+  border: 1px solid #DBDBDB;
+
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.registerContainer .registerLogo {
+  margin-bottom: 15px;
+
+  color: #007A33;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.registerContainer .registerForm {
+  width: 300px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-wrap: nowrap;
+
+  margin-top: 10px;
+}
+
+.email {
+  margin-bottom: 20px;
+}
+
+.email,
+.password,
+.checkPassword,
+.name,
+.job {
+  width: 100%;
+  height: 60px;
+}
+
+.formText {
+  width: 100%;
+  height: 40px;
+  padding: 0 10px;
+  background-color: #FAFAFA;
+  border: 1px solid #DBDBDB;
+  border-radius: 3px;
+}
+
+.duplicateBox {
+  display: flex;
+  flex-direction: row;
+
+  align-items: center;
+}
+
+.duplicateBox  .error {
+  margin-left: 10px;
+  font-size: 10px;
+}
+
+.phone {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  height: 20px;
+}
+
+.phone>p {
+  margin-bottom: 3px;
+}
+
+.phoneNumber {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.phoneNumber>* {
+  margin-right: 3px;
+}
+
+.phoneFront {
+  width: 18%;
+}
+
+.phoneMiddle,
+.phoneLast {
+  width: 25%;
+}
+
+.checkCertificationNumberContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: self-start;
+
+  margin-top: 50px;
+  width: 100%;
+  height: 20px;
+}
+
+.checkCertificationNumberContainer>div>* {
+  margin-right: 5px;
+}
+
+.checkCertificationNumberContainer .timer {
+  color: red;
+}
+
+
+.buttonContainer {
+  margin-top: 50px;
+  width: 100%;
+  height: 60px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.buttonContainer .registerButton,
+.buttonContainer .backToLogin {
+  width: 100%;
+  height: 250px;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.error {
+  font-size: 10px;
+  color: red;
+}
+
+.formText::placeholder {
+  color: #000;
+}
