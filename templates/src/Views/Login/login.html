@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>로그인</title>
+
+  <!--  css  -->
+  <link rel="stylesheet" href="/templates/src/Login/login.css" />
+</head>
+<body>
+  <div class="loginContainer">
+    <div class="loginLogo">
+      <a href="/">전남대학교</a><br/>
+      융합 빅데이터 연구실
+    </div>
+    <form action="/users/login/" method="post" class="loginForm">
+      {% csrf_token %}
+      <input type="text" id="id" class="id" name="id" placeholder="이메일" />
+      <input
+        type="password"
+        id="password"
+        class="password"
+        name="password"
+        placeholder="비밀번호"
+      />
+      {% if error %}
+      <div id="error" class="error">{{ error }}</div>
+      {% endif %}
+      <button
+        id="loginButton"
+        name="login_btn"
+        class="loginButton"
+        type="submit"
+        disabled
+      >
+        로그인
+      </button>
+    </form>
+
+    <div class="else">
+      <a href="/users/sign-up/" class="register">회원가입</a> /
+      <a href="#">아이디 및 비밀번호 찾기</a>
+    </div>
+  </div>
+</body>
+
+<script src="/templates/src/CDN/jquery-1.12.4.min.js"></script>
+<script src="/templates/src/Login/login.js"></script>
+
+</html>
