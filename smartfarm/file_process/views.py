@@ -1,12 +1,15 @@
 from rest_framework import viewsets
 from django.shortcuts import render
 from ..models import File
-#파일 관련 뷰셋
-class FileViewSet(viewsets.ModelViewSet):
+from rest_framework import exceptions
+from django.contrib.auth import authenticate
 
-    queryset = File.objects.all()
+#파일 관련 뷰셋
+class FileViewSet(viewsets.GenericViewSet):
 
     def page(self, request):
+        if authenticate(request) is None:
+            raise exceptions.NotAuthenticated()
         return render(request, 'src/Views/FileList/fileList.html')
 
     def list():
