@@ -19,3 +19,7 @@ class SignUpSerializer(serializers.Serializer):
     
 class EmailValidationSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
+
+class SignInSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(required=True)

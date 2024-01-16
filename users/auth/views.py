@@ -1,10 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from ..models import User
 from argon2 import PasswordHasher
 from django.contrib.auth import authenticate
 from argon2.exceptions import VerifyMismatchError
 from rest_framework import exceptions,viewsets
-from .serializers import SignUpSerializer, EmailValidationSerializer
+from .serializers import *
 from rest_framework.response import Response
 from .exceptions.auth_exceptions import *
 from common.base_exception import CustomBaseException
@@ -13,13 +13,15 @@ class SignUpViewSet(viewsets.GenericViewSet):
     def page(self, request):
         #이미 로그인한 사람이라면 이용 불가
         if authenticate(request) is not None:
-            raise exceptions.NotAcceptable()
+            raise exceptions.PermissionDenied()
         #로그인 하지 않았다면 페이지 렌더링
         return render(request, 'src/Views/Register/register.html')
     
     @swagger_auto_schema(request_body=SignUpSerializer, responses={1001: '이메일 중복', 1002: '전화번호', 500: '서버 에러'})
     def sign_up(self, request):
         serializer = SignUpSerializer(data=request.data)
+        if authenticate(request) is not None:
+            raise exceptions.PermissionDenied()
         if serializer.is_valid():
             #이메일 중복 확인
             if self.is_duplicated_email(serializer.validated_data['user_id']):
@@ -49,67 +51,54 @@ class SignUpViewSet(viewsets.GenericViewSet):
             raise exceptions.ValidationError()
     #내부 사용 함수
     def is_duplicated_user_tel(self, user_tel):
-        if User.objects.filter(user_tel=user_tel).exists():
-            return True
-        return False
+        return User.objects.filter(user_tel=user_tel).exists()
     
     def is_duplicated_email(self, email):
-        if User.objects.filter(user_id=email).exists():
-            return True
-        return False
+        return User.objects.filter(user_id=email).exists()
 
-class SignInViewSet(viewsets.ModelViewSet):
-    
-    queryset = User.objects.all()
-    serializer_class = SignUpSerializer
 
+class SignInViewSet(viewsets.GenericViewSet):
     def page(self, request):
-        #이미 로그인한 사람이라면 이용 불가
         if authenticate(request) is not None:
-            raise exceptions.NotAcceptable()
+            raise exceptions.PermissionDenied()
         return render(request, 'src/Views/Login/login.html')
     
+    @swagger_auto_schema(request_body=SignInSerializer)
     def sign_in(self, request):
-        if request.session.get('user'):
-            return redirect('/')
+        serializer = SignInSerializer(data=request.data)
 
-        login_user_id=request.POST['id']
-        login_user_pw=request.POST['password']
+        if authenticate(request) is not None:
+            raise exceptions.PermissionDenied()
 
-        try:
-            user = User.objects.get(user_id=login_user_id)
-        except User.DoesNotExist:
-            user=None
-            context = {
-                'error' : '계정이 존재하지 않습니다.'
-            }
-            return render(request, 'Html/login.html', context)
-        
-        try :
-            PasswordHasher().verify(user.user_pw.encode(), login_user_pw.encode())
-        except VerifyMismatchError:
-            user=None  
-            context = {
-                'error' : '비밀번호가 일치하지 않습니다.'
-            }
-            return render(request, 'Html/login.html', context)
-        
-        if user != None:
-            request.session['user'] = user.id
-        
-            # Redirect to a success page.
-            return redirect('/')
+        if serializer.is_valid():
+            try:
+                user = User.objects.get(user_id=serializer.validated_data['email'])
+            except User.DoesNotExist:
+                raise IdNotFoundException()
             
-        else:
-            context = {
-                'error' : '로그인에 실패하였습니다.'
-            }
-            return render(request, 'Html/login.html', context)
+            try:
+                self.is_correct_password(user.user_pw, serializer.validated_data['password'])
+            except VerifyMismatchError:    
+                raise PasswordNotMatchedException()
 
-class SignOutViewSet(viewsets.ModelViewSet):
+            request.session['user'] = user.user_id
+
+            return Response({"status":"success","message":"로그인에 성공했습니다."},status=200)
         
-    queryset = User.objects.all()
+        else:
+            raise exceptions.ValidationError()
+        
+    def is_correct_password(self, login_pw, user_pw):
+        return PasswordHasher().verify(login_pw.encode(), user_pw.encode())
+        
 
+class SignOutViewSet(viewsets.GenericViewSet):
     def sign_out(self, request):
+        login_session = request.session.get('user', None)
+
+        if login_session is None:
+            raise exceptions.NotAuthenticated()
+        
         request.session.flush()
-        return redirect('/')
+        return Response({"status":"success","message":"로그아웃에 성공했습니다."},status=200)
+
