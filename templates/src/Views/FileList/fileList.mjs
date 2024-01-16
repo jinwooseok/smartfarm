@@ -85,13 +85,7 @@ $$fileNameCondition.forEach((element) => {
 // 파일 검색 함수
 const searchInputTest = (event) => {
   const text = event.target.value;
-  for (let i = 0; i < fileList.length; i++) {
-    if (!fileList[i].fileName.includes(text)) {
-      $$listAll[i].style.display = "none";
-    } else {
-      $$listAll[i].style.display = "flex";
-    }
-  }
+	showFileList(text);
 }
 
 $search.addEventListener("keyup", searchInputTest);
