@@ -2,14 +2,17 @@ from django.shortcuts import render, redirect
 from ..models import User
 from argon2 import PasswordHasher, exceptions
 from django.http import HttpResponse, JsonResponse
-#캐시 차단 라이브러리
-from django.views.decorators.cache import never_cache
+from django.contrib.auth import authenticate
+from rest_framework import exceptions
 # Create your views here.
 from rest_framework import viewsets
+from .serializers import SignUpSerializer
 class SignUpViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
-    
+    serializer_class = SignUpSerializer
     def page(self, request):
+        if authenticate(request) is None:
+            raise exceptions.NotAuthenticated()
         return render(request, 'src/Views/Register/register.html')
     
     def sign_up(self, request):
@@ -56,7 +59,6 @@ class SignInViewSet(viewsets.ModelViewSet):
     def page(self, request):
         return render(request, 'src/Views/Login/login.html')
     
-    @never_cache
     def sign_in(self, request):
         if request.session.get('user'):
             return redirect('/')
