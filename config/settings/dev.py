@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'users',
     #크로스도메인 보안 관련
     'corsheaders',
+    'rest_framework',
+    'drf_yasg',
 
 ]
 
@@ -171,9 +173,32 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
 REST_FRAMEWORK = {
-   'DEFAULT_AUTHENTICATION_CLASSES': (
-   'rest_framework.authentication.TokenAuthentication',
-   )
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'rest_framework.authentication.TokenAuthentication',
+    ),
+    'EXCEPTION_HANDLER': 'common.base_exception_handler.base_exception_handler',
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'debug.log'),
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
 }
 
 CACHES = {

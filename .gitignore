@@ -5,3 +5,4 @@ secrets.json
 *.xlsx
 *.xls
 secrets.yaml
+debug.log
