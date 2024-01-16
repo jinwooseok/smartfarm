@@ -1,15 +1,17 @@
 "use strick";
-import API from "../../Utils/API.mjs";
+import API from "/templates/src/Utils/API.mjs";
 
-const $loginId = document.querySelector("#id");
-const $loginPassword = document.querySelector("#password");
+const $email = document.querySelector("#email");
+const $password = document.querySelector("#password");
 const $loginBtn = document.querySelector("#loginButton");
+const $showPassword = document.querySelector("#showPassword");
+const $showPasswordText = document.querySelector("#showPasswordText");
 
 const idPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
 
 function isValid() {
   // ID를 적고 @가 포함 + 비밀번호는 8자리 이상
-  if (idPattern.test($loginId.value) && $loginPassword.value.length >= 8) {
+  if (idPattern.test($email.value) && $password.value.length >= 8) {
     $loginBtn.style.backgroundColor = "#007A33";
     $loginBtn.disabled = false;
   } else {
@@ -21,17 +23,17 @@ function isValid() {
 // 로그인 ajax
 const submitLoginInfo = async () =>{
   const data = {
-    email: $loginId.value,
-    password: $loginPassword.value,
+    email: $email.value,
+    password: $password.value,
   };
-
-  return API("/users/sign-in/", "post", data);
+  return await API("/users/sign-in/", "post", data);
 
 }
 
-const checkResponse = () => {
-  const response = submitLoginInfo();
-
+// 버튼 클릭 결과
+const clickResponse = async () => {
+  const response = await submitLoginInfo();
+  console.log("response", response);
   if (response.status === "success") {
     location.replace("/file-list/");
   }
@@ -41,9 +43,23 @@ const checkResponse = () => {
   } else if(response.status === 1002) {
     alert(response.message); //"비밀번호가 일치하지 않습니다.”
   }
-
 }
 
-$loginBtn.addEventListener('click', checkResponse());
-$loginId.addEventListener("keyup", isValid);
-$loginPassword.addEventListener("keyup", isValid);
+// 비밀번호 보여주기
+const changePassWordStatus = () => {
+
+  if ($showPassword.checked) {
+    $password.type = "text";
+    $showPasswordText.textContent = "비밀번호 숨기기";
+    return;
+  }
+
+  $password.type = "password";
+  $showPasswordText.textContent = "비밀번호 보기";
+  return;
+}
+
+$loginBtn.addEventListener('click', clickResponse);
+$email.addEventListener("keyup", isValid);
+$password.addEventListener("keyup", isValid);
+$showPassword.addEventListener("click", changePassWordStatus);

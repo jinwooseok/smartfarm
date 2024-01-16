@@ -7,7 +7,7 @@
   <title>로그인</title>
 
   <!--  css  -->
-  <link rel="stylesheet" href="/templates/src/Login/login.css" />
+  <link rel="stylesheet" href="/templates/src/Views/Login/login.css" />
 </head>
 <body>
   <div class="loginContainer">
@@ -15,9 +15,8 @@
       <a href="/">전남대학교</a><br/>
       융합 빅데이터 연구실
     </div>
-    <form action="/users/login/" method="post" class="loginForm">
-      {% csrf_token %}
-      <input type="text" id="id" class="id" name="id" placeholder="이메일" />
+    <div class="loginForm">
+      <input type="text" id="email" class="id" name="id" placeholder="이메일" />
       <input
         type="password"
         id="password"
@@ -25,9 +24,7 @@
         name="password"
         placeholder="비밀번호"
       />
-      {% if error %}
-      <div id="error" class="error">{{ error }}</div>
-      {% endif %}
+      <div id="error" class="error"></div>
       <button
         id="loginButton"
         name="login_btn"
@@ -37,7 +34,11 @@
       >
         로그인
       </button>
-    </form>
+      <div class="showPasswordDiv" id="showPasswordDiv">
+        <input type="checkbox" id="showPassword">
+        <span id="showPasswordText">비밀번호 보기</span>
+      </div>
+    </div>
 
     <div class="else">
       <a href="/users/sign-up/" class="register">회원가입</a> /
@@ -47,6 +48,6 @@
 </body>
 
 <script src="/templates/src/CDN/jquery-1.12.4.min.js"></script>
-<script src="/templates/src/Login/login.js"></script>
+<script type="module" src="/templates/src/Views/Login/login.mjs"></script>
 
 </html>

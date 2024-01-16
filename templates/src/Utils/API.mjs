@@ -1,6 +1,9 @@
 import cookies from "/templates/src/Utils/CsrfToken.mjs";
 
 const API = async (url, type, data) => {
+	console.log("url", url)
+	console.log("type", type)
+	console.log("data", data)
 	try {
 		const response = await $.ajax({
 			url: url,
@@ -14,7 +17,7 @@ const API = async (url, type, data) => {
 		return response;
 
 	} catch (error) {
-		return error.status;
+		return error;
 	}
 }
 
