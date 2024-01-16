@@ -2,9 +2,10 @@ from datetime import datetime
 from rest_framework import exceptions
 from rest_framework.views import exception_handler
 from rest_framework.response import Response
-from .base_exception import BaseException
+from .base_exception import CustomBaseException
 from .exception_codes import STATUS_RSP_INTERNAL_ERROR
 import logging
+from rest_framework import serializers
 
 def base_exception_handler(exc, context):
     logger = logging.getLogger(__name__)
@@ -58,35 +59,21 @@ def base_exception_handler(exc, context):
         elif isinstance(exc, exceptions.ValidationError):
             status_code = 400
             code = response.status_code
+            msg = "유효하지 않은 전달인자입니다."
+        elif isinstance(exc, CustomBaseException):
+            status_code = exc.status_code
+            code = exc.code
             msg = exc.detail
-        elif isinstance(exc, BaseException):
-            status_code = exc.detail.get('status_code')
-            code = exc.detail.get('code')
-
-            if hasattr(context['request'], 'LANGUAGE_CODE'):
-                language_code = context['request'].LANGUAGE_CODE
-                msg = exc.detail.get(
-                    'lang_message'
-                ).get(
-                    language_code
-                )
-            else:
-                msg = exc.detail.get(
-                    'default_message'
-                )
-
-            if exc.args[1:]:
-                for key, val in exc.args[1].items():
-                    response.data[key] = val
-
-            response.data.pop('default_message', None)
-            response.data.pop('lang_message', None)
         else:
+            status_code = 500
             code = response.status_code
             msg = "unknown error"
 
-
         response.status_code = status_code
+
+        if response.data is not dict:
+            response.data = {}
+
         response.data['status'] = code
         response.data['message'] = msg
         response.data['data'] = None

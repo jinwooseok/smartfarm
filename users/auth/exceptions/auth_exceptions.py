@@ -1,11 +1,13 @@
-class EmailDuplicatedException(BaseException):
-    status_code = 400
-    code = 1001
-    default_detail = '이미 존재하는 이메일입니다.'
-    default_code = 'email_duplicated'
+from rest_framework import status
+from common.base_exception import CustomBaseException
+class EmailDuplicatedException(CustomBaseException):
+    def __init__(self):
+        self.status_code = 400
+        self.code = 1001
+        self.detail = '이미 존재하는 이메일입니다.'
 
-class UserTelDuplicatedException(BaseException):
-    status_code = 400
-    code = 1002
-    default_detail = '이미 존재하는 전화번호입니다.'
-    default_code = 'tel_duplicated'
+class UserTelDuplicatedException(CustomBaseException):
+    def __init__(self):
+        self.status_code = 400
+        self.code = 1002
+        self.detail = '이미 존재하는 전화번호입니다.'
