@@ -16,28 +16,17 @@
       융합 빅데이터 연구실
     </div>
     <div class="loginForm">
-      <input type="text" id="email" class="id" name="id" placeholder="이메일" />
-      <input
-        type="password"
-        id="password"
-        class="password"
-        name="password"
-        placeholder="비밀번호"
-      />
-      <div id="error" class="error"></div>
-      <button
-        id="loginButton"
-        name="login_btn"
-        class="loginButton"
-        type="submit"
-        disabled
-      >
-        로그인
-      </button>
+      <input type="text" id="email" class="email" placeholder="이메일" />
+      <div id="Emailrror" class="error"></div>
+      <input type="password" id="password" class="password" placeholder="비밀번호"/>
+      <div id="passwordError" class="error"></div>
       <div class="showPasswordDiv" id="showPasswordDiv">
         <input type="checkbox" id="showPassword">
         <span id="showPasswordText">비밀번호 보기</span>
       </div>
+      <button  id="loginButton" class="loginButton" type="submit" disabled>
+        로그인
+      </button>
     </div>
 
     <div class="else">

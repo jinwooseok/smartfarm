@@ -7,10 +7,11 @@ const $loginBtn = document.querySelector("#loginButton");
 const $showPassword = document.querySelector("#showPassword");
 const $showPasswordText = document.querySelector("#showPasswordText");
 
+// test@test.com 형식
 const idPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
 
+// 입력 값 형식 검사
 function isValid() {
-  // ID를 적고 @가 포함 + 비밀번호는 8자리 이상
   if (idPattern.test($email.value) && $password.value.length >= 8) {
     $loginBtn.style.backgroundColor = "#007A33";
     $loginBtn.disabled = false;
@@ -20,14 +21,14 @@ function isValid() {
   }
 }
 
-// 로그인 ajax
+// 로그인 검사
 const submitLoginInfo = async () =>{
   const data = {
     email: $email.value,
     password: $password.value,
   };
-  return await API("/users/sign-in/", "post", data);
 
+  return await API("/users/sign-in/", "post", data);
 }
 
 // 버튼 클릭 결과
@@ -47,7 +48,6 @@ const clickResponse = async () => {
 
 // 비밀번호 보여주기
 const changePassWordStatus = () => {
-
   if ($showPassword.checked) {
     $password.type = "text";
     $showPasswordText.textContent = "비밀번호 숨기기";

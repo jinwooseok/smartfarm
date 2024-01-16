@@ -1,4 +1,4 @@
-<p>파일 목록</p><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 
 <head>
@@ -8,9 +8,8 @@
 	<title>파일 목록</title>
 	
 	<!-- css -->
-	<link rel="stylesheet" href="/templates/Css/fileList.css">
-	<link rel="stylesheet" href="/templates/Css/nav.css">
-	<link rel="stylesheet" href="/templates/Css/jsuties.css" type="text/css" />
+	<link rel="stylesheet" href="/templates/src/Views/Filelist/fileList.css">
+	<link rel="stylesheet" href="/templates/src/Views/jsuties.css" type="text/css" />
 
 	<!-- spreadsheetjs -->
 	<script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
@@ -18,7 +17,82 @@
 
 	<!-- fontawesome-->
 	<script src="https://kit.fontawesome.com/4c4b76e7c2.js" crossorigin="anonymous"></script>
-
 </head>
-
 <body>
+	<div class="container">	
+		<li class="upperContainer">
+			<div class="title">
+				전남대학교</br>융합 빅데이터 연구실
+			</div>
+			<div class="logoutContainer">
+				<a href="#" class="logoutBtn">로그아웃</a>
+			</div>
+		</li>
+		
+		<li class="textSelectContainer">
+			<div class="fileNameCondition all"><p>전체</p></div>
+			<div class="fileNameCondition env"><p>환경</p></div>
+			<div class="fileNameCondition growth"><p>생육</p></div>
+			<div class="fileNameCondition output"><p>생산량</p></div>
+			<div class="fileNameCondition revise"><p>수정</p></div>
+			<div class="fileNameCondition merge"><p>병합</p></div>
+		</li>
+		
+		<li class="fileListContainer">
+			<div class="explain">
+				<h3>파일 관리</h3>
+				<p>파일 삭제, 파일 업로드, 파일 다운로드를 할 수 있고</p>
+				<p>파일을 수정하기 위한 다른 창으로 넘어갈 수 있습니다.</p>
+			</div>
+			<div class="Box">
+				<div class="listContainer" id="listContainer">
+					<div class="listTitle">
+						<input type="checkbox" class="checkAll" id="checkAll">
+						<div class="fileTitle" id="fileTitle">
+							파일명
+						</div>
+						<div class="uploadDate" id="uploadDate">
+							업로드 날짜
+						</div>
+						<div class="lastUpdateDate" id="lastUpdateDate">
+							마지막 수정 날짜
+						</div>
+					</div>
+					<div class="file-container">
+						<!-- {% for file in files %}
+						<div class="list">
+							<input type="checkbox" class="check">
+							<div class="fileTitle" id="AllTitle">
+								<a onclick="moveRevisePage(event)">{{file.file_title}}</a>
+							</div>
+							<div class="uploadDate" id="uploadDate">
+								{{file.created_at | date:'Y-m-d'}}
+							</div>
+							<div class="lastUpdateDate" id="lastUpdateDate">
+								{{file.updated_at | date:'Y-m-d'}}
+							</div>
+						</div>
+						{% endfor %} -->
+					</div>
+				</div>
+				<div class="searchBox">
+					<i class="fa-solid fa-magnifying-glass"></i>
+					<input id="search" type="text" placeholder="입력">
+	
+					<button class="delete" id="delete">파일 삭제</button>
+					<button class="download" id="download">파일 다운</button>
+					<button class="upload" id="upload">파일 등록</button>
+				</div>
+			</div>
+
+		</li>
+
+		<!-- 파일 등록 클릭 시 팝업 창 -->
+	</div>
+</body>
+
+<script type="module" src="/templates/src/Views/Filelist/fileList.mjs"></script>
+<script type="module" src="/templates/src/Views/Filelist/upload.mjs"></script>
+<script src="/templates/src/CDN/jquery-1.12.4.min.js"></script>
+
+</html>
