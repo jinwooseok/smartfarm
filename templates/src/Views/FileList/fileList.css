@@ -10,7 +10,7 @@ li {
 	list-style: none;
 }
 
-a[class="logOutBtn"] {
+a {
 	text-decoration: none;
 }
 
@@ -211,6 +211,10 @@ li:nth-child(3) {
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
+}
+
+.listContainer .list .fileTitle a{
+	color: #000;
 }
 
 .listContainer .list .fileTitle {

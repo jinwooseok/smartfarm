@@ -1,4 +1,5 @@
 import API from "/templates/src/Utils/API.mjs";
+// import cookies from "/templates/src/Utils/CsrfToken.mjs";
 
 const $id = document.querySelector("#registerID");
 const $password = document.querySelector("#registerPassword");
@@ -23,9 +24,8 @@ let checkCertificationNumber = false;
 
 async function checkDuplicateEmail(email) {
   const data = { registerID : email };
-  console.log(data);
   const response = await API("./email/", "post", data);
-  // return response.status;
+  return response.status;
 }
 
 function regEmail() {
@@ -40,7 +40,7 @@ async function isValidEmail() {
   if (regEmail()) {
     try {
       const isDuplicate = await checkDuplicateEmail(email);
-      console.log(isDuplicate, "Xxx");
+      console.log(isDuplicate, "isDuplicate");
       if (isDuplicate === "success") {
         alert('사용가능한 아이디 입니다.');
         document.querySelector('#idDuplicate').innerHTML = '';
@@ -122,7 +122,6 @@ function showKeyUpError(event) {
 }
 
 async function submitUserRegisterInfo() {
-
   const data = {
     email: $id.value,
     password: $password.value,
@@ -146,8 +145,8 @@ const checkResponse = async () => {
   }
 }
 
-function locationLogin() {
-  location.replace("/users/sign-in");
+function locationMain() {
+  location.replace("/");
 }
 
 let timerInterval;
@@ -200,4 +199,4 @@ $checkEmail.addEventListener("click", async () => {
 
 $registerForm.addEventListener("keyup", showKeyUpError);
 $registerButton.addEventListener("click", checkResponse);
-$backToLogin.addEventListener("click", locationLogin);
+$backToLogin.addEventListener("click", locationMain);
