@@ -1,4 +1,5 @@
-import API from "../../Utils/API.mjs";
+import API from "/templates/src/Utils/API.mjs";
+// import cookies from "/templates/src/Utils/CsrfToken.mjs";
 
 const $id = document.querySelector("#registerID");
 const $password = document.querySelector("#registerPassword");
@@ -39,6 +40,7 @@ async function isValidEmail() {
   if (regEmail()) {
     try {
       const isDuplicate = await checkDuplicateEmail(email);
+      console.log(isDuplicate, "isDuplicate");
       if (isDuplicate === "success") {
         alert('사용가능한 아이디 입니다.');
         document.querySelector('#idDuplicate').innerHTML = '';
@@ -119,8 +121,7 @@ function showKeyUpError(event) {
   updateButtonState();
 }
 
-async function submitUserInfo() {
-
+async function submitUserRegisterInfo() {
   const data = {
     email: $id.value,
     password: $password.value,
@@ -129,22 +130,23 @@ async function submitUserInfo() {
     phone: [$phoneFront, $phoneMiddle, $phoneLast],
   };
 
-  const response = await API("/users/sign-up/", "post", data);
+  return await API("/users/sign-up/", "post", data);
+}
 
+const checkResponse = async () => {
+  const response = await submitUserRegisterInfo();
+  console.log("response", response);
   if (response.status === "success") {
-    alert("회원가입 감사합니다.");
     location.replace("/users/sign-in/");
   }
 
   if (response.status === 1002) {
-    alert(response.message);
+    alert(response.message); //"계정이 존재하지 않습니다.”
   }
-  
-
 }
 
-function locationLogin() {
-  location.replace("/users/sign-in");
+function locationMain() {
+  location.replace("/");
 }
 
 let timerInterval;
@@ -196,5 +198,5 @@ $checkEmail.addEventListener("click", async () => {
 });
 
 $registerForm.addEventListener("keyup", showKeyUpError);
-$registerButton.addEventListener("click", submitUserInfo);
-$backToLogin.addEventListener("click", locationLogin);
+$registerButton.addEventListener("click", checkResponse);
+$backToLogin.addEventListener("click", locationMain);

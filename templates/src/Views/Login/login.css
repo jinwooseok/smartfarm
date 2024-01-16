@@ -1,8 +1,3 @@
-ul,
-li {
-  list-style: none;
-}
-
 * {
   padding: 0;
   margin: 0;
@@ -54,7 +49,7 @@ body {
   margin-top: 10px;
 }
 
-.loginForm .id,
+.loginForm .email,
 .loginForm .password {
   width: 100%;
   height: 40px;
@@ -65,17 +60,17 @@ body {
   border-radius: 3px;
 }
 
-.loginForm .id:focus,
+.loginForm .email:focus,
 .loginForm .password:focus {
   outline: 1px solid #a8a8a8;
 }
 
-.loginForm .id::placeholder,
+.loginForm .email::placeholder,
 .loginForm .password::placeholder {
   color: #8E8E8E;
 }
 
-.loginForm .id::-ms-value,
+.loginForm .email::-ms-value,
 .loginForm .password::-ms-value {
   color: #262626;
 }

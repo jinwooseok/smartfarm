@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>회원가입</title>
 
-  <link rel="stylesheet" href="/templates/src/Register/register.css">
+  <link rel="stylesheet" href="/templates/src/Views/Register/register.css">
 </head>
 
 <body>
@@ -18,7 +18,7 @@
     <div class="registerLogo">
       <h1>회원가입</h1>
     </div>
-    <form method="POST" class="registerForm" id="registerForm" onsubmit="return false;">
+    <div class="registerForm" id="registerForm">
       {% csrf_token %}
       <div class="email">
         <input type="text" class="formText registerID" id="registerID" name="registerID" placeholder="이메일">
@@ -73,10 +73,10 @@
         <button class="registerButton" id="registerButton" type="submit" disabled >제출하기</button>
         <button class="backToLogin" id="backToLogin" type="button">취소</button>
       </div>
-    </form>
+    </div>
   </div>
 </body>
 </html>
 
-<script type="module" src="/templates/src/Register/register.mjs"></script>
+<script type="module" src="/templates/src/Views/Register/register.mjs"></script>
 <script src="/templates/src/CDN/jquery-1.12.4.min.js"></script>
