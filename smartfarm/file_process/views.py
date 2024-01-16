@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate
 class FileViewSet(viewsets.GenericViewSet):
 
     def page(self, request):
-        if authenticate(request) is None:
+        if request.session.get('user_id') is None:
             raise exceptions.NotAuthenticated()
         return render(request, 'src/Views/FileList/fileList.html')
 

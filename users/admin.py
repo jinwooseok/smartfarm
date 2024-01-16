@@ -8,6 +8,5 @@ class UserAdmin(admin.ModelAdmin):
         'user_pw',
         'user_name',
         'user_job',
-        'user_tel',
-        'user_register_dttm',
+        'user_tel'
     )

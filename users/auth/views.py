@@ -12,7 +12,7 @@ from drf_yasg.utils import swagger_auto_schema
 class SignUpViewSet(viewsets.GenericViewSet):
     def page(self, request):
         #이미 로그인한 사람이라면 이용 불가
-        if authenticate(request) is not None:
+        if request.session.get('user_id') is not None:
             raise exceptions.PermissionDenied()
         #로그인 하지 않았다면 페이지 렌더링
         return render(request, 'src/Views/Register/register.html')
@@ -20,7 +20,7 @@ class SignUpViewSet(viewsets.GenericViewSet):
     @swagger_auto_schema(request_body=SignUpSerializer, responses={1001: '이메일 중복', 1002: '전화번호', 500: '서버 에러'})
     def sign_up(self, request):
         serializer = SignUpSerializer(data=request.data)
-        if authenticate(request) is not None:
+        if request.session.get('user_id') is not None:
             raise exceptions.PermissionDenied()
         if serializer.is_valid():
             #이메일 중복 확인
@@ -59,7 +59,7 @@ class SignUpViewSet(viewsets.GenericViewSet):
 
 class SignInViewSet(viewsets.GenericViewSet):
     def page(self, request):
-        if authenticate(request) is not None:
+        if request.session.get('user_id') is not None:
             raise exceptions.PermissionDenied()
         return render(request, 'src/Views/Login/login.html')
     
@@ -67,7 +67,7 @@ class SignInViewSet(viewsets.GenericViewSet):
     def sign_in(self, request):
         serializer = SignInSerializer(data=request.data)
 
-        if authenticate(request) is not None:
+        if request.session.get('user_id') is not None:
             raise exceptions.PermissionDenied()
 
         if serializer.is_valid():
@@ -81,7 +81,7 @@ class SignInViewSet(viewsets.GenericViewSet):
             except VerifyMismatchError:    
                 raise PasswordNotMatchedException()
 
-            request.session['user'] = user.user_id
+            request.session['user_id'] = user.user_id
 
             return Response({"status":"success","message":"로그인에 성공했습니다."},status=200)
         
