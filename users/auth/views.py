@@ -1,52 +1,56 @@
 from django.shortcuts import render, redirect
 from ..models import User
-from argon2 import PasswordHasher, exceptions
-from django.http import HttpResponse, JsonResponse
+from argon2 import PasswordHasher
 from django.contrib.auth import authenticate
+from argon2.exceptions import VerifyMismatchError
 from rest_framework import exceptions
 # Create your views here.
 from rest_framework import viewsets
 from .serializers import SignUpSerializer
+from rest_framework.response import Response
+from .exceptions.auth_exceptions import *
 class SignUpViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = SignUpSerializer
     def page(self, request):
-        if authenticate(request) is None:
-            raise exceptions.NotAuthenticated()
+        #이미 로그인한 사람이라면 이용 불가
+        if authenticate(request) is not None:
+            raise exceptions.NotAcceptable()
+        #로그인 하지 않았다면 페이지 렌더링
         return render(request, 'src/Views/Register/register.html')
     
     def sign_up(self, request):
-        user_id=request.POST['registerID']
-        if self.is_duplicated_email(user_id):
-            return HttpResponse("<script>alert('이미 존재하는 이메일입니다.');location.href='.';</script>")
-        #비밀번호는 argon2의 hash함수를 사용해 db에 저장
-        user_pw=request.POST['registerPassword']
-        user_pw=PasswordHasher().hash(user_pw)
-        
-        user_name=request.POST['name']
-        
-        user_job=request.POST['registerJob']
-        #phone에서 3개의 요소를 받기 때문에 (###,####,####) getlist로 값을 받음
-        user_tel=request.POST.getlist('phone')
-        user_tel = ''.join(user_tel)
-        if User.objects.filter(user_tel=user_tel).exists():
-            return HttpResponse("<script>alert('이미 존재하는 전화번호입니다.');location.href='.';</script>")
-        user=User(
-            user_id = user_id,
-            user_pw = user_pw,
-            user_name = user_name,
-            user_tel = user_tel,
-            user_job = user_job,
-        )
-        user.save()
-        return redirect('users:login')
+        serializer = SignUpSerializer(data=request.data)
+        if serializer.is_valid():
+            #이메일 중복 확인
+            if self.is_duplicated_email(serializer.validated_data['user_id']):
+                raise EmailDuplicatedException()
+            #비밀번호 암호화
+            serializer.validated_data['user_pw'] = PasswordHasher().hash(serializer.validated_data['user_pw'])
+            #전화번호 합체
+            serializer.validated_data['user_tel'] = ''.join(serializer.validated_data['user_tel'])
+            #전화번호 검증
+            if self.is_duplicated_user_tel(serializer.validated_data['user_tel']):
+                raise UserTelDuplicatedException()
+            #DB에 저장
+            serializer.save()
+            return Response(data=None,status="success",message="회원가입에 성공했습니다.",status_code=201)
+            #비밀번호는 argon2의 hash함수를 사용해 db에 저장
+        else:
+            raise exceptions.server_error()
     
     def valid_email(self, request):
         register_id = request.POST.get('registerID')
         if self.is_duplicated_email(register_id):
-            return JsonResponse({'data':True})
-        return JsonResponse({'data':False})
-        
+            raise EmailDuplicatedException()
+        return Response(data=None,status="success",message="중복되지 않는 이메일입니다.",status_code=200)
+    
+    #내부 사용 함수
+    def is_duplicated_user_tel(user_tel):
+        if User.objects.filter(user_tel=user_tel).exists():
+            return True
+        return False
+    
     def is_duplicated_email(email):
         if User.objects.filter(user_id=email).exists():
             return True
@@ -55,8 +59,12 @@ class SignUpViewSet(viewsets.ModelViewSet):
 class SignInViewSet(viewsets.ModelViewSet):
     
     queryset = User.objects.all()
-    
+    serializer_class = SignUpSerializer
+
     def page(self, request):
+        #이미 로그인한 사람이라면 이용 불가
+        if authenticate(request) is not None:
+            raise exceptions.NotAcceptable()
         return render(request, 'src/Views/Login/login.html')
     
     def sign_in(self, request):
@@ -77,7 +85,7 @@ class SignInViewSet(viewsets.ModelViewSet):
         
         try :
             PasswordHasher().verify(user.user_pw.encode(), login_user_pw.encode())
-        except exceptions.VerifyMismatchError:
+        except VerifyMismatchError:
             user=None  
             context = {
                 'error' : '비밀번호가 일치하지 않습니다.'
