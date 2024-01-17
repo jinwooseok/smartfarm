@@ -8,35 +8,34 @@ def user_media_path(instance, file_root):
 
 class File(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,default=000000)
-    file_type = models.CharField(max_length=200,blank=True)
+    file_type = models.CharField(max_length=200,null=True)
     file_title = models.CharField(max_length=200)
-    file_root = models.FileField(upload_to=user_media_path,blank=True)
+    file_root = models.FileField(upload_to=user_media_path,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
-class Status(models.Model):
-    file = models.ForeignKey(File,on_delete=models.CASCADE,default=000000)
-    status_id = models.IntegerChoices('status_id','0 1 2 3 4 5 6 7 8 9')
-    status_name = models.CharField(max_length=200)
-    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.ManyToManyField('Status', through='Status', related_name='file_status')
 
 class StatusCode(models.Model):
-    status_name = models.CharField(max_length=200)
+    status_id = models.IntegerField(null=False)
+    status_name = models.CharField(max_length=200, null=False)
+
+class Status(models.Model):
+    file = models.ForeignKey(File, on_delete=models.CASCADE)
+    status = models.ForeignKey(StatusCode, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 class Feature(models.Model):
     file = models.ForeignKey(File,on_delete=models.CASCADE,default=000000)
     feature_order = models.IntegerField()
     feature_name = models.CharField(max_length=200)
     feature_type = models.CharField(max_length=200)
-    feature_importance = models.FloatField()
+    feature_importance = models.FloatField(null=True)
     feature_selected = models.BooleanField(default=False)
 
 class LearnedModel(models.Model):
     file = models.ForeignKey(File,on_delete=models.CASCADE,default=000000)
     model_name = models.CharField(max_length=200)
-    model_type = models.CharField(max_length=200)
-    model_score = models.FloatField()
-    model_params = models.CharField(max_length=200)
-    model_status = models.IntegerField()
+    model_meta_root = models.CharField(max_length=200)
+    model_weight_root = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
