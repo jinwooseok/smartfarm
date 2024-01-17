@@ -25,7 +25,7 @@ let checkCertificationNumber = false;
 async function checkDuplicateEmail(email) {
   const data = { registerID : email };
   const response = await API("./email/", "post", data);
-  return response.status;
+  return response;
 }
 
 function regEmail() {
@@ -140,8 +140,8 @@ const checkResponse = async () => {
     location.replace("/users/sign-in/");
   }
 
-  if (response.status === 1002) {
-    alert(response.message); //"계정이 존재하지 않습니다.”
+  if (response === 1002) {
+    alert("계정이 존재하지 않습니다."); //"계정이 존재하지 않습니다."
   }
 }
 
