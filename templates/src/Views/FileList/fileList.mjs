@@ -1,4 +1,5 @@
 import API from "/templates/src/Utils/API.mjs";
+import Logout from "/templates/src/Utils/Logout.mjs";
 
 const $checkAll = document.querySelector("#checkAll"); // 전체 선택 버튼
 const $AllCheckBox = document.querySelectorAll(".check");
@@ -11,6 +12,9 @@ const $AllTitle = document.querySelectorAll("#AllTitle");
 const $search = document.querySelector("#search");
 const $delete = document.querySelector("#delete");
 const $download = document.querySelector("#download");
+const $logoutBtn = document.querySelector("#logoutBtn");
+
+$logoutBtn.addEventListener("click", Logout);
 
 let fileList = [
 	{
@@ -89,6 +93,9 @@ const handleFileNameCondition = (event) =>{
 	const condition = event.target.innerText;
 	showFileList(condition);
 	changeCss(event);
+  for (let i = 0; i < $AllCheckBox.length; i++) {
+    $AllCheckBox[i].checked = false;
+  }
 }
 
 // 클릭한 조건 확인 및 html 수정 함수
@@ -167,32 +174,13 @@ const downloadToCsv = (data, title) => {
 
 const clickDownloadButton = () => {
 	const downloadTitle = setDownloadFile();
-
-	downloadTitle?.map((title) => {
-		const response = API("/download/", "post", {data: title,});
-
-		if(response === "success") {
+  console.log("downloadTitle", downloadTitle);
+	downloadTitle?.map( async (title) => {
+		const response = await API("/download/", "post", {data: title,});
+    console.log(response, "downloadResponse");
+		if(response.status === "success") {
 			downloadToCsv(response.data, title);
 		}
-  //   $.ajax({
-  //     url: "/download/",
-  //     type: "post",
-  //     dataType: "json",
-  //     headers: { "X-CSRFToken": csrftoken },
-  //     data: {
-  //       data: title,
-  //     },
-  //     async :false,
-  //     success: function (response) {
-  //       if (response.data != null) {
-  //         download(response.data, title);
-  //       }
-  //     },
-  //     error: function (xhr, error) {
-  //       alert("에러입니다.");
-  //       console.error("error : " + error);
-  //     },
-  //   });
   }); 
 }
 
@@ -209,28 +197,12 @@ const deleteCheckedItems = async (checkedItems) => {
 	});
 
 	const response = await API("delete/", "post", JSON.stringify(deleteList));
-
+  console.log(response, "deleteResponse");
 	if (response.status === "success") {
 		location.href = "../";
 	} else {
 		alert("삭제 실패");
 	}
-  // $.ajax({
-  //   url: "delete/",
-  //   type: "post",
-  //   dataType: "json",
-  //   headers: { "X-CSRFToken": csrftoken },
-  //   data: { data: JSON.stringify(deleteList) },
-  //   success: function (response) {
-  //     if (response.data != null) {
-  //       location.href = "../";
-  //     }
-  //   },
-  //   error: function (xhr, error) {
-  //     alert("에러입니다.");
-  //     console.error("error : " + error);
-  //   }
-  // });
 }
 
 const clickDeleteButton = () => {
