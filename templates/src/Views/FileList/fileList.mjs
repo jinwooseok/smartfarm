@@ -52,10 +52,10 @@ let fileList = [
 ];
 
 // (async function () {
-// // 파일 불러오는 API
-// const response = await API("files/", "get");
-// console.log(response);
-// fileList = response.data; // 형식 = [{fileName": ,"lastUpdateDate":}, {fileName": ,"lastUpdateDate":},]
+//   // 파일 불러오는 API
+//   const response = await API("/files/", "get");
+//   console.log(response);
+//   fileList = response.data; // 형식 = [{fileName": ,"lastUpdateDate":}, {fileName": ,"lastUpdateDate":},]
 // }());
 
 // 파일 목록 보여주는 함수
@@ -225,10 +225,18 @@ const clickDeleteButton = () => {
 // 삭제 이벤트
 $delete.addEventListener("click", clickDeleteButton);
 
+let debounce;
+
 // 파일 검색 함수
 const searchInputTest = (event) => {
   const text = event.target.value;
-	showFileList(text);
+
+  clearTimeout(debounce);
+
+  debounce = setTimeout(() => {
+    showFileList(text);
+  }, 200);
+  
 }
 
 $search.addEventListener("keyup", searchInputTest);
