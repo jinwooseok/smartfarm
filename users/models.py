@@ -9,7 +9,7 @@ class User(models.Model) :
     user_job = models.CharField(max_length=128, verbose_name='유저 직업')
     user_register_dttm = models.DateField(auto_now_add=True, verbose_name='계정 생성시간')    
     def __str__(self):
-        return self.user_name
+        return self.id
 
     class Meta: # DB 테이블명 지정해주는 옵션
         db_table = 'user' # 테이블명 지정

@@ -2,21 +2,41 @@ from rest_framework import viewsets
 from django.shortcuts import render
 from ..models import File
 from rest_framework import exceptions
-from django.contrib.auth import authenticate
+from .serializers import *
+from rest_framework.response import Response
 
 #파일 관련 뷰셋
 class FileViewSet(viewsets.GenericViewSet):
 
     def page(self, request):
-        if request.session.get('user_id') is None:
+        if request.session.get('user') is None:
             raise exceptions.NotAuthenticated()
         return render(request, 'src/Views/FileList/fileList.html')
 
-    def list():
-        return 0
-    def details_list():
-        return 0
-    def save():
+    def list(self, request):
+        user = request.session.get('user')
+        if user is None:
+            raise exceptions.NotAuthenticated()
+        file_object = File.objects.filter(user=user)
+        serializer = FileSerializer(file_object, many=True)
+        print(serializer.data)
+        return Response(serializer.success(), status=200)
+        
+    def name_list(self, request):
+        user = request.session.get('user')
+        if user is None:
+            raise exceptions.NotAuthenticated()
+        file_object = File.objects.filter(user=user)
+        serializer = FileNameSerializer(file_object, many=True)
+        return Response(serializer.success(), status=200)
+    
+    def save(self, request):
+        serializer = FileSaveSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"status":"success","message":"저장에 성공했습니다."},status=201)
+        else:
+            raise exceptions.ValidationError()
         return 0
     def delete():
         return 0

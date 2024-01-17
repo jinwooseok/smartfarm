@@ -17,7 +17,7 @@ urlpatterns = [
     #파일 관련
     path('file-list/',FileViewSet.as_view({'get':'page'})),
     path('files/',FileViewSet.as_view({'get':'list'})),
-    path('files/file-name',FileViewSet.as_view({'get':'name_list'})),
+    path('files/file-name/',FileViewSet.as_view({'get':'name_list'})),
     path('files/save/',FileViewSet.as_view({'post':'save'})),
     path('files/delete/',FileViewSet.as_view({'delete':'delete'})),
     

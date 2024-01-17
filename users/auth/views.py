@@ -12,7 +12,7 @@ from drf_yasg.utils import swagger_auto_schema
 class SignUpViewSet(viewsets.GenericViewSet):
     def page(self, request):
         #이미 로그인한 사람이라면 이용 불가
-        if request.session.get('user_id') is not None:
+        if request.session.get('user') is not None:
             raise exceptions.PermissionDenied()
         #로그인 하지 않았다면 페이지 렌더링
         return render(request, 'src/Views/Register/register.html')
@@ -20,7 +20,7 @@ class SignUpViewSet(viewsets.GenericViewSet):
     @swagger_auto_schema(request_body=SignUpSerializer, responses={1001: '이메일 중복', 1002: '전화번호', 500: '서버 에러'})
     def sign_up(self, request):
         serializer = SignUpSerializer(data=request.data)
-        if request.session.get('user_id') is not None:
+        if request.session.get('user') is not None:
             raise exceptions.PermissionDenied()
         if serializer.is_valid():
             #이메일 중복 확인
@@ -35,7 +35,7 @@ class SignUpViewSet(viewsets.GenericViewSet):
                 raise UserTelDuplicatedException()
             #DB에 저장
             serializer.save()
-            return Response({"status":"success","message":"회원가입에 성공했습니다."},status=201)
+            return Response(serializer.success(),status=201)
             #비밀번호는 argon2의 hash함수를 사용해 db에 저장
         else:
             raise exceptions.ValidationError()
@@ -46,7 +46,8 @@ class SignUpViewSet(viewsets.GenericViewSet):
         if serializer.is_valid():
             if self.is_duplicated_email(serializer.validated_data['email']):
                 raise EmailDuplicatedException()
-            return Response({"status":"success","message":"중복되지 않는 이메일입니다."},status=200)
+
+            return Response(serializer.success(),status=200)
         else:
             raise exceptions.ValidationError()
     #내부 사용 함수
@@ -59,7 +60,7 @@ class SignUpViewSet(viewsets.GenericViewSet):
 
 class SignInViewSet(viewsets.GenericViewSet):
     def page(self, request):
-        if request.session.get('user_id') is not None:
+        if request.session.get('user') is not None:
             raise exceptions.PermissionDenied()
         return render(request, 'src/Views/Login/login.html')
     
@@ -67,7 +68,7 @@ class SignInViewSet(viewsets.GenericViewSet):
     def sign_in(self, request):
         serializer = SignInSerializer(data=request.data)
 
-        if request.session.get('user_id') is not None:
+        if request.session.get('user') is not None:
             raise exceptions.PermissionDenied()
 
         if serializer.is_valid():
@@ -81,9 +82,9 @@ class SignInViewSet(viewsets.GenericViewSet):
             except VerifyMismatchError:    
                 raise PasswordNotMatchedException()
 
-            request.session['user_id'] = user.user_id
-
-            return Response({"status":"success","message":"로그인에 성공했습니다."},status=200)
+            request.session['user'] = user.id
+            print(serializer.success())
+            return Response(serializer.success(),status=200)
         
         else:
             raise exceptions.ValidationError()
