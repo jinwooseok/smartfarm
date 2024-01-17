@@ -112,6 +112,92 @@ const getCheckedItems = () => {
 }
 
 // 파일 다운로드 함수
+const setDownloadFile = () =>{
+  const DownloadFile = getCheckedItems();
+
+  const downloadTitle = [];
+  DownloadFile.map((file) => {
+    downloadTitle.push(file.parentElement.childNodes[3].innerText);
+  });
+
+  if (downloadTitle.length === 0) {
+    alert('파일을 선택해주세요');
+    return;
+  }
+
+  return downloadTitle;
+}
+
+// download 로직, csv로
+const downloadToCsv = (data, title) => {
+  const jsonData = data
+  let jsonDataParsing = JSON.parse(jsonData);
+
+  let toCsv = '';
+  let row="";
+
+  for(let i in jsonDataParsing[0]){
+    row += i+","; // 열 입력
+  }
+  row = row.slice(0,-1);
+  toCsv += row +"\r\n";
+
+  toCsv += jsonDataParsing.reduce((csv, rowObject) => {
+    const row = Object.values(rowObject).join(",") + "\r\n";
+    return csv + row;
+  }, "");
+
+  if (toCsv === "") {
+    alert("Invalid data");
+    return;
+  }
+
+  const fileName = title;
+  const uri = "data:text/csv;charset=utf-8,\uFEFF" + encodeURI(toCsv);
+
+  const link = document.createElement("a");
+  link.href = uri;
+  link.style.visibility = "hidden";
+  link.download = fileName;
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+const clickDownloadButton = () => {
+	const downloadTitle = setDownloadFile();
+
+	downloadTitle?.map((title) => {
+		const response = API("/download/", "post", {data: title,});
+
+		if(response === "success") {
+			downloadToCsv(response.data, title);
+		}
+  //   $.ajax({
+  //     url: "/download/",
+  //     type: "post",
+  //     dataType: "json",
+  //     headers: { "X-CSRFToken": csrftoken },
+  //     data: {
+  //       data: title,
+  //     },
+  //     async :false,
+  //     success: function (response) {
+  //       if (response.data != null) {
+  //         download(response.data, title);
+  //       }
+  //     },
+  //     error: function (xhr, error) {
+  //       alert("에러입니다.");
+  //       console.error("error : " + error);
+  //     },
+  //   });
+  }); 
+}
+
+$download.addEventListener("click", clickDownloadButton);
+
 
 // 파일 삭제 함수
 const deleteCheckedItems = async (checkedItems) => {
@@ -124,7 +210,7 @@ const deleteCheckedItems = async (checkedItems) => {
 
 	const response = await API("delete/", "post", JSON.stringify(deleteList));
 
-	if (response === "success") {
+	if (response.status === "success") {
 		location.href = "../";
 	} else {
 		alert("삭제 실패");

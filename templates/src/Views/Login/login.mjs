@@ -35,7 +35,7 @@ const submitLoginInfo = async () =>{
 const clickResponse = async () => {
   const response = await submitLoginInfo();
   console.log("response", response);
-  if (response === "success") {
+  if (response.status === "success") {
     location.replace("/file-list/");
   }
 

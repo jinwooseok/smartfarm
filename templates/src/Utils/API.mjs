@@ -11,8 +11,8 @@ const API = async (url, type, data={}) => {
 			data: data,
 			async: false,
 		});
-		console.log("re",response.status);
-		return response.status;
+		console.log("re",response);
+		return response;
 
 	} catch (error) {
 		console.log("error", error.status);
