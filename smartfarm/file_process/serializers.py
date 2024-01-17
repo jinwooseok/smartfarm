@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from ..models import File
-import json
+
 class FileInfoSerializer(serializers.ModelSerializer):
     fileName = serializers.CharField(source='file_title')
     createdDate = serializers.DateTimeField(source='created_at')
@@ -8,6 +8,7 @@ class FileInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
         fields = ['fileName', 'createdDate', 'updatedDate']
+
 
 class FileNameSerializer(serializers.ModelSerializer):
     fileName = serializers.CharField(source='file_title')
@@ -17,4 +18,5 @@ class FileNameSerializer(serializers.ModelSerializer):
         
 
 class FileSaveSerializer(serializers.Serializer):
-    data = serializers.JSONField()
+    fileName = serializers.CharField()
+    fileData = serializers.JSONField()

@@ -5,6 +5,8 @@ from rest_framework import exceptions
 from .serializers import *
 from rest_framework.response import Response
 from common.response import *
+from .service.file_save_service import FileSaveService
+from common.validate_exception import ValidationException
 
 #파일 관련 뷰셋
 class FileViewSet(viewsets.GenericViewSet):
@@ -31,13 +33,17 @@ class FileViewSet(viewsets.GenericViewSet):
         return Response(ResponseBody.generate(serializer), status=200)
     
     def save(self, request):
+        user = request.session.get('user')
+        if user is None:
+            raise exceptions.NotAuthenticated()
         serializer = FileSaveSerializer(data=request.data)
+        
         if serializer.is_valid():
-            serializer.save()
-            return Response({"status":"success","message":"저장에 성공했습니다."},status=201)
+            FileSaveService.excute(serializer, user)
+            return Response(ResponseBody.generate(),status=201)
         else:
-            raise exceptions.ValidationError()
-        return 0
+            raise ValidationException()
+    
     def delete():
         return 0
 
