@@ -20,3 +20,6 @@ class FileNameSerializer(serializers.ModelSerializer):
 class FileSaveSerializer(serializers.Serializer):
     fileName = serializers.CharField()
     fileData = serializers.JSONField()
+
+class FileDeleteSerializer(serializers.Serializer):
+    fileName = serializers.CharField()

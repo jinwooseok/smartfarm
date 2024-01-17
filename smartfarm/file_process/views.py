@@ -6,6 +6,7 @@ from .serializers import *
 from rest_framework.response import Response
 from common.response import *
 from .service.file_save_service import FileSaveService
+from .service.file_delete_service import FileDeleteService
 from common.validate_exception import ValidationException
 
 #파일 관련 뷰셋
@@ -44,7 +45,16 @@ class FileViewSet(viewsets.GenericViewSet):
         else:
             raise ValidationException()
     
-    def delete():
+    def delete(self, request):
+        user = request.session.get('user')
+        if user is None:
+            raise exceptions.NotAuthenticated()
+        
+        serializer = FileDeleteSerializer(data=request.data)
+
+        if serializer.is_valid():
+            FileDeleteService.excute(serializer, user)
+            return Response(ResponseBody.generate(),status=200)
         return 0
 
 # def fileListView(request):

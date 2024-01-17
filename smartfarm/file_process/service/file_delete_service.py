@@ -2,7 +2,7 @@ from ...models import File
 import os
 from ..exceptions.file_exception import *
 
-class FileSaveService():    
+class FileDeleteService():    
     def __init__(self, serializer, user):
         self.user = user
         self.file_title = serializer.validated_data['fileName']
