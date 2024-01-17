@@ -1,9 +1,16 @@
 import API from "/templates/src/Utils/API.mjs";
 
+const $checkAll = document.querySelector("#checkAll"); // 전체 선택 버튼
+const $AllCheckBox = document.querySelectorAll(".check");
+
 const $$fileNameCondition = document.querySelectorAll(".fileNameCondition");
 const $$listAll = document.querySelectorAll(".list");
 
+const $AllTitle = document.querySelectorAll("#AllTitle");
+
 const $search = document.querySelector("#search");
+const $delete = document.querySelector("#delete");
+const $download = document.querySelector("#download");
 
 let fileList = [
 	{
@@ -89,8 +96,20 @@ $$fileNameCondition.forEach((element) => {
 	element.addEventListener('click', handleFileNameCondition);
 });
 
+// 전체 체크
+function AllCheck() {
+	for (let i = 0; i < $AllCheckBox.length; i++) {
+    $AllCheckBox[i].checked = this.checked;
+  }
+}
 
-// 체크한 파일 확인 함수
+// 전체 선택 이벤트
+$checkAll.addEventListener("change", AllCheck);
+
+// 체크한 파일 수 확인
+const getCheckedItems = () => {
+  return Array.from($AllCheckBox).filter((checkbox) => checkbox.checked);
+}
 
 // 파일 다운로드 함수
 
