@@ -7,8 +7,11 @@ class ValidationException(CustomBaseException):
         value_list = []
         for field, error_list in errors.items():
             for error in error_list:
-                value_list.append(f'{field}: {error}')
+                if (error == "This field is required."):
+                    value_list.append(f"({field}) : 필수 {field}에 값이 존재하지 않습니다.")
+                else:
+                    value_list.append(f"({field}) : 유효하지 않은 {field}입니다.")
         self.status_code = 400
         self.code = 400
-        self.detail =  value_list.__str__()
+        self.detail =  ", ".join(value_list)
         

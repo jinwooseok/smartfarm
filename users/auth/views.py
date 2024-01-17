@@ -84,7 +84,6 @@ class SignInViewSet(viewsets.GenericViewSet):
                 raise PasswordNotMatchedException()
 
             request.session['user'] = user.id
-            print(serializer.success())
             return Response(serializer.success(),status=200)
         
         else:

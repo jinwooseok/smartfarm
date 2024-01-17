@@ -12,11 +12,15 @@ def base_exception_handler(exc, context):
 
     response = exception_handler(exc, context)
 
+    logger.error(f"[ERROR] {datetime.now()}")
+    logger.error(f"> context : {context}")
+    logger.error(f"> error : {exc}")
+
     if response is not None:
         if isinstance(exc, exceptions.ParseError):
             status_code = 400
             code = response.status_code
-            msg = exc.detail
+            msg = "잘못된 형식이 입력되었습니다."
         elif isinstance(exc, exceptions.AuthenticationFailed):
             status_code = 401
             code = response.status_code
@@ -60,14 +64,10 @@ def base_exception_handler(exc, context):
         else:
             status_code = 500
             code = response.status_code
-            msg = "unknown error"
-            
+            msg = "unknown error occurred.",
+
         #서버측 에러 표현
-        logger.error(f"[CUSTOM_EXCEPTION_HANDLER_ERROR]")
-        logger.error(f"[{datetime.now()}]")
-        logger.error(f"> error : {exc}")
-        logger.error(f"> context : {context}")
-        logger.error(f"> detail : {msg}")
+        logger.error(f"> {status_code}({code}) detail : {msg}")
 
         response.status_code = status_code
 
@@ -78,11 +78,12 @@ def base_exception_handler(exc, context):
         response.data['message'] = msg
         response.data['data'] = None
 
-        response.data.pop('detail', None)
-
         return response
     else:
-        STATUS_RSP_INTERNAL_ERROR['message'] = STATUS_RSP_INTERNAL_ERROR.pop('default_message', None)
-        STATUS_RSP_INTERNAL_ERROR['data'] = None
-        STATUS_RSP_INTERNAL_ERROR.pop('lang_message', None)
+        #서버측 에러 표현
+        logger.error(f"[ERROR] {datetime.now()}")
+        logger.error(f"> context : {context}")
+        logger.error(f"> error : {exc}")
+        logger.error(f"> {STATUS_RSP_INTERNAL_ERROR['status']} detail : {STATUS_RSP_INTERNAL_ERROR['message']}")
+
         return Response(STATUS_RSP_INTERNAL_ERROR, status=500)
