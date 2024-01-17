@@ -23,9 +23,9 @@ let emailValid = false;
 let checkCertificationNumber = false;
 
 async function checkDuplicateEmail(email) {
-  const data = { registerID : email };
+  const data = { email : email };
   const response = await API("./email/", "post", data);
-  return response;
+  return response.status;
 }
 
 function regEmail() {
@@ -40,12 +40,11 @@ async function isValidEmail() {
   if (regEmail()) {
     try {
       const isDuplicate = await checkDuplicateEmail(email);
-      console.log(isDuplicate, "isDuplicate");
       if (isDuplicate === "success") {
         alert('사용가능한 아이디 입니다.');
         document.querySelector('#idDuplicate').innerHTML = '';
         return true;
-      } else {
+      } else if (isDuplicate === 452) {
         alert("중복된 아이디 입니다.");
         return false;
       }
@@ -121,30 +120,6 @@ function showKeyUpError(event) {
   updateButtonState();
 }
 
-async function submitUserRegisterInfo() {
-  const data = {
-    email: $id.value,
-    password: $password.value,
-    name: $name.value,
-    job: $job.value,
-    phone: [$phoneFront, $phoneMiddle, $phoneLast],
-  };
-
-  return await API("/users/sign-up/", "post", data);
-}
-
-const checkResponse = async () => {
-  const response = await submitUserRegisterInfo();
-  console.log("response", response);
-  if (response.status === "success") {
-    location.replace("/users/sign-in/");
-  }
-
-  if (response === 1002) {
-    alert("계정이 존재하지 않습니다."); //"계정이 존재하지 않습니다."
-  }
-}
-
 function locationMain() {
   location.replace("/");
 }
@@ -152,7 +127,6 @@ function locationMain() {
 let timerInterval;
 
 function timer() {
-
   $checkCertificationNumber.disabled =false;
 
   const endTime = (+new Date) + 1000 * 181;
@@ -162,8 +136,6 @@ function timer() {
   let mins = time.getUTCMinutes();
 
   $postCertificationNumber.disabled = true;
-
-  alert("인증번호를 전송합니다.");
 
   timerInterval = setInterval( () => {
     const element = $timer;
@@ -180,12 +152,77 @@ function timer() {
       element.innerHTML = (hours ? hours + ':' + ('0' + mins).slice(-2) : mins) + ':' + ('0' + time.getUTCSeconds()).slice(-2);
     }
   }, time.getUTCMilliseconds());
+};
+
+/* API 미완
+async function checkSendCertification() {
+  return await API(
+    "users/sign-up/phone/send/",
+    "post",
+    {phone : [$phoneFront.value, $phoneMiddle.value, $phoneLast.value]}
+  );
 }
 
+async function sendCertification () {
+  const isSendNumber = await checkSendCertification();
+  console.log(isSendNumber);
+
+  switch(isSendNumber.status) {
+    case "success" : 
+      alert("인증번호를 전송합니다.");
+      timer();
+      break;
+    case 1001 :
+      alert("잘못된 전화번호 형식입니다.");
+      break;
+    case 1002 :
+        alert("존재하지 않는 전화번호입니다.");
+        break;
+    case 1003 :
+      alert("중복된 전화번호입니다.");
+      break;
+    case 1004 :
+      alert("인증번호 전송에 실패했습니다.");
+      break;
+  };
+}
+*/
+
+async function submitUserRegisterInfo() {
+  const data = {
+    email: $id.value,
+    password: $password.value,
+    name: $name.value,
+    job: $job.value,
+    phone: JSON.stringify([
+      $phoneFront.value.replace(/'/g, ""),
+      $phoneMiddle.value.replace(/'/g, ""),
+      $phoneLast.value.replace(/'/g, "")
+    ]),
+  };
+
+  return await API("/users/sign-up/", "post", data);
+}
+
+const checkRegisterResponse = async () => {
+  const response = await submitUserRegisterInfo();
+  console.log("response", response);
+  if (response.status === "success") {
+    location.replace("/users/sign-in/");
+  }
+
+  if (response.status === 1002) {
+    // alert("계정이 존재하지 않습니다."); //
+  }
+}
+
+// $postCertificationNumber.addEventListener('click', sendCertification);
 $postCertificationNumber.addEventListener('click', timer);
 
 $checkCertificationNumber.addEventListener('click', () => {
-  clearInterval(timerInterval); 
+  clearInterval(timerInterval);
+
+  // api로 변경해야 함
   $postCertificationNumber.disabled = false;
   checkCertificationNumber = true;
   updateButtonState();
@@ -198,5 +235,5 @@ $checkEmail.addEventListener("click", async () => {
 });
 
 $registerForm.addEventListener("keyup", showKeyUpError);
-$registerButton.addEventListener("click", checkResponse);
+$registerButton.addEventListener("click", checkRegisterResponse);
 $backToLogin.addEventListener("click", locationMain);

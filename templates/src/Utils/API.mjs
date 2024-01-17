@@ -11,12 +11,13 @@ const API = async (url, type, data={}) => {
 			data: data,
 			async: false,
 		});
-		console.log("re",response);
+		console.log("response", response);
 		return response;
 
 	} catch (error) {
 		console.log("error", error.status);
-		return error.status;
+		console.log("error.status", error.status);
+		return error.responseJSON ? error.responseJSON : error.status;
 	}
 }
 

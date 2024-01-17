@@ -6,6 +6,8 @@ const $password = document.querySelector("#password");
 const $loginBtn = document.querySelector("#loginButton");
 const $showPassword = document.querySelector("#showPassword");
 const $showPasswordText = document.querySelector("#showPasswordText");
+const $EmailError = document.querySelector("#EmailError");
+const $passwordError = document.querySelector("#passwordError");
 
 // test@test.com 형식
 const idPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
@@ -34,15 +36,17 @@ const submitLoginInfo = async () =>{
 // 버튼 클릭 결과
 const clickResponse = async () => {
   const response = await submitLoginInfo();
-  console.log("response", response);
+  $EmailError.innerHTML = '';
+  $passwordError.innerHTML = '';
+
   if (response.status === "success") {
-    location.replace("/file-list/");
+    // location.replace("/file-list/");
   }
 
-  if (response === 1001) {
-    alert("계정이 존재하지 않습니다."); //"계정이 존재하지 않습니다."
-  } else if(response === 1002) {
-    alert("비밀번호가 일치하지 않습니다."); //"비밀번호가 일치하지 않습니다."
+  if (response.status === 452) {
+    $EmailError.innerHTML = response.message; //"계정이 존재하지 않습니다."
+  } else if(response === 453) {
+    $passwordError.innerHTML = response.message; //"비밀번호가 일치하지 않습니다."
   }
 }
 
