@@ -206,7 +206,6 @@ async function submitUserRegisterInfo() {
 
 const checkRegisterResponse = async () => {
   const response = await submitUserRegisterInfo();
-  console.log("response", response);
   if (response.status === "success") {
     location.replace("/users/sign-in/");
   }

@@ -37,8 +37,6 @@ const submitLoginInfo = async () =>{
 const clickResponse = async () => {
   const response = await submitLoginInfo();
 
-  console.log("response",response);
-
   $EmailError.innerHTML = '';
   $passwordError.innerHTML = '';
 

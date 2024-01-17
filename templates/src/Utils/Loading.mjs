@@ -11,7 +11,7 @@ const Loading = {
     let loadingImg = "";
     loadingImg += "<div id='loadingImg'>";
     loadingImg +=
-      `<img src="/templates/IMG/Spinner.gif" style='z-index:9000; display: block;  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);'/>`;
+      `<img src="/templates/src/IMG/Spinner.gif" style='z-index:9000; display: block;  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);'/>`;
     loadingImg += "</div>";
   
     Div.innerHTML=loadingImg;
