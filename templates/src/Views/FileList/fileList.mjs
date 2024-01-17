@@ -2,12 +2,11 @@ import API from "/templates/src/Utils/API.mjs";
 import Logout from "/templates/src/Utils/Logout.mjs";
 
 const $checkAll = document.querySelector("#checkAll"); // 전체 선택 버튼
-const $AllCheckBox = document.querySelectorAll(".check");
 
 const $$fileNameCondition = document.querySelectorAll(".fileNameCondition");
-const $$listAll = document.querySelectorAll(".list");
 
 const $AllTitle = document.querySelectorAll("#AllTitle");
+const $fileContainer = document.querySelector("#fileContainer");
 
 const $search = document.querySelector("#search");
 const $delete = document.querySelector("#delete");
@@ -56,10 +55,37 @@ let fileList = [
 //   const response = await API("/files/", "get");
 //   console.log(response);
 //   fileList = response.data; // 형식 = [{fileName": ,"lastUpdateDate":}, {fileName": ,"lastUpdateDate":},]
+//    setFileList();
 // }());
+
+// 초기 파일 목록 만들기
+const setFileList = () => {
+  fileList.map((file) => {
+    let listDiv = document.createElement('div');
+    listDiv.classList.add("list");
+    const listChild = `
+      <input type="checkbox" class="check">
+      <div class="fileTitle" id="AllTitle">
+        <a href="#">${file.fileName}</a>
+      </div>
+      <div class="uploadDate" id="uploadDate">
+        ${file.lastUpdateDate}
+      </div>
+      <div class="lastUpdateDate" id="lastUpdateDate">
+        ${file.lastUpdateDate}
+      </div>
+    `;
+
+    listDiv.innerHTML = listChild;
+    $fileContainer.appendChild(listDiv);
+  });
+};
+
+setFileList();
 
 // 파일 목록 보여주는 함수
 const showFileList = (condition) => {
+  const $$listAll = document.querySelectorAll(".list");
 	// 불러온 파일을 조건에 따라 보여주기
 	if (condition === "전체") {
 		for (let i = 0; i < fileList.length; i++) {
@@ -90,9 +116,11 @@ const changeCss = (event) =>{
 }
 
 const handleFileNameCondition = (event) =>{
+  const $AllCheckBox = document.querySelectorAll(".check");
 	const condition = event.target.innerText;
 	showFileList(condition);
 	changeCss(event);
+  $checkAll.checked = false;
   for (let i = 0; i < $AllCheckBox.length; i++) {
     $AllCheckBox[i].checked = false;
   }
@@ -105,8 +133,13 @@ $$fileNameCondition.forEach((element) => {
 
 // 전체 체크
 function AllCheck() {
+  const $AllCheckBox = document.querySelectorAll(".check");
+  const $$listAll = document.querySelectorAll(".list");
+  
 	for (let i = 0; i < $AllCheckBox.length; i++) {
-    $AllCheckBox[i].checked = this.checked;
+    if ($$listAll[i].style.display === "flex") {
+      $AllCheckBox[i].checked = this.checked;
+    }
   }
 }
 
@@ -115,6 +148,7 @@ $checkAll.addEventListener("change", AllCheck);
 
 // 체크한 파일 수 확인
 const getCheckedItems = () => {
+  const $AllCheckBox = document.querySelectorAll(".check");
   return Array.from($AllCheckBox).filter((checkbox) => checkbox.checked);
 }
 
@@ -186,9 +220,9 @@ const clickDownloadButton = () => {
 
 $download.addEventListener("click", clickDownloadButton);
 
-
 // 파일 삭제 함수
 const deleteCheckedItems = async (checkedItems) => {
+  const $AllCheckBox = document.querySelectorAll(".check");
   const deleteList = checkedItems.map((checkbox) => {
     const index = Array.from($AllCheckBox).indexOf(checkbox);
     const title = $AllTitle[index].innerText;
@@ -230,13 +264,13 @@ let debounce;
 // 파일 검색 함수
 const searchInputTest = (event) => {
   const text = event.target.value;
-
   clearTimeout(debounce);
 
   debounce = setTimeout(() => {
+    $checkAll.checked = false;
     showFileList(text);
   }, 200);
-  
+
 }
 
 $search.addEventListener("keyup", searchInputTest);

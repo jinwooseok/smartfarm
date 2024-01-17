@@ -14,9 +14,12 @@
 	<!-- spreadsheetjs -->
 	<script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
 	<link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
+	<script src="https://jsuites.net/v4/jsuites.js"></script>
+	<link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
 
 	<!-- fontawesome-->
 	<script src="https://kit.fontawesome.com/4c4b76e7c2.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
 	<div class="container">	
@@ -58,124 +61,7 @@
 							마지막 수정 날짜
 						</div>
 					</div>
-					<div class="file-container">
-						<!-- {% for file in files %}
-						<div class="list">
-							<input type="checkbox" class="check">
-							<div class="fileTitle" id="AllTitle">
-								<a onclick="moveRevisePage(event)">{{file.file_title}}</a>
-							</div>
-							<div class="uploadDate" id="uploadDate">
-								{{file.created_at | date:'Y-m-d'}}
-							</div>
-							<div class="lastUpdateDate" id="lastUpdateDate">
-								{{file.updated_at | date:'Y-m-d'}}
-							</div>
-						</div>
-						{% endfor %} -->
-						<div class="list">
-							<input type="checkbox" class="check">
-							<div class="fileTitle" id="AllTitle">
-								<a href="#">예시_수정</a>
-							</div>
-							<div class="uploadDate" id="uploadDate">
-								2024-01-01
-							</div>
-							<div class="lastUpdateDate" id="lastUpdateDate">
-								2024-01-01
-							</div>
-						</div>
-
-						<div class="list">
-							<input type="checkbox" class="check">
-							<div class="fileTitle" id="AllTitle">
-								<a href="#">예시_병합</a>
-							</div>
-							<div class="uploadDate" id="uploadDate">
-								2024-01-01
-							</div>
-							<div class="lastUpdateDate" id="lastUpdateDate">
-								2024-01-01
-							</div>
-						</div>
-
-						<div class="list">
-							<input type="checkbox" class="check">
-							<div class="fileTitle" id="AllTitle">
-								<a href="#">예시_환경</a>
-							</div>
-							<div class="uploadDate" id="uploadDate">
-								2024-01-01
-							</div>
-							<div class="lastUpdateDate" id="lastUpdateDate">
-								2024-01-01
-							</div>
-						</div>
-
-						<div class="list">
-							<input type="checkbox" class="check">
-							<div class="fileTitle" id="AllTitle">
-								<a href="#">예시_생육</a>
-							</div>
-							<div class="uploadDate" id="uploadDate">
-								2024-01-01
-							</div>
-							<div class="lastUpdateDate" id="lastUpdateDate">
-								2024-01-01
-							</div>
-						</div>
-
-						<div class="list">
-							<input type="checkbox" class="check">
-							<div class="fileTitle" id="AllTitle">
-								<a href="#">예시_생산량</a>
-							</div>
-							<div class="uploadDate" id="uploadDate">
-								2024-01-01
-							</div>
-							<div class="lastUpdateDate" id="lastUpdateDate">
-								2024-01-01
-							</div>
-						</div>
-
-						<div class="list">
-							<input type="checkbox" class="check">
-							<div class="fileTitle" id="AllTitle">
-								<a href="#">예시_생육_생산량_병합</a>
-							</div>
-							<div class="uploadDate" id="uploadDate">
-								2024-01-01
-							</div>
-							<div class="lastUpdateDate" id="lastUpdateDate">
-								2024-01-01
-							</div>
-						</div>
-
-						<div class="list">
-							<input type="checkbox" class="check">
-							<div class="fileTitle" id="AllTitle">
-								<a href="#">예시_생육_환경_병합</a>
-							</div>
-							<div class="uploadDate" id="uploadDate">
-								2024-01-01
-							</div>
-							<div class="lastUpdateDate" id="lastUpdateDate">
-								2024-01-01
-							</div>
-						</div>
-
-						<div class="list">
-							<input type="checkbox" class="check">
-							<div class="fileTitle" id="AllTitle">
-								<a href="#">예시</a>
-							</div>
-							<div class="uploadDate" id="uploadDate">
-								2024-01-01
-							</div>
-							<div class="lastUpdateDate" id="lastUpdateDate">
-								2024-01-01
-							</div>
-						</div>
+					<div class="fileContainer" id="fileContainer">
 					</div>
 				</div>
 
@@ -190,13 +76,29 @@
 			</div>
 
 		</li>
-
-		<!-- 파일 등록 클릭 시 팝업 창 -->
 	</div>
+		<!-- 파일 등록 클릭 시 팝업 창 -->
+	<dialog class="uploadContainer" id="uploadContainer">
+		<div class="file">
+			<input type="file" id="fileUploadDrag" class="fileUploadDrag" name="fileUploadDrag" accept=".xls, .xlsx, .csv">
+			<div class="icon">
+				<i class="fa-solid fa-cloud-arrow-up" id="fileIcon"></i>
+				<span>파일을 드래그하세요</span>
+			</div>
+		</div>
+		<div class="buttonContainer">
+			<input type="file" name="fileUploadInput" id="fileUploadInput" class="fileUploadInput" accept=".xls, .xlsx, .csv">
+			<label for="fileUploadInput">선택</label>
+			<input id="fileName" name="fileName" class="fileName" value="선택한 파일 이름" disabled="disabled">
+			<button class="fileUpload" id="fileUpload">등록</button>
+			<button class="closeUploadPopup" id="closeUploadPopup">닫기</button>
+		</div>
+	</dialog>
 </body>
 
 <script type="module" src="/templates/src/Views/Filelist/fileList.mjs"></script>
 <script type="module" src="/templates/src/Views/Filelist/upload.mjs"></script>
 <script src="/templates/src/CDN/jquery-1.12.4.min.js"></script>
+<script src="/templates/src/CDN/xlsx.full.min.js"></script>
 
 </html>
