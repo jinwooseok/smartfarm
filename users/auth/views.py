@@ -7,7 +7,7 @@ from rest_framework import exceptions,viewsets
 from .serializers import *
 from rest_framework.response import Response
 from .exceptions.auth_exceptions import *
-from common.base_exception import CustomBaseException
+from common.validate_exception import ValidationException
 from drf_yasg.utils import swagger_auto_schema
 class SignUpViewSet(viewsets.GenericViewSet):
     def page(self, request):
@@ -24,21 +24,21 @@ class SignUpViewSet(viewsets.GenericViewSet):
             raise exceptions.PermissionDenied()
         if serializer.is_valid():
             #이메일 중복 확인
-            if self.is_duplicated_email(serializer.validated_data['user_id']):
+            if self.is_duplicated_email(serializer.validated_data['email']):
                 raise EmailDuplicatedException()
             #비밀번호 암호화
-            serializer.validated_data['user_pw'] = PasswordHasher().hash(serializer.validated_data['user_pw'])
+            serializer.validated_data['password'] = PasswordHasher().hash(serializer.validated_data['password'])
             #전화번호 합체
-            serializer.validated_data['user_tel'] = ''.join(serializer.validated_data['user_tel'])
+            serializer.validated_data['phone'] = ''.join(serializer.validated_data['phone'])
             #전화번호 검증
-            if self.is_duplicated_user_tel(serializer.validated_data['user_tel']):
+            if self.is_duplicated_user_tel(serializer.validated_data['phone']):
                 raise UserTelDuplicatedException()
             #DB에 저장
             serializer.save()
             return Response(serializer.success(),status=201)
             #비밀번호는 argon2의 hash함수를 사용해 db에 저장
         else:
-            raise exceptions.ValidationError()
+            raise ValidationException(serializer)
     
     @swagger_auto_schema(request_body=EmailValidationSerializer)
     def valid_email(self, request):
@@ -49,9 +49,10 @@ class SignUpViewSet(viewsets.GenericViewSet):
 
             return Response(serializer.success(),status=200)
         else:
-            raise exceptions.ValidationError()
+            raise ValidationException(serializer)
     #내부 사용 함수
     def is_duplicated_user_tel(self, user_tel):
+        user_tel = ''.join(user_tel)
         return User.objects.filter(user_tel=user_tel).exists()
     
     def is_duplicated_email(self, email):
@@ -87,7 +88,7 @@ class SignInViewSet(viewsets.GenericViewSet):
             return Response(serializer.success(),status=200)
         
         else:
-            raise exceptions.ValidationError()
+            raise ValidationException(serializer)
         
     def is_correct_password(self, login_pw, user_pw):
         return PasswordHasher().verify(login_pw.encode(), user_pw.encode())
