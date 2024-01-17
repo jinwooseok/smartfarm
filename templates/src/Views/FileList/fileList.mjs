@@ -114,6 +114,58 @@ const getCheckedItems = () => {
 // 파일 다운로드 함수
 
 // 파일 삭제 함수
+const deleteCheckedItems = async (checkedItems) => {
+  const deleteList = checkedItems.map((checkbox) => {
+    const index = Array.from($AllCheckBox).indexOf(checkbox);
+    const title = $AllTitle[index].innerText;
+    checkbox.parentElement.remove();
+    return title;
+	});
+
+	const response = await API("delete/", "post", JSON.stringify(deleteList));
+
+	if (response === "success") {
+		location.href = "../";
+	} else {
+		alert("삭제 실패");
+	}
+  // $.ajax({
+  //   url: "delete/",
+  //   type: "post",
+  //   dataType: "json",
+  //   headers: { "X-CSRFToken": csrftoken },
+  //   data: { data: JSON.stringify(deleteList) },
+  //   success: function (response) {
+  //     if (response.data != null) {
+  //       location.href = "../";
+  //     }
+  //   },
+  //   error: function (xhr, error) {
+  //     alert("에러입니다.");
+  //     console.error("error : " + error);
+  //   }
+  // });
+}
+
+const clickDeleteButton = () => {
+  const checkedItems = getCheckedItems();
+  if (!checkedItems.length) {
+    alert("삭제할 파일을 선택하세요");
+    return;
+  }
+
+  const yesOrNo = confirm("정말 삭제하나요?");
+  if (yesOrNo) {
+    deleteCheckedItems(checkedItems);
+    $checkAll.checked = false;
+    AllCheck();
+  } else {
+    alert("삭제를 취소합니다.");
+  }
+}
+
+// 삭제 이벤트
+$delete.addEventListener("click", clickDeleteButton);
 
 // 파일 검색 함수
 const searchInputTest = (event) => {

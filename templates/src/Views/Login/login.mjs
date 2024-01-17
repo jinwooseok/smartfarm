@@ -35,14 +35,14 @@ const submitLoginInfo = async () =>{
 const clickResponse = async () => {
   const response = await submitLoginInfo();
   console.log("response", response);
-  if (response.status === "success") {
+  if (response === "success") {
     location.replace("/file-list/");
   }
 
-  if (response.status === 1001) {
-    alert(response.message); //"계정이 존재하지 않습니다.”
-  } else if(response.status === 1002) {
-    alert(response.message); //"비밀번호가 일치하지 않습니다.”
+  if (response === 1001) {
+    alert("계정이 존재하지 않습니다."); //"계정이 존재하지 않습니다."
+  } else if(response === 1002) {
+    alert("비밀번호가 일치하지 않습니다."); //"비밀번호가 일치하지 않습니다."
   }
 }
 

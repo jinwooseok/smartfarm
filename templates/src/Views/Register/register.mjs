@@ -136,12 +136,12 @@ async function submitUserRegisterInfo() {
 const checkResponse = async () => {
   const response = await submitUserRegisterInfo();
   console.log("response", response);
-  if (response.status === "success") {
+  if (response === "success") {
     location.replace("/users/sign-in/");
   }
 
-  if (response.status === 1002) {
-    alert(response.message); //"계정이 존재하지 않습니다.”
+  if (response === 1002) {
+    alert("계정이 존재하지 않습니다."); //"계정이 존재하지 않습니다."
   }
 }
 
