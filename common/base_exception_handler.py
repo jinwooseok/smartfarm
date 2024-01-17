@@ -9,13 +9,6 @@ from rest_framework import serializers
 
 def base_exception_handler(exc, context):
     logger = logging.getLogger(__name__)
-    
-    logger.error(f"[CUSTOM_EXCEPTION_HANDLER_ERROR]")
-    logger.error(f"[{datetime.now()}]")
-    logger.error(f"> exc")
-    logger.error(f"{exc}")
-    logger.error(f"> context")
-    logger.error(f"{context}")
 
     response = exception_handler(exc, context)
 
@@ -68,6 +61,13 @@ def base_exception_handler(exc, context):
             status_code = 500
             code = response.status_code
             msg = "unknown error"
+            
+        #서버측 에러 표현
+        logger.error(f"[CUSTOM_EXCEPTION_HANDLER_ERROR]")
+        logger.error(f"[{datetime.now()}]")
+        logger.error(f"> error : {exc}")
+        logger.error(f"> context : {context}")
+        logger.error(f"> detail : {msg}")
 
         response.status_code = status_code
 
