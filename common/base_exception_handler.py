@@ -6,13 +6,16 @@ from .base_exception import CustomBaseException
 from .exception_codes import STATUS_RSP_INTERNAL_ERROR
 import logging
 from rest_framework import serializers
-
+import traceback
 def base_exception_handler(exc, context):
     logger = logging.getLogger(__name__)
 
     response = exception_handler(exc, context)
 
-    logger.error(f"[ERROR] {datetime.now()}")
+    logger.error(f"\n[ERROR] {datetime.now()}")
+    logger.error(f"----------------------------------------")
+    traceback.print_exc()
+    logger.error(f"----------------------------------------")
     logger.error(f"> context : {context}")
     logger.error(f"> error : {exc}")
 
@@ -24,7 +27,7 @@ def base_exception_handler(exc, context):
         elif isinstance(exc, exceptions.AuthenticationFailed):
             status_code = 401
             code = response.status_code
-            msg = exc.detail
+            msg = "인증 실패"
         elif isinstance(exc, exceptions.NotAuthenticated):
             status_code = 401
             code = response.status_code
@@ -32,7 +35,7 @@ def base_exception_handler(exc, context):
         elif isinstance(exc, exceptions.PermissionDenied):
             status_code = 403
             code = response.status_code
-            msg = exc.detail
+            msg = "권한이 없습니다."
         elif isinstance(exc, exceptions.NotFound):
             status_code = 404
             code = response.status_code
@@ -67,7 +70,7 @@ def base_exception_handler(exc, context):
             msg = "unknown error occurred.",
 
         #서버측 에러 표현
-        logger.error(f"> {status_code}({code}) detail : {msg}")
+        logger.error(f"> {status_code}({code}) detail : {msg}\n")
 
         response.status_code = status_code
 
@@ -81,9 +84,6 @@ def base_exception_handler(exc, context):
         return response
     else:
         #서버측 에러 표현
-        logger.error(f"[ERROR] {datetime.now()}")
-        logger.error(f"> context : {context}")
-        logger.error(f"> error : {exc}")
-        logger.error(f"> {STATUS_RSP_INTERNAL_ERROR['status']} detail : {STATUS_RSP_INTERNAL_ERROR['message']}")
+        logger.error(f"> {STATUS_RSP_INTERNAL_ERROR['status']} detail : {STATUS_RSP_INTERNAL_ERROR['message']}\n")
 
         return Response(STATUS_RSP_INTERNAL_ERROR, status=500)
