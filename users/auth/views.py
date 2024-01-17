@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from .exceptions.auth_exceptions import *
 from common.validate_exception import ValidationException
 from drf_yasg.utils import swagger_auto_schema
+from common.response import ResponseBody
 class SignUpViewSet(viewsets.GenericViewSet):
     def page(self, request):
         #이미 로그인한 사람이라면 이용 불가
@@ -35,7 +36,7 @@ class SignUpViewSet(viewsets.GenericViewSet):
                 raise UserTelDuplicatedException()
             #DB에 저장
             serializer.save()
-            return Response(serializer.success(),status=201)
+            return Response(ResponseBody.generate(),status=201)
             #비밀번호는 argon2의 hash함수를 사용해 db에 저장
         else:
             raise ValidationException(serializer)
@@ -47,7 +48,7 @@ class SignUpViewSet(viewsets.GenericViewSet):
             if self.is_duplicated_email(serializer.validated_data['email']):
                 raise EmailDuplicatedException()
 
-            return Response(serializer.success(),status=200)
+            return Response(ResponseBody.generate(),status=200)
         else:
             raise ValidationException(serializer)
     #내부 사용 함수
@@ -84,10 +85,10 @@ class SignInViewSet(viewsets.GenericViewSet):
                 raise PasswordNotMatchedException()
 
             request.session['user'] = user.id
-            return Response(serializer.success(),status=200)
+            return Response(ResponseBody.generate(serializer),status=200)
         
         else:
-            raise ValidationException(serializer)
+            raise ValidationException()
         
     def is_correct_password(self, login_pw, user_pw):
         return PasswordHasher().verify(login_pw.encode(), user_pw.encode())
@@ -101,5 +102,5 @@ class SignOutViewSet(viewsets.GenericViewSet):
             raise exceptions.NotAuthenticated()
         
         request.session.flush()
-        return Response({"status":"success","message":"로그아웃에 성공했습니다."},status=200)
+        return Response(ResponseBody.generate(),status=200)
 

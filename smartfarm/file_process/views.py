@@ -4,6 +4,7 @@ from ..models import File
 from rest_framework import exceptions
 from .serializers import *
 from rest_framework.response import Response
+from common.response import *
 
 #파일 관련 뷰셋
 class FileViewSet(viewsets.GenericViewSet):
@@ -18,9 +19,8 @@ class FileViewSet(viewsets.GenericViewSet):
         if user is None:
             raise exceptions.NotAuthenticated()
         file_object = File.objects.filter(user=user)
-        serializer = FileSerializer(file_object, many=True)
-        print(serializer.data)
-        return Response(serializer.success(), status=200)
+        serializer = FileInfoSerializer(file_object, many=True)
+        return Response(ResponseBody.generate(serializer), status=200)
         
     def name_list(self, request):
         user = request.session.get('user')
@@ -28,7 +28,7 @@ class FileViewSet(viewsets.GenericViewSet):
             raise exceptions.NotAuthenticated()
         file_object = File.objects.filter(user=user)
         serializer = FileNameSerializer(file_object, many=True)
-        return Response(serializer.success(), status=200)
+        return Response(ResponseBody.generate(serializer), status=200)
     
     def save(self, request):
         serializer = FileSaveSerializer(data=request.data)

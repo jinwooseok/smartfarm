@@ -17,17 +17,9 @@ class SignUpSerializer(serializers.Serializer):
         )
         user.save()
     
-    def success(self):
-        return {"status":"success","message":"회원가입에 성공했습니다."}
-    
 class EmailValidationSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
-    
-    def success(self):
-        return {"status":"success","message":"중복되지 않는 이메일입니다."}
 
 class SignInSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
-    def success(self):
-        return {"status":"success","message":"로그인에 성공했습니다."}
