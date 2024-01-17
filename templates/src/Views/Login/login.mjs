@@ -13,7 +13,7 @@ const $passwordError = document.querySelector("#passwordError");
 const idPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
 
 // 입력 값 형식 검사
-function isValid() {
+const isValid = () => {
   if (idPattern.test($email.value) && $password.value.length >= 8) {
     $loginBtn.style.backgroundColor = "#007A33";
     $loginBtn.disabled = false;
@@ -43,7 +43,7 @@ const clickResponse = async () => {
   $passwordError.innerHTML = '';
 
   if (response.status === "success") {
-    // location.replace("/file-list/");
+    location.replace("/file-list/");
   }
 
   if (response.status === 452) {
