@@ -36,6 +36,9 @@ const submitLoginInfo = async () =>{
 // 버튼 클릭 결과
 const clickResponse = async () => {
   const response = await submitLoginInfo();
+
+  console.log("response",response);
+
   $EmailError.innerHTML = '';
   $passwordError.innerHTML = '';
 
@@ -44,9 +47,11 @@ const clickResponse = async () => {
   }
 
   if (response.status === 452) {
-    $EmailError.innerHTML = response.message; //"계정이 존재하지 않습니다."
-  } else if(response === 453) {
-    $passwordError.innerHTML = response.message; //"비밀번호가 일치하지 않습니다."
+    console.log("message", response.message)
+    $EmailError.textContent = response.message; //"계정이 존재하지 않습니다."
+  } else if(response.status === 453) {
+    console.log("message", response.message)
+    $passwordError.textContent = response.message; //"비밀번호가 일치하지 않습니다."
   }
 }
 
