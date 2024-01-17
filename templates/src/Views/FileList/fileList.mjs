@@ -5,7 +5,6 @@ const $$listAll = document.querySelectorAll(".list");
 
 const $search = document.querySelector("#search");
 
-
 let fileList = [
 	{
 		fileName: "예시_수정",
@@ -51,7 +50,6 @@ let fileList = [
 // 파일 목록 보여주는 함수
 const showFileList = (condition) => {
 	// 불러온 파일을 조건에 따라 보여주기
-
 	if (condition === "전체") {
 		for (let i = 0; i < fileList.length; i++) {
 			$$listAll[i].style.display = "flex";
@@ -68,13 +66,29 @@ const showFileList = (condition) => {
   }
 }
 
+// 클릭한 조건 css 변경
+const changeCss = (event) =>{
+	$$fileNameCondition.forEach((div) => {
+		div.style.backgroundColor = "#fff";
+		div.style.color = "#000";
+	});
+
+	const clickedDiv = event.currentTarget;
+	clickedDiv.style.backgroundColor = '#007A33';
+	clickedDiv.style.color = '#ffffff';
+}
+
+const handleFileNameCondition = (event) =>{
+	const condition = event.target.innerText;
+	showFileList(condition);
+	changeCss(event);
+}
+
 // 클릭한 조건 확인 및 html 수정 함수
 $$fileNameCondition.forEach((element) => {
-	element.addEventListener('click', () => {
-		const condition = element.querySelector('p').innerText;
-		showFileList(condition);
-	});
+	element.addEventListener('click', handleFileNameCondition);
 });
+
 
 // 체크한 파일 확인 함수
 
@@ -89,7 +103,6 @@ const searchInputTest = (event) => {
 }
 
 $search.addEventListener("keyup", searchInputTest);
-
 
 // 페이지 이동 함수
 

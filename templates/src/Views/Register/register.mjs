@@ -25,7 +25,7 @@ let checkCertificationNumber = false;
 async function checkDuplicateEmail(email) {
   const data = { registerID : email };
   const response = await API("./email/", "post", data);
-  return response.status;
+  return response;
 }
 
 function regEmail() {
