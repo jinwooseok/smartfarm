@@ -22,4 +22,4 @@ class FileSaveSerializer(serializers.Serializer):
     fileData = serializers.JSONField()
 
 class FileDeleteSerializer(serializers.Serializer):
-    fileName = serializers.CharField()
+    fileName = serializers.JSONField()

@@ -40,10 +40,10 @@ class FileViewSet(viewsets.GenericViewSet):
         serializer = FileSaveSerializer(data=request.data)
         
         if serializer.is_valid():
-            FileSaveService.excute(serializer, user)
+            FileSaveService(serializer, user).excute()
             return Response(ResponseBody.generate(),status=201)
         else:
-            raise ValidationException()
+            raise ValidationException(serializer)
     
     def delete(self, request):
         user = request.session.get('user')

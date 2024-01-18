@@ -85,10 +85,10 @@ class SignInViewSet(viewsets.GenericViewSet):
                 raise PasswordNotMatchedException()
 
             request.session['user'] = user.id
-            return Response(ResponseBody.generate(serializer),status=200)
+            return Response(ResponseBody.generate(),status=200)
         
         else:
-            raise ValidationException()
+            raise ValidationException(serializer)
         
     def is_correct_password(self, login_pw, user_pw):
         return PasswordHasher().verify(login_pw.encode(), user_pw.encode())
