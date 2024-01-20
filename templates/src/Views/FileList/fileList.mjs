@@ -3,7 +3,7 @@ import Logout from "/templates/src/Utils/Logout.mjs";
 
 const $checkAll = document.querySelector("#checkAll"); // 전체 선택 버튼
 
-const $$fileNameCondition = document.querySelectorAll(".fileNameCondition");
+const $$condition = document.querySelectorAll(".condition");
 
 const $AllTitle = document.querySelectorAll("#AllTitle");
 const $fileContainer = document.querySelector("#fileContainer");
@@ -15,48 +15,11 @@ const $logoutBtn = document.querySelector("#logoutBtn");
 
 $logoutBtn.addEventListener("click", Logout);
 
-let fileList = [
-	{
-		fileName: "예시_수정",
-		lastUpdateDate: "2024-01-01",
-	},
-	{
-		fileName: "예시_병합",
-		lastUpdateDate: "2024-01-01",
-	},
-	{
-		fileName: "예시_환경",
-		lastUpdateDate: "2024-01-01",
-	},
-	{
-		fileName: "예시_생육",
-		lastUpdateDate: "2024-01-01",
-	},
-	{
-		fileName: "예시_생산량",
-		lastUpdateDate: "2024-01-01",
-	},
-	{
-		fileName: "예시_생육_생산량_병합",
-		lastUpdateDate: "2024-01-01",
-	},
-	{
-		fileName: "예시_생육_환경_병합",
-		lastUpdateDate: "2024-01-01",
-	},
-	{
-		fileName: "예시",
-		lastUpdateDate: "2024-01-01",
-	},
-];
+let fileList;
 
-// (async function () {
-//   // 파일 불러오는 API
-//   const response = await API("/files/", "get");
-//   console.log(response);
-//   fileList = response.data; // 형식 = [{fileName": ,"lastUpdateDate":}, {fileName": ,"lastUpdateDate":},]
-//    setFileList();
-// }());
+const locationPage = (id, title) => {
+  console.log(id, title);
+}
 
 // 초기 파일 목록 만들기
 const setFileList = () => {
@@ -68,11 +31,20 @@ const setFileList = () => {
       <div class="fileTitle" id="AllTitle">
         <a href="#">${file.fileName}</a>
       </div>
-      <div class="uploadDate" id="uploadDate">
-        ${file.lastUpdateDate}
-      </div>
       <div class="lastUpdateDate" id="lastUpdateDate">
-        ${file.lastUpdateDate}
+        ${file.updatedDate}
+      </div>
+      <div class="revise" id="revise">
+      데이터 처리
+      </div>
+      <div class="analyze" id="analyze">
+        데이터 분석
+      </div>
+      <div class="ABMS" id="ABMS">
+        ABMS
+      </div>
+      <div class="merge" id="merge">
+        파일 병합
       </div>
     `;
 
@@ -81,7 +53,66 @@ const setFileList = () => {
   });
 };
 
-setFileList();
+const movePage = (id, title) => {
+  switch (id) {
+    case "revise" :
+      console.log(`/revise/${title}/`);
+      // location.href(`/revise/${title}/`);
+      break;
+    case "analyze" :
+      console.log(`/analyze/${title}/`);
+      // location.href(`/analyze/${title}/`);
+      break;
+    case "ABMS" :
+      console.log(`/abms/${title}/`);
+      // location.href(`/abms/${title}/`);
+      break;
+    case "merge" :
+      console.log(`/merge/`);
+      // location.href(`/merge/`);
+      break;
+    default :
+      alert("잘못된 요청입니다.");
+      break;
+  }
+}
+
+// 세팅 파일에 함수 넣기
+const setOnClick = () => {
+  const $$revise = document.querySelectorAll("#revise");
+  const $$analyze = document.querySelectorAll("#analyze");
+  const $$ABMS = document.querySelectorAll("#ABMS");
+  const $$merge = document.querySelectorAll("#merge");
+
+  $$revise.forEach((element) => {
+    element.addEventListener('click', () => {
+      movePage(element.id, element.parentNode.childNodes[3].innerText);
+    });
+  });
+  $$analyze.forEach((element) => {
+    element.addEventListener('click', () => {
+      movePage(element.id, element.parentNode.childNodes[3].innerText);
+    });
+  });
+  $$ABMS.forEach((element) => {
+    element.addEventListener('click', () => {
+      movePage(element.id, element.parentNode.childNodes[3].innerText);
+    });
+  });
+  $$merge.forEach((element) => {
+    element.addEventListener('click', () => {
+      movePage(element.id, element.parentNode.childNodes[3].innerText);
+    });
+  });
+};
+
+(async function () {
+  // 파일 불러오는 API
+  const response = await API("/files/", "get");
+  fileList = response.data; // 형식 = [{fileName": ,"lastUpdateDate":}, {fileName": ,"lastUpdateDate":},]
+  setFileList();
+  setOnClick();
+}());
 
 // 파일 목록 보여주는 함수
 const showFileList = (condition) => {
@@ -105,7 +136,7 @@ const showFileList = (condition) => {
 
 // 클릭한 조건 css 변경
 const changeCss = (event) =>{
-	$$fileNameCondition.forEach((div) => {
+	$$condition.forEach((div) => {
 		div.style.backgroundColor = "#fff";
 		div.style.color = "#000";
 	});
@@ -127,7 +158,7 @@ const handleFileNameCondition = (event) =>{
 }
 
 // 클릭한 조건 확인 및 html 수정 함수
-$$fileNameCondition.forEach((element) => {
+$$condition.forEach((element) => {
 	element.addEventListener('click', handleFileNameCondition);
 });
 
@@ -135,8 +166,8 @@ $$fileNameCondition.forEach((element) => {
 function AllCheck() {
   const $AllCheckBox = document.querySelectorAll(".check");
   const $$listAll = document.querySelectorAll(".list");
-  
-	for (let i = 0; i < $AllCheckBox.length; i++) {
+
+  for (let i = 0; i < $AllCheckBox.length; i++) {
     if ($$listAll[i].style.display === "flex") {
       $AllCheckBox[i].checked = this.checked;
     }

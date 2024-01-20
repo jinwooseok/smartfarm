@@ -22,46 +22,47 @@
 
 </head>
 <body>
-	<div class="container">	
-		<li class="upperContainer">
+	<div class="containerDIV">	
+		<div class="upperDIV">
 			<div class="title">
 				전남대학교</br>융합 빅데이터 연구실
 			</div>
-			<div class="logoutContainer">
+			<div class="logoutDIV">
 				<a class="logoutBtn" id="logoutBtn">로그아웃</a>
 			</div>
-		</li>
+		</div>
 		
-		<li class="textSelectContainer">
-			<div class="fileNameCondition all"><p>전체</p></div>
-			<div class="fileNameCondition env"><p>환경</p></div>
-			<div class="fileNameCondition growth"><p>생육</p></div>
-			<div class="fileNameCondition output"><p>생산량</p></div>
-			<div class="fileNameCondition revise"><p>수정</p></div>
-			<div class="fileNameCondition merge"><p>병합</p></div>
-		</li>
 		
-		<li class="fileListContainer">
-			<div class="explain">
+		<div class="lowerDIV">
+			<div class="explainDIV">
 				<h3>파일 관리</h3>
 				<p>파일 삭제, 파일 업로드, 파일 다운로드를 할 수 있고</p>
 				<p>파일을 수정하기 위한 다른 창으로 넘어갈 수 있습니다.</p>
 			</div>
-			<div class="Box">
-				<div class="listContainer" id="listContainer">
-					<div class="listTitle">
+			<li class="conditionSelectDIV">
+				<div class="condition all"><p>전체</p></div>
+				<div class="condition env"><p>환경</p></div>
+				<div class="condition growth"><p>생육</p></div>
+				<div class="condition output"><p>생산량</p></div>
+				<div class="condition revise"><p>수정</p></div>
+				<div class="condition merge"><p>병합</p></div>
+			</li>
+			<div class="fileManagerDIV">
+				<div class="fileListDIV" id="fileListDIV">
+					<div class="listHeader">
 						<input type="checkbox" class="checkAll" id="checkAll">
 						<div class="fileTitle" id="fileTitle">
 							파일명
 						</div>
-						<div class="uploadDate" id="uploadDate">
-							업로드 날짜
-						</div>
 						<div class="lastUpdateDate" id="lastUpdateDate">
-							마지막 수정 날짜
+							수정 날짜
+						</div>
+						<div class="fileMove" id="fileMove">
+							작업 선택
 						</div>
 					</div>
-					<div class="fileContainer" id="fileContainer">
+
+					<div class="fileContainer" id="fileContainer">				
 					</div>
 				</div>
 
@@ -75,7 +76,7 @@
 				</div>
 			</div>
 
-		</li>
+		</div>
 	</div>
 		<!-- 파일 등록 클릭 시 팝업 창 -->
 	<dialog class="uploadContainer" id="uploadContainer">
