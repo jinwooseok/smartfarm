@@ -13,10 +13,12 @@ const $fileName = document.querySelector("#fileName");
 
 // 파일 업로드 버튼 팝업창 관리 함수
 $upload.addEventListener("click", () => {
+	$uploadContainer.style.display = "flex";
 	$uploadContainer.showModal();
 })
 
 $closeUploadPopup.addEventListener("click", () => {
+  $uploadContainer.style.display = "none";
   $uploadContainer.close();
 });
 
@@ -37,7 +39,6 @@ const readFileContent = (file) => {
     const fileContent =  event.target.result;
     const workbook = XLSX.read(fileContent, { type: "binary" });
     sheetData = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[workbook.SheetNames[0]]);
-    console.log("sheetData", sheetData);
     Loading.CloseLoading();
   };
 
@@ -84,11 +85,16 @@ const uploadFile = async () => {
 		fileName: $fileName.value,
 		fileData: JSON.stringify(sheetData),
 	};
-	const response = await API("", "" , data);
+
+	const response = await API("/files/save/", "post" , data);
+
+	if (response.status === "success") {
+		location.replace("/file-list/");
+	}
 }
 
 // 업로드 하고 다시 페이지 호출
-// $fileUpload.addEventListener("click", uploadFile);
+$fileUpload.addEventListener("click", uploadFile);
 
 
 // 파일 업로드 함수

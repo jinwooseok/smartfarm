@@ -2,7 +2,7 @@
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
-	overflow-y: hidden;
+	/* overflow-y: hidden; */
 }
 
 ul,
@@ -14,42 +14,19 @@ a {
 	text-decoration: none;
 }
 
-.container {
-	display: grid;
+.containerDIV {
+	width: 1280px;
 	height: 100%;
-	grid-template-columns: repeat(7, 1fr);
-	grid-template-rows: repeat(8, minmax(100px, 1fr));
-	grid-template-areas:
-		"상단 상단 상단 상단 상단 상단 상단"
-		"옆 나머지 나머지 나머지 나머지 나머지 나머지"
-		"옆 나머지 나머지 나머지 나머지 나머지 나머지"
-		"옆 나머지 나머지 나머지 나머지 나머지 나머지"
-		"옆 나머지 나머지 나머지 나머지 나머지 나머지"
-		"옆 나머지 나머지 나머지 나머지 나머지 나머지"
-		"옆 나머지 나머지 나머지 나머지 나머지 나머지"
-		"옆 나머지 나머지 나머지 나머지 나머지 나머지"
-	;
+	margin: 0 auto;
 }
 
-li:nth-child(1) {
-	grid-area: 상단;
-}
-
-li:nth-child(2) {
-	grid-area: 옆;
-}
-
-li:nth-child(3) {
-	grid-area: 나머지;
-}
-
-.upperContainer {
+.upperDIV {
 	height: 100px;
 	border: 1px solid #000;
 	position: relative;
 }
 
-.upperContainer .title {
+.upperDIV .title {
 	width: 200px;
 	height: 50px;
 	margin-top: 25px;
@@ -60,7 +37,7 @@ li:nth-child(3) {
 	font-weight: bold;
 }
 
-.upperContainer .logoutContainer {
+.upperDIV .logoutDIV {
 	position: absolute;
 	top: calc((100px - 28px)/2);
 	right: 25px;
@@ -69,7 +46,7 @@ li:nth-child(3) {
 	text-align: center;
 }
 
-.logoutBtn {
+.upperDIV .logoutDIV .logoutBtn {
 	position: relative;
 	padding: 4px 12px;
 	border: 1px solid rgba(0, 0, 0, 0.21);
@@ -88,53 +65,66 @@ li:nth-child(3) {
 	background: #87a86f;
 }
 
-.textSelectContainer {
-	border-right: 1px solid #000;
-
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	align-items: center;
+.lowerDIV {
+	width: 1000px;
+	margin: 0 auto;
 }
 
-.textSelectContainer>* {
-	width: 100%;
-
-	font-size: 15px;
-	border: 1px #000 solid;
-}
-
-.all {
-	background-color: #007A33;
-	color: #fff;
-}
-
-.fileNameCondition>p {
-	padding: 10px 8px;
-	margin-left: 10px;
-}
-
-.fileListContainer .explain {
+.lowerDIV .explainDIV {
 	margin: 0 auto;
 	margin-top: 15px;
 
 	text-align: center;
 }
 
-.fileListContainer .explain h3 {
+.lowerDIV .explainDIV h3 {
 	font-size: 30px;
 	font-weight: bold;
 	margin-bottom: 5px;
 }
 
-.fileListContainer .explain p {
+.lowerDIV .explainDIV p {
 	font-size: 15px;
 	margin-bottom: 0;
 	margin-top: 0;
 }
 
-.Box {
-	width: 800px;
+.lowerDIV .conditionSelectDIV {
+	width: 1000px;
+	margin: 0 auto;
+	margin-top: 20px;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	align-items: center;
+}
+
+.lowerDIV .conditionSelectDIV>* {
+	width: 150px;
+	border: 1px #000 solid;
+	border-radius: 20px;
+
+	font-size: 15px;
+	text-align: center;
+}
+
+.lowerDIV .conditionSelectDIV:last-child {
+	margin-left: 0px;
+}
+
+.lowerDIV .all {
+	background-color: #007A33;
+	color: #fff;
+}
+
+.lowerDIV .condition>p {
+	padding: 10px 8px;
+}
+
+/* 파일 목록 관리 */
+.fileManagerDIV {
+	width: 1000px;
 	height: 480px;
 	margin: 0 auto;
 	margin-top: 20px;
@@ -143,9 +133,8 @@ li:nth-child(3) {
 	flex-direction: column;
 }
 
-/* fileList */
-.listContainer {
-	width: 800px;
+.fileManagerDIV .fileListDIV {
+	width: 1000px;
 	height: 400px;
 	border: 1px solid #000;
 	border-radius: 10px;
@@ -153,64 +142,36 @@ li:nth-child(3) {
 	overflow-y: hidden;
 }
 
-.listContainer .listTitle {
+.fileListDIV .listHeader {
 	width: 95%;
 	margin: 5px auto;
 
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
-	justify-content: center;
+	justify-content: flex-start;
 	align-items: center;
 
 	text-align: center;
 }
 
-.listContainer .fileContainer {
-	width: 95%;
-	height: calc(400px - 50px);
-	margin: 5px auto;
-
-	overflow-y: auto;
+.fileListDIV .listHeader>*{
+	margin-left: 10px;
 }
 
-.listContainer .fileContainer .list {
-	width: 100%;
-	margin-bottom: 3px;
-
-	display: flex;
-	flex-direction: row;
-	flex-wrap: nowrap;
-	justify-content: center;
-	align-items: center;
-
-	text-align: center;
-}
-
-.listContainer .listTitle>*,
-.listContainer .list>* {
-	margin: 0 10px;
-}
-
-.listContainer .listTitle {
+.fileListDIV .listHeader {
 	border-bottom: 1px solid #999;
 }
 
-.listContainer .list>* {
-	border: 1px solid #000;
-
-	font-size: 12px;
-}
-
-.listContainer .listTitle .checkAll,
-.listContainer .list .check {
+.fileListDIV .listHeader .checkAll,
+.fileListDIV .list .check {
 	width: 16px;
 	height: 16px;
 }
 
-.listContainer .listTitle .fileTitle,
-.listContainer .list .fileTitle {
-	width: 500px;
+.fileListDIV .listHeader .fileTitle,
+.fileListDIV .list .fileTitle {
+	width: 400px;
 	height: 26px;
 	line-height: 26px;
 
@@ -219,24 +180,23 @@ li:nth-child(3) {
 	white-space: nowrap;
 }
 
-.listContainer .list .fileTitle a{
+
+.fileListDIV .list .fileTitle a{
 	color: #000;
 }
 
-.listContainer .list .fileTitle {
+.fileListDIV .list .fileTitle {
 	text-align: left;
 	padding-left: 5px;
 }
 
-.listContainer .list .fileTitle :hover {
+.fileListDIV .list .fileTitle :hover {
 	cursor: pointer;
 	text-decoration: underline;
 }
 
-.listContainer .listTitle .uploadDate,
-.listContainer .listTitle .lastUpdateDate,
-.listContainer .list .uploadDate,
-.listContainer .list .lastUpdateDate {
+.fileListDIV .lastUpdateDate,
+.list .lastUpdateDate{
 	width: 150px;
 	height: 26px;
 	line-height: 26px;
@@ -245,6 +205,52 @@ li:nth-child(3) {
 	overflow: hidden;
 	white-space: nowrap;
 }
+
+.fileListDIV .fileMove{
+	text-align: center;
+	width: 360px;
+}
+
+.fileListDIV .fileContainer {
+	width: 95%;
+	height: 350px;
+	margin: 5px auto;
+}
+
+.fileContainer .list {
+	width: 100%;
+	margin: 5px auto;
+
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: center;
+
+	text-align: center;
+}
+
+.fileContainer .list>* {
+	border: 1px solid #000;
+	font-size: 12px;
+	margin-left: 10px;
+}
+
+.list .revise,
+.list .analyze,
+.list .ABMS,
+.list .merge {
+	width: 80px;
+	height: 26px;
+	line-height: 26px;
+}
+
+.list .revise:hover,
+.list .analyze:hover,
+.list .ABMS:hover,
+.list .merge:hover {
+	cursor: pointer;
+} 
 
 /* scroll */
 .fileContainer::-webkit-scrollbar {
@@ -256,7 +262,7 @@ li:nth-child(3) {
 }
 
 .searchBox {
-	width: 800px;
+	width: 1000px;
 	margin-top: 10px;
 
 	display: inline-block;
@@ -288,7 +294,7 @@ li:nth-child(3) {
 	border: 1px solid #000;
 	border-radius: 20px;
 
-	display: flex;
+	display: none;
 	flex-direction: column;
 	justify-content: start;
 	align-items: center;
