@@ -20,7 +20,8 @@ urlpatterns = [
     path('files/file-name/',FileViewSet.as_view({'get':'name_list'})),
     path('files/save/',FileViewSet.as_view({'post':'save'})),
     path('files/delete/',FileViewSet.as_view({'delete':'delete'})),
-    
+    path('files/download/',FileViewSet.as_view({'post':'download'})),
+
     #파일 데이터 관련
     path('files/<str:file_title>/data/',FileDataViewSet.as_view({'get':'details'})),
     path('files/<str:file_title>/data/summary/',FileDataViewSet.as_view({'get':'summary'})),

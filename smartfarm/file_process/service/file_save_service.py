@@ -12,7 +12,7 @@ class FileSaveService():
         self.file_root = None
         self.file_data = serializer.validated_data['fileData']
 
-    def excute(self):
+    def execute(self):
         #파일명 중복 체크
         file_title = self.convert_file_name(self.user, self.file_title)
         #데이터 배열을 csv파일로 만들기

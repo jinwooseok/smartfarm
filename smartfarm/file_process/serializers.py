@@ -16,10 +16,9 @@ class FileNameSerializer(serializers.ModelSerializer):
         model = File
         fields = ('fileName',)
     
-    def get_file_root(self):
-        file_object = File.objects.get(file_title=self.validated_data['fileName'])
-        file_root = file_object.file_root
-        return file_root
+    def get_file_root(self, user):
+        file_object = File.objects.get(user=user, file_title=self.data['fileName'])
+        return file_object.file_root
         
 
 class FileSaveSerializer(serializers.Serializer):
@@ -28,3 +27,10 @@ class FileSaveSerializer(serializers.Serializer):
 
 class FileDeleteSerializer(serializers.Serializer):
     fileName = serializers.JSONField()
+
+    def get_file_root(self, user):
+        file_object = File.objects.get(user=user, file_title=self.data['fileName'])
+        return file_object.file_root
+    
+    def get_file_object(self, user):
+        return File.objects.get(user=user, file_title=self.data['fileName'])

@@ -39,7 +39,7 @@ class FileViewSet(viewsets.GenericViewSet):
         serializer = FileSaveSerializer(data=request.data)
         
         if serializer.is_valid():
-            FileSaveService(serializer, user).excute()
+            FileSaveService(serializer, user).execute()
             return Response(ResponseBody.generate(),status=201)
         else:
             raise ValidationException(serializer)
@@ -52,7 +52,7 @@ class FileViewSet(viewsets.GenericViewSet):
         serializer = FileDeleteSerializer(data=request.data)
 
         if serializer.is_valid():
-            FileDeleteService.excute(serializer, user)
+            FileDeleteService(serializer, user).execute()
             return Response(ResponseBody.generate(),status=200)
         return 0
     
@@ -63,8 +63,8 @@ class FileViewSet(viewsets.GenericViewSet):
         
         serializer = FileNameSerializer(data=request.data)
 
-        if serializers.is_valid():
-            FileDownloadService.excute(serializer, user)
+        if serializer.is_valid():
+            FileDownloadService(serializer, user).execute()
             return Response(ResponseBody.generate(),status=200)
 
 

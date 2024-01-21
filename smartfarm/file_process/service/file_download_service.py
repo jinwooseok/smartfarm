@@ -1,17 +1,17 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 import os
 from django.conf import settings
-from ...models import File
+from ..utils.utils import *
 
 class FileDownloadService:
     
-    def __init__(self, serializer):
-        self.file_name = serializer.validated_data['fileName']
-        self.file_path = os.path.join(settings.MEDIA_ROOT, serializer.get_file_root())
+    def __init__(self, serializer, user):
+        self.file_name = serializer.data['fileName']
+        self.file_root = serializer.get_file_root(user)
     
     def execute(self):
-        print(self.file_path)
-        return self.attach_file(self.file_name, self.file_path)
+        file_absolute_path = search_file_absolute_path(self.file_root)
+        return self.attach_file(self.file_name, file_absolute_path)
 
     @staticmethod
     def attach_file(file_name, file_path):
