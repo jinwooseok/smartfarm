@@ -64,8 +64,7 @@ class FileViewSet(viewsets.GenericViewSet):
         serializer = FileNameSerializer(data=request.data)
 
         if serializer.is_valid():
-            FileDownloadService(serializer, user).execute()
-            return Response(ResponseBody.generate(),status=200)
+            return Response(ResponseBody.generate(FileDownloadService(serializer, user).execute()),status=200)
 
 
 # def fileListView(request):

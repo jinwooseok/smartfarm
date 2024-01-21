@@ -1,7 +1,16 @@
 from rest_framework import viewsets
 from django.shortcuts import render
 from ..models import File
-#데이터 관련 뷰셋
+from rest_framework import exceptions
+from .serializers import *
+from rest_framework.response import Response
+from common.response import *
+from ..file_process.serializers import FileNameSerializer
+from common.response import ResponseBody
+
+from .service.get_file_data_service import GetFileDataService
+from .service.get_data_summary_service import GetDataSummaryService
+
 class FileDataViewSet(viewsets.ModelViewSet):
 
     queryset = File.objects.all()
@@ -11,9 +20,25 @@ class FileDataViewSet(viewsets.ModelViewSet):
     def page(self, request):
         return render(request, 'src/Views/FileList/fileList.html')
       
-    def details():
-        return 0
-    def summary():
+    def details(self, request, file_title):
+        user = request.session.get('user')
+        if user is None:
+            raise exceptions.NotAuthenticated()
+        
+        serializer = FileNameSerializer(data={'fileName': file_title})
+        
+        if serializer.is_valid():
+            return Response(ResponseBody.generate(GetFileDataService(serializer, user).execute()), status=200)     
+    
+    def summary(self, request, file_title):
+        user = request.session.get('user')
+        if user is None:
+            raise exceptions.NotAuthenticated()
+        
+        serializer = FileNameSerializer(data={'fileName': file_title})
+
+        if serializer.is_valid():
+            return Response(ResponseBody.generate(GetDataSummaryService(serializer, user).execute()), status=200)
         return 0
     def process_outlier():
         return 0

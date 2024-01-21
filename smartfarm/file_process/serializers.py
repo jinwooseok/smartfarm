@@ -19,6 +19,9 @@ class FileNameSerializer(serializers.ModelSerializer):
     def get_file_root(self, user):
         file_object = File.objects.get(user=user, file_title=self.data['fileName'])
         return file_object.file_root
+    
+    def get_file_object(self, user):
+        return File.objects.get(user=user, file_title=self.data['fileName'])
         
 
 class FileSaveSerializer(serializers.Serializer):
