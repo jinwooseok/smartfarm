@@ -12,9 +12,6 @@ from drf_yasg.utils import swagger_auto_schema
 from common.response import ResponseBody
 class SignUpViewSet(viewsets.GenericViewSet):
     def page(self, request):
-        #이미 로그인한 사람이라면 이용 불가
-        if request.session.get('user') is not None:
-            raise exceptions.PermissionDenied()
         #로그인 하지 않았다면 페이지 렌더링
         return render(request, 'src/Views/Register/register.html')
     
@@ -62,8 +59,6 @@ class SignUpViewSet(viewsets.GenericViewSet):
 
 class SignInViewSet(viewsets.GenericViewSet):
     def page(self, request):
-        if request.session.get('user') is not None:
-            raise exceptions.PermissionDenied()
         return render(request, 'src/Views/Login/login.html')
     
     @swagger_auto_schema(request_body=SignInSerializer)

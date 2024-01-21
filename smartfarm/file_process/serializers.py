@@ -15,6 +15,11 @@ class FileNameSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
         fields = ('fileName',)
+    
+    def get_file_root(self):
+        file_object = File.objects.get(file_title=self.validated_data['fileName'])
+        file_root = file_object.file_root
+        return file_root
         
 
 class FileSaveSerializer(serializers.Serializer):

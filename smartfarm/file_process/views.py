@@ -7,14 +7,13 @@ from rest_framework.response import Response
 from common.response import *
 from .service.file_save_service import FileSaveService
 from .service.file_delete_service import FileDeleteService
+from .service.file_download_service import FileDownloadService
 from common.validate_exception import ValidationException
 
 #파일 관련 뷰셋
 class FileViewSet(viewsets.GenericViewSet):
 
     def page(self, request):
-        if request.session.get('user') is None:
-            raise exceptions.NotAuthenticated()
         return render(request, 'src/Views/FileList/fileList.html')
 
     def list(self, request):
@@ -56,6 +55,18 @@ class FileViewSet(viewsets.GenericViewSet):
             FileDeleteService.excute(serializer, user)
             return Response(ResponseBody.generate(),status=200)
         return 0
+    
+    def download(self, request):
+        user = request.session.get('user')
+        if user is None:
+            raise exceptions.NotAuthenticated()
+        
+        serializer = FileNameSerializer(data=request.data)
+
+        if serializers.is_valid():
+            FileDownloadService.excute(serializer, user)
+            return Response(ResponseBody.generate(),status=200)
+
 
 # def fileListView(request):
 #     user = loginValidator(request)

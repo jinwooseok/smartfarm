@@ -8,7 +8,9 @@ class FileDataViewSet(viewsets.ModelViewSet):
 
     # def page(self, request):
     #     return render(request, 'src/Views/')
-
+    def page(self, request):
+        return render(request, 'src/Views/FileList/fileList.html')
+      
     def details():
         return 0
     def summary():
