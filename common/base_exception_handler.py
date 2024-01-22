@@ -5,19 +5,18 @@ from rest_framework.response import Response
 from .base_exception import CustomBaseException
 from .exception_codes import STATUS_RSP_INTERNAL_ERROR
 import logging
-from rest_framework import serializers
 import traceback
 def base_exception_handler(exc, context):
-    logger = logging.getLogger(__name__)
+    logger = logging.getLogger('django.request')
 
     response = exception_handler(exc, context)
 
-    logger.error(f"\n[ERROR] {datetime.now()}")
-    logger.error(f"----------------------------------------")
+    logger.info(f"\n[ERROR] {datetime.now()}")
+    logger.info(f"----------------------------------------")
     traceback.print_exc()
-    logger.error(f"----------------------------------------")
-    logger.error(f"> context : {context}")
-    logger.error(f"> error : {exc}")
+    logger.info(f"----------------------------------------")
+    logger.info(f"> context : {context}")
+    logger.info(f"> error : {exc}")
 
     if response is not None:
         if isinstance(exc, exceptions.ParseError):

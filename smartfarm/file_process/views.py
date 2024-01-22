@@ -22,7 +22,7 @@ class FileViewSet(viewsets.GenericViewSet):
             raise exceptions.NotAuthenticated()
         file_object = File.objects.filter(user=user)
         serializer = FileInfoSerializer(file_object, many=True)
-        return Response(ResponseBody.generate(serializer), status=200)
+        return Response(ResponseBody.generate(serializer=serializer), status=200)
         
     def name_list(self, request):
         user = request.session.get('user')
@@ -30,7 +30,7 @@ class FileViewSet(viewsets.GenericViewSet):
             raise exceptions.NotAuthenticated()
         file_object = File.objects.filter(user=user)
         serializer = FileNameSerializer(file_object, many=True)
-        return Response(ResponseBody.generate(serializer), status=200)
+        return Response(ResponseBody.generate(serializer=serializer), status=200)
     
     def save(self, request):
         user = request.session.get('user')
@@ -54,7 +54,8 @@ class FileViewSet(viewsets.GenericViewSet):
         if serializer.is_valid():
             FileDeleteService(serializer, user).execute()
             return Response(ResponseBody.generate(),status=200)
-        return 0
+        else:
+            raise ValidationException(serializer)
     
     def download(self, request):
         user = request.session.get('user')
@@ -64,8 +65,9 @@ class FileViewSet(viewsets.GenericViewSet):
         serializer = FileNameSerializer(data=request.data)
 
         if serializer.is_valid():
-            return Response(ResponseBody.generate(FileDownloadService(serializer, user).execute()),status=200)
-
+            return Response(ResponseBody.generate(data=FileDownloadService(serializer, user).execute()),status=200)
+        else:
+            raise ValidationException(serializer)
 
 # def fileListView(request):
 #     user = loginValidator(request)

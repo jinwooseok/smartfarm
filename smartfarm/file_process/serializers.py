@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from ..models import File
-
+from .exceptions.file_exception import FileNotFoundException
 class FileInfoSerializer(serializers.ModelSerializer):
     fileName = serializers.CharField(source='file_title')
     createdDate = serializers.DateTimeField(source='created_at')
@@ -17,11 +17,19 @@ class FileNameSerializer(serializers.ModelSerializer):
         fields = ('fileName',)
     
     def get_file_root(self, user):
-        file_object = File.objects.get(user=user, file_title=self.data['fileName'])
+        try:
+            print(user, self.data['fileName'])
+            file_object = File.objects.get(user=user, file_title=self.data['fileName'])
+        except:
+            raise FileNotFoundException()
+        
         return file_object.file_root
     
     def get_file_object(self, user):
-        return File.objects.get(user=user, file_title=self.data['fileName'])
+        try:
+            return File.objects.get(user=user, file_title=self.data['fileName'])
+        except:
+            raise FileNotFoundException()
         
 
 class FileSaveSerializer(serializers.Serializer):
