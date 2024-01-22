@@ -28,7 +28,7 @@ class FileDataViewSet(viewsets.ModelViewSet):
         serializer = FileNameSerializer(data={'fileName': file_title})
         
         if serializer.is_valid():
-            return Response(ResponseBody.generate(GetFileDataService(serializer, user).execute()), status=200)     
+            return Response(ResponseBody.generate(data=GetFileDataService(serializer, user).execute()), status=200)     
     
     def summary(self, request, file_title):
         user = request.session.get('user')
@@ -38,7 +38,7 @@ class FileDataViewSet(viewsets.ModelViewSet):
         serializer = FileNameSerializer(data={'fileName': file_title})
 
         if serializer.is_valid():
-            return Response(ResponseBody.generate(GetDataSummaryService(serializer, user).execute()), status=200)
+            return Response(ResponseBody.generate(data=GetDataSummaryService(serializer, user).execute()), status=200)
         return 0
     def process_outlier():
         return 0

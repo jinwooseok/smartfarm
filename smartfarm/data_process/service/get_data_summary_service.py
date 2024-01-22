@@ -16,6 +16,6 @@ class GetDataSummaryService():
         dataFrame = GetFileDataService.file_to_df(file_absolute_path)
         
         data = DataProcess.round_converter(dataFrame)
-        data = DataProcess.non_to_blank(data) 
+        data = DataProcess.nan_to_string(data) 
         return DataProcess.to_summary(data)
         # return json.loads(DataProcess.df_to_json_string(data))

@@ -14,8 +14,9 @@ class GetFileDataService():
         file_absolute_path = search_file_absolute_path(self.file_root)
         dataFrame = GetFileDataService.file_to_df(file_absolute_path)
         data = DataProcess.round_converter(dataFrame)
-        data = DataProcess.non_to_blank(data) 
-        return json.loads(DataProcess.df_to_json_string(data))
+        data = DataProcess.nan_to_string(data) 
+        print(dataFrame.dtypes)
+        return DataProcess.df_to_json_object(data)
     
     @staticmethod
     def file_to_df(file_absolute_path):

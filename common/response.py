@@ -4,8 +4,10 @@ class ResponseBody():
         self.data = data
 
     @staticmethod
-    def generate(serializer=None):
-        if serializer is not None:
+    def generate(serializer=None, data=None):
+        if data is not None:
+            instance = ResponseBody(data = data)
+        elif serializer is not None:
             instance = ResponseBody(data = serializer.data)
         else:
             instance = ResponseBody()

@@ -18,37 +18,42 @@ class DataProcess:
         return data
     
     @staticmethod
-    def non_to_blank(data):
-        return data.replace({np.nan: ""})
+    def nan_to_string(data, string=""):
+        return data.replace({np.nan: string})
     
     @staticmethod
-    def df_to_json_string(data):
-        return data.to_json(orient="records",force_ascii=False)
+    def df_to_json_string(data, orient="records"):
+        return data.to_json(orient=orient,force_ascii=False)
+
+    @staticmethod
+    def df_to_json_object(data, orient="records"):
+        return json.loads(data.to_json(orient=orient,force_ascii=False))
     #데이터 변경, 결측치,이상치 처리
 
     @staticmethod
     def to_summary(data):
+        drop_list = []
         for column in data.columns:
             numeric_series = pd.to_numeric(data[column], errors='coerce').astype(float)
             if numeric_series.notnull().sum() <= 1:
-                numeric_series.drop(column, axis=1, inplace=True)
+                drop_list.append(column)
+        
+        data = DataProcess.drop_columns(data, drop_list)
+            
         null_count=pd.DataFrame(data.isnull().sum()).T
         null_count.index=["Null_count"]
-        try:
-            numeral_data = data.describe().iloc[[4,5,6,1,3,7],:]
-            numeral_data.index = ["Q1","Q2","Q3","mean","min","max"]
-            summary = pd.concat([null_count,numeral_data], ignore_index=False)
-            summary = summary.replace({np.nan: "-"})#결측치를 처리해줌
-            summary = summary.round(2)
 
-        except IndexError:
-            numeral_data = pd.DataFrame(index = ["Q1","Q2","Q3","mean","min","max"], columns = data.columns)
-            summary = pd.concat([null_count,numeral_data], ignore_index=False)
-            summary = summary.replace({np.nan: "-"})#결측치를 처리해줌
-        summary_json = summary.to_json(orient="columns",force_ascii=False)
-        #json문자열 to json 객체
-        return json.loads(summary_json)
+        statistic_info = data.describe().iloc[[4,5,6,1,3,7],:]
+        statistic_info.index = ["Q1","Q2","Q3","mean","min","max"]
+        summary = pd.concat([null_count,statistic_info], ignore_index=False)
+        summary = DataProcess.nan_to_string(summary, "-")
+        summary = DataProcess.round_converter(summary)
+
+        return DataProcess.df_to_json_object(summary, orient="columns")
     
+    @staticmethod
+    def drop_columns(data, columns):
+        return data.drop(columns, axis=1)
     
     @staticmethod
     def dataIntegrator(data1, data2):
