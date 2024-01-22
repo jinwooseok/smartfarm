@@ -288,7 +288,7 @@ a {
 	cursor: pointer;
 }
 
-.uploadContainer {
+.uploadDialog {
 	width: 500px;
 	height: 300px;
 	border: 1px solid #000;
@@ -352,7 +352,7 @@ a {
 	font-size: 13px;
 }
 
-.buttonContainer {
+.buttonDIV {
 	margin-top: 10px;
 
 	display: flex;
@@ -361,11 +361,11 @@ a {
 	align-items: center;
 }
 
-.buttonContainer input[type="file"] {
+.buttonDIV input[type="file"] {
 	display: none;
 }
 
-.buttonContainer label,
+.buttonDIV label,
 .fileUpload,
 .closeUploadPopup {
 	display: inline-block;
