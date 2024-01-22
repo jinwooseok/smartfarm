@@ -42,7 +42,7 @@ body {
   display: none;
 }
 
-.registerContainer {
+.registerDIV {
   width: 350px;
   height: 600px;
 
@@ -60,7 +60,7 @@ body {
   justify-content: center;
 }
 
-.registerContainer .registerLogo {
+.registerDIV .registerLogo {
   margin-bottom: 15px;
 
   color: #007A33;
@@ -68,7 +68,7 @@ body {
   font-weight: bold;
 }
 
-.registerContainer .registerForm {
+.registerDIV .registerForm {
   width: 300px;
 
   display: flex;

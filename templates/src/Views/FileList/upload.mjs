@@ -1,7 +1,7 @@
 import API from "/templates/src/Utils/API.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
 
-const $uploadContainer = document.querySelector("#uploadContainer");
+const $uploadDialog = document.querySelector("#uploadDialog");
 const $upload = document.querySelector("#upload");
 const $fileUpload = document.querySelector("#fileUpload");
 const $closeUploadPopup = document.querySelector("#closeUploadPopup");
@@ -13,13 +13,13 @@ const $fileName = document.querySelector("#fileName");
 
 // 파일 업로드 버튼 팝업창 관리 함수
 $upload.addEventListener("click", () => {
-	$uploadContainer.style.display = "flex";
-	$uploadContainer.showModal();
+	$uploadDialog.style.display = "flex";
+	$uploadDialog.showModal();
 })
 
 $closeUploadPopup.addEventListener("click", () => {
-  $uploadContainer.style.display = "none";
-  $uploadContainer.close();
+  $uploadDialog.style.display = "none";
+  $uploadDialog.close();
 });
 
 let selectedFile;
