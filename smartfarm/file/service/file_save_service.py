@@ -8,8 +8,8 @@ from django.db import transaction
 from ..utils.utils import *
 from ..exceptions.file_exception import *
 
-from ...feature_process.serializers import FeatureSerializer
-from ...feature_process.service.feature_service import FeatureService
+from ...feature.serializers import FeatureSerializer
+from ...feature.service.feature_service import FeatureService
 from common.validate_exception import ValidationException
 class FileSaveService():
     

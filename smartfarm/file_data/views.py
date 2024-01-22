@@ -5,7 +5,7 @@ from rest_framework import exceptions
 from .serializers import *
 from rest_framework.response import Response
 from common.response import *
-from ..file_process.serializers import FileNameSerializer
+from ..file.serializers import FileNameSerializer
 from common.response import ResponseBody
 
 from .service.get_file_data_service import GetFileDataService
@@ -15,9 +15,7 @@ class FileDataViewSet(viewsets.ModelViewSet):
 
     queryset = File.objects.all()
 
-    # def page(self, request):
-    #     return render(request, 'src/Views/')
-    def page(self, request):
+    def page(self, request, file_title):
         return render(request, 'src/Views/FileList/fileList.html')
       
     def details(self, request, file_title):
@@ -42,7 +40,10 @@ class FileDataViewSet(viewsets.ModelViewSet):
         return 0
     def process_outlier():
         return 0
-    def process_farm():
-        return 0
+    
     def process_time_series():
         return 0
+
+class DataMergeViewSet(viewsets.GenericViewSet):
+    def page(self, request):
+        return render(request, 'src/Views/Merge/merge.html')

@@ -4,8 +4,10 @@ from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 
-from .file_process.views import FileViewSet
-from .data_process.views import FileDataViewSet
+from .file.views import FileViewSet
+from .file_data.views import FileDataViewSet, DataMergeViewSet
+from .data_analytics.views import DataAnalyticsViewSet
+from .farm_process.views import DataABMSViewSet
 app_name='smartfarm'
 
 
@@ -22,19 +24,25 @@ urlpatterns = [
     path('files/delete/',FileViewSet.as_view({'delete':'delete'})),
     path('files/download/',FileViewSet.as_view({'post':'download'})),
 
+    #파일 수정 페이지 호출
+    path('revise/<str:file_title>/',FileDataViewSet.as_view({'get':'page'})),
+    
     #파일 데이터 관련
     path('files/<str:file_title>/data/',FileDataViewSet.as_view({'get':'details'})),
     path('files/<str:file_title>/data/summary/',FileDataViewSet.as_view({'get':'summary'})),
     path('files/<str:file_title>/data/preprocess/',FileDataViewSet.as_view({'post':'process_outlier'})),
-    path('files/<str:file_title>/data/farm/',FileDataViewSet.as_view({'post':'process_farm'})),
     path('files/<str:file_title>/data/timeseries/',FileDataViewSet.as_view({'post':'process_time_series'})),
 
-    path('revise/<str:file_title>/',FileDataViewSet.as_view({'get':'page'})),
-    
-    #abms 관련
-    path('abms/<str:file_title>/',FileDataViewSet.as_view({'get':'page'})),
-    path('abms/<str:file_title>/env/',FileDataViewSet.as_view({'get':'page'})),
-    
+    #농업 처리 도메인관련
+    path('files/<str:file_title>/data/farm/',FileDataViewSet.as_view({'post':'process_farm'})),
+    path('abms/<str:file_title>/',DataABMSViewSet.as_view({'get':'page'})),
+    path('abms/<str:file_title>/env/',DataABMSViewSet.as_view({'get':'page'})),
+
+
+    #분석
+    path('analytics/<str:file_title>/',DataAnalyticsViewSet.as_view({'get':'page'})),
+    #병합
+    path('merge/',DataMergeViewSet.as_view({'get':'page'})),
     
     # path('merge/'),
     # #데이터 분석 관련
