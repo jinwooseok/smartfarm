@@ -1,38 +1,58 @@
-from ...models import File
+from ...models import File, user_file_path
 import pandas as pd
 from django.core import files
 import copy
 import os
+from django.db import transaction
 
+from ..utils.utils import *
+from ..exceptions.file_exception import *
+
+from ...feature_process.serializers import FeatureSerializer
+from ...feature_process.service.feature_service import FeatureService
+from common.validate_exception import ValidationException
 class FileSaveService():
     
     def __init__(self, serializer, user):
         self.user = user
         self.file_title = serializer.validated_data['fileName']
-        self.file_root = None
         self.file_data = serializer.validated_data['fileData']
 
+    @transaction.atomic
     def execute(self):
         #파일명 중복 체크
-        file_title = self.convert_file_name(self.user, self.file_title)
+        self.file_title = self.convert_file_name(self.user, self.file_title)
         #데이터 배열을 csv파일로 만들기
-        self.json_to_csv(file_title, self.file_data)
+        self.json_to_csv(self.file_title, self.file_data)
+
+        FileSaveService.save_file(self.user, self.file_title)
+        file = File.objects.get(user_id=self.user, file_title=self.file_title)
+        print(file.id)
+        feature_info_list = FeatureService.extract_feature(file.id, pd.DataFrame(self.file_data))
+        print(feature_info_list)
+        #변수 정보 저장
+        feature_serializer = FeatureSerializer(data=feature_info_list, many=True)
+        if feature_serializer.is_valid():
+            feature_serializer.save()
+        else:
+            raise ValidationException(feature_serializer)
         #파일 저장
-        self.save_file(self.user, file_title)
+    
+        
+
 
     
     @staticmethod
     def json_to_csv(file_title, file_data):
-        #data = pd.read_json(file_data)
         data = pd.DataFrame(file_data)
-        print(data)
         data.to_csv(file_title, index = False)
 
     @staticmethod
     def save_file(user, file_title):
         f = open(file_title,'rb')
         file_open=files.File(f, name=file_title)
-        FileSaveService.save_file_form(user, file_title, file_open)
+        instance = FileSaveService.save_file_form(user, file_title, file_open)
+        instance.save()
         f.close()
         os.remove(file_title)
     
@@ -43,7 +63,7 @@ class FileSaveService():
                     file_title=file_title,
                     file_root=file_root,
                 )
-        instance.save()
+        return instance
 
     #input : id, file이름 output: 중복되지 않는 파일이름
     @staticmethod

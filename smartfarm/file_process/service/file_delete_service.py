@@ -12,8 +12,12 @@ class FileDeleteService():
         file_absolute_path = search_file_absolute_path(self.file_root)
         #db제거
         self.file_object.delete()
-        #파일제거
+        file_absolute_path = search_file_absolute_path(self.file_root)
+        FileDeleteService.delete_local_file(file_absolute_path)
+    
+    @staticmethod
+    def delete_local_file(file_path):
         try:
-            os.remove(file_absolute_path)
+            os.remove(file_path)
         except:
             raise OriginalFileNotFoundException()
