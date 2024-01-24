@@ -16,7 +16,7 @@ class FileDataViewSet(viewsets.ModelViewSet):
     queryset = File.objects.all()
 
     def page(self, request, file_title):
-        return render(request, 'src/Views/FileList/fileList.html')
+        return render(request, 'src/Views/Revise/revise.html')
       
     def details(self, request, file_title):
         user = request.session.get('user')
