@@ -2,10 +2,7 @@ import API from "/templates/src/Utils/API.mjs";
 import Logout from "/templates/src/Utils/Logout.mjs";
 
 const $checkAll = document.querySelector("#checkAll"); // 전체 선택 버튼
-
 const $$condition = document.querySelectorAll(".condition");
-
-const $AllTitle = document.querySelectorAll("#AllTitle");
 const $fileContainer = document.querySelector("#fileContainer");
 
 const $search = document.querySelector("#search");
@@ -53,17 +50,17 @@ const setFileList = () => {
 const movePage = (id, title) => {
   switch (id) {
     case "revise" :
-      console.log(`/revise/${title}/`)
+      // console.log(`/revise/${title}/`)
       location.href = `/revise/${title}/`
       break;
     case "analyze" :
-      // location.href = `/analyze/${title}/`
+      location.href = `/analytics/${title}/`
       break;
     case "ABMS" :
-      // location.href = `/abms/${title}/`
+      location.href = `/abms/${title}/`
       break;
     case "merge" :
-      // location.href = `/merge/`
+      location.href = `/merge/`
       break;
     default :
       alert("잘못된 요청입니다.");
@@ -141,10 +138,11 @@ const changeClickedCss = (event) =>{
 }
 
 const handleFileNameCondition = (event) =>{
-  const $AllCheckBox = document.querySelectorAll(".check");
 	const condition = event.target.innerText;
 	showFileList(condition);
 	changeClickedCss(event);
+
+  const $AllCheckBox = document.querySelectorAll(".check");
   $checkAll.checked = false;
   for (let i = 0; i < $AllCheckBox.length; i++) {
     $AllCheckBox[i].checked = false;
@@ -239,7 +237,7 @@ const clickDownloadButton = () => {
 	const downloadTitle = setDownloadFile();
 
 	downloadTitle?.map( async (title) => {
-		const response = await API("/files/download/", "post", {fileName: JSON.stringify(title)});
+		const response = await API("/download/", "post", {fileName: JSON.stringify(title)});
     console.log(response, "downloadResponse");
 		if(response.status === "success") {
 			downloadToCsv(response.data, title);

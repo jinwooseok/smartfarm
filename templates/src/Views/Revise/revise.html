@@ -1,1 +1,56 @@
-수정
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>데이터 처리</title>
+
+		<!-- css -->
+		<link rel="stylesheet" href="/templates/src/Views/Revise/revise.css">
+		<link rel="stylesheet" href="/templates/src/Views/jsuties.css" type="text/css" />
+	
+		<!-- spreadsheetjs -->
+		<script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
+		<link rel="stylesheet" href="https://bossanova.uk/jspreadsheet/v4/jexcel.css" type="text/css" />
+		<script src="https://jsuites.net/v4/jsuites.js"></script>
+		<link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
+
+
+</head>
+<body>
+	<div class="containerDIV">	
+		<li class="upperDIV">	
+			<div class="title">
+				전남대학교</br>융합 빅데이터 연구실
+			</div>
+			<div class="logoutDIV">
+				<a class="logoutBtn" id="logoutBtn">로그아웃</a>
+			</div>
+		</li>
+		<li class="progressDIV">	
+			<div class="nowProgressDIV">
+				<div class="progress now ">전처리 및 이상치</div>
+				<div class="progress">파일 기초 설정</div>
+				<div class="progress">파일 변수 지정</div>
+				<div class="progress">확인 및 저장</div>
+			</div>
+		</li>
+		<li class="workDIV">
+			<div class="spreadSheetDIV" id="spreadSheet">
+				spreadSheetDIV
+			</div>
+
+			<div class="fileStaticDataDIV" id="fileStaticData">
+				fileStaticDataDIV
+			</div>
+
+			<div class="buttonDIV" id="buttonDIV">
+				<button class="next" id="next">다음</button>
+			</div>
+		</li>
+	</div>
+</body>
+</html>
+
+<script type="module" src="/templates/src/Views/Revise/revise.mjs"></script>
+<script src="/templates/src/CDN/jquery-1.12.4.min.js"></script>
