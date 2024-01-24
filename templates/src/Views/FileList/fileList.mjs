@@ -17,19 +17,16 @@ $logoutBtn.addEventListener("click", Logout);
 
 let fileList;
 
-const locationPage = (id, title) => {
-  console.log(id, title);
-}
-
 // 초기 파일 목록 만들기
 const setFileList = () => {
   fileList.map((file) => {
     let listDiv = document.createElement('div');
     listDiv.classList.add("list");
+    listDiv.style.display = "flex"
     const listChild = `
       <input type="checkbox" class="check">
       <div class="fileTitle" id="AllTitle">
-        <a href="#">${file.fileName}</a>
+        ${file.fileName}
       </div>
       <div class="lastUpdateDate" id="lastUpdateDate">
         ${file.updatedDate}
@@ -56,20 +53,17 @@ const setFileList = () => {
 const movePage = (id, title) => {
   switch (id) {
     case "revise" :
-      console.log(`/revise/${title}/`);
-      // location.href(`/revise/${title}/`);
+      console.log(`/revise/${title}/`)
+      location.href = `/revise/${title}/`
       break;
     case "analyze" :
-      console.log(`/analyze/${title}/`);
-      // location.href(`/analyze/${title}/`);
+      // location.href = `/analyze/${title}/`
       break;
     case "ABMS" :
-      console.log(`/abms/${title}/`);
-      // location.href(`/abms/${title}/`);
+      // location.href = `/abms/${title}/`
       break;
     case "merge" :
-      console.log(`/merge/`);
-      // location.href(`/merge/`);
+      // location.href = `/merge/`
       break;
     default :
       alert("잘못된 요청입니다.");
@@ -135,7 +129,7 @@ const showFileList = (condition) => {
 }
 
 // 클릭한 조건 css 변경
-const changeCss = (event) =>{
+const changeClickedCss = (event) =>{
 	$$condition.forEach((div) => {
 		div.style.backgroundColor = "#fff";
 		div.style.color = "#000";
@@ -150,7 +144,7 @@ const handleFileNameCondition = (event) =>{
   const $AllCheckBox = document.querySelectorAll(".check");
 	const condition = event.target.innerText;
 	showFileList(condition);
-	changeCss(event);
+	changeClickedCss(event);
   $checkAll.checked = false;
   for (let i = 0; i < $AllCheckBox.length; i++) {
     $AllCheckBox[i].checked = false;
@@ -167,8 +161,12 @@ function AllCheck() {
   const $AllCheckBox = document.querySelectorAll(".check");
   const $$listAll = document.querySelectorAll(".list");
 
+  console.log("$listAll ", $$listAll )
+
   for (let i = 0; i < $AllCheckBox.length; i++) {
+    console.log("$AllCheckBox[i]", $AllCheckBox[i].style.display )
     if ($$listAll[i].style.display === "flex") {
+      console.log("$AllCheckBox[i]", $AllCheckBox[i].checked )
       $AllCheckBox[i].checked = this.checked;
     }
   }
@@ -239,9 +237,9 @@ const downloadToCsv = (data, title) => {
 
 const clickDownloadButton = () => {
 	const downloadTitle = setDownloadFile();
-  console.log("downloadTitle", downloadTitle);
+
 	downloadTitle?.map( async (title) => {
-		const response = await API("/download/", "post", {data: title,});
+		const response = await API("/files/download/", "post", {fileName: JSON.stringify(title)});
     console.log(response, "downloadResponse");
 		if(response.status === "success") {
 			downloadToCsv(response.data, title);
@@ -252,22 +250,24 @@ const clickDownloadButton = () => {
 $download.addEventListener("click", clickDownloadButton);
 
 // 파일 삭제 함수
-const deleteCheckedItems = async (checkedItems) => {
+const deleteCheckedItems = (checkedItems) => {
   const $AllCheckBox = document.querySelectorAll(".check");
+  const $AllTitle = document.querySelectorAll("#AllTitle");
+
   const deleteList = checkedItems.map((checkbox) => {
     const index = Array.from($AllCheckBox).indexOf(checkbox);
     const title = $AllTitle[index].innerText;
-    checkbox.parentElement.remove();
     return title;
 	});
 
-	const response = await API("delete/", "post", JSON.stringify(deleteList));
-  console.log(response, "deleteResponse");
-	if (response.status === "success") {
-		location.href = "../";
-	} else {
-		alert("삭제 실패");
-	}
+  deleteList?.map( async (name) => {
+    const response = await API("/files/delete/", "delete", {fileName : JSON.stringify(name)});
+    if (response.status === "success") {
+      location.href = "/file-list/";
+    } else {
+      alert("삭제 실패");
+    }
+  });
 }
 
 const clickDeleteButton = () => {
