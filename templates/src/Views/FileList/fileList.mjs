@@ -48,9 +48,11 @@ const setFileList = () => {
 };
 
 const movePage = (id, title) => {
+
+  localStorage.setItem("fileTitle", JSON.stringify(title));
+
   switch (id) {
     case "revise" :
-      // console.log(`/revise/${title}/`)
       location.href = `/revise/${title}/`
       break;
     case "analyze" :

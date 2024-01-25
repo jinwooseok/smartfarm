@@ -18,39 +18,75 @@
 
 </head>
 <body>
-	<div class="containerDIV">	
-		<li class="upperDIV">	
+	<div class="containerDIV" id="containerDIV">	
+		<div class="upperDIV">	
 			<div class="title">
 				전남대학교</br>융합 빅데이터 연구실
 			</div>
 			<div class="logoutDIV">
 				<a class="logoutBtn" id="logoutBtn">로그아웃</a>
 			</div>
-		</li>
-		<li class="progressDIV">	
-			<div class="nowProgressDIV">
-				<div class="progress now ">전처리 및 이상치</div>
-				<div class="progress">파일 기초 설정</div>
-				<div class="progress">파일 변수 지정</div>
-				<div class="progress">확인 및 저장</div>
-			</div>
-		</li>
-		<li class="workDIV">
-			<div class="spreadSheetDIV" id="spreadSheet">
-				spreadSheetDIV
-			</div>
+		</div>
 
-			<div class="fileStaticDataDIV" id="fileStaticData">
-				fileStaticDataDIV
+		<div class="rowDIV">
+			<div class="progressDIV">	
+				<div class="nowProgressDIV">
+					<div class="progress now ">전처리 및 이상치</div>
+					<div class="progress">파일 기초 설정</div>
+					<div class="progress">파일 변수 지정</div>
+					<div class="progress">확인 및 저장</div>
+				</div>
 			</div>
+			<div class="columnDIV">
+				<div class="fileSelectDIV">
+					<select name="fileListSelectBox" id="fileListSelectBox" class="fileListSelectBox">
+					</select>
+				</div>
+				<div class="workDIV">
+					<div class="spreadSheetDIV" id="spreadSheetDIV">
 
-			<div class="buttonDIV" id="buttonDIV">
-				<button class="next" id="next">다음</button>
+					</div>
+		
+					<div class="fileStaticDataDIV" id="fileStaticDataDIV">
+						<div class="columnList">
+							<div class="columnName" id="columnName">
+								열 이름
+							</div>
+							<div class="nullCount" id="nullCount">
+								빈 값
+							</div>
+							<div class="Q1" id="Q1">
+								1사분위 값
+							</div>
+							<div class="Q2" id="Q2">
+								중앙값
+							</div>
+							<div class="Q3" id="Q3">
+								3사분위값
+							</div>
+							<div class="mean" id="mean">
+								평균
+							</div>
+							<div class="min" id="min">
+								최소
+							</div>
+							<div class="max" id="max">
+								최대
+							</div>
+						</div>
+					</div>
+		
+					<div class="buttonDIV" id="buttonDIV">
+						<button class="next" id="next">다음</button>
+						<button class="prev" id="prev">이전</button>
+					</div>
+				</div>
 			</div>
-		</li>
-	</div>
+		</div>
 </body>
 </html>
 
 <script type="module" src="/templates/src/Views/Revise/revise.mjs"></script>
+<script type="module" src="/templates/src/Views/Revise/moveFile.mjs"></script>
+<script type="module" src="/templates/src/Views/Revise/showFile.mjs"></script>
 <script src="/templates/src/CDN/jquery-1.12.4.min.js"></script>
