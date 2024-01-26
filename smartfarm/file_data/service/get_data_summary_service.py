@@ -1,10 +1,8 @@
 from ...file.utils.utils import *
-import pandas as pd
 from ..utils.process import DataProcess
-import os
-import json
 from .get_file_data_service import GetFileDataService
-from ..utils.process import DataProcess
+import pandas as pd
+
 class GetDataSummaryService():
     def __init__(self, serializer, user):
         self.file_name = serializer.data['fileName']
@@ -13,9 +11,31 @@ class GetDataSummaryService():
     
     def execute(self):
         file_absolute_path = search_file_absolute_path(self.file_root)
-        dataFrame = GetFileDataService.file_to_df(file_absolute_path)
+        df = GetFileDataService.file_to_df(file_absolute_path)
         
-        data = DataProcess.round_converter(dataFrame)
-        data = DataProcess.nan_to_string(data) 
-        return DataProcess.to_summary(data)
+        return GetDataSummaryService.to_summary(df)
         # return json.loads(DataProcess.df_to_json_string(data))
+    
+    @staticmethod
+    def to_summary(data):
+        drop_list = []
+        for column in data.columns:
+            if DataProcess.to_numeric_or_none(data[column]) is None:
+                drop_list.append(column)
+        
+        data = DataProcess.drop_columns(data, drop_list)
+            
+        null_count=pd.DataFrame(data.isnull().sum()).T
+        null_count.index=["Null_count"]
+        statistic_info = data.describe().iloc[[4,5,6,1,3,7],:]
+        
+        statistic_info.index = ["Q1","Q2","Q3","mean","min","max"]
+
+        # column_name = pd.Series({"name":list(data.columns)})
+        columns_df = pd.DataFrame([data.columns], index=['name'], columns=data.columns)
+
+        summary = pd.concat([columns_df,null_count,statistic_info], ignore_index=False)
+        summary = DataProcess.nan_to_string(summary, "-")
+        summary = DataProcess.round_converter(summary)
+
+        return DataProcess.df_to_json_object(summary.T, orient="records")
