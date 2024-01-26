@@ -42,14 +42,19 @@ class DataProcess:
             
         null_count=pd.DataFrame(data.isnull().sum()).T
         null_count.index=["Null_count"]
-
         statistic_info = data.describe().iloc[[4,5,6,1,3,7],:]
+        
         statistic_info.index = ["Q1","Q2","Q3","mean","min","max"]
-        summary = pd.concat([null_count,statistic_info], ignore_index=False)
+
+        # column_name = pd.Series({"name":list(data.columns)})
+        columns_df = pd.DataFrame([data.columns], index=['name'], columns=data.columns)
+        print(columns_df)
+
+        summary = pd.concat([columns_df,null_count,statistic_info], ignore_index=False)
         summary = DataProcess.nan_to_string(summary, "-")
         summary = DataProcess.round_converter(summary)
 
-        return DataProcess.df_to_json_object(summary, orient="columns")
+        return DataProcess.df_to_json_object(summary.T, orient="records")
     
     @staticmethod
     def drop_columns(data, columns):
