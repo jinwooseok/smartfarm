@@ -3,6 +3,10 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from common.response import *
 from rest_framework import exceptions
+from ..file.serializers import FileNameSerializer
+from .service.farm_process_service import FarmProcessService
+from common.validate_exception import ValidationException
+from .serializers import FarmProcessSerializer
 
 class DataABMSViewSet(viewsets.GenericViewSet):
     def page(self, request, file_title):
@@ -10,7 +14,19 @@ class DataABMSViewSet(viewsets.GenericViewSet):
     
 class FarmProcessViewSet(viewsets.GenericViewSet):
     
+    def process_farm(self, request, file_title):
+        user = request.session.get('user')
+        if user is None:
+            raise exceptions.NotAuthenticated()
 
-    def process_farm():
-        return 0
+        farmProressSerializer = FarmProcessSerializer(data = request.data)
+        fileNameSerializer = FileNameSerializer(data={'fileName': file_title})
+        if farmProressSerializer.is_valid() and fileNameSerializer.is_valid():
+            data=FarmProcessService(farmProressSerializer, fileNameSerializer, user).execute()
+            print(data)
+            return Response(ResponseBody.generate(), status=200)
+        elif farmProressSerializer.is_valid() == False:
+            raise ValidationException(farmProressSerializer)
+        else:
+            raise ValidationException(fileNameSerializer)
     

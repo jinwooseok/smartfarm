@@ -65,7 +65,7 @@ class FileViewSet(viewsets.GenericViewSet):
         serializer = FileNameSerializer(data=request.data)
 
         if serializer.is_valid():
-            return Response(ResponseBody.generate(data=FileDownloadService(serializer, user).execute()),status=200)
+            return FileDownloadService(serializer, user).execute()
         else:
             raise ValidationException(serializer)
 

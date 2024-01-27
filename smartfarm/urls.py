@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 from .file.views import FileViewSet
 from .file_data.views import FileDataViewSet, DataMergeViewSet
 from .data_analytics.views import DataAnalyticsViewSet
-from .farm_process.views import DataABMSViewSet
+from .farm_process.views import DataABMSViewSet, FarmProcessViewSet
 app_name='smartfarm'
 
 
@@ -34,7 +34,7 @@ urlpatterns = [
     path('files/<str:file_title>/data/timeseries/',FileDataViewSet.as_view({'post':'process_time_series'})),
 
     #농업 처리 도메인관련
-    path('files/<str:file_title>/data/farm/',FileDataViewSet.as_view({'post':'process_farm'})),
+    path('files/<str:file_title>/data/farm/',FarmProcessViewSet.as_view({'post':'process_farm'})),
     path('abms/<str:file_title>/',DataABMSViewSet.as_view({'get':'page'})),
     path('abms/<str:file_title>/env/',DataABMSViewSet.as_view({'get':'page'})),
 

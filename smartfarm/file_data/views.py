@@ -10,6 +10,7 @@ from common.response import ResponseBody
 
 from .service.get_file_data_service import GetFileDataService
 from .service.get_data_summary_service import GetDataSummaryService
+from common.validate_exception import ValidationException
 
 class FileDataViewSet(viewsets.ModelViewSet):
 
@@ -37,9 +38,18 @@ class FileDataViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid():
             return Response(ResponseBody.generate(data=GetDataSummaryService(serializer, user).execute()), status=200)
-        return 0
-    def process_outlier():
-        return 0
+        else:
+            raise ValidationException()
+    
+    def process_outlier(self, request, file_title):
+        user = request.session.get('user')
+        if user is None:
+            raise exceptions.NotAuthenticated()
+        
+        serializer = FileNameSerializer(data={'fileName': file_title})
+
+        if serializer.is_valid():
+            return Response(ResponseBody.generate(data=GetDataSummaryService(serializer, user).execute()), status=200)
     
     def process_time_series():
         return 0

@@ -29,32 +29,23 @@ class DataProcess:
     def df_to_json_object(data, orient="records"):
         return json.loads(data.to_json(orient=orient,force_ascii=False))
     #데이터 변경, 결측치,이상치 처리
-
-    @staticmethod
-    def to_summary(data):
-        drop_list = []
-        for column in data.columns:
-            numeric_series = pd.to_numeric(data[column], errors='coerce').astype(float)
-            if numeric_series.notnull().sum() <= 1:
-                drop_list.append(column)
-        
-        data = DataProcess.drop_columns(data, drop_list)
-            
-        null_count=pd.DataFrame(data.isnull().sum()).T
-        null_count.index=["Null_count"]
-
-        statistic_info = data.describe().iloc[[4,5,6,1,3,7],:]
-        statistic_info.index = ["Q1","Q2","Q3","mean","min","max"]
-        summary = pd.concat([null_count,statistic_info], ignore_index=False)
-        summary = DataProcess.nan_to_string(summary, "-")
-        summary = DataProcess.round_converter(summary)
-
-        return DataProcess.df_to_json_object(summary, orient="columns")
     
     @staticmethod
     def drop_columns(data, columns):
         return data.drop(columns, axis=1)
     
+    def drop_rows(data, rows):
+        return data.drop(rows, axis=0)
+    
+    @staticmethod
+    def to_numeric_or_none(series):
+        numeric_series = pd.to_numeric(series, errors='coerce').astype(float)
+        if numeric_series.notnull().sum() == 0:
+            return numeric_series
+        else:
+            return None
+
+
     @staticmethod
     def dataIntegrator(data1, data2):
         data1 = data1.append(data2)
@@ -91,22 +82,6 @@ class DataProcess:
     def getDateSeries(self):
         return self.data.iloc[:, self.date]
     
-    #함수 input과 output은 데이터프레임. json변환은 따로 따로. 초기 변환은 배치처리
-
-    def outLierDropper(self):
-        data = self.data
-        dropIndex = []
-        for i in range(len(data.columns)):
-            numeric_rows = pd.to_numeric(data.iloc[:, i], errors='coerce')
-            if len(numeric_rows.notnull()) == 0:
-                continue
-            if len(self.outLierDetector(numeric_rows)) != 0:
-                dropIndex = dropIndex+self.outLierDetector(data.iloc[:, i])
-        dropIndex = list(set(dropIndex))
-
-
-        self.data.drop(dropIndex, axis=0, inplace=True)
-        return self.data.to_json(orient="records",force_ascii=False)
     
     @staticmethod
     def dataMerger(df1, df2):
@@ -136,7 +111,7 @@ class DataProcess:
     
     #하나의 series를 받아서 결측치의 인덱스를 알려줌
     @staticmethod
-    def outLierDetector(data, window_size=10, threshold=3):
+    def outlier_detector(data, window_size=10, threshold=3):
         outlier_indices = []
         index_list = [i for i in range(len(data))]
         for start in range(0, len(data) - window_size):
