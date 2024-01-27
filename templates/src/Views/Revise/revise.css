@@ -78,7 +78,6 @@ li, ul{
 .progressDIV .progress{
 	padding: 8px 14px;
 	font-size: 14px;
-	border: 1px solid #000;
 }
 
 .now{
@@ -109,23 +108,9 @@ li, ul{
   overflow-y: hidden;
 }
 
-.workDIV .fileStaticDataDIV {
-	width: 1000px;
-	height: 200px;
-	margin : 0 auto;
-
-	border: 1px solid #000;
-
-	overflow-y: scroll;
-}
-
 .workDIV .buttonDIV {
 	width: 1000px;
 	margin : 20px auto;
-
-	border: 1px solid #000;
-
-	overflow-y: scroll;
 }
 
 button{

@@ -161,8 +161,6 @@ function AllCheck() {
   const $AllCheckBox = document.querySelectorAll(".check");
   const $$listAll = document.querySelectorAll(".list");
 
-  console.log("$listAll ", $$listAll )
-
   for (let i = 0; i < $AllCheckBox.length; i++) {
     console.log("$AllCheckBox[i]", $AllCheckBox[i].style.display )
     if ($$listAll[i].style.display === "flex") {
@@ -239,7 +237,7 @@ const clickDownloadButton = () => {
 	const downloadTitle = setDownloadFile();
 
 	downloadTitle?.map( async (title) => {
-		const response = await API("/download/", "post", {fileName: JSON.stringify(title)});
+		const response = await API("/files/download/", "post", {fileName: title});
     console.log(response, "downloadResponse");
 		if(response.status === "success") {
 			downloadToCsv(response.data, title);
