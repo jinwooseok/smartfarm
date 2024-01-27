@@ -6,7 +6,7 @@ class ShowFilePage {
 	#fileTitle;
 	#fileDate;
 	
-	constructor () {
+	constructor() {
 	}
 
 	templates() {
@@ -15,8 +15,8 @@ class ShowFilePage {
 		</div>
 
 		<div class="buttonDIV" id="buttonDIV">
-			<button class="next" id="next">다음</button>
-			<button class="prev" id="prev">이전</button>
+			<button class="nextPage" id="nextPage">다음</button>
+			<button class="prevPage" id="prevPage">이전</button>
 		</div>
 		`
 	}
@@ -26,7 +26,7 @@ class ShowFilePage {
 		this.#fileDate = response.data;
 	}
 
-	showFile (element) {
+	showFile(element) {
 		element.innerHTML = "";
 		new Excel(this.#fileDate, element);
 	}

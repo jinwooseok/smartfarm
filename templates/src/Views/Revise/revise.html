@@ -8,6 +8,7 @@
 		<!-- css -->
 		<link rel="stylesheet" href="/templates/src/Views/Revise/revise.css">
 		<link rel="stylesheet" href="/templates/src/Views/jsuties.css" type="text/css" />
+		<link rel="stylesheet" href="/templates/src/Views/Revise/billboard.css">
 	
 		<!-- spreadsheetjs -->
 		<script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
@@ -15,6 +16,11 @@
 		<script src="https://jsuites.net/v4/jsuites.js"></script>
 		<link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
 
+		  <!-- billboard.ks -->
+			<script src="https://d3js.org/d3.v6.min.js"></script>
+
+			<!-- fontawesome-->
+			<script src="https://kit.fontawesome.com/4c4b76e7c2.js" crossorigin="anonymous"></script>
 
 </head>
 <body>
@@ -44,12 +50,10 @@
 				</div>
 				<div class="workDIV">
 					<div class="spreadSheetDIV" id="spreadSheetDIV">
-
 					</div>
 				
 					<div class="buttonDIV" id="buttonDIV">
-						<button class="next" id="next">다음</button>
-						<button class="prev" id="prev">이전</button>
+						<button class="nextPage" id="nextPage">다음</button>
 					</div>
 				</div>
 			</div>
@@ -58,4 +62,5 @@
 </html>
 
 <script type="module" src="/templates/src/Views/Revise/revise.mjs"></script>
+<script src="/templates/src/CDN/billboard.js"></script>
 <script src="/templates/src/CDN/jquery-1.12.4.min.js"></script>

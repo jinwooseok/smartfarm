@@ -2,11 +2,11 @@ import API from "/templates/src/Utils/API.mjs";
 import Logout from "/templates/src/Utils/Logout.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
 
-import showFilePage from "./showFilePage.mjs";
-import ShowTreatmentPage from "./showTreatmentPage.mjs";
+import ShowFilePage from "./ShowFilePage.mjs";
+import ShowTreatmentPage from "./ShowTreatmentPage.mjs";
+import Graph from "./Graph.mjs";
 
 // 순수 페이지 이동만 관리
-
 const $spreadSheetDIV = document.querySelector("#spreadSheetDIV");
 
 const $logoutBtn = document.querySelector("#logoutBtn");
@@ -16,11 +16,9 @@ const $fileListSelectBox = document.querySelector("#fileListSelectBox");
 
 ////////////////////// 파일 변경
 const fileName = JSON.parse(localStorage.getItem("fileTitle"));
-let fileTitleLists; // 파일 목록
 
 const setFileListSelectBox = async ()=> {
 	const response = await API("/files/file-name/", "get");
-	fileTitleLists = response.data;
 	setNowFileTitle(response.data);
 }
 
@@ -48,9 +46,11 @@ $fileListSelectBox.addEventListener("change", moveSelectedFileTitle);
   await setFileListSelectBox();
 
 	// 파일 데이터 그리기
-	showFilePage.setFileTitle(fileName);
-	await showFilePage.setFileData();
-	showFilePage.showFile($spreadSheetDIV);
+	Loading.StartLoading();
+	ShowFilePage.setFileTitle(fileName);
+	await ShowFilePage.setFileData();
+	ShowFilePage.showFile($spreadSheetDIV);
+	Loading.CloseLoading();
 }());
 
 ///////////////////////// page 변환
@@ -66,13 +66,13 @@ const changeProgress = (step) => {
 		}
 	}
 
-	if (step === "next" && nowIndex !== 3) {
+	if (step === "nextPage" && nowIndex !== 3) {
 		progress[nowIndex].classList.remove('now');
 		progress[nowIndex+1].classList.add('now');
 		changeDiv(nowIndex+1);
 	} 
 
-	if (step === "prev" && nowIndex !== 0) {
+	if (step === "prevPage" && nowIndex !== 0) {
 		progress[nowIndex].classList.remove('now');
 		progress[nowIndex-1].classList.add('now');
 		changeDiv(nowIndex-1);
@@ -84,41 +84,22 @@ const clickEvent = (id) => {
 		case "save" :
 			alert("파일을 저장합니다.");
 			break;
-		case "next" :
+		case "nextPage" :
 			confirm(`이동 합니다.`) === true ? changeProgress(id) : null;
 			break;
-		case "prev" :
+		case "prevPage" :
 			confirm(`이동 합니다.`) === true ? changeProgress(id) : null;
 			break;
+		case "nextGraph" :
+			// 그래프 다음 데이터
+			break;
+		case "prevGraph" :
+			// 그래프 이전 데이터
+			break;
+		case "closeGraph" :
+			Graph.closeGraph();
+			break;
 	}
-}
-
-const changeDiv = async (nowProgress) => {
-	console.log("현재 페이지", nowProgress);
-	const $workDIV = document.querySelector(".workDIV");
-
-	if (nowProgress === 0) {
-		$workDIV.innerHTML = showFilePage.templates();
-
-		const $spreadSheetDIV = document.querySelector("#spreadSheetDIV");
-		showFilePage.showFile($spreadSheetDIV);
-	}
-
-	if (nowProgress === 1) {
-		ShowTreatmentPage.setFileTitle(fileName);
-		await ShowTreatmentPage.setStaticData();
-
-		$workDIV.innerHTML = ShowTreatmentPage.templates();
-	}
-
-	if (nowProgress === 2) {
-		
-	}
-
-	if (nowProgress === 3) {
-
-	}
-	
 }
 
 window.addEventListener("click", (event) => {
@@ -128,13 +109,41 @@ window.addEventListener("click", (event) => {
 	}
 })
 
-/*
-파일 확인 -> 전처리 -> 기타 설정 -> 변수 설정 -> 저장
 
-1. 전처리 후 데이터 변환
-2. 기타 설정 및 변수 목록은 js에서 보관 후 저장할 떄 전송
+const changeDiv = async (nowProgress) => {
+	console.log("현재 페이지", nowProgress);
+	const $workDIV = document.querySelector(".workDIV");
 
-페이지가 전환되면 전역변수에 설정한 값들은 변경을 안함
-함수 내에서 변수를 다시 불러서 해야하는 경우가 많을 것
-안되면 변수를 함수 내에서 설정하도록 하자
-*/
+	if (nowProgress === 0) { // 데이터 그림
+		$workDIV.innerHTML = ShowFilePage.templates();
+
+		const $spreadSheetDIV = document.querySelector("#spreadSheetDIV");
+		ShowFilePage.showFile($spreadSheetDIV);
+	}
+
+	if (nowProgress === 1) { // 전처리
+		ShowTreatmentPage.setFileTitle(fileName);
+		// await ShowTreatmentPage.setStaticData();
+
+		$workDIV.innerHTML = ShowTreatmentPage.templates();
+
+		// 그래프 보여주는 부분
+		const $$columnName = document.querySelectorAll("#columnName");
+		$$columnName.forEach((element) => {
+			element.addEventListener('click', (element) => {
+				Graph.showGraph(element.innerHTML);
+			});
+		});
+	
+
+	}
+
+	if (nowProgress === 2) { // 파일 수정 데이터 전송
+		
+	}
+
+	if (nowProgress === 3) { // 파일 저장
+
+	}
+	
+}
