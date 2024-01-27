@@ -8,6 +8,7 @@
 		<!-- css -->
 		<link rel="stylesheet" href="/templates/src/Views/Revise/revise.css">
 		<link rel="stylesheet" href="/templates/src/Views/jsuties.css" type="text/css" />
+		<link rel="stylesheet" href="/templates/src/Views/Revise/billboard.css">
 	
 		<!-- spreadsheetjs -->
 		<script src="https://bossanova.uk/jspreadsheet/v4/jexcel.js"></script>
@@ -15,42 +16,51 @@
 		<script src="https://jsuites.net/v4/jsuites.js"></script>
 		<link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
 
+		  <!-- billboard.ks -->
+			<script src="https://d3js.org/d3.v6.min.js"></script>
+
+			<!-- fontawesome-->
+			<script src="https://kit.fontawesome.com/4c4b76e7c2.js" crossorigin="anonymous"></script>
 
 </head>
 <body>
-	<div class="containerDIV">	
-		<li class="upperDIV">	
+	<div class="containerDIV" id="containerDIV">	
+		<div class="upperDIV">	
 			<div class="title">
 				전남대학교</br>융합 빅데이터 연구실
 			</div>
 			<div class="logoutDIV">
 				<a class="logoutBtn" id="logoutBtn">로그아웃</a>
 			</div>
-		</li>
-		<li class="progressDIV">	
-			<div class="nowProgressDIV">
-				<div class="progress now ">전처리 및 이상치</div>
-				<div class="progress">파일 기초 설정</div>
-				<div class="progress">파일 변수 지정</div>
-				<div class="progress">확인 및 저장</div>
-			</div>
-		</li>
-		<li class="workDIV">
-			<div class="spreadSheetDIV" id="spreadSheet">
-				spreadSheetDIV
-			</div>
+		</div>
 
-			<div class="fileStaticDataDIV" id="fileStaticData">
-				fileStaticDataDIV
+		<div class="rowDIV">
+			<div class="progressDIV">	
+				<div class="nowProgressDIV">
+					<div class="progress now ">전처리 및 이상치</div>
+					<div class="progress">파일 기초 설정</div>
+					<div class="progress">파일 변수 지정</div>
+					<div class="progress">확인 및 저장</div>
+				</div>
 			</div>
-
-			<div class="buttonDIV" id="buttonDIV">
-				<button class="next" id="next">다음</button>
+			<div class="columnDIV">
+				<div class="fileSelectDIV">
+					<select name="fileListSelectBox" id="fileListSelectBox" class="fileListSelectBox">
+					</select>
+				</div>
+				<div class="workDIV">
+					<div class="spreadSheetDIV" id="spreadSheetDIV">
+					</div>
+				
+					<div class="buttonDIV" id="buttonDIV">
+						<button class="nextPage" id="nextPage">다음</button>
+					</div>
+				</div>
 			</div>
-		</li>
-	</div>
+		</div>
 </body>
 </html>
 
 <script type="module" src="/templates/src/Views/Revise/revise.mjs"></script>
+<script src="/templates/src/CDN/billboard.js"></script>
 <script src="/templates/src/CDN/jquery-1.12.4.min.js"></script>

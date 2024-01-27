@@ -3,7 +3,7 @@
 	margin: 0;
 	padding: 0;
 
-	overflow-y: hidden;
+	/* overflow-y: hidden; */
 }
 
 li, ul{
@@ -16,35 +16,11 @@ li, ul{
 	display: grid;
 	width: 1280px;
 	height: 100%;
-	grid-template-columns: repeat(7, 1fr);
-	grid-template-rows: repeat(8, minmax(100px, 1fr));
-	grid-template-areas:
-		"상단 상단 상단 상단 상단 상단 상단"
-		"옆 나머지 나머지 나머지 나머지 나머지 나머지"
-		"옆 나머지 나머지 나머지 나머지 나머지 나머지"
-		"옆 나머지 나머지 나머지 나머지 나머지 나머지"
-		"옆 나머지 나머지 나머지 나머지 나머지 나머지"
-		"옆 나머지 나머지 나머지 나머지 나머지 나머지"
-		"옆 나머지 나머지 나머지 나머지 나머지 나머지"
-		"옆 나머지 나머지 나머지 나머지 나머지 나머지"
-	;
-}
-
-li:nth-child(1) {
-	grid-area: 상단;
-}
-
-li:nth-child(2) {
-	grid-area: 옆;
-}
-
-li:nth-child(3) {
-	grid-area: 나머지;
 }
 
 .upperDIV {
+	width: 1280px;
 	height: 100px;
-	border: 1px solid #000;
 	position: relative;
 }
 
@@ -87,14 +63,20 @@ li:nth-child(3) {
 	background: #87a86f;
 }
 
-.progressDIV{
-	border-right: 1px solid #000;
+.rowDIV{
+	display: flex;
+	flex-direction: row;
+}
+
+.progressDIV {
+	width: 200px;
+	height : calc(100vh - 100px);
+	border: 1px solid #000;
 }
 
 .progressDIV .progress{
 	padding: 8px 14px;
 	font-size: 14px;
-	border: 1px solid #000;
 }
 
 .now{
@@ -102,31 +84,32 @@ li:nth-child(3) {
 	color: #fff;
 }
 
+.fileSelectDIV {
+  width: 1000px;
+  margin: 0 auto;
+  margin-top: 10px;
+
+  display: flex;
+  justify-content: right;
+}
+
+.columnDIV {
+	width: 1080px;
+}
+
 .workDIV .spreadSheetDIV {
 	width: 1000px;
 	height: auto;
-	margin : 20px auto;
+	margin : 20px 40px;
 
 	border: 1px solid #000;
-}
-
-.workDIV .fileStaticDataDIV {
-	width: 1000px;
-	height: 300px;
-	margin : 20px auto;
-
-	border: 1px solid #000;
-
-	overflow-y: scroll;
+	overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .workDIV .buttonDIV {
 	width: 1000px;
 	margin : 20px auto;
-
-	border: 1px solid #000;
-
-	overflow-y: scroll;
 }
 
 button{
@@ -142,4 +125,89 @@ button{
 
 button:hover{
 	cursor: pointer;
+}
+
+.fileStaticDataDIV {
+	width: 1000px;
+  height: 300px;
+  padding: 3px 0;
+  margin: 10px auto;
+  text-align: center;
+
+  border: 1px solid #000;
+
+  overflow-y: scroll;
+}
+
+.fileStaticDataDIV .columnList {
+  width: 100%;
+  height: 30px;
+  line-height: 26px;
+
+  display: -webkit-inline-box;
+
+  text-align: center;
+}
+
+.fileStaticDataDIV .columnList:first-child {
+  border-bottom: 1px solid #999;
+  margin-bottom: 5px;
+}
+
+.fileStaticDataDIV .columnList>* {
+  height: 26px;
+}
+
+.fileStaticDataDIV .columnList .columnName {
+  width: 250px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.fileStaticDataDIV .columnList .nullCount,
+.fileStaticDataDIV .columnList .Q1,
+.fileStaticDataDIV .columnList .Q2,
+.fileStaticDataDIV .columnList .mean,
+.fileStaticDataDIV .columnList .Q3,
+.fileStaticDataDIV .columnList .min,
+.fileStaticDataDIV .columnList .max {
+  width: 100px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.fileStaticDataDIV .columnList:not(:first-child)>* {
+  border-right: 1px solid #888;
+  font-size: 16px;
+  margin-top: 8px;
+}
+
+.fileStaticDataDIV .columnList .columnName:not(:first-child)>*:hover {
+  color: blue;
+}
+
+.graphDIV {
+	display: none;
+
+	width: 480px;
+	height: 300px;
+	margin-top: 10px;
+	margin-left: 10px;
+  
+	border: 1px solid #000;
+}
+
+.graphDIV .buttonContainer {
+  display: none;
+  flex-direction: row;
+  justify-content: space-between;
+
+  width: 30%;
+  margin-left: 35%;
+}
+
+.graphDIV .buttonContainer i {
+  font-size: 30px;
 }
