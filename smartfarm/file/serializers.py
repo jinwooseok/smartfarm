@@ -3,8 +3,8 @@ from ..models import File
 from .exceptions.file_exception import FileNotFoundException
 class FileInfoSerializer(serializers.ModelSerializer):
     fileName = serializers.CharField(source='file_title')
-    createdDate = serializers.DateTimeField(source='created_at')
-    updatedDate = serializers.DateTimeField(source='updated_at')
+    createdDate = serializers.DateTimeField(source='created_at', format='%Y-%m-%d')
+    updatedDate = serializers.DateTimeField(source='updated_at', format='%Y-%m-%d')
     class Meta:
         model = File
         fields = ['fileName', 'createdDate', 'updatedDate']
