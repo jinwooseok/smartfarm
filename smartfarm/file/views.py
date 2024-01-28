@@ -9,6 +9,7 @@ from .service.file_save_service import FileSaveService
 from .service.file_delete_service import FileDeleteService
 from .service.file_download_service import FileDownloadService
 from common.validate_exception import ValidationException
+from ..file_data.service.get_file_data_service import GetFileDataService
 
 #파일 관련 뷰셋
 class FileViewSet(viewsets.GenericViewSet):
@@ -65,7 +66,7 @@ class FileViewSet(viewsets.GenericViewSet):
         serializer = FileNameSerializer(data=request.data)
 
         if serializer.is_valid():
-            return FileDownloadService(serializer, user).execute()
+            return Response(ResponseBody.generate(data=GetFileDataService(serializer, user).execute()), status=200)  
         else:
             raise ValidationException(serializer)
 
