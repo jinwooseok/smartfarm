@@ -13,23 +13,26 @@ from ...feature.service.feature_service import FeatureService
 from common.validate_exception import ValidationException
 class FileSaveService():
     
-    def __init__(self, serializer, user):
+    def __init__(self, user, file_title, file_data):
         self.user = user
-        self.file_title = serializer.validated_data['fileName']
-        self.file_data = serializer.validated_data['fileData']
+        self.file_title = file_title
+        self.file_data = file_data
+
+    @classmethod
+    def from_serializer(cls, serializer, user) -> 'FileSaveService':
+        return cls(user, serializer.validated_data['fileName'], serializer.validated_data['fileData'])
 
     @transaction.atomic
     def execute(self):
         #파일명 중복 체크
         self.file_title = self.convert_file_name(self.user, self.file_title)
         #데이터 배열을 csv파일로 만들기
-        self.json_to_csv(self.file_title, self.file_data)
+        self.data_to_csv(self.file_title, self.file_data)
 
         FileSaveService.save_file(self.user, self.file_title)
         file = File.objects.get(user_id=self.user, file_title=self.file_title)
-        print(file.id)
+
         feature_info_list = FeatureService.extract_feature(file.id, pd.DataFrame(self.file_data))
-        print(feature_info_list)
         #변수 정보 저장
         feature_serializer = FeatureSerializer(data=feature_info_list, many=True)
         if feature_serializer.is_valid():
@@ -38,9 +41,17 @@ class FileSaveService():
             raise ValidationException(feature_serializer)
         #파일 저장
     
-        
+    @staticmethod
+    def data_to_csv(file_title, file_data):
+        print(type(file_data))
+        if type(file_data) is pd.DataFrame:
+            return FileSaveService.df_to_csv(file_title, file_data)
+        elif type(file_data) is list:
+            return FileSaveService.json_to_csv(file_title, file_data)
 
-
+    @staticmethod
+    def df_to_csv(file_title, file_data):
+        file_data.to_csv(file_title, index = False)
     
     @staticmethod
     def json_to_csv(file_title, file_data):

@@ -10,7 +10,7 @@ class FileInfoSerializer(serializers.ModelSerializer):
         fields = ['fileName', 'createdDate', 'updatedDate']
 
 
-class FileNameSerializer(serializers.ModelSerializer):
+class FileNameModelSerializer(serializers.ModelSerializer):
     fileName = serializers.CharField(source='file_title')
     class Meta:
         model = File
@@ -31,17 +31,28 @@ class FileNameSerializer(serializers.ModelSerializer):
         except:
             raise FileNotFoundException()
         
-
-class FileSaveSerializer(serializers.Serializer):
+class FileNameSerializer(serializers.Serializer):
     fileName = serializers.CharField()
-    fileData = serializers.JSONField()
-
-class FileDeleteSerializer(serializers.Serializer):
-    fileName = serializers.JSONField()
-
+    
     def get_file_root(self, user):
-        file_object = File.objects.get(user=user, file_title=self.data['fileName'])
+        try:
+            print(user, self.data['fileName'])
+            file_object = File.objects.get(user=user, file_title=self.data['fileName'])
+        except:
+            raise FileNotFoundException()
+        
         return file_object.file_root
     
     def get_file_object(self, user):
-        return File.objects.get(user=user, file_title=self.data['fileName'])
+        try:
+            return File.objects.get(user=user, file_title=self.data['fileName'])
+        except:
+            raise FileNotFoundException()
+        
+
+class FileSaveSerializer(FileNameSerializer):
+    fileData = serializers.JSONField()
+
+
+class FileDeleteSerializer(FileNameSerializer):
+    fileName = serializers.JSONField()

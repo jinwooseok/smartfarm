@@ -9,17 +9,18 @@ class ETLProcess():
         self.start_index = start_index
         self.var = var
         
+
 class GrowthProcess(ETLProcess):
-     def __init__(self, data, file_type, date_column, lat_lon, interval, start_index, var=None):
-        super().__init__(data, file_type, date_column, lat_lon, interval, start_index, var)
+    def asdf():
+        pass        
+
 
 class EnvirProcess(ETLProcess):
-     def __init__(self, data, file_type, date_column, lat_lon, interval, start_index, var=None):
-        super().__init__(data, file_type, date_column, lat_lon, interval, start_index, var)
-
+    def asdf():
+        pass      
 class OutputProcess(ETLProcess):
-     def __init__(self, data, file_type, date_column, lat_lon, interval, start_index, var=None):
-        super().__init__(data, file_type, date_column, lat_lon, interval, start_index, var)
+    def asdf():
+        pass 
 
 #     def ETL_stream(self):
 #         df = DataProcess(self.data, self.date, self.startIndex)

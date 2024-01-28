@@ -30,7 +30,7 @@ class FileViewSet(viewsets.GenericViewSet):
         if user is None:
             raise exceptions.NotAuthenticated()
         file_object = File.objects.filter(user=user)
-        serializer = FileNameSerializer(file_object, many=True)
+        serializer = FileNameModelSerializer(file_object, many=True)
         return Response(ResponseBody.generate(serializer=serializer), status=200)
     
     def save(self, request):
@@ -40,7 +40,7 @@ class FileViewSet(viewsets.GenericViewSet):
         serializer = FileSaveSerializer(data=request.data)
         
         if serializer.is_valid():
-            FileSaveService(serializer, user).execute()
+            FileSaveService.from_serializer(serializer, user).execute()
             return Response(ResponseBody.generate(),status=201)
         else:
             raise ValidationException(serializer)

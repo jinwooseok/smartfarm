@@ -19,14 +19,13 @@ class FarmProcessViewSet(viewsets.GenericViewSet):
         if user is None:
             raise exceptions.NotAuthenticated()
 
-        farmProressSerializer = FarmProcessSerializer(data = request.data)
-        fileNameSerializer = FileNameSerializer(data={'fileName': file_title})
-        if farmProressSerializer.is_valid() and fileNameSerializer.is_valid():
-            data=FarmProcessService(farmProressSerializer, fileNameSerializer, user).execute()
+        serializer = FarmProcessSerializer(data = request.data)
+        serializer.initial_data['fileName'] = file_title
+        
+        if serializer.is_valid():
+            data=FarmProcessService(serializer, user).execute()
             print(data)
             return Response(ResponseBody.generate(), status=200)
-        elif farmProressSerializer.is_valid() == False:
-            raise ValidationException(farmProressSerializer)
         else:
-            raise ValidationException(fileNameSerializer)
+            raise ValidationException(serializer)
     
