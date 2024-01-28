@@ -40,7 +40,7 @@ class DataProcess:
     @staticmethod
     def to_numeric_or_none(series):
         numeric_series = pd.to_numeric(series, errors='coerce').astype(float)
-        if numeric_series.notnull().sum() == 0:
+        if numeric_series.notnull().sum() > 0:
             return numeric_series
         else:
             return None
