@@ -54,13 +54,26 @@ $fileListSelectBox.addEventListener("change", moveSelectedFileTitle);
 	Loading.CloseLoading();
 }());
 
-const data = {
+let data = ''; //
+
+const submitData = {
 	newFileName: '',
 	fileType: "", // typeDIv
 	startIndex: 1, // startIndex
 	dateColumn: 1, // date
 	interval: "", //periodDIV
 	var: "",
+}
+
+const checkRadioValue = (htmlTag) => {
+  for (let i = 0; i < htmlTag.length; i++) {
+    if (htmlTag[i].checked) {
+      if (htmlTag[i].value === "else"){
+        return document.getElementById("elsePeriod").value;
+      }
+      return htmlTag[i].value;
+    }
+  }
 }
 
 ///////////////////////// page 변환
@@ -89,19 +102,7 @@ const changeProgress = (step) => {
 	}
 }
 
-const checkRadioValue = (htmlTag) => {
-  for (let i = 0; i < htmlTag.length; i++) {
-    if (htmlTag[i].checked) {
-      if (htmlTag[i].value === "else"){
-        return document.getElementById("elsePeriod").value;
-      }
-      return htmlTag[i].value;
-    }
-  }
-}
-
-const clickEvent = async (id, targetClass) => {
-
+const clickEvent = async (event, id, targetClass) => {
 	// periodSelectDIV
 	if (id === "else") {
 		document.querySelector("#elsePeriod").disabled = false;
@@ -111,6 +112,11 @@ const clickEvent = async (id, targetClass) => {
 	if (id === "weekly" || id === "daily") {
 		document.querySelector("#elsePeriod").disabled = true;
     return;
+	}
+
+	// revise
+	if (id === "wordContain") {
+		console.log(event, "e");
 	}
 
 	// 파일 저장
@@ -129,12 +135,12 @@ const clickEvent = async (id, targetClass) => {
 
 		// 데이터 확인
 		if(targetClass.contains("setting")) {
-			data.fileType = checkRadioValue(document.querySelectorAll('input[name="type"]'));
-			data.startIndex = document.querySelector("#startIndex").value;
-			data.dateColumn = document.querySelector("#date").value
-			data.interval =  checkRadioValue(document.querySelectorAll('input[name="period"]'));
+			submitData.fileType = checkRadioValue(document.querySelectorAll('input[name="type"]'));
+			submitData.startIndex = document.querySelector("#startIndex").value;
+			submitData.dateColumn = document.querySelector("#date").value
+			submitData.interval =  checkRadioValue(document.querySelectorAll('input[name="period"]'));
 
-			console.log("setting", data);
+			console.log("setting", submitData);
 		}
 
 		confirm(`이동 합니다.`) === true ? changeProgress(id) : null;
@@ -160,7 +166,7 @@ window.addEventListener("click", (event) => {
 	const targetId = event.target.id;
 	const targetClass= event.target.classList;
 	if (targetId !== "") {
-		clickEvent(targetId, targetClass);
+		clickEvent(event, targetId, targetClass);
 	}
 })
 
@@ -172,8 +178,6 @@ const changeDiv = async (nowProgress) => {
 
 		const $spreadSheetDIV = document.querySelector("#spreadSheetDIV");
 		ShowFilePage.showFile($spreadSheetDIV);
-
-		// ShowFilePage.getFileDate() // 파일 데이터 불러오기
 	}
 
 	if (nowProgress === 1) { // 전처리
@@ -193,6 +197,8 @@ const changeDiv = async (nowProgress) => {
 
 	if (nowProgress === 2) { // 파일 수정 데이터 전송
 		$workDIV.innerHTML = RevisePage.templates();
+
+		ShowFilePage.setColumn(document.querySelector("#dataColumnList"));
 	}
 
 	if (nowProgress === 3) { // 파일 저장

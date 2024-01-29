@@ -242,3 +242,92 @@ button:hover{
 .graphDIV .buttonContainer i {
   font-size: 30px;
 }
+
+/* 변수 선택 창 */
+.variablesContainer {
+  width: 40%;
+  height: 100%;
+  position: relative;
+  text-align: center;
+}
+
+/* 난이도 선택 */
+.reviseDIV {
+  width: 1000px;
+	margin: 0 auto;
+
+	display: flex;
+	flex-direction: row;
+
+}
+
+.box {
+  width: 500px;
+  display: none;
+}
+
+input[name="level"] {
+  display: none;
+}
+
+.variablesDIV{
+	width: 500px;
+}
+
+.variablesContainer>label {
+  display: inline-block;
+  margin: 0 15px;
+}
+
+label:hover {
+  border-bottom: 2px solid #000;
+}
+
+input[name="level"]:checked+label {
+  border-bottom: 2px solid #007A33;
+  cursor: default;
+}
+
+input[name="level"]:checked+label+.box {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.easyVersion select {
+  width: 200px;
+}
+
+.hardVersion select {
+  width: 150px
+}
+
+.totalVariableContainer{
+  width: 200px;
+  height: 100%;
+
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.totalVariableContainer select{
+  width: 50%;
+}
+
+/* 파일 저장 */
+.fileSaveContainer {
+  width: 200px;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+
+.fileSaveContainer>*:not(:nth-child(2)) {
+  margin-top: 30px;
+}

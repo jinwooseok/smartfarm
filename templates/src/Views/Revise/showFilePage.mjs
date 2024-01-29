@@ -1,5 +1,6 @@
 import API from "/templates/src/Utils/API.mjs";
 import Excel from "/templates/src/Model/Excel.mjs";
+import { reviseDefaultValue } from "../../Constant/variableList.mjs";
 
 class ShowFilePage {
 
@@ -49,6 +50,22 @@ class ShowFilePage {
 			<button class="nextPage setting" id="nextPage">다음</button>
 		</div>
 		`
+	}
+
+	setColumn(htmlTag, text="") {
+		htmlTag.innerHTML = "";
+		if (text !== "") {
+			Object.keys(this.#fileDate[0]).map((column) => {
+				if (column.includes(text)) {
+					htmlTag.innerHTML += `<option value="${column}">${column}</option>`
+				}
+			})
+			return;
+		};
+	
+		Object.keys(this.#fileDate[0]).map( (column) => {
+			htmlTag.innerHTML += `<option value="${column}">${column}</option>`
+		});
 	}
 
 	async setFileData() {
