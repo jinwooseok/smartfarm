@@ -6,6 +6,11 @@
 	/* overflow-y: hidden; */
 }
 
+a{
+	color: #007A33;
+	text-decoration: none;
+}
+
 li, ul{
 	list-style: none;
 }
@@ -107,6 +112,30 @@ li, ul{
   overflow-y: hidden;
 }
 
+.workDIV .settingDIV{
+	width: 1000px;
+	height: 200px;
+	margin: 0 auto;
+
+	border: 1px solid #000;
+
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: center;
+}
+
+.settingDIV>*{
+	width: 200px;
+	height: 200px;
+	text-align: center;
+	border-right: 1px solid #000;
+}
+
+.settingDIV>*:last-child{
+	border: none;
+}
+
 .workDIV .buttonDIV {
 	width: 1000px;
 	margin : 20px auto;
@@ -126,6 +155,8 @@ button{
 button:hover{
 	cursor: pointer;
 }
+
+/* 2 page */
 
 .fileStaticDataDIV {
 	width: 1000px;

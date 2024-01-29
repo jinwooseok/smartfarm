@@ -55,12 +55,16 @@ class ShowTreatmentPage{
 		</div>
 		
 		<div class="buttonDIV" id="buttonDIV">
-			<button class="nextPage" id="nextPage">다음</button>
+			<button class="nextPage treat" id="nextPage">다음</button>
 			<button class="prevPage" id="prevPage">이전</button>
 		</div>
 		`
 
 		return html;
+	}
+
+	async submit() {
+		console.log("전처리 전송");
 	}
 
 	async drawHtml() {
@@ -118,40 +122,3 @@ class ShowTreatmentPage{
 }
 
 export default new ShowTreatmentPage();
-
-// const drawStaticData = (staticData) => {
-// 	const $fileStaticDataDIV = document.querySelector("#fileStaticDataDIV");
-// 	console.log("drawStaticData", staticData)
-// 	// 여기부터 시작 => 통계치 그리기
-// 	// for(let data of staticData) {
-		
-// 	// 	$fileStaticDataDIV.innerHTML += `
-			// <div class="columnList">
-			// 	<div class="columnName" id="columnName">
-			// 		rererererererereerr
-			// 	</div>
-			// 	<div class="nullCount" id="nullCount">
-			// 		3
-			// 	</div>
-			// 	<div class="Q1" id="Q1">
-			// 		100
-			// 	</div>
-			// 	<div class="Q2" id="Q2">
-			// 		100
-			// 	</div>
-			// 	<div class="Q3" id="Q3">
-			// 		1000000000
-			// 	</div>
-			// 	<div class="mean" id="mean">
-			// 		1
-			// 	</div>
-			// 	<div class="min" id="min">
-			// 		0
-			// 	</div>
-			// 	<div class="max" id="max">
-			// 		1
-			// 	</div>
-			// </div>
-// 	// 	`
-// 	// }
-// }

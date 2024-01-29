@@ -3,37 +3,6 @@ import API from "/templates/src/Utils/API.mjs";
 // 페이지 디자인 하기 
 /*
 <!-- 엑셀 기준 열 지정 및 주기 선택 -->
-        <div class="settingContainer">
-          <div class="dateContainer">
-            <span>날짜 열</span>
-            <input type="text" name="date" id="date" class="date" value="1">
-          </div>
-
-          <div class="startContainer">
-            <span>처리 시작 행</span>
-            <input type="text" name="startIndex" id="startIndex" class="startIndex" value="1">
-          </div>
-
-          <div class="periodContainer">
-            <span>주기 선택</span>
-            <div class="radioContainer" id="periodContainer">
-              <input type="radio" name="period" id="days" value="days" checked><label for="days">일간</label>
-              <input type="radio" name="period" id="weeks" value="weeks"><label for="weeks">주간</label>
-              <input type="radio" name="period" id="else" value="else"><label for="else">기타</label>
-            </div>
-            <input type="text" id="elsePeriod" class="elsePeriod" disabled>
-          </div>
-
-          <div class="typeSelectContainer" id="typeSelectContainer">
-            <span>종류 선택</span>
-            <div class="radioContainer" id="typeContainer">
-              <input type="radio" name="type" id="환경" value="환경" checked><label for="환경">환경</label>
-              <input type="radio" name="type" id="생육" value="생육"><label for="생육">생육</label>
-              <input type="radio" name="type" id="생산량" value="생산량"><label for="생산량">생산량</label>
-            </div>
-          </div>
-        </div>
-
         <div class="variablesContainer">
           <input type="radio" name="level" class="easy" id="easy" checked><label for="easy">쉬움</label>
           <div class="box easyVersion">
@@ -87,16 +56,6 @@ import API from "/templates/src/Utils/API.mjs";
           </select>
         </div>
 
-        <!-- 파일 저장 -->
-        <div class="fileSaveContainer">
-          <span>저장할 파일 이름</span>
-          <input type="text" name="fileName" id="fileName" class="fileName"
-            placeholder="저장할 파일의 이름을 입력하세요">
-          <div>
-            <button id="submitData">저장</button>
-            <button id="resetData">초기화</button>
-          </div>
-        </div>
       </div>
  */
 class RevisePage {
@@ -108,6 +67,12 @@ class RevisePage {
 
 	templates() {
 		return `
+    <div class="fileSaveDIV">
+      <span>저장할 파일 이름</span>
+      <input type="text" name="fileName" id="fileName" class="fileName"
+      placeholder="저장할 파일의 이름을 입력하세요">
+    </div>
+
 
 		<div class="buttonDIV" id="buttonDIV">
 			<button class="nextPage" id="nextPage">다음</button>
