@@ -23,7 +23,7 @@ $closeUploadPopup.addEventListener("click", () => {
 });
 
 let selectedFile;
-let sheetData;
+let sheetData = "";
 
 const fileSetting = () => {
   $fileIcon.style.display = "none";
@@ -31,8 +31,9 @@ const fileSetting = () => {
   $fileName.value = selectedFile.name.replace(/\s/g, "_");
 }
 
-const readFileContent = (file) => {
+const readXlsxFileContent = (file) => {
   const reader = new FileReader();
+
   Loading.StartLoading();
 
   reader.onload = function (event) {
@@ -48,6 +49,45 @@ const readFileContent = (file) => {
   };
 
   reader.readAsBinaryString(file);
+}
+
+const readCsvFileContent = (file) => {
+  const reader = new FileReader();
+  console.log("CSV")
+  Loading.StartLoading();
+
+  reader.onload = function (event) {
+    const fileContent =  event.target.result;
+    sheetData = parseCSV(fileContent);
+    Loading.CloseLoading();
+  };
+
+  reader.onerror = function (event) {
+    console.error(event.target.error);
+    Loading.CloseLoading();
+  };
+
+  reader.readAsText(file, 'UTF-8');
+}
+
+const parseCSV = (csvContent) => {
+  const lines = csvContent.split('\n');
+  const result = [];
+  
+  // 첫 줄을 헤더로 사용
+  const headers = lines[0].split(',');
+
+  // 나머지 줄 처리
+  for (let i = 1; i < lines.length; i++) {
+    const values = lines[i].split(',');
+    const entry = {};
+    headers.forEach((header, index) => {
+      entry[header] = values[index];
+    });
+    result.push(entry);
+  }
+
+  return result;
 }
 
 $fileUploadInput.addEventListener("change", (event) => {
@@ -76,8 +116,20 @@ $fileUploadDrag.addEventListener("drop", (event) => {
 
 const showFile = () => {
   fileSetting();
-  readFileContent(selectedFile);
+  if (
+    $fileName.value.toLowerCase().includes("xls") ||
+    $fileName.value.toLowerCase().includes("xlsx") 
+  ) {
+    readXlsxFileContent(selectedFile);
+    return;
+  }
+
+  if ($fileName.value.toLowerCase().includes("csv")) {
+    readCsvFileContent(selectedFile);
+    return;
+  }
 }
+
 
 // 파일 업로드
 const uploadFile = async () => {
