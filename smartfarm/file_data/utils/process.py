@@ -44,6 +44,27 @@ class DataProcess:
             return numeric_series
         else:
             return None
+        
+    #다양한 날짜 형식 처리, 타입 처리 전엔 항상 날짜의 형태의 문자열로 처리, 날짜 열만 따로 호출함.
+    def date_converter(date_series):
+        date_type = date_series.dtype
+        date_series = date_series.rename("날짜")
+        #str, object, int, int64, datetime64의 경우 pandas to_datetime을 통해 datetime64[ns]로 변환
+        try:
+            if date_type == str or date_type == object:
+                date_series = pd.to_datetime(date_series,format='mixed',yearfirst=True,errors='coerce')
+            elif date_type in [int, np.int64]:
+                date_series = pd.to_datetime(date_series.astype(str),format='mixed',yearfirst=True,errors='coerce')
+            elif date_type == "datetime64[ns]" or date_type == "<M8[ns]":    
+                date_series = pd.to_datetime(date_series,format='mixed',yearfirst=True,errors='coerce')
+            else:
+                raise ValueError
+            return date_series
+        except:
+            raise ValueError    
+        
+        
+    
 
 
     @staticmethod
@@ -51,25 +72,6 @@ class DataProcess:
         data1 = data1.append(data2)
         return data1
 
-
-    #다양한 날짜 형식 처리, 타입 처리 전엔 항상 날짜의 형태의 문자열로 처리, 날짜 열만 따로 호출함.
-    def dateConverter(self):
-        date_type = self.getDateSeries().dtype
-        self.data.rename(columns={self.data.columns[self.date]:'날짜'}, inplace=True)
-        #str, object, int, int64, datetime64의 경우 pandas to_datetime을 통해 datetime64[ns]로 변환
-        try:
-            if date_type == str or date_type == object:
-                self.data["날짜"] = pd.to_datetime(self.data["날짜"],format='mixed',yearfirst=True,errors='coerce')
-            elif date_type in [int, np.int64]:
-                self.data["날짜"] = pd.to_datetime(self.data["날짜"].astype(str),format='mixed',yearfirst=True,errors='coerce')
-            elif date_type == "datetime64[ns]" or date_type == "<M8[ns]":    
-                self.data["날짜"] = pd.to_datetime(self.data["날짜"],format='mixed',yearfirst=True,errors='coerce')
-            else:
-                print("날짜 형식이 아닙니다.")
-                raise ValueError
-        except:
-            print("날짜 형식이 아닙니다.")
-            raise ValueError
     
     def isMinute(self):
         #분 단위인지 판별
