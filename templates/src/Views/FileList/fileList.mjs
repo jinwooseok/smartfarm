@@ -102,7 +102,7 @@ const setOnClick = () => {
 (async function () {
   // 파일 불러오는 API
   const response = await API("/files/", "get");
-  fileList = response.data; // 형식 = [{fileName": ,"lastUpdateDate":}, {fileName": ,"lastUpdateDate":},]
+  fileList = response.data;
   setFileList();
   setOnClick();
 }());
@@ -198,19 +198,18 @@ const setDownloadFile = () =>{
 
 // download 로직, csv로
 const downloadToCsv = (data, title) => {
-  const jsonData = data
-  let jsonDataParsing = JSON.parse(jsonData);
+  const jsonData = data;
 
   let toCsv = '';
   let row="";
 
-  for(let i in jsonDataParsing[0]){
+  for(let i in jsonData[0]){
     row += i+","; // 열 입력
   }
   row = row.slice(0,-1);
   toCsv += row +"\r\n";
 
-  toCsv += jsonDataParsing.reduce((csv, rowObject) => {
+  toCsv += jsonData.reduce((csv, rowObject) => {
     const row = Object.values(rowObject).join(",") + "\r\n";
     return csv + row;
   }, "");
@@ -263,7 +262,7 @@ const deleteCheckedItems = (checkedItems) => {
     if (response.status === "success") {
       location.href = "/file-list/";
     } else {
-      alert("삭제 실패");
+      alert("삭제 실패");``
     }
   });
 }

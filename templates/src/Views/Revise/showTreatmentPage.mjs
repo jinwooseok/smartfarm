@@ -9,9 +9,9 @@ class ShowTreatmentPage{
 	constructor() {
 	}
 
-	templates() {
+	async templates() {
 		
-		// const staticHtml = this.drawHtml();
+		const staticHtml = await this.drawHtml();
 		const html = `
 		<div class="rowDIV">
 			<div class="fileStaticDataDIV" id="fileStaticDataDIV">
@@ -41,32 +41,7 @@ class ShowTreatmentPage{
 						최대
 					</div>
 				</div>
-				<div class="columnList">
-					<div class="columnName" id="columnName">
-						열 이름
-					</div>
-					<div class="nullCount" id="nullCount">
-						빈 값
-					</div>
-					<div class="Q1" id="Q1">
-						1사분위 값
-					</div>
-					<div class="Q2" id="Q2">
-						중앙값
-					</div>
-					<div class="Q3" id="Q3">
-						3사분위값
-					</div>
-					<div class="mean" id="mean">
-						평균
-					</div>
-					<div class="min" id="min">
-						최소
-					</div>
-					<div class="max" id="max">
-						최대
-					</div>
-				</div>
+				${staticHtml}
 			</div>
 			<div class="graphDIV" id="graphDIV">
 				<div id="myChart">
@@ -80,7 +55,7 @@ class ShowTreatmentPage{
 		</div>
 		
 		<div class="buttonDIV" id="buttonDIV">
-			<button class="nextPage" id="nextPage">다음</button>
+			<button class="nextPage treat" id="nextPage">다음</button>
 			<button class="prevPage" id="prevPage">이전</button>
 		</div>
 		`
@@ -88,15 +63,20 @@ class ShowTreatmentPage{
 		return html;
 	}
 
+	async submit() {
+		console.log("전처리 전송");
+	}
 
-	drawHtml() {
-		let html;
+	async drawHtml() {
+		let html = '';
+
+		await this.setStaticData();
 
 		for(let data of this.#staticData) {
 			html += `
 				<div class="columnList">
 					<div class="columnName" id="columnName">
-						${data.fileName}
+						${data.name}
 					</div>
 					<div class="nullCount" id="nullCount">
 						${data["Null_count"]}
@@ -142,40 +122,3 @@ class ShowTreatmentPage{
 }
 
 export default new ShowTreatmentPage();
-
-// const drawStaticData = (staticData) => {
-// 	const $fileStaticDataDIV = document.querySelector("#fileStaticDataDIV");
-// 	console.log("drawStaticData", staticData)
-// 	// 여기부터 시작 => 통계치 그리기
-// 	// for(let data of staticData) {
-		
-// 	// 	$fileStaticDataDIV.innerHTML += `
-			// <div class="columnList">
-			// 	<div class="columnName" id="columnName">
-			// 		rererererererereerr
-			// 	</div>
-			// 	<div class="nullCount" id="nullCount">
-			// 		3
-			// 	</div>
-			// 	<div class="Q1" id="Q1">
-			// 		100
-			// 	</div>
-			// 	<div class="Q2" id="Q2">
-			// 		100
-			// 	</div>
-			// 	<div class="Q3" id="Q3">
-			// 		1000000000
-			// 	</div>
-			// 	<div class="mean" id="mean">
-			// 		1
-			// 	</div>
-			// 	<div class="min" id="min">
-			// 		0
-			// 	</div>
-			// 	<div class="max" id="max">
-			// 		1
-			// 	</div>
-			// </div>
-// 	// 	`
-// 	// }
-// }

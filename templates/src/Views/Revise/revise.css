@@ -6,6 +6,11 @@
 	/* overflow-y: hidden; */
 }
 
+a{
+	color: #007A33;
+	text-decoration: none;
+}
+
 li, ul{
 	list-style: none;
 }
@@ -107,6 +112,30 @@ li, ul{
   overflow-y: hidden;
 }
 
+.workDIV .settingDIV{
+	width: 1000px;
+	height: 200px;
+	margin: 0 auto;
+
+	border: 1px solid #000;
+
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: center;
+}
+
+.settingDIV>*{
+	width: 200px;
+	height: 200px;
+	text-align: center;
+	border-right: 1px solid #000;
+}
+
+.settingDIV>*:last-child{
+	border: none;
+}
+
 .workDIV .buttonDIV {
 	width: 1000px;
 	margin : 20px auto;
@@ -126,6 +155,8 @@ button{
 button:hover{
 	cursor: pointer;
 }
+
+/* 2 page */
 
 .fileStaticDataDIV {
 	width: 1000px;
@@ -159,7 +190,7 @@ button:hover{
 }
 
 .fileStaticDataDIV .columnList .columnName {
-  width: 250px;
+  width: 180px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -172,7 +203,7 @@ button:hover{
 .fileStaticDataDIV .columnList .Q3,
 .fileStaticDataDIV .columnList .min,
 .fileStaticDataDIV .columnList .max {
-  width: 100px;
+  width: 110px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -210,4 +241,93 @@ button:hover{
 
 .graphDIV .buttonContainer i {
   font-size: 30px;
+}
+
+/* 변수 선택 창 */
+.variablesContainer {
+  width: 40%;
+  height: 100%;
+  position: relative;
+  text-align: center;
+}
+
+/* 난이도 선택 */
+.reviseDIV {
+  width: 1000px;
+	margin: 0 auto;
+
+	display: flex;
+	flex-direction: row;
+
+}
+
+.box {
+  width: 500px;
+  display: none;
+}
+
+input[name="level"] {
+  display: none;
+}
+
+.variablesDIV{
+	width: 500px;
+}
+
+.variablesContainer>label {
+  display: inline-block;
+  margin: 0 15px;
+}
+
+label:hover {
+  border-bottom: 2px solid #000;
+}
+
+input[name="level"]:checked+label {
+  border-bottom: 2px solid #007A33;
+  cursor: default;
+}
+
+input[name="level"]:checked+label+.box {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.easyVersion select {
+  width: 200px;
+}
+
+.hardVersion select {
+  width: 150px
+}
+
+.totalVariableContainer{
+  width: 200px;
+  height: 100%;
+
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.totalVariableContainer select{
+  width: 50%;
+}
+
+/* 파일 저장 */
+.fileSaveContainer {
+  width: 200px;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+
+.fileSaveContainer>*:not(:nth-child(2)) {
+  margin-top: 30px;
 }

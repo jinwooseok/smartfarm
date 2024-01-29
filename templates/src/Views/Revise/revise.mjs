@@ -4,6 +4,7 @@ import Loading from "/templates/src/Utils/Loading.mjs";
 
 import ShowFilePage from "./ShowFilePage.mjs";
 import ShowTreatmentPage from "./ShowTreatmentPage.mjs";
+import RevisePage from "./RevisePage.mjs";
 import Graph from "./Graph.mjs";
 
 // 순수 페이지 이동만 관리
@@ -53,6 +54,28 @@ $fileListSelectBox.addEventListener("change", moveSelectedFileTitle);
 	Loading.CloseLoading();
 }());
 
+let data = ''; //
+
+const submitData = {
+	newFileName: '',
+	fileType: "", // typeDIv
+	startIndex: 1, // startIndex
+	dateColumn: 1, // date
+	interval: "", //periodDIV
+	var: "",
+}
+
+const checkRadioValue = (htmlTag) => {
+  for (let i = 0; i < htmlTag.length; i++) {
+    if (htmlTag[i].checked) {
+      if (htmlTag[i].value === "else"){
+        return document.getElementById("elsePeriod").value;
+      }
+      return htmlTag[i].value;
+    }
+  }
+}
+
 ///////////////////////// page 변환
 const changeProgress = (step) => {
 	const $$progress = document.querySelectorAll(".progress");
@@ -79,39 +102,75 @@ const changeProgress = (step) => {
 	}
 }
 
-const clickEvent = (id) => {
-	switch (id) {
-		case "save" :
-			alert("파일을 저장합니다.");
-			break;
-		case "nextPage" :
-			confirm(`이동 합니다.`) === true ? changeProgress(id) : null;
-			break;
-		case "prevPage" :
-			confirm(`이동 합니다.`) === true ? changeProgress(id) : null;
-			break;
-		case "nextGraph" :
-			// 그래프 다음 데이터
-			break;
-		case "prevGraph" :
-			// 그래프 이전 데이터
-			break;
-		case "closeGraph" :
-			Graph.closeGraph();
-			break;
+const clickEvent = async (event, id, targetClass) => {
+	// periodSelectDIV
+	if (id === "else") {
+		document.querySelector("#elsePeriod").disabled = false;
+    return;
+	}
+
+	if (id === "weekly" || id === "daily") {
+		document.querySelector("#elsePeriod").disabled = true;
+    return;
+	}
+
+	// revise
+	if (id === "wordContain") {
+		console.log(event, "e");
+	}
+
+	// 파일 저장
+	if (id === "save") {
+		alert("파일을 저장합니다.");
+		return;
+	}
+
+	// 페이지 이동
+	if (id === "nextPage" || id === "prevPage") {
+
+		// 전처리
+		if(targetClass.contains("treat")) {
+			await ShowTreatmentPage.submit();
+		}
+
+		// 데이터 확인
+		if(targetClass.contains("setting")) {
+			submitData.fileType = checkRadioValue(document.querySelectorAll('input[name="type"]'));
+			submitData.startIndex = document.querySelector("#startIndex").value;
+			submitData.dateColumn = document.querySelector("#date").value
+			submitData.interval =  checkRadioValue(document.querySelectorAll('input[name="period"]'));
+
+			console.log("setting", submitData);
+		}
+
+		confirm(`이동 합니다.`) === true ? changeProgress(id) : null;
+		return;
+	}	
+
+	// 그래프
+	if (id === "nextGraph") {
+		// 그래프 다음 데이터
+		return;
+	}
+	if (id === "prevGraph") {
+		// 그래프 이전 데이터
+		return;
+	}
+	if (id === "closeGraph") {
+		confirm(`이동 합니다.`) === true ? changeProgress(id) : null;
+		return;
 	}
 }
 
 window.addEventListener("click", (event) => {
 	const targetId = event.target.id;
+	const targetClass= event.target.classList;
 	if (targetId !== "") {
-		clickEvent(targetId);
+		clickEvent(event, targetId, targetClass);
 	}
 })
 
-
 const changeDiv = async (nowProgress) => {
-	console.log("현재 페이지", nowProgress);
 	const $workDIV = document.querySelector(".workDIV");
 
 	if (nowProgress === 0) { // 데이터 그림
@@ -123,9 +182,8 @@ const changeDiv = async (nowProgress) => {
 
 	if (nowProgress === 1) { // 전처리
 		ShowTreatmentPage.setFileTitle(fileName);
-		// await ShowTreatmentPage.setStaticData();
 
-		$workDIV.innerHTML = ShowTreatmentPage.templates();
+		$workDIV.innerHTML = await ShowTreatmentPage.templates();
 
 		// 그래프 보여주는 부분
 		const $$columnName = document.querySelectorAll("#columnName");
@@ -135,15 +193,20 @@ const changeDiv = async (nowProgress) => {
 			});
 		});
 	
-
 	}
 
 	if (nowProgress === 2) { // 파일 수정 데이터 전송
-		
+		$workDIV.innerHTML = RevisePage.templates();
+
+		ShowFilePage.setColumn(document.querySelector("#dataColumnList"));
 	}
 
 	if (nowProgress === 3) { // 파일 저장
-
+		$workDIV.innerHTML = `
+		<div class="buttonDIV" id="buttonDIV">
+		<button class="nextPage" id="nextPage">다음</button>
+		<button class="prevPage" id="prevPage">이전</button>
+	</div>`;
 	}
 	
 }
