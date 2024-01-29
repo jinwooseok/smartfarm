@@ -237,7 +237,7 @@ const clickDownloadButton = () => {
 	const downloadTitle = setDownloadFile();
 
 	downloadTitle?.map( async (title) => {
-		const response = await API("/files/download/", "post", {fileName: title});
+		const response = await API("/files/download/", "post", {fileName: JSON.stringify(title)});
     console.log(response, "downloadResponse");
 		if(response.status === "success") {
 			downloadToCsv(response.data, title);
@@ -263,7 +263,7 @@ const deleteCheckedItems = (checkedItems) => {
     if (response.status === "success") {
       location.href = "/file-list/";
     } else {
-      alert("삭제 실패");
+      alert("삭제 실패");``
     }
   });
 }

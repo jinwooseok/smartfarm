@@ -125,7 +125,7 @@ const changeDiv = async (nowProgress) => {
 		ShowTreatmentPage.setFileTitle(fileName);
 		// await ShowTreatmentPage.setStaticData();
 
-		$workDIV.innerHTML = ShowTreatmentPage.templates();
+		$workDIV.innerHTML = await ShowTreatmentPage.templates();
 
 		// 그래프 보여주는 부분
 		const $$columnName = document.querySelectorAll("#columnName");

@@ -159,7 +159,7 @@ button:hover{
 }
 
 .fileStaticDataDIV .columnList .columnName {
-  width: 250px;
+  width: 180px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -172,7 +172,7 @@ button:hover{
 .fileStaticDataDIV .columnList .Q3,
 .fileStaticDataDIV .columnList .min,
 .fileStaticDataDIV .columnList .max {
-  width: 100px;
+  width: 110px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
