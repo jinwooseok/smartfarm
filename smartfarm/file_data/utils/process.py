@@ -4,10 +4,7 @@ import numpy as np
 import json
 ## -------------데이터 변경 클래스-----------------
 class DataProcess:
-    # def __init__(self, data, date = 0, startIndex = 1):
-    #     self.data = pd.read_json(data).iloc[int(startIndex)-1:,:].reset_index(drop=True)
-    #     self.date = int(date)
-    
+
     #실수 자료를 소수점 2자리 수로 반올림
     @staticmethod
     def round_converter(data, round=2):

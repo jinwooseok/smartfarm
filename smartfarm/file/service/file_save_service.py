@@ -11,6 +11,8 @@ from ..exceptions.file_exception import *
 from ...feature.serializers import FeatureSerializer
 from ...feature.service.feature_service import FeatureService
 from common.validate_exception import ValidationException
+
+
 class FileSaveService():
     
     def __init__(self, user, file_title, file_data):
@@ -43,7 +45,6 @@ class FileSaveService():
     
     @staticmethod
     def data_to_csv(file_title, file_data):
-        print(type(file_data))
         if type(file_data) is pd.DataFrame:
             return FileSaveService.df_to_csv(file_title, file_data)
         elif type(file_data) is list:
@@ -56,6 +57,7 @@ class FileSaveService():
     @staticmethod
     def json_to_csv(file_title, file_data):
         data = pd.DataFrame(file_data)
+        print(data)
         data.to_csv(file_title, index = False)
 
     @staticmethod

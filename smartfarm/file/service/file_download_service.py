@@ -1,4 +1,4 @@
-from django.http import FileResponse
+from django.http import HttpResponse
 import os
 from django.conf import settings
 from ..utils.utils import *
@@ -16,6 +16,8 @@ class FileDownloadService:
     @staticmethod
     def attach_file(file_name, file_path):
         if os.path.exists(file_path):
-            return FileResponse(open(file_path, 'rb'), as_attachment=True, filename=file_name, content_type='application/octet-stream')
+            response = HttpResponse(open(file_path, 'rb'), content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename=' + file_name
+            return response
         else:
             raise FileNotFoundException()
