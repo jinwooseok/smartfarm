@@ -125,6 +125,12 @@ const clickEvent = async (event, id, targetClass) => {
 		return;
 	}
 
+	// 변수 초기화
+	if (id === "resetData") {
+		alert("변수 초기화");
+		return;
+	}
+
 	// 페이지 이동
 	if (id === "nextPage" || id === "prevPage") {
 

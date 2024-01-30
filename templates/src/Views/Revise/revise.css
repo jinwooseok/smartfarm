@@ -243,13 +243,6 @@ button:hover{
   font-size: 30px;
 }
 
-/* 변수 선택 창 */
-.variablesContainer {
-  width: 40%;
-  height: 100%;
-  position: relative;
-  text-align: center;
-}
 
 /* 난이도 선택 */
 .reviseDIV {
@@ -258,11 +251,10 @@ button:hover{
 
 	display: flex;
 	flex-direction: row;
-
 }
 
 .box {
-  width: 500px;
+  width: 600px;
   display: none;
 }
 
@@ -271,10 +263,15 @@ input[name="level"] {
 }
 
 .variablesDIV{
-	width: 500px;
+	width: 800px;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	align-items: center;
 }
 
-.variablesContainer>label {
+.variablesDIV>label {
   display: inline-block;
   margin: 0 15px;
 }
@@ -304,7 +301,7 @@ input[name="level"]:checked+label+.box {
   width: 150px
 }
 
-.totalVariableContainer{
+.totalVariableDIV{
   width: 200px;
   height: 100%;
 
@@ -313,12 +310,12 @@ input[name="level"]:checked+label+.box {
   align-items: center;
 }
 
-.totalVariableContainer select{
+.totalVariableDIV select{
   width: 50%;
 }
 
 /* 파일 저장 */
-.fileSaveContainer {
+.fileSaveDIV {
   width: 200px;
   height: 100%;
 
@@ -328,6 +325,6 @@ input[name="level"]:checked+label+.box {
   align-items: center;
 }
 
-.fileSaveContainer>*:not(:nth-child(2)) {
+.fileSaveDIV>*:not(:nth-child(2)) {
   margin-top: 30px;
 }

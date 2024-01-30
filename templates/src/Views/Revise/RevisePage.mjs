@@ -17,6 +17,7 @@ class RevisePage {
     <div class="reviseDIV">
       <div class="variablesDIV">
         <input type="radio" name="level" class="easy" id="easy" checked><label for="easy">쉬움</label>
+
         <div class="box easyVersion">
           <select name="dataColumnList" id="dataColumnList" class="dataColumnList" multiple size="5">
           </select>
@@ -61,20 +62,20 @@ class RevisePage {
           <button class="optionDelete" id="optionDelete">삭제</button>
           <button class="optionSelect" id="optionSelect">추가</button>
         </div>
-      </div>
 
-      <div class="totalVariableContainer">
-        <select name="selectedValueList" id="selectedValueList" class="selectedValueList" multiple size="5">
-        </select>
+        <div class="totalVariableDIV">
+          <select name="selectedValueList" id="selectedValueList" class="selectedValueList" multiple size="5">
+          </select>
+        </div>
+
       </div>
 
       <!-- 파일 저장 -->
-      <div class="fileSaveContainer">
+      <div class="fileSaveDIV">
         <span>저장할 파일 이름</span>
         <input type="text" name="fileName" id="fileName" class="fileName"
           placeholder="저장할 파일의 이름을 입력하세요">
         <div>
-          <button id="submitData">저장</button>
           <button id="resetData">초기화</button>
         </div>
       </div>
@@ -82,7 +83,7 @@ class RevisePage {
     </div>
 
 		<div class="buttonDIV" id="buttonDIV">
-			<button class="nextPage" id="nextPage">다음</button>
+			<button class="save" id="save">저장</button>
 			<button class="prevPage" id="prevPage">이전</button>
 		</div>
 		`
