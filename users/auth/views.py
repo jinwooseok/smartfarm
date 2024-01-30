@@ -15,21 +15,20 @@ class SignUpViewSet(viewsets.GenericViewSet):
         #로그인 하지 않았다면 페이지 렌더링
         return render(request, 'src/Views/Register/register.html')
     
-    @swagger_auto_schema(request_body=SignUpSerializer, responses={1001: '이메일 중복', 1002: '전화번호', 500: '서버 에러'})
     def sign_up(self, request):
         serializer = SignUpSerializer(data=request.data)
         if request.session.get('user') is not None:
             raise exceptions.PermissionDenied()
         if serializer.is_valid():
             #이메일 중복 확인
-            if self.is_duplicated_email(serializer.validated_data['email']):
+            if self.is_duplicated_email(serializer.validated_data['user_id']):
                 raise EmailDuplicatedException()
             #비밀번호 암호화
-            serializer.validated_data['password'] = PasswordHasher().hash(serializer.validated_data['password'])
+            serializer.validated_data['user_pw'] = PasswordHasher().hash(serializer.validated_data['user_pw'])
             #전화번호 합체
-            serializer.validated_data['phone'] = ''.join(serializer.validated_data['phone'])
+            serializer.validated_data['user_tel'] = ''.join(serializer.validated_data['user_tel'])
             #전화번호 검증
-            if self.is_duplicated_user_tel(serializer.validated_data['phone']):
+            if self.is_duplicated_user_tel(serializer.validated_data['user_tel']):
                 raise UserTelDuplicatedException()
             #DB에 저장
             serializer.save()

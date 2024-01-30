@@ -5,11 +5,11 @@ class SignUpSerializer(serializers.ModelSerializer):
     password = serializers.CharField(source="user_pw",required=True)
     name = serializers.CharField(source="user_name",required=True)
     job = serializers.CharField(source="user_job",required=True)
-    phone = serializers.ListField(source="user_phone",required=True)
+    phone = serializers.ListField(source="user_tel",required=True)
     class Meta:
         model = User
         write_only=True
-        fields = ['email', 'password', 'name', 'job', 'phone']   
+        fields = ('email', 'password', 'name', 'job', 'phone')  
     
 class EmailValidationSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
