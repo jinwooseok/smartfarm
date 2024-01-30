@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from ..models import Feature
+from ..models import FileFeature
 
-class FeatureSerializer(serializers.ModelSerializer):
+class FileFeatureSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Feature
+        model = FileFeature
         fields = ['file','feature_order','feature_name','feature_type','feature_importance','feature_selected']

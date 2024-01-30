@@ -16,32 +16,14 @@ class FileNameModelSerializer(serializers.ModelSerializer):
         model = File
         fields = ('fileName',)
     
-    def get_file_root(self, user):
-        try:
-            print(user, self.data['fileName'])
-            file_object = File.objects.get(user=user, file_title=self.data['fileName'])
-        except:
-            raise FileNotFoundException()
-        
-        return file_object.file_root
-    
     def get_file_object(self, user):
-        try:
-            return File.objects.get(user=user, file_title=self.data['fileName'])
-        except:
-            raise FileNotFoundException()
-        
+            try:
+                return File.objects.get(user=user, file_title=self.data['fileName'])
+            except:
+                raise FileNotFoundException()
+            
 class FileNameSerializer(serializers.Serializer):
     fileName = serializers.CharField()
-    
-    def get_file_root(self, user):
-        try:
-            print(user, self.data['fileName'])
-            file_object = File.objects.get(user=user, file_title=self.data['fileName'])
-        except:
-            raise FileNotFoundException()
-        
-        return file_object.file_root
     
     def get_file_object(self, user):
         try:

@@ -1,4 +1,4 @@
-from ...models import File, user_file_path
+from ...models import File, FileStatus
 import pandas as pd
 from django.core import files
 import copy
@@ -8,17 +8,18 @@ from django.db import transaction
 from ..utils.utils import *
 from ..exceptions.file_exception import *
 
-from ...feature.serializers import FeatureSerializer
+from ...feature.serializers import FileFeatureSerializer
 from ...feature.service.feature_service import FeatureService
 from common.validate_exception import ValidationException
 
 
 class FileSaveService():
     
-    def __init__(self, user, file_title, file_data):
+    def __init__(self, user, file_title, file_data, statuses=1):
         self.user = user
         self.file_title = file_title
         self.file_data = file_data
+        self.statuses = statuses
 
     @classmethod
     def from_serializer(cls, serializer, user) -> 'FileSaveService':
@@ -31,12 +32,12 @@ class FileSaveService():
         #데이터 배열을 csv파일로 만들기
         self.data_to_csv(self.file_title, self.file_data)
 
-        FileSaveService.save_file(self.user, self.file_title)
+        FileSaveService.save_file(self.user, self.file_title, self.statuses)
         file = File.objects.get(user_id=self.user, file_title=self.file_title)
 
         feature_info_list = FeatureService.extract_feature(file.id, pd.DataFrame(self.file_data))
         #변수 정보 저장
-        feature_serializer = FeatureSerializer(data=feature_info_list, many=True)
+        feature_serializer = FileFeatureSerializer(data=feature_info_list, many=True)
         if feature_serializer.is_valid():
             feature_serializer.save()
         else:
@@ -57,15 +58,15 @@ class FileSaveService():
     @staticmethod
     def json_to_csv(file_title, file_data):
         data = pd.DataFrame(file_data)
-        print(data)
         data.to_csv(file_title, index = False)
 
     @staticmethod
-    def save_file(user, file_title):
+    def save_file(user, file_title, statuses):
         f = open(file_title,'rb')
         file_open=files.File(f, name=file_title)
         instance = FileSaveService.save_file_form(user, file_title, file_open)
         instance.save()
+        FileStatus.objects.create(status_id=statuses, file_id=instance.id)
         f.close()
         os.remove(file_title)
     
@@ -74,7 +75,7 @@ class FileSaveService():
         instance = File(
                     user_id=user,
                     file_title=file_title,
-                    file_root=file_root,
+                    file_root=file_root
                 )
         return instance
 
