@@ -63,51 +63,6 @@ class DataProcess:
         
     
 
-
-    @staticmethod
-    def dataIntegrator(data1, data2):
-        data1 = data1.append(data2)
-        return data1
-
-    
-    def isMinute(self):
-        #분 단위인지 판별
-        dateSeries = self.getDateSeries()
-        if dateSeries[1] - dateSeries[0] == pd.Timedelta('0 days 00:01:00'):
-            return True
-        else:
-            return False
-
-    def getDateSeries(self):
-        return self.data.iloc[:, self.date]
-    
-    
-    @staticmethod
-    def dataMerger(df1, df2):
-        df1 = df1.append(df2)
-        return df1
-    
-    #날짜열의 위치를 탐지. 반드시 날짜 형식이 있어야 함. 없을 시 변화없고 경고문 출력
-    @staticmethod
-    def dateDetecter(data):
-        for i, k in enumerate(data):
-            if data[k].dtype == "datetime64[ns]":
-                return i
-    
-    @staticmethod
-    def intDetecter(data):
-        for i, k in enumerate(data):
-            if data[k].dtype == "int64":
-                return i
-        return -1
-    
-    #컬럼명 변경
-    @staticmethod
-    def columnToString(df, columnIndex):
-        if columnIndex != -1:
-            df.iloc[:, columnIndex] = df.iloc[:, columnIndex].astype(str)
-        return df
-    
     #하나의 series를 받아서 결측치의 인덱스를 알려줌
     @staticmethod
     def outlier_detector(data, window_size=10, threshold=3):
