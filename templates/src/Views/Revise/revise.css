@@ -144,7 +144,7 @@ li, ul{
 button{
 	border: 1px solid #007A33;
 	border-radius: 10px;
-	margin-right: 5px;
+	margin-right: 8px;
 	padding: 5px 11px;
 	background-color: #007A33;
 	color: #fff;
@@ -243,40 +243,41 @@ button:hover{
   font-size: 30px;
 }
 
-/* 변수 선택 창 */
-.variablesContainer {
-  width: 40%;
-  height: 100%;
-  position: relative;
-  text-align: center;
-}
 
 /* 난이도 선택 */
 .reviseDIV {
   width: 1000px;
 	margin: 0 auto;
 
-	display: flex;
-	flex-direction: row;
-
-}
-
-.box {
-  width: 500px;
-  display: none;
+	display: grid;
+	grid-template-columns : repeat(6, 1fr);
+	grid-template-areas:
+			"라디오 라디오 라디오 라디오 라디오 저장 저장"
+			"설정 설정 설정 설정 확인 저장 저장"
+			"설정 설정 설정 설정 확인 저장 저장"
+	;
 }
 
 input[name="level"] {
   display: none;
 }
 
-.variablesDIV{
-	width: 500px;
+.levelSelectDIV{
+	margin-bottom: 10px;
+
+	grid-area: 라디오;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
 }
 
-.variablesContainer>label {
-  display: inline-block;
-  margin: 0 15px;
+.box {
+	grid-area: 설정;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	align-items: center;
 }
 
 label:hover {
@@ -301,26 +302,24 @@ input[name="level"]:checked+label+.box {
 }
 
 .hardVersion select {
-  width: 150px
+  width: 130px
 }
 
-.totalVariableContainer{
-  width: 200px;
-  height: 100%;
+.totalVariableDIV{
+	grid-area: 확인;
 
   display: flex;
   justify-content: start;
   align-items: center;
 }
 
-.totalVariableContainer select{
-  width: 50%;
+.totalVariableDIV select{
+  width: 95%;
 }
 
 /* 파일 저장 */
-.fileSaveContainer {
-  width: 200px;
-  height: 100%;
+.fileSaveDIV {
+	grid-area: 저장;
 
   display: flex;
   flex-direction: column;
@@ -328,6 +327,6 @@ input[name="level"]:checked+label+.box {
   align-items: center;
 }
 
-.fileSaveContainer>*:not(:nth-child(2)) {
+.fileSaveDIV>*:not(:nth-child(2)) {
   margin-top: 30px;
 }

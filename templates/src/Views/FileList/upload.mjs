@@ -67,7 +67,7 @@ const readCsvFileContent = (file) => {
     Loading.CloseLoading();
   };
 
-  reader.readAsText(file, 'UTF-8');
+  reader.readAsText(file, 'EUC-KR');
 }
 
 const parseCSV = (csvContent) => {
