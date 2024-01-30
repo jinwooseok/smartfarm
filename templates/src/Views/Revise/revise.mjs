@@ -54,8 +54,6 @@ $fileListSelectBox.addEventListener("change", moveSelectedFileTitle);
 	Loading.CloseLoading();
 }());
 
-let data = ''; //
-
 const submitData = {
 	newFileName: '',
 	fileType: "", // typeDIv
@@ -103,6 +101,28 @@ const changeProgress = (step) => {
 }
 
 const clickEvent = async (event, id, targetClass) => {
+
+	// 페이지 이동
+	if (id === "nextPage" || id === "prevPage") {
+		// 데이터 확인
+		if(targetClass.contains("setting")) {
+			submitData.fileType = checkRadioValue(document.querySelectorAll('input[name="type"]'));
+			submitData.startIndex = document.querySelector("#startIndex").value;
+			submitData.dateColumn = document.querySelector("#date").value
+			submitData.interval =  checkRadioValue(document.querySelectorAll('input[name="period"]'));
+
+			console.log("setting", submitData);
+		}
+
+		// 전처리
+		if(targetClass.contains("treat")) {
+			await ShowTreatmentPage.submit();
+		}
+
+		confirm(`이동 합니다.`) === true ? changeProgress(id) : null;
+		return;
+	}	
+
 	// periodSelectDIV
 	if (id === "else") {
 		document.querySelector("#elsePeriod").disabled = false;
@@ -114,44 +134,48 @@ const clickEvent = async (event, id, targetClass) => {
     return;
 	}
 
-	// revise
-	if (id === "wordContain") {
-		console.log(event, "e");
+	///////////////////// revise
+	if (id === "wordContain") { // 포함된 변수 목록 불러옴
+		RevisePage.addWordContainSelectBox(event);
 	}
 
-	// 파일 저장
-	if (id === "save") {
-		alert("파일을 저장합니다.");
+	if (id === "save") { 	// 파일 저장
+		submitData.newFileName = document.querySelector('#fileName').value;
+		submitData.var = JSON.stringify(RevisePage.getNewData());
+		console.log("submitData", submitData);
 		return;
 	}
 
-	// 변수 초기화
-	if (id === "resetData") {
-		alert("변수 초기화");
+	if (id === "resetData") {// 변수 초기화
+		RevisePage.resetData();
+		document.querySelector("#selectedValueList").innerHTML = '';
 		return;
 	}
 
-	// 페이지 이동
-	if (id === "nextPage" || id === "prevPage") {
-
-		// 전처리
-		if(targetClass.contains("treat")) {
-			await ShowTreatmentPage.submit();
-		}
-
-		// 데이터 확인
-		if(targetClass.contains("setting")) {
-			submitData.fileType = checkRadioValue(document.querySelectorAll('input[name="type"]'));
-			submitData.startIndex = document.querySelector("#startIndex").value;
-			submitData.dateColumn = document.querySelector("#date").value
-			submitData.interval =  checkRadioValue(document.querySelectorAll('input[name="period"]'));
-
-			console.log("setting", submitData);
-		}
-
-		confirm(`이동 합니다.`) === true ? changeProgress(id) : null;
+	if (id === "defaultSelect") { // 변수 자동 선택
+		RevisePage.createEasyVersionData(event);
 		return;
-	}	
+	}
+
+	if (id === "optionDelete") { // 변수 삭제
+		RevisePage.varDelete();
+		return;
+	}
+
+	if (id === "optionADD") { // 변수 추가
+		RevisePage.createHardVersionData();
+		return;
+	}
+
+	if (id === "easy") {
+		document.querySelector(".box").innerHTML = RevisePage.templatesEasy();
+		return;
+	}
+
+	if (id === "hard") {
+		document.querySelector(".box").innerHTML = RevisePage.templatesHard();
+		return;
+	}
 
 	// 그래프
 	if (id === "nextGraph") {
@@ -204,15 +228,19 @@ const changeDiv = async (nowProgress) => {
 	if (nowProgress === 2) { // 파일 수정 데이터 전송
 		$workDIV.innerHTML = RevisePage.templates();
 
+		// 데이터 열 불러오기
 		ShowFilePage.setColumn(document.querySelector("#dataColumnList"));
+		// 이름 자동 지정
+		RevisePage.setFileName(fileName);
 	}
 
 	if (nowProgress === 3) { // 파일 저장
 		$workDIV.innerHTML = `
 		<div class="buttonDIV" id="buttonDIV">
-		<button class="nextPage" id="nextPage">다음</button>
-		<button class="prevPage" id="prevPage">이전</button>
-	</div>`;
+			<button class="nextPage" id="nextPage">다음</button>
+			<button class="prevPage" id="prevPage">이전</button>
+		</div>
+		`;
 	}
 	
 }

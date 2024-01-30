@@ -144,7 +144,7 @@ li, ul{
 button{
 	border: 1px solid #007A33;
 	border-radius: 10px;
-	margin-right: 5px;
+	margin-right: 8px;
 	padding: 5px 11px;
 	background-color: #007A33;
 	color: #fff;
@@ -249,31 +249,35 @@ button:hover{
   width: 1000px;
 	margin: 0 auto;
 
-	display: flex;
-	flex-direction: row;
-}
-
-.box {
-  width: 600px;
-  display: none;
+	display: grid;
+	grid-template-columns : repeat(6, 1fr);
+	grid-template-areas:
+			"라디오 라디오 라디오 라디오 라디오 저장 저장"
+			"설정 설정 설정 설정 확인 저장 저장"
+			"설정 설정 설정 설정 확인 저장 저장"
+	;
 }
 
 input[name="level"] {
   display: none;
 }
 
-.variablesDIV{
-	width: 800px;
+.levelSelectDIV{
+	margin-bottom: 10px;
+
+	grid-area: 라디오;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+}
+
+.box {
+	grid-area: 설정;
 
 	display: flex;
 	flex-direction: row;
 	justify-content: space-evenly;
 	align-items: center;
-}
-
-.variablesDIV>label {
-  display: inline-block;
-  margin: 0 15px;
 }
 
 label:hover {
@@ -298,12 +302,11 @@ input[name="level"]:checked+label+.box {
 }
 
 .hardVersion select {
-  width: 150px
+  width: 130px
 }
 
 .totalVariableDIV{
-  width: 200px;
-  height: 100%;
+	grid-area: 확인;
 
   display: flex;
   justify-content: start;
@@ -311,13 +314,12 @@ input[name="level"]:checked+label+.box {
 }
 
 .totalVariableDIV select{
-  width: 50%;
+  width: 95%;
 }
 
 /* 파일 저장 */
 .fileSaveDIV {
-  width: 200px;
-  height: 100%;
+	grid-area: 저장;
 
   display: flex;
   flex-direction: column;

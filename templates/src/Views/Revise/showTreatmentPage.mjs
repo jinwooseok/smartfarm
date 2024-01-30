@@ -64,7 +64,7 @@ class ShowTreatmentPage{
 	}
 
 	async submit() {
-		console.log("전처리 전송");
+		console.log("전처리 전송 API 만들기");
 	}
 
 	async drawHtml() {
@@ -109,7 +109,6 @@ class ShowTreatmentPage{
 	async setStaticData() {
 		const response = await API(`/files/${this.#fileTitle}/data/summary/`, "get");
 		this.#staticData = response.data;
-		console.log("staticData", this.#staticData);
 	}
 
 	setFileTitle(fileName) {
