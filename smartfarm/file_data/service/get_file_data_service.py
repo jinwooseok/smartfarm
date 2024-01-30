@@ -7,8 +7,8 @@ import json
 class GetFileDataService():
     def __init__(self, serializer, user):
         self.file_name = serializer.data['fileName']
-        self.file_root = serializer.get_file_root(user)
         self.file_object = serializer.get_file_object(user)
+        self.file_root = self.file_object.file_root    
     
     def execute(self):
         file_absolute_path = search_file_absolute_path(self.file_root)

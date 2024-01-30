@@ -12,11 +12,12 @@ class ProcessOutlierService():
     
     @classmethod
     def from_serializer(cls, serializer, user) -> 'ProcessOutlierService':
+        file_object = serializer.get_file_object(user)
         return cls(serializer.data['fileName']
-                   ,serializer.get_file_root(user)
-                   ,serializer.get_file_object(user)
-                   ,serializer.data['newFileName']
-                   ,user)
+            ,file_object.file_root
+            ,file_object
+            ,serializer.data['newFileName']
+            ,user)
     
 
     def execute(self):
