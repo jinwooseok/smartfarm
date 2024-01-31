@@ -53,7 +53,6 @@ const readXlsxFileContent = (file) => {
 
 const readCsvFileContent = (file) => {
   const reader = new FileReader();
-  console.log("CSV")
   Loading.StartLoading();
 
   reader.onload = function (event) {
@@ -78,7 +77,7 @@ const parseCSV = (csvContent) => {
   const headers = lines[0].split(',');
 
   // 나머지 줄 처리
-  for (let i = 1; i < lines.length; i++) {
+  for (let i = 1; i < lines.length - 1; i++) {
     const values = lines[i].split(',');
     const entry = {};
     headers.forEach((header, index) => {
@@ -137,6 +136,9 @@ const uploadFile = async () => {
 		fileName: $fileName.value,
 		fileData: JSON.stringify(sheetData),
 	};
+
+  console.log(sheetData[0]);
+  console.log(sheetData[sheetData.length-1]);
 
 	const response = await API("/files/save/", "post" , data);
 

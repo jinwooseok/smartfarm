@@ -1,7 +1,6 @@
 import API from "/templates/src/Utils/API.mjs";
-import Graph from "./Graph.mjs";
 
-class ShowTreatmentPage{
+class ShowPreprocessPage{
 
 	#staticData;
 	#fileTitle;
@@ -64,7 +63,8 @@ class ShowTreatmentPage{
 	}
 
 	async submit() {
-		console.log("전처리 전송 API 만들기");
+		const response = await API(`/files/${this.#fileTitle}/data/preprocess/`, "post");
+		console.log(response, "treat");
 	}
 
 	async drawHtml() {
@@ -120,4 +120,4 @@ class ShowTreatmentPage{
 	}
 }
 
-export default new ShowTreatmentPage();
+export default new ShowPreprocessPage();

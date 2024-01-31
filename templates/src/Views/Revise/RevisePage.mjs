@@ -1,12 +1,7 @@
-import API from "/templates/src/Utils/API.mjs";
 import ShowFilePage from "./ShowFilePage.mjs";
 import { reviseDefaultValue } from "../../Constant/variableList.mjs";
+import API from "/templates/src/Utils/API.mjs";
 
-// 페이지 디자인 하기 
-/*
-<!-- 엑셀 기준 열 지정 및 주기 선택 -->
-      
- */
 class RevisePage {
 
   #newData = [];
@@ -16,6 +11,11 @@ class RevisePage {
 	
 	constructor() {
 	}
+
+  async submit(fileName, submitData) {
+    const response = await API(`/files/${fileName}/data/farm/`, "post", submitData);
+		console.log("save", response)
+  }
 
   templatesEasy() {
     document.querySelector('.box').classList.add("easyVersion");
