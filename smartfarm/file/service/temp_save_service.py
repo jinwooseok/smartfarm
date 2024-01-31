@@ -30,7 +30,7 @@ class TempSaveService(FileSaveService):
     def save_file(file_id, file_title, statuses):
         f = open(file_title,'rb')
         file_open=files.File(f, name=file_title)
-        instance_tuple=Temp.objects.update_or_create(file_id=file_id, file_title=file_title, file_root=file_open)
+        instance_tuple=Temp.objects.update_or_create(file_id=file_id, file_title=file_title, defaults={"file_root":file_open})
         TempStatus.objects.update_or_create(status_id=statuses, temp_id=instance_tuple[0].id)
         f.close()
         os.remove(file_title)

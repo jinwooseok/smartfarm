@@ -1,6 +1,7 @@
 from ...file_data.service.get_file_data_service import GetFileDataService
 from ...file.utils.utils import search_file_absolute_path
-from ...file.service.temp_save_service import TempSaveService
+from ...file.service.temp_save_service import FileSaveService
+from ...file.service.temp_delete_service import TempDeleteService
 from ..utils.process import ETLProcessFactory
 from ...file_data.service.get_temp_data_service import GetTempDataService
 class FarmProcessService():
@@ -16,8 +17,11 @@ class FarmProcessService():
         self.user = user
     
     def execute(self):
-        temp_object = GetTempDataService.get_temp_file(self.file_object.id, status_id=1)
-        file_absolute_path = search_file_absolute_path(temp_object.file_root)
+        instance = GetTempDataService.get_temp_file(self.file_object.id, status_id=1)
+        if instance is None:
+            instance = self.file_object
+        
+        file_absolute_path = search_file_absolute_path(instance.file_root)
         df = GetFileDataService.file_to_df(file_absolute_path)
         #데이터프레임 윗부분 자르기
         df = df.iloc[self.start_index-1:]
@@ -26,7 +30,10 @@ class FarmProcessService():
         #정적 메서드 핸들러
         result = process_factory.handler()
         #저장
-        TempSaveService(self.user, self.file_object.file_title, self.new_file_name, result, statuses=2).execute()
+        FileSaveService(self.user, self.new_file_name, result, statuses=2).execute()
+        #임시파일 삭제
+        TempDeleteService(self.user, instance).execute()
+        
     
 
 

@@ -29,5 +29,8 @@ class GetTempDataService(GetFileDataService):
     
     @staticmethod
     def get_temp_file(file_id, status_id):
-        instance = Temp.objects.get(file_id=file_id, statuses=status_id)
+        try:
+            instance = Temp.objects.get(file_id=file_id, statuses=status_id)
+        except: instance = None
+        
         return instance

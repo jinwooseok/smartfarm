@@ -19,11 +19,12 @@ class ProcessOutlierService():
     
 
     def execute(self):
-            file_absolute_path = search_file_absolute_path(self.file_root)
-            df = GetFileDataService.file_to_df(file_absolute_path)
-            result = ProcessOutlierService.outlier_dropper(df)
-            TempSaveService(self.user, self.file_name, result, statuses=1).execute()
-            
+        file_absolute_path = search_file_absolute_path(self.file_root)
+        df = GetFileDataService.file_to_df(file_absolute_path)
+        result = ProcessOutlierService.outlier_dropper(df)
+        result.dropna(subset=["일시"],axis=0, inplace=True)
+        TempSaveService(self.user, self.file_name, result, statuses=1).execute()
+        
 
     @staticmethod
     def outlier_dropper(df):
