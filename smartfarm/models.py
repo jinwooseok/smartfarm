@@ -8,7 +8,7 @@ def user_file_path(instance, file_root):
 
 def user_temp_path(instance, file_root):
     # 파일이 저장될 경로: media/file/<user_id>/<filename>
-    return '{0}/temp/{1}'.format(instance.user.id, file_root)
+    return '{0}/temp/{1}'.format(instance.file.user.id, file_root)
 
 def user_model_path(instance, file_root):
     # 파일이 저장될 경로: media/file/<user_id>/<filename>

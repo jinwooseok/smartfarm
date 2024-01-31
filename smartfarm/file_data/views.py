@@ -29,7 +29,7 @@ class FileDataViewSet(viewsets.ModelViewSet):
         serializer = FileNameSerializer(data={'fileName': file_title})
         
         if serializer.is_valid():
-            return Response(ResponseBody.generate(data=GetFileDataService(serializer, user).execute()), status=200)     
+            return Response(ResponseBody.generate(data=GetFileDataService.from_serializer(serializer, user).execute()), status=200)     
     
     def summary(self, request, file_title):
         user = request.session.get('user')

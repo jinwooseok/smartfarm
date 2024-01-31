@@ -11,7 +11,7 @@ class GetFileDataService():
     @classmethod
     def from_serializer(cls, serializer, user) -> 'GetFileDataService':
         file_object = serializer.get_file_object(user)
-        file_name = file_object.file_name
+        file_name = file_object.file_title
         file_root = file_object.file_root
         return cls(file_name, file_object, file_root)
     

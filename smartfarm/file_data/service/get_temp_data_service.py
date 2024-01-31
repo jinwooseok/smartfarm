@@ -14,7 +14,7 @@ class GetTempDataService(GetFileDataService):
     @classmethod
     def from_serializer(cls, serializer, user, status_id) -> 'GetTempDataService':
         file_object = serializer.get_file_object(user)
-        file_name = file_object.file_name
+        file_name = file_object.file_title
         status_id = status_id
         return cls(file_name, file_object, status_id) 
 

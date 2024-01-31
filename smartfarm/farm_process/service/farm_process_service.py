@@ -16,7 +16,9 @@ class FarmProcessService():
         self.user = user
     
     def execute(self):
-        df = GetTempDataService(file_name=self.file_object.file_name, file_object=self.file_object, status_id=1).execute()
+        temp_object = GetTempDataService.get_temp_file(self.file_object.id, status_id=1)
+        file_absolute_path = search_file_absolute_path(temp_object.file_root)
+        df = GetFileDataService.file_to_df(file_absolute_path)
         #데이터프레임 윗부분 자르기
         df = df.iloc[self.start_index-1:]
         #프로세스 선정
@@ -24,7 +26,7 @@ class FarmProcessService():
         #정적 메서드 핸들러
         result = process_factory.handler()
         #저장
-        TempSaveService(self.user, self.file_object.file_name, self.new_file_name, result, statuses=2).execute()
+        TempSaveService(self.user, self.file_object.file_title, self.new_file_name, result, statuses=2).execute()
     
 
 

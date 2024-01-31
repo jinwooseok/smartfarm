@@ -3,12 +3,11 @@ from ...file.utils.utils import search_file_absolute_path
 from ..utils.process import DataProcess
 from ...file.service.temp_save_service import TempSaveService
 class ProcessOutlierService():
-    def __init__(self, file_name, file_root, file_object, new_file_name, user):
+    def __init__(self, file_name, file_root, file_object, user):
         self.user = user
         self.file_name = file_name
         self.file_root = file_root
         self.file_object = file_object
-        self.new_file_name = new_file_name
     
     @classmethod
     def from_serializer(cls, serializer, user) -> 'ProcessOutlierService':
@@ -16,7 +15,6 @@ class ProcessOutlierService():
         return cls(serializer.data['fileName']
             ,file_object.file_root
             ,file_object
-            ,serializer.data['newFileName']
             ,user)
     
 
@@ -24,7 +22,7 @@ class ProcessOutlierService():
             file_absolute_path = search_file_absolute_path(self.file_root)
             df = GetFileDataService.file_to_df(file_absolute_path)
             result = ProcessOutlierService.outlier_dropper(df)
-            TempSaveService(self.user, self.file_name, self.new_file_name, result, statuses=1).execute()
+            TempSaveService(self.user, self.file_name, result, statuses=1).execute()
             
 
     @staticmethod
