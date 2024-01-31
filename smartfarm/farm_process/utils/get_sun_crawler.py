@@ -2,6 +2,7 @@ import datetime
 import pandas as pd
 import requests
 from dateutil.relativedelta import relativedelta
+from ..exceptions.date_exceptions import *
 # 일출,일몰 크롤링 모듈
         #
         # long: 경도
@@ -14,7 +15,7 @@ class GetSunCrawler():
         self.lati = lati
         self.start_date = start_date
         self.end_date = end_date
-        self.service_key = "CHC3lP5ETp1jJorhar3RNwTH3OmFzVEWqFf2jJVkogfdbEMbXMR32QRMF1zP7EiZUsycywUpwbfp9L4nvaY8nA%3D%3D"
+        self.service_key = "KrL1x60Wlerl6EMB6sls2UUFYHp5PDj0jaRyBUDt%2Fh3ginr04Btpg%2BF8hCjIsE%2FyXHan%2BC7J3IkPLCekCdHT6A%3D%3D"
         
     def execute(self):
         start_date = self.start_date        
@@ -36,19 +37,23 @@ class GetSunCrawler():
 
     @staticmethod
     def get_sun_from_response(response):
+        print(response)
         # 일출 일몰 시간 추출
         sunrise = response[response.find('sunrise')+8:response.find('sunrise')+12]
         sunset = response[response.find('sunset')+7:response.find('sunset')+11]
         
         sunrise = sunrise[:2] + ":" + sunrise[2:]
         sunset = sunset[:2] + ":" + sunset[2:]
-        
-        sunrise = datetime.datetime.strptime(sunrise,"%H:%M").time()
-        sunset = datetime.datetime.strptime(sunset,"%H:%M").time()
+        try:
+            sunrise = datetime.datetime.strptime(sunrise,"%H:%M").time()
+            sunset = datetime.datetime.strptime(sunset,"%H:%M").time()
+        except:
+            raise GetSunApiException()
         return sunrise, sunset
 
     @staticmethod
     def api_form(service_key, date, long, lati):
+        print(service_key)
         URL = "http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo?serviceKey=" + \
                         service_key + "&locdate=" + date.strftime("%Y%m%d") + \
                         "&longitude=" + str(long) + "&latitude=" + str(lati) + "&dnYn=N"

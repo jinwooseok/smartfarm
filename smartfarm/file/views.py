@@ -53,7 +53,7 @@ class FileViewSet(viewsets.GenericViewSet):
         serializer = FileDeleteSerializer(data=request.data)
 
         if serializer.is_valid():
-            FileDeleteService(serializer, user).execute()
+            FileDeleteService.from_serializer(serializer, user).execute()
             return Response(ResponseBody.generate(),status=200)
         else:
             raise ValidationException(serializer)

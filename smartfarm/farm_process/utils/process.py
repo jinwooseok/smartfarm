@@ -21,6 +21,7 @@ class ETLProcessFactory():
     def handler(self):
         file_type = self.file_type
         interval = self.interval
+        self.data = self.data.dropna(subset=[self.data.columns[self.date_column]])
         #날짜열 추출
         date_series = self.data.iloc[:,self.date_column]
         #날짜열 드롭. 방해됨
