@@ -17,12 +17,14 @@ class GetDataSummaryService():
     
     @staticmethod
     def to_summary(data):
-        drop_list = []
+        summary_dict = {}
         for column in data.columns:
-            if DataProcess.to_numeric_or_none(data[column]) is None:
-                drop_list.append(column)
-        
-        data = DataProcess.drop_columns(data, drop_list)
+            numeric_column = DataProcess.to_numeric_or_none(data[column])
+            if numeric_column is not None:
+                summary_dict[column] = numeric_column
+            
+        data = pd.DataFrame(summary_dict)
+        print(data)
             
         null_count=pd.DataFrame(data.isnull().sum()).T
         null_count.index=["Null_count"]

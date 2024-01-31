@@ -45,7 +45,10 @@ class DailyFeatureGenerator():
         
         timing_key = standard[0]
         #타이밍이 들어있는 열을 찾는다.
-        timing_series = data[timing_dict[timing_key]]
+        if timing_key == '전체':
+            timing_series = date_series
+        else:
+            timing_series = data[timing_dict[timing_key]]
         
         function_key = standard[1]
         function = functions_dict[function_key]
