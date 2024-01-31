@@ -1,7 +1,7 @@
 from .get_file_data_service import GetFileDataService
 from ...file.utils.utils import search_file_absolute_path
 from ..utils.process import DataProcess
-from ...file.service.file_save_service import FileSaveService
+from ...file.service.temp_save_service import TempSaveService
 class ProcessOutlierService():
     def __init__(self, file_name, file_root, file_object, new_file_name, user):
         self.user = user
@@ -23,8 +23,8 @@ class ProcessOutlierService():
     def execute(self):
             file_absolute_path = search_file_absolute_path(self.file_root)
             df = GetFileDataService.file_to_df(file_absolute_path)
-            df = ProcessOutlierService.outlier_dropper(df)
-            FileSaveService(self.user, self.new_file_name, df).execute()
+            result = ProcessOutlierService.outlier_dropper(df)
+            TempSaveService(self.user, self.file_name, self.new_file_name, result, statuses=1).execute()
             
 
     @staticmethod
@@ -33,6 +33,6 @@ class ProcessOutlierService():
         for column in df.columns:
             numeric_column = DataProcess.to_numeric_or_none(df[column])
             if numeric_column is not None:
-                drop_index = drop_index+DataProcess.outlier_detector(df[column])
+                drop_index = drop_index+DataProcess.outlier_detector(numeric_column)
 
         return DataProcess.drop_rows(df, list(set(drop_index)))

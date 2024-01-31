@@ -1,6 +1,6 @@
 from ...file_data.service.get_file_data_service import GetFileDataService
 from ...file.utils.utils import search_file_absolute_path
-from ...file.service.file_save_service import FileSaveService
+from ...file.service.temp_save_service import TempSaveService
 from ..utils.process import ETLProcessFactory
 
 class FarmProcessService():
@@ -11,8 +11,8 @@ class FarmProcessService():
         self.date_column = serializer.validated_data['dateColumn']
         self.interval = serializer.validated_data['interval']
         self.var = serializer.validated_data['var']
-        self.file_root = serializer.get_file_root(user)
         self.file_object = serializer.get_file_object(user)
+        self.file_root = self.file_object.file_root
         self.user = user
     
     def execute(self):
@@ -25,7 +25,7 @@ class FarmProcessService():
         #정적 메서드 핸들러
         result = process_factory.handler()
         #저장
-        FileSaveService(self.user, self.new_file_name, result).execute()
+        TempSaveService(self.user, self.file_object.file_name, self.new_file_name, result, statuses=2).execute()
     
 
 

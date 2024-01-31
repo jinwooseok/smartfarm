@@ -69,6 +69,7 @@ class EnvirProcess:
     
     @staticmethod
     def start_end_extractor(date_series):
+        print(date_series)
         if date_series.isnull().sum() != 0:
             raise NullDateException()
         return date_series.iloc[0], date_series.iloc[-1]
