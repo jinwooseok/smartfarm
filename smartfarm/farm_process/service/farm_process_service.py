@@ -2,7 +2,7 @@ from ...file_data.service.get_file_data_service import GetFileDataService
 from ...file.utils.utils import search_file_absolute_path
 from ...file.service.temp_save_service import TempSaveService
 from ..utils.process import ETLProcessFactory
-
+from ...file_data.service.get_temp_data_service import GetTempDataService
 class FarmProcessService():
     def __init__(self, serializer, user):
         self.new_file_name = serializer.validated_data['newFileName']
@@ -16,8 +16,7 @@ class FarmProcessService():
         self.user = user
     
     def execute(self):
-        file_absolute_path = search_file_absolute_path(self.file_root)
-        df = GetFileDataService.file_to_df(file_absolute_path)
+        df = GetTempDataService(file_name=self.file_object.file_name, file_object=self.file_object, status_id=1).execute()
         #데이터프레임 윗부분 자르기
         df = df.iloc[self.start_index-1:]
         #프로세스 선정
