@@ -54,6 +54,8 @@ class FileDataViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             ProcessOutlierService.from_serializer(serializer, user).execute()
             return Response(ResponseBody.generate(), status=200)
+        else:
+            raise ValidationException(serializer)
     
     def process_time_series():
         return 0
