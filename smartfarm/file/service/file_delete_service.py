@@ -15,11 +15,8 @@ class FileDeleteService():
     
         
     def execute(self):
-        file_absolute_path = search_file_absolute_path(self.file_root)
         #db상 파일 제거
         self.file_object.delete()
-        #실제 파일 제거
-        self.delete_local_file(file_absolute_path)
 
     @staticmethod
     def delete_local_file(file_path):

@@ -1,6 +1,6 @@
 from .file_save_service import FileSaveService
+from .file_delete_service import FileDeleteService
 from ...models import Temp, TempStatus, File
-import pandas as pd
 from django.core import files
 import copy
 import os
@@ -23,15 +23,23 @@ class TempSaveService(FileSaveService):
         
         file = File.objects.get(user_id=self.user, file_title=file_title)
         
-        TempSaveService.save_file(file.id, file_title, self.statuses)
+        TempSaveService.save_file(file, file_title, self.statuses)
 
 
     @staticmethod
-    def save_file(file_id, file_title, statuses):
+    def save_file(file, file_title, statuses):
         f = open(file_title,'rb')
         file_open=files.File(f, name=file_title)
-        instance_tuple=Temp.objects.update_or_create(file_id=file_id, file_title=file_title, defaults={"file_root":file_open})
-        TempStatus.objects.update_or_create(status_id=statuses, temp_id=instance_tuple[0].id)
+        try:
+            #있는데 root만 달라진거면 새 root로 저장하고 기존 root 삭제
+            print(file)
+            temp_instance = Temp.objects.get(file=file)
+            if temp_instance.file_root != file_open:
+                temp_instance.delete()
+                Temp.objects.create(file=file, file_title=file_title, file_root=file_open)
+        #없으면 새로 저장
+        except Temp.DoesNotExist:
+            Temp.objects.create(file=file, file_title=file_title, file_root=file_open)
         f.close()
         os.remove(file_title)
 
