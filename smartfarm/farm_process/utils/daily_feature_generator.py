@@ -10,6 +10,7 @@ class DailyFeatureGenerator():
     
     def execute(self):
         return_list = []
+        print(self.var)
         for variable in self.var:
             temp = list(variable.keys())[0]
             standards = variable[temp]
@@ -22,7 +23,7 @@ class DailyFeatureGenerator():
             merged_df = pd.merge(merged_df, return_list[i], on='날짜', how='left')
         return merged_df
     
-    def generating_variable(data, date_series, temp,standard, t_diff=3, div_DN=False, tbase=15): 
+    def generating_variable(data, date_series, temp,standard, t_diff=2, div_DN=False, tbase=15): 
         
         timing_dict = {
             '전체' : 'all',
@@ -56,15 +57,17 @@ class DailyFeatureGenerator():
         period = 1
         
         temp_list = []
-        
+        date_list = []
         standard_date = date_series.iloc[0]
         last_date = date_series.iloc[-1]
         while last_date >= standard_date:
             total_mask = DailyFeatureGenerator.total_mask(date_series, standard_date, period, timing_series, timing_key)
-            temp = DailyFeatureGenerator.daily_grouping(total_mask, standard_date, data, target_column, function)
+            temp = DailyFeatureGenerator.daily_grouping(total_mask, data, target_column, function)
             temp_list.append(temp)
+            date_list.append(standard_date)
             standard_date += pd.Timedelta(days=period)
-        return_df = pd.DataFrame(temp_list, columns=['날짜', f'{timing_key}{function_key}{target_column}'])
+        print(temp_list)
+        return_df = pd.DataFrame({'날짜':date_list, f'{timing_key}{function_key}{target_column}':temp_list})
         return return_df
     
     def total_mask(date_series, standard_date, period, timing_series, timing_key):
@@ -75,17 +78,17 @@ class DailyFeatureGenerator():
             timing_mask = timing_mask_generator(timing_series, timing_key)
         return total_mask_generator([daily_mask, timing_mask])
     
-    def daily_grouping(mask, standard_date, data, target_column, function):
-        if len(mask) == 0:
-            [standard_date, np.nan]
+    def daily_grouping(mask, data, target_column, function):
+        if mask.sum() == 0:
+            np.nan
         else:
-            return [standard_date, function(data[target_column].loc[mask])]
+            return function(data[target_column].loc[mask])
    
    
     def DIF(data):
         return max(data) - min(data)
    
-    def GDD(data, tbase):
+    def GDD(data, tbase=15):
         temp = (max(data)+min(data))/2 - tbase
         if temp >= 0:
             return temp

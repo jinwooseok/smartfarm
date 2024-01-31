@@ -37,11 +37,10 @@ class GetSunCrawler():
 
     @staticmethod
     def get_sun_from_response(response):
-        print(response)
         # 일출 일몰 시간 추출
         sunrise = response[response.find('sunrise')+8:response.find('sunrise')+12]
         sunset = response[response.find('sunset')+7:response.find('sunset')+11]
-        
+          
         sunrise = sunrise[:2] + ":" + sunrise[2:]
         sunset = sunset[:2] + ":" + sunset[2:]
         try:
@@ -53,7 +52,6 @@ class GetSunCrawler():
 
     @staticmethod
     def api_form(service_key, date, long, lati):
-        print(service_key)
         URL = "http://apis.data.go.kr/B090041/openapi/service/RiseSetInfoService/getLCRiseSetInfo?serviceKey=" + \
                         service_key + "&locdate=" + date.strftime("%Y%m%d") + \
                         "&longitude=" + str(long) + "&latitude=" + str(lati) + "&dnYn=N"
