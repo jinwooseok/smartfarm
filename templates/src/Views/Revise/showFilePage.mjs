@@ -18,12 +18,12 @@ class ShowFilePage {
 		<div class="settingDIV">
 			<div class="dateDIV">
 				<span>날짜 열</span>
-				<input type="text" name="date" id="date" class="date" value="1">
+				<input type="number" name="date" id="date" class="date" value="1">
 			</div>
 
 			<div class="startDIV">
 				<span>처리 시작 행</span>
-				<input type="text" name="startIndex" id="startIndex" class="startIndex" value="1">
+				<input type="number" name="startIndex" id="startIndex" class="startIndex" value="1">
 			</div>
 
 			<div class="periodSelectDIV">

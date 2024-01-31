@@ -1,9 +1,10 @@
 import API from "/templates/src/Utils/API.mjs";
 import Logout from "/templates/src/Utils/Logout.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
+import setFileListSelectBox from "/templates/src/Utils/FIleList.mjs";
 
 import ShowFilePage from "./ShowFilePage.mjs";
-import ShowTreatmentPage from "./ShowTreatmentPage.mjs";
+import ShowPreprocessPage from "./ShowPreprocessPage.mjs";
 import RevisePage from "./RevisePage.mjs";
 import Graph from "./Graph.mjs";
 
@@ -17,11 +18,6 @@ const $fileListSelectBox = document.querySelector("#fileListSelectBox");
 
 ////////////////////// 파일 변경
 const fileName = JSON.parse(localStorage.getItem("fileTitle"));
-
-const setFileListSelectBox = async ()=> {
-	const response = await API("/files/file-name/", "get");
-	setNowFileTitle(response.data);
-}
 
 const setNowFileTitle = (fileTitleLists) => {
   fileTitleLists.map( (title) => {
@@ -44,7 +40,7 @@ $fileListSelectBox.addEventListener("change", moveSelectedFileTitle);
 // 시작 설정
 (async function () {
 	// 파일 목록 보여줌
-  await setFileListSelectBox();
+	setNowFileTitle(await setFileListSelectBox());
 
 	// 파일 데이터 그리기
 	Loading.StartLoading();
@@ -107,16 +103,14 @@ const clickEvent = async (event, id, targetClass) => {
 		// 데이터 확인
 		if(targetClass.contains("setting")) {
 			submitData.fileType = checkRadioValue(document.querySelectorAll('input[name="type"]'));
-			submitData.startIndex = document.querySelector("#startIndex").value;
-			submitData.dateColumn = document.querySelector("#date").value
+			submitData.startIndex = Number(document.querySelector("#startIndex").value);
+			submitData.dateColumn = Number(document.querySelector("#date").value);
 			submitData.interval =  checkRadioValue(document.querySelectorAll('input[name="period"]'));
-
-			console.log("setting", submitData);
 		}
 
 		// 전처리
 		if(targetClass.contains("treat")) {
-			await ShowTreatmentPage.submit();
+			await ShowPreprocessPage.submit();
 		}
 
 		confirm(`이동 합니다.`) === true ? changeProgress(id) : null;
@@ -142,7 +136,8 @@ const clickEvent = async (event, id, targetClass) => {
 	if (id === "save") { 	// 파일 저장
 		submitData.newFileName = document.querySelector('#fileName').value;
 		submitData.var = JSON.stringify(RevisePage.getNewData());
-		console.log("submitData", submitData);
+
+		await RevisePage.submit(fileName, submitData);
 		return;
 	}
 
@@ -187,7 +182,7 @@ const clickEvent = async (event, id, targetClass) => {
 		return;
 	}
 	if (id === "closeGraph") {
-		confirm(`이동 합니다.`) === true ? changeProgress(id) : null;
+		Graph.closeGraph();
 		return;
 	}
 }
@@ -211,9 +206,9 @@ const changeDiv = async (nowProgress) => {
 	}
 
 	if (nowProgress === 1) { // 전처리
-		ShowTreatmentPage.setFileTitle(fileName);
+		ShowPreprocessPage.setFileTitle(fileName);
 
-		$workDIV.innerHTML = await ShowTreatmentPage.templates();
+		$workDIV.innerHTML = await ShowPreprocessPage.templates();
 
 		// 그래프 보여주는 부분
 		const $$columnName = document.querySelectorAll("#columnName");

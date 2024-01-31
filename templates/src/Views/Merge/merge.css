@@ -1,0 +1,94 @@
+*{
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+
+	/* overflow-y: hidden; */
+}
+
+a{
+	color: #007A33;
+	text-decoration: none;
+}
+
+li, ul{
+	list-style: none;
+}
+
+.containerDIV {
+	margin: 0 auto;
+
+	display: grid;
+	width: 1280px;
+	height: 100%;
+}
+
+.upperDIV {
+	width: 1280px;
+	height: 100px;
+	position: relative;
+}
+
+.upperDIV .title {
+	width: 200px;
+	height: 50px;
+	margin-top: 25px;
+	margin-left: 20px;
+
+	color: #007A33;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.upperDIV .logoutDIV {
+	position: absolute;
+	top: calc((100px - 28px)/2);
+	right: 25px;
+
+	display: inline-block;
+	text-align: center;
+}
+
+.upperDIV .logoutDIV .logoutBtn {
+	position: relative;
+	padding: 4px 12px;
+	border: 1px solid rgba(0, 0, 0, 0.21);
+	border-bottom: 4px solid rgba(0, 0, 0, 0.21);
+	border-radius: 4px;
+	background: #72B08E;
+
+	display: inline-block;
+
+	text-decoration: none;
+	font-size: 14px;
+	color: white;
+}
+
+.logoutBtn:active {
+	background: #87a86f;
+}
+
+.rowDIV{
+	display: flex;
+	flex-direction: row;
+}
+
+.progressDIV {
+	width: 200px;
+	height : calc(100vh - 100px);
+	border: 1px solid #000;
+}
+
+.progressDIV .progress{
+	padding: 8px 14px;
+	font-size: 14px;
+}
+
+.now{
+	background-color: #007A33;
+	color: #fff;
+}
+
+.columnDIV {
+	width: 1080px;
+}
