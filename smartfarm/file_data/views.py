@@ -12,6 +12,7 @@ from .serializers import ProcessOutlierSerializer
 from .service.get_file_data_service import GetFileDataService
 from .service.get_data_summary_service import GetDataSummaryService
 from .service.drop_outlier_service import ProcessOutlierService
+from .service.shift_data_service import ShiftDataService
 from common.validate_exception import ValidationException
 
 class FileDataViewSet(viewsets.ModelViewSet):
@@ -56,6 +57,21 @@ class FileDataViewSet(viewsets.ModelViewSet):
             return Response(ResponseBody.generate(), status=200)
         else:
             raise ValidationException(serializer)
+        
+    def process_time_series(self, request, file_title):
+        user = request.session.get('user')
+        if user is None:
+            raise exceptions.NotAuthenticated()
+        data = request.data.copy()
+        data['fileName'] = file_title
+        
+        serializer = ProcessTimeSeriesSerializer(data=data)
+
+        if serializer.is_valid():
+            ShiftDataService(serializer, user).execute()
+            return Response(ResponseBody.generate(), status=200)
+        else:
+            raise ValidationException()
     
     def process_time_series():
         return 0

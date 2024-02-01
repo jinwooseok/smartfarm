@@ -20,11 +20,12 @@ class GetTempDataService(GetFileDataService):
 
     def execute(self):
         temp_object = self.get_temp_file(self.file_object.id, self.status_id)
+        
         file_absolute_path = search_file_absolute_path(temp_object.file_root)
-        dataFrame = GetFileDataService.file_to_df(file_absolute_path)
+        dataFrame = self.file_to_df(file_absolute_path)
+        
         data = DataProcess.round_converter(dataFrame)
         data = DataProcess.nan_to_string(data) 
-        print(dataFrame.dtypes)
         return DataProcess.df_to_json_object(data)
     
     @staticmethod

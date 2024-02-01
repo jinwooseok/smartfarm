@@ -30,16 +30,8 @@ def main_page(request):
     user = loginValidator(request)
     return render(request,'src/Views/Main/main.html')
 
-@api_view(['GET'])
-def download_guide(request):
-    file_name = 'smartfarm_guidebook.pdf'
-    return attach_file(file_name, os.path.join(settings.MEDIA_ROOT, file_name))
+# @api_view(['GET'])
+# def download_guide(request):
+#     file_name = 'smartfarm_guidebook.pdf'
+#     return attach_file(file_name, os.path.join(settings.MEDIA_ROOT, file_name))
 
-def attach_file(file_name, file_path):
-    if os.path.exists(file_path):
-         with open(file_path, 'rb') as file:
-            response = HttpResponse(file.read())
-            response['Content-Disposition'] = 'attachment; filename="{}"'.format(file_name)
-            return response
-    else:
-        return JsonResponse(failResponse("파일을 찾을 수 없습니다."), status=400)
