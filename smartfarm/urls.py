@@ -14,7 +14,7 @@ app_name='smartfarm'
 urlpatterns = [
     #기타
     path('', views.main_page, name='main_page'),
-    path('download/guidebook/',views.download_guide, name='download_guide'),
+    #path('download/guidebook/',views.download_guide, name='download_guide'),
 
     #파일 관련
     path('file-list/',FileViewSet.as_view({'get':'page'})),

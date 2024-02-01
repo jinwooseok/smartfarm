@@ -17,3 +17,9 @@ class FileSaveException(CustomBaseException):
         self.status_code = 454
         self.code = 454
         self.detail = '파일 저장에 실패하였습니다.'
+        
+class TempNotFoundException(CustomBaseException):
+    def __init__(self):
+        self.status_code = 455
+        self.code = 455
+        self.detail = '저장된 임시파일이 없습니다.'

@@ -11,7 +11,7 @@ from ..exceptions.file_exception import *
 from ...feature.serializers import FileFeatureSerializer
 from ...feature.service.feature_service import FeatureService
 from common.validate_exception import ValidationException
-
+from ..repositorys import *
 
 class FileSaveService():
     
@@ -33,7 +33,7 @@ class FileSaveService():
         self.data_to_csv(self.file_title, self.file_data)
 
         FileSaveService.save_file(self.user, self.file_title, self.statuses)
-        file = File.objects.get(user_id=self.user, file_title=self.file_title)
+        file = get_file_by_user_file_title(user_id=self.user, file_title=self.file_title)
 
         feature_info_list = FeatureService.extract_feature(file.id, pd.DataFrame(self.file_data))
         #변수 정보 저장
