@@ -31,7 +31,10 @@ class ETLProcessFactory():
         date_series = DataProcess.date_converter(date_series)
         #그 후 핸들링
         if file_type=="env":
-            if interval=="daily":
+            if interval=="hourly":
+                return EnvirProcess.minute_to_hour(self.data, date_series
+                                                  , self.lat, self.lon, self.var)
+            elif interval=="daily":
                 return EnvirProcess.hour_to_daily(self.data, date_series
                                                   , self.lat, self.lon, self.var)
             elif interval=="weekly":                                     
@@ -57,6 +60,17 @@ class ETLProcessFactory():
 
 
 class EnvirProcess:
+    @staticmethod
+    def minute_to_hour(data, date_series, lat, lon, var=None):
+        start_date, end_date = EnvirProcess.start_end_extractor(date_series)
+        sun_dataset = GetSunCrawler(start_date, end_date, lat, lon).execute()
+        day_night_series, srise_to_noon_series, srise_diff_series = DailyTimeClassifier(sun_dataset, date_series).execute()
+        
+        concated_data = pd.concat([date_series, data, day_night_series, srise_to_noon_series, srise_diff_series], axis=1)
+        result_data = DailyFeatureGenerator(concated_data, var).execute()
+        
+        return result_data
+        
     @staticmethod
     def hour_to_daily(data, date_series, lat, lon, var = None):        
         start_date, end_date = EnvirProcess.start_end_extractor(date_series)
