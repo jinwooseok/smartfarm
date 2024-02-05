@@ -17,10 +17,3 @@ class FileDeleteService():
     def execute(self):
         #db상 파일 제거
         self.file_object.delete()
-
-    @staticmethod
-    def delete_local_file(file_path):
-        try:
-            os.remove(file_path)
-        except:
-            raise OriginalFileNotFoundException()

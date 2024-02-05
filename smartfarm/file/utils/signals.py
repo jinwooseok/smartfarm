@@ -7,12 +7,10 @@ from ..utils.utils import *
 
 @receiver(pre_delete, sender=File)
 def delete_file(sender, instance, **kwargs):
-    print(instance)
     delete_local_file(search_file_absolute_path(instance.file_root))
     
 @receiver(pre_delete, sender=Temp)
 def delete_temp(sender, instance, **kwargs):
-    print(instance)
     delete_local_file(search_file_absolute_path(instance.file_root))
     
 
