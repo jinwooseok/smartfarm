@@ -1,38 +1,42 @@
 from rest_framework import viewsets
 from django.shortcuts import render
-from ..models import File
-from rest_framework import exceptions
 from .serializers import *
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
+
 from common.response import *
 from .service.file_save_service import FileSaveService
 from .service.file_delete_service import FileDeleteService
 from .service.file_download_service import FileDownloadService
-from common.validate_exception import ValidationException
 from ..file_data.service.get_file_data_service import GetFileDataService
 from common.validators import login_validator, serializer_validator
+
 #파일 관련 뷰셋
 class FileViewSet(viewsets.GenericViewSet):
-
     def page(self, request):
         return render(request, 'src/Views/FileList/fileList.html')
 
     def list(self, request):
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
         user_id = login_validator(request)
-        file_object = File.objects.filter(user=user_id)
+        file_object = filter_file_by_user(user_id)
+        file_object = paginator.paginate_queryset(file_object, request)
         serializer = FileInfoSerializer(file_object, many=True)
         return Response(ResponseBody.generate(serializer=serializer), status=200)
         
     def name_list(self, request):
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
         user_id = login_validator(request)
-        file_object = File.objects.filter(user=user_id)
+        file_object = filter_file_by_user(user_id)
+        file_object = paginator.paginate_queryset(file_object, request)
         serializer = FileNameModelSerializer(file_object, many=True)
         return Response(ResponseBody.generate(serializer=serializer), status=200)
     
     def save(self, request):
         user_id = login_validator(request)
         serializer = FileSaveSerializer(data=request.data)
-        
         serializer = serializer_validator(serializer)
         FileSaveService.from_serializer(serializer, user_id).execute()
         

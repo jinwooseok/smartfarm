@@ -17,3 +17,6 @@ def get_file_by_user_file_title(user_id, file_title):
         return File.objects.get(user=user_id, file_title=file_title)
     except:
         raise FileNotFoundException()
+
+def filter_file_by_user(user_id):
+    return File.objects.filter(user=user_id) 
