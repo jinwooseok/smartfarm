@@ -13,6 +13,7 @@ class RevisePage {
 	}
 
   async submit(fileName, submitData) {
+    console.log("var",submitData.var)
     const response = await API(`/files/${fileName}/data/farm/`, "post", submitData);
 		console.log("save", response)
   }
@@ -64,8 +65,8 @@ class RevisePage {
     <select name="thirdText" id="thirdText" class="thirdText" multiple size="6">
       <!-- js를 통해 입력 -->
     </select>
-    <button class="optionDelete" id="optionDelete">삭제</button>
-    <button class="optionADD" id="optionADD">추가</button>
+    <button class="optionDelete" id="optionDelete"><i class="fa-solid fa-arrow-left"></i></button>
+    <button class="optionADD" id="optionADD"><i class="fa-solid fa-arrow-right"></i></button>
     `;
   }
 
@@ -86,7 +87,7 @@ class RevisePage {
           <option id="defaultSelect" value="insolation">일사량</option>
           <option id="defaultSelect" value="precipitation">강수량</option>
         </select>
-        <button class="optionDelete" id="optionDelete">삭제</button>
+        <button class="optionDelete" id="optionDelete"><i class="fa-solid fa-arrow-left"></i></button>
       </div>
     
       <div class="totalVariableDIV">
@@ -158,8 +159,6 @@ class RevisePage {
     const selectedValue = document.querySelector("#dataColumnList").options[document.querySelector("#dataColumnList").selectedIndex]?.value;
     const $selectedValueList = document.querySelector("#selectedValueList");
   
-    console.log(selectedDefaultValue, selectedValue)
-
     if (selectedValue === undefined) {
       alert('왼쪽 상자에서 값을 선택해주세요');
       return;

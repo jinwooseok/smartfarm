@@ -92,3 +92,24 @@ li, ul{
 .columnDIV {
 	width: 1080px;
 }
+
+
+.workDIV .buttonDIV {
+	width: 1000px;
+	margin : 20px auto;
+}
+
+button{
+	border: 1px solid #007A33;
+	border-radius: 10px;
+	margin-right: 8px;
+	padding: 5px 11px;
+	background-color: #007A33;
+	color: #fff;
+
+	float: right;
+}
+
+button:hover{
+	cursor: pointer;
+}

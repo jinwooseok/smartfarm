@@ -142,9 +142,29 @@ const uploadFile = async () => {
 
 	const response = await API("/files/save/", "post" , data);
 
-	if (response.status === "success") {
-		location.replace("/file-list/");
-	}
+  checkResponse(response);
+  
+}
+
+const checkResponse = (code) => {
+  switch(code) {
+    case code.status === "success":
+      location.replace("/file-list/");
+      break;
+    case 401 :
+      alert("로그인이 필요합니다.");
+      location.replace("/users/sign-in/");
+      break;
+    case 452 :
+        alert("DB에 파일이 존재하지 않습니다.");
+        break;
+    case 454 :
+      alert("파일 저장에 실패하였습니다.");
+      break;
+    case 456 :
+      alert("데이터를 csv로 변환할 수 없습니다.");
+      break;
+  }
 }
 
 // 업로드 하고 다시 페이지 호출

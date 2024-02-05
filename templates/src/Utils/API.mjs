@@ -15,8 +15,7 @@ const API = async (url, type, data={}) => {
 		return response;
 
 	} catch (error) {
-		console.log("error", error.status);
-		console.log("error.status", error.status);
+		console.log("error", error);
 		return error.responseJSON ? error.responseJSON : error.status;
 	}
 }

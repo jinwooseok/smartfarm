@@ -102,6 +102,12 @@ const setOnClick = () => {
 (async function () {
   // 파일 불러오는 API
   const response = await API("/files/", "get");
+  if (response === 401) {
+    alert("로그인이 필요합니다.");
+    location.replace("/users/sign-in/");
+    return;
+  }
+
   fileList = response.data;
   setFileList();
   setOnClick();
@@ -237,10 +243,12 @@ const clickDownloadButton = () => {
 
 	downloadTitle?.map( async (title) => {
 		const response = await API("/files/download/", "post", {fileName: title});
-    console.log(response, "downloadResponse");
 		if(response.status === "success") {
 			downloadToCsv(response.data, title);
+      return;
 		}
+
+    alert("ERROR");
   }); 
 }
 
@@ -262,7 +270,7 @@ const deleteCheckedItems = (checkedItems) => {
     if (response.status === "success") {
       location.href = "/file-list/";
     } else {
-      alert("삭제 실패");``
+      alert("삭제 실패");
     }
   });
 }
