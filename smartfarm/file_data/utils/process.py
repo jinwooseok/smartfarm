@@ -9,7 +9,7 @@ class DataProcess:
     @staticmethod
     def round_converter(data, round=2):
         #object 타입을 제외하고 소수 둘째자리로 반올림
-        data[data.select_dtypes(exclude=['object']).columns] = data.select_dtypes(exclude=['object']).round(decimals = round)
+        data[data.select_dtypes(exclude=['object']).columns] = data.select_dtypes(exclude=['object']).round(round)
         #object와 날짜 타입은 문자로 변환
         data[data.select_dtypes(include=['object','datetime64[ns]']).columns] = data.select_dtypes(include=['object','datetime64[ns]']).astype(str)
         return data
