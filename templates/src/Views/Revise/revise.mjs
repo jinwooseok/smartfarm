@@ -98,8 +98,16 @@ const changeProgress = (step) => {
 
 const clickEvent = async (event, id, targetClass) => {
 
+	const $$button = document.querySelectorAll('button');
+	Array.from($$button).map((button) => {
+		button.disabled = true;
+	})
+
 	// 페이지 이동
 	if (id === "nextPage" || id === "prevPage") {
+
+		confirm(`이동 합니다.`) === true ? changeProgress(id) : null;
+
 		// 데이터 확인
 		if(targetClass.contains("setting")) {
 			submitData.fileType = checkRadioValue(document.querySelectorAll('input[name="type"]'));
@@ -110,22 +118,20 @@ const clickEvent = async (event, id, targetClass) => {
 
 		// 전처리
 		if(targetClass.contains("treat")) {
+			Loading.StartLoading();
 			await ShowPreprocessPage.submit();
+			Loading.CloseLoading();
 		}
 
-		confirm(`이동 합니다.`) === true ? changeProgress(id) : null;
-		return;
 	}	
 
 	// periodSelectDIV
 	if (id === "else") {
 		document.querySelector("#elsePeriod").disabled = false;
-    return;
 	}
 
 	if (id === "weekly" || id === "daily") {
 		document.querySelector("#elsePeriod").disabled = true;
-    return;
 	}
 
 	///////////////////// revise
@@ -137,54 +143,50 @@ const clickEvent = async (event, id, targetClass) => {
 		submitData.newFileName = document.querySelector('#fileName').value;
 		submitData.var = JSON.stringify(RevisePage.getNewData());
 
+		Loading.StartLoading();
 		await RevisePage.submit(fileName, submitData);
-		return;
+		Loading.CloseLoading();
 	}
 
 	if (id === "resetData") {// 변수 초기화
 		RevisePage.resetData();
 		document.querySelector("#selectedValueList").innerHTML = '';
-		return;
 	}
 
 	if (id === "defaultSelect") { // 변수 자동 선택
 		RevisePage.createEasyVersionData(event);
-		return;
 	}
 
 	if (id === "optionDelete") { // 변수 삭제
 		RevisePage.varDelete();
-		return;
 	}
 
 	if (id === "optionADD") { // 변수 추가
 		RevisePage.createHardVersionData();
-		return;
 	}
 
 	if (id === "easy") {
 		document.querySelector(".box").innerHTML = RevisePage.templatesEasy();
-		return;
 	}
 
 	if (id === "hard") {
 		document.querySelector(".box").innerHTML = RevisePage.templatesHard();
-		return;
 	}
 
 	// 그래프
 	if (id === "nextGraph") {
 		// 그래프 다음 데이터
-		return;
 	}
 	if (id === "prevGraph") {
 		// 그래프 이전 데이터
-		return;
 	}
 	if (id === "closeGraph") {
 		Graph.closeGraph();
-		return;
 	}
+	
+	Array.from($$button).map((button) => {
+		button.disabled = false;
+	})
 }
 
 window.addEventListener("click", (event) => {
@@ -229,13 +231,4 @@ const changeDiv = async (nowProgress) => {
 		RevisePage.setFileName(fileName);
 	}
 
-	if (nowProgress === 3) { // 파일 저장
-		$workDIV.innerHTML = `
-		<div class="buttonDIV" id="buttonDIV">
-			<button class="nextPage" id="nextPage">다음</button>
-			<button class="prevPage" id="prevPage">이전</button>
-		</div>
-		`;
-	}
-	
 }

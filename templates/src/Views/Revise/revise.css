@@ -27,6 +27,8 @@ li, ul{
 	width: 1280px;
 	height: 100px;
 	position: relative;
+
+	border-bottom: 1px solid #000;
 }
 
 .upperDIV .title {
@@ -114,7 +116,7 @@ li, ul{
 
 .workDIV .settingDIV{
 	width: 1000px;
-	height: 200px;
+	height: 100px;
 	margin: 0 auto;
 
 	border: 1px solid #000;
@@ -127,7 +129,7 @@ li, ul{
 
 .settingDIV>*{
 	width: 200px;
-	height: 200px;
+	height: 100px;
 	text-align: center;
 	border-right: 1px solid #000;
 }
@@ -160,18 +162,18 @@ button:hover{
 
 .fileStaticDataDIV {
 	width: 1000px;
-  height: 300px;
   padding: 3px 0;
   margin: 10px auto;
   text-align: center;
 
   border: 1px solid #000;
 
-  overflow-y: scroll;
+	overflow: scroll;
 }
 
+.fileStaticDataDIV .titleListDIV,
 .fileStaticDataDIV .columnList {
-  width: 100%;
+  width: 1000px;
   height: 30px;
   line-height: 26px;
 
@@ -180,42 +182,47 @@ button:hover{
   text-align: center;
 }
 
-.fileStaticDataDIV .columnList:first-child {
-  border-bottom: 1px solid #999;
+.fileStaticDataDIV .titleListDIV {
+	width: 100%;
+	border-bottom: 1px solid #999;
   margin-bottom: 5px;
 }
 
-.fileStaticDataDIV .columnList>* {
-  height: 26px;
+.fileStaticDataDIV .listDIV{
+	width: 1000px;
+	height: 270px;
 }
 
-.fileStaticDataDIV .columnList .columnName {
+.fileStaticDataDIV .columnName {
   width: 180px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
 
-.fileStaticDataDIV .columnList .nullCount,
-.fileStaticDataDIV .columnList .Q1,
-.fileStaticDataDIV .columnList .Q2,
-.fileStaticDataDIV .columnList .mean,
-.fileStaticDataDIV .columnList .Q3,
-.fileStaticDataDIV .columnList .min,
-.fileStaticDataDIV .columnList .max {
+.fileStaticDataDIV .nullCount,
+.fileStaticDataDIV .Q1,
+.fileStaticDataDIV .Q2,
+.fileStaticDataDIV .mean,
+.fileStaticDataDIV .Q3,
+.fileStaticDataDIV .min,
+.fileStaticDataDIV .max {
   width: 110px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
 
-.fileStaticDataDIV .columnList:not(:first-child)>* {
-  border-right: 1px solid #888;
+.fileStaticDataDIV .listDIV .columnList{
   font-size: 16px;
-  margin-top: 8px;
+  margin-top: 3px;
 }
 
-.fileStaticDataDIV .columnList .columnName:not(:first-child)>*:hover {
+.fileStaticDataDIV .listDIV .columnList>*:not(:last-child){
+	border-right: 1px solid #888;
+}
+
+.fileStaticDataDIV .listDIV .columnList .columnName:hover {
   color: blue;
 }
 

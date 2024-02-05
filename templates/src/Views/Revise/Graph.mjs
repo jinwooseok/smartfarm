@@ -13,12 +13,20 @@ class Graph {
 	}	
 
 	closeGraph() {
+		document.querySelector('#titleListDIV').removeAttribute('style');
+
 		document.querySelector("#fileStaticDataDIV").style.width = "1000px";
+		document.querySelector("#titleListDIV").style.width = "1000px";
+		document.querySelector("#listDIV").style.width = "1000px";
 		document.querySelector("#graphDIV").style.display = "none";
 	}
 
 	showGraph(event) {
+		document.querySelector('#titleListDIV').removeAttribute('style');
+
 		document.querySelector("#fileStaticDataDIV").style.width = "500px";
+		document.querySelector("#titleListDIV").style.width = "500px";
+		document.querySelector("#listDIV").style.width = "500px";
 		document.querySelector("#graphDIV").style.display = "block";
 
 		// const xColumn = lineDraw(name);

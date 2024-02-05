@@ -14,33 +14,37 @@ class ShowPreprocessPage{
 		const html = `
 		<div class="rowDIV">
 			<div class="fileStaticDataDIV" id="fileStaticDataDIV">
-				<div class="columnList">
-					<div class="columnName">
-						열 이름
-					</div>
-					<div class="nullCount" id="nullCount">
-						빈 값
-					</div>
-					<div class="Q1" id="Q1">
-						1사분위 값
-					</div>
-					<div class="Q2" id="Q2">
-						중앙값
-					</div>
-					<div class="Q3" id="Q3">
-						3사분위값
-					</div>
-					<div class="mean" id="mean">
-						평균
-					</div>
-					<div class="min" id="min">
-						최소
-					</div>
-					<div class="max" id="max">
-						최대
-					</div>
+				<div class="titleListDIV" id="titleListDIV">
+					<div class="columnList">
+						<div class="columnName">
+							열 이름
+						</div>
+						<div class="nullCount" id="nullCount">
+							빈 값
+						</div>
+						<div class="Q1" id="Q1">
+							1사분위 값
+						</div>
+						<div class="Q2" id="Q2">
+							중앙값
+						</div>
+						<div class="Q3" id="Q3">
+							3사분위값
+						</div>
+						<div class="mean" id="mean">
+							평균
+						</div>
+						<div class="min" id="min">
+							최소
+						</div>
+						<div class="max" id="max">
+							최대
+						</div>
+					</div> 
 				</div>
-				${staticHtml}
+				<div class="listDIV" id="listDIV">
+					${staticHtml}
+				</div>
 			</div>
 			<div class="graphDIV" id="graphDIV">
 				<div id="myChart">

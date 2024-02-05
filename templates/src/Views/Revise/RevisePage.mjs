@@ -13,6 +13,7 @@ class RevisePage {
 	}
 
   async submit(fileName, submitData) {
+    console.log("var",submitData.var)
     const response = await API(`/files/${fileName}/data/farm/`, "post", submitData);
 		console.log("save", response)
   }
@@ -158,8 +159,6 @@ class RevisePage {
     const selectedValue = document.querySelector("#dataColumnList").options[document.querySelector("#dataColumnList").selectedIndex]?.value;
     const $selectedValueList = document.querySelector("#selectedValueList");
   
-    console.log(selectedDefaultValue, selectedValue)
-
     if (selectedValue === undefined) {
       alert('왼쪽 상자에서 값을 선택해주세요');
       return;
