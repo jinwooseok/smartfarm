@@ -174,7 +174,8 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-    'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ),
     'EXCEPTION_HANDLER': 'common.base_exception_handler.base_exception_handler',
     'DEFAULT_RENDERER_CLASSES': (
@@ -235,7 +236,11 @@ CACHES = {
 
 SESSION_COOKIE_AGE = 6000
 SESSION_SAVE_EVERY_REQUEST = True
+
 USE_ETAGS = False
+
+SESSION_COOKIE_SECURE = True
+
 # SESSION_EXPIRE_SECONDS = 600
 
 # SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True

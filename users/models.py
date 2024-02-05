@@ -7,7 +7,7 @@ class User(models.Model) :
     user_name = models.CharField(max_length=16, verbose_name='유저 이름')
     user_tel = models.CharField(max_length=128, unique=True, verbose_name='유저 전화번호')
     user_job = models.CharField(max_length=128, verbose_name='유저 직업')
-    user_register_dttm = models.DateField(auto_now_add=True, verbose_name='계정 생성시간')    
+    user_register_dttm = models.DateField(auto_now_add=True, verbose_name='계정 생성시간')  
     def __str__(self):
         return self.id
 

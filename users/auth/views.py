@@ -47,14 +47,10 @@ class SignInViewSet(viewsets.GenericViewSet):
 
         serializer = serializer_validator(serializer)
         user = AuthUserService.from_serializer(serializer).execute()
-        request.session['user'] = user.user_id
+        request.session['user'] = user.id
         return Response(ResponseBody.generate(),status=200)
 
 class SignOutViewSet(viewsets.GenericViewSet):
-    
-    authentication_classes = [SessionAuthentication]
-    permission_classes = [IsAuthenticated]
-    
     def sign_out(self, request):
         request.session.flush()
         return Response(ResponseBody.generate(),status=200)
