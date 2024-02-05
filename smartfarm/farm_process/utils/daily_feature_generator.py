@@ -76,7 +76,6 @@ class DailyFeatureGenerator():
         print(temp_list)
         return_df = pd.DataFrame({'날짜':date_list, f'{timing_key}{function_key}{target_column}':temp_list})
         return return_df
-    
     def total_mask(date_series, standard_date, period, timing_series, timing_key):
         daily_mask = daily_mask_generator(date_series, standard_date, period)
         if timing_key == '전체':

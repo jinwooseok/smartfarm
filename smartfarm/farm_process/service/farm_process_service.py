@@ -25,12 +25,11 @@ class FarmProcessService():
         
         file_absolute_path = search_file_absolute_path(instance.file_root)
         df = GetFileDataService.file_to_df(file_absolute_path)
-        
         #데이터프레임 윗부분 자르기
         if self.start_index < 1 or self.start_index > len(df):
-            raise StartIndexException()    
+            raise StartIndexException()
+            
         df = df.iloc[self.start_index-1:]
-        
         #프로세스 선정
         process_factory = ETLProcessFactory(df, self.file_type, self.date_column, self.interval, var = self.var)
         #정적 메서드 핸들러
