@@ -1,15 +1,16 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from ..models import User
-from argon2 import PasswordHasher
-from django.contrib.auth import authenticate
-from argon2.exceptions import VerifyMismatchError
+from django.shortcuts import render
 from rest_framework import exceptions,viewsets
-from .serializers import *
 from rest_framework.response import Response
-from .exceptions.auth_exceptions import *
-from common.validate_exception import ValidationException
 from drf_yasg.utils import swagger_auto_schema
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 from common.response import ResponseBody
+from .serializers import *
+from .exceptions.auth_exceptions import *
+from .service.save_user_service import SaveUserService
+from .service.auth_user_service import AuthUserService
+from common.serializer_validator import serializer_validator
 class SignUpViewSet(viewsets.GenericViewSet):
     def page(self, request):
         #로그인 하지 않았다면 페이지 렌더링
@@ -17,44 +18,21 @@ class SignUpViewSet(viewsets.GenericViewSet):
     
     def sign_up(self, request):
         serializer = SignUpSerializer(data=request.data)
+        
         if request.session.get('user') is not None:
             raise exceptions.PermissionDenied()
-        if serializer.is_valid():
-            #이메일 중복 확인
-            if self.is_duplicated_email(serializer.validated_data['user_id']):
-                raise EmailDuplicatedException()
-            #비밀번호 암호화
-            serializer.validated_data['user_pw'] = PasswordHasher().hash(serializer.validated_data['user_pw'])
-            #전화번호 합체
-            serializer.validated_data['user_tel'] = ''.join(serializer.validated_data['user_tel'])
-            #전화번호 검증
-            if self.is_duplicated_user_tel(serializer.validated_data['user_tel']):
-                raise UserTelDuplicatedException()
-            #DB에 저장
-            serializer.save()
-            return Response(ResponseBody.generate(),status=201)
-            #비밀번호는 argon2의 hash함수를 사용해 db에 저장
-        else:
-            raise ValidationException(serializer)
+        
+        serializer = serializer_validator(serializer)
+        SaveUserService.from_serializer(serializer).execute()
+        return Response(ResponseBody.generate(),status=201)
     
     @swagger_auto_schema(request_body=EmailValidationSerializer)
     def valid_email(self, request):
         serializer = EmailValidationSerializer(data=request.data)
-        if serializer.is_valid():
-            if self.is_duplicated_email(serializer.validated_data['email']):
-                raise EmailDuplicatedException()
-
-            return Response(ResponseBody.generate(),status=200)
-        else:
-            raise ValidationException(serializer)
-    #내부 사용 함수
-    def is_duplicated_user_tel(self, user_tel):
-        user_tel = ''.join(user_tel)
-        return User.objects.filter(user_tel=user_tel).exists()
-    
-    def is_duplicated_email(self, email):
-        return User.objects.filter(user_id=email).exists()
-
+        serializer = serializer_validator(serializer)
+        if SaveUserService.is_duplicated_email(serializer.validated_data['email']):
+            raise EmailDuplicatedException()
+        return Response(ResponseBody.generate(),status=200)
 
 class SignInViewSet(viewsets.GenericViewSet):
     def page(self, request):
@@ -67,34 +45,17 @@ class SignInViewSet(viewsets.GenericViewSet):
         if request.session.get('user') is not None:
             raise exceptions.PermissionDenied()
 
-        if serializer.is_valid():
-            try:
-                user = User.objects.get(user_id=serializer.validated_data['email'])
-            except User.DoesNotExist:
-                raise IdNotFoundException()
-            
-            try:
-                self.is_correct_password(user.user_pw, serializer.validated_data['password'])
-            except VerifyMismatchError:    
-                raise PasswordNotMatchedException()
-
-            request.session['user'] = user.id
-            return Response(ResponseBody.generate(),status=200)
-        
-        else:
-            raise ValidationException(serializer)
-        
-    def is_correct_password(self, login_pw, user_pw):
-        return PasswordHasher().verify(login_pw.encode(), user_pw.encode())
-        
+        serializer = serializer_validator(serializer)
+        user = AuthUserService.from_serializer(serializer).execute()
+        request.session['user'] = user.user_id
+        return Response(ResponseBody.generate(),status=200)
 
 class SignOutViewSet(viewsets.GenericViewSet):
+    
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     def sign_out(self, request):
-        login_session = request.session.get('user', None)
-
-        if login_session is None:
-            raise exceptions.NotAuthenticated()
-        
         request.session.flush()
         return Response(ResponseBody.generate(),status=200)
 
