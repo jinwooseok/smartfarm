@@ -10,7 +10,7 @@ from .serializers import *
 from .exceptions.auth_exceptions import *
 from .service.save_user_service import SaveUserService
 from .service.auth_user_service import AuthUserService
-from common.serializer_validator import serializer_validator
+from common.validators import serializer_validator
 class SignUpViewSet(viewsets.GenericViewSet):
     def page(self, request):
         #로그인 하지 않았다면 페이지 렌더링

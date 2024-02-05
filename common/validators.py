@@ -1,8 +1,8 @@
-from validate_exception import ValidationException
+from .validate_exception import ValidationException
 
 def serializer_validator(serializer):
     if serializer.is_valid():
-        return True
+        return serializer
     else:
         raise ValidationException(serializer)
         

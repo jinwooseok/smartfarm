@@ -17,11 +17,12 @@ class AuthUserService:
     
     def execute(self):
         user = get_user_by_email(self.user_id)
-        self.is_correct_password(self.user_pw, user.user_pw)
+        self.is_correct_password(user.user_pw, self.user_pw)
         return user
-
-    def is_correct_password(login_pw, user_pw):
+    
+    @staticmethod
+    def is_correct_password(user_pw,login_pw):
         try:
-            return PasswordHasher().verify(login_pw.encode(), user_pw.encode())
-        except VerifyMismatchError:    
+            return PasswordHasher().verify(user_pw, login_pw)
+        except:    
             raise PasswordNotMatchedException()
