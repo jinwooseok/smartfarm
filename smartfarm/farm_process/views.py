@@ -2,8 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.response import Response
 from common.response import *
-from rest_framework import exceptions
-from ..file.serializers import FileNameSerializer
+from common.validators import login_validator, serializer_validator
 from .service.farm_process_service import FarmProcessService
 from common.validate_exception import ValidationException
 from .serializers import FarmProcessSerializer
@@ -14,16 +13,11 @@ class DataABMSViewSet(viewsets.GenericViewSet):
 class FarmProcessViewSet(viewsets.GenericViewSet):
     
     def process_farm(self, request, file_title):
-        user = request.session.get('user')
-        if user is None:
-            raise exceptions.NotAuthenticated()
+        user_id = login_validator(request)
         data = request.data.copy()
         data['fileName'] = file_title
         serializer = FarmProcessSerializer(data = data)
-        
-        if serializer.is_valid():
-            data=FarmProcessService(serializer, user).execute()
-            return Response(ResponseBody.generate(), status=200)
-        else:
-            raise ValidationException(serializer)
+        serializer = serializer_validator(serializer)
+        data=FarmProcessService(serializer, user_id).execute()
+        return Response(ResponseBody.generate(), status=200)
     

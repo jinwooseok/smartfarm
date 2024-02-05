@@ -10,7 +10,7 @@ from .service.file_delete_service import FileDeleteService
 from .service.file_download_service import FileDownloadService
 from common.validate_exception import ValidationException
 from ..file_data.service.get_file_data_service import GetFileDataService
-
+from common.validators import login_validator, serializer_validator
 #파일 관련 뷰셋
 class FileViewSet(viewsets.GenericViewSet):
 
@@ -18,57 +18,46 @@ class FileViewSet(viewsets.GenericViewSet):
         return render(request, 'src/Views/FileList/fileList.html')
 
     def list(self, request):
-        user = request.session.get('user')
-        if user is None:
-            raise exceptions.NotAuthenticated()
-        file_object = File.objects.filter(user=user)
+        user_id = login_validator(request)
+        file_object = File.objects.filter(user=user_id)
         serializer = FileInfoSerializer(file_object, many=True)
         return Response(ResponseBody.generate(serializer=serializer), status=200)
         
     def name_list(self, request):
-        user = request.session.get('user')
-        if user is None:
-            raise exceptions.NotAuthenticated()
-        file_object = File.objects.filter(user=user)
+        user_id = login_validator(request)
+        file_object = File.objects.filter(user=user_id)
         serializer = FileNameModelSerializer(file_object, many=True)
         return Response(ResponseBody.generate(serializer=serializer), status=200)
     
     def save(self, request):
-        user = request.session.get('user')
-        if user is None:
-            raise exceptions.NotAuthenticated()
+        user_id = login_validator(request)
         serializer = FileSaveSerializer(data=request.data)
         
-        if serializer.is_valid():
-            FileSaveService.from_serializer(serializer, user).execute()
-            return Response(ResponseBody.generate(),status=201)
-        else:
-            raise ValidationException(serializer)
+        serializer = serializer_validator(serializer)
+        FileSaveService.from_serializer(serializer, user_id).execute()
+        
+        return Response(ResponseBody.generate(),status=201)
+
     
     def delete(self, request):
-        user = request.session.get('user')
-        if user is None:
-            raise exceptions.NotAuthenticated()
+        user_id = login_validator(request)
         
         serializer = FileDeleteSerializer(data=request.data)
 
-        if serializer.is_valid():
-            FileDeleteService.from_serializer(serializer, user).execute()
-            return Response(ResponseBody.generate(),status=200)
-        else:
-            raise ValidationException(serializer)
+        serializer = serializer_validator(serializer)
+        
+        FileDeleteService.from_serializer(serializer, user_id).execute()
+        
+        return Response(ResponseBody.generate(),status=200)
     
     def download(self, request):
-        user = request.session.get('user')
-        if user is None:
-            raise exceptions.NotAuthenticated()
+        user_id = login_validator(request)
         
         serializer = FileNameSerializer(data=request.data)
+        
+        serializer = serializer_validator(serializer)
+        return Response(ResponseBody.generate(data=GetFileDataService(serializer, user_id).execute()), status=200)  
 
-        if serializer.is_valid():
-            return Response(ResponseBody.generate(data=GetFileDataService(serializer, user).execute()), status=200)  
-        else:
-            raise ValidationException(serializer)
 
 # def fileListView(request):
 #     user = loginValidator(request)

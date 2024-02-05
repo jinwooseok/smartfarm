@@ -13,7 +13,7 @@ from .service.get_file_data_service import GetFileDataService
 from .service.get_data_summary_service import GetDataSummaryService
 from .service.drop_outlier_service import ProcessOutlierService
 from .service.shift_data_service import ShiftDataService
-from common.validate_exception import ValidationException
+from common.validators import serializer_validator, login_validator
 
 class FileDataViewSet(viewsets.ModelViewSet):
 
@@ -23,55 +23,43 @@ class FileDataViewSet(viewsets.ModelViewSet):
         return render(request, 'src/Views/Revise/revise.html')
       
     def details(self, request, file_title):
-        user = request.session.get('user')
-        if user is None:
-            raise exceptions.NotAuthenticated()
+        user_id = login_validator(request)
         
         serializer = FileNameSerializer(data={'fileName': file_title})
         
-        if serializer.is_valid():
-            return Response(ResponseBody.generate(data=GetFileDataService.from_serializer(serializer, user).execute()), status=200)     
+        serializer = serializer_validator(serializer)
+        return Response(ResponseBody.generate(data=GetFileDataService.from_serializer(serializer, user_id).execute()), status=200)     
     
     def summary(self, request, file_title):
-        user = request.session.get('user')
-        if user is None:
-            raise exceptions.NotAuthenticated()
+        user_id = login_validator(request)
         
         serializer = FileNameSerializer(data={'fileName': file_title})
 
-        if serializer.is_valid():
-            return Response(ResponseBody.generate(data=GetDataSummaryService(serializer, user).execute()), status=200)
-        else:
-            raise ValidationException()
+        serializer = serializer_validator(serializer)
+        return Response(ResponseBody.generate(data=GetDataSummaryService(serializer, user_id).execute()), status=200)
     
     def process_outlier(self, request, file_title):
-        user = request.session.get('user')
-        if user is None:
-            raise exceptions.NotAuthenticated()
+        user_id = login_validator(request)
         
         serializer = ProcessOutlierSerializer(data=request.data)
         serializer.initial_data['fileName'] = file_title
 
-        if serializer.is_valid():
-            ProcessOutlierService.from_serializer(serializer, user).execute()
-            return Response(ResponseBody.generate(), status=200)
-        else:
-            raise ValidationException(serializer)
+        serializer = serializer_validator(serializer)
+        ProcessOutlierService.from_serializer(serializer, user_id).execute()
+        return Response(ResponseBody.generate(), status=200)
+
         
     def process_time_series(self, request, file_title):
-        user = request.session.get('user')
-        if user is None:
-            raise exceptions.NotAuthenticated()
+        user_id = login_validator(request)
+        
         data = request.data.copy()
         data['fileName'] = file_title
         
         serializer = ProcessTimeSeriesSerializer(data=data)
 
-        if serializer.is_valid():
-            ShiftDataService(serializer, user).execute()
-            return Response(ResponseBody.generate(), status=200)
-        else:
-            raise ValidationException()
+        serializer = serializer_validator(serializer)
+        ShiftDataService(serializer, user_id).execute()
+        return Response(ResponseBody.generate(), status=200)
     
     def process_time_series():
         return 0
