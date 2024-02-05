@@ -21,9 +21,9 @@ class ProcessOutlierService():
     def execute(self):
         file_absolute_path = search_file_absolute_path(self.file_root)
         df = GetFileDataService.file_to_df(file_absolute_path)
-        result = ProcessOutlierService.outlier_dropper(df)
-        TempSaveService(self.user, self.file_name, result, statuses=1).execute()
-        
+        result, drop_index = ProcessOutlierService.outlier_dropper(df)
+        TempSaveService(self.user, self.file_name, result, statuses=[1]).execute()
+        return drop_index
 
     @staticmethod
     def outlier_dropper(df):
@@ -33,4 +33,4 @@ class ProcessOutlierService():
             if numeric_column is not None:
                 drop_index = drop_index+DataProcess.outlier_detector(numeric_column)
 
-        return DataProcess.drop_rows(df, list(set(drop_index)))
+        return DataProcess.drop_rows(df, list(set(drop_index))), drop_index

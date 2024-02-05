@@ -4,6 +4,8 @@ from ...file.service.temp_save_service import FileSaveService
 from ...file.service.temp_delete_service import TempDeleteService
 from ..utils.process import ETLProcessFactory
 from ...file_data.service.get_temp_data_service import GetTempDataService
+from ..exceptions.exceptions import StartIndexException
+
 class FarmProcessService():
     def __init__(self, serializer, user):
         self.new_file_name = serializer.validated_data['newFileName']
@@ -23,8 +25,12 @@ class FarmProcessService():
         
         file_absolute_path = search_file_absolute_path(instance.file_root)
         df = GetFileDataService.file_to_df(file_absolute_path)
+        
         #데이터프레임 윗부분 자르기
+        if self.start_index < 1 or self.start_index > len(df):
+            raise StartIndexException()    
         df = df.iloc[self.start_index-1:]
+        
         #프로세스 선정
         process_factory = ETLProcessFactory(df, self.file_type, self.date_column, self.interval, var = self.var)
         #정적 메서드 핸들러

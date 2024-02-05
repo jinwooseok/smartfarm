@@ -2,7 +2,7 @@ import datetime
 import pandas as pd
 import requests
 from dateutil.relativedelta import relativedelta
-from ..exceptions.date_exceptions import *
+from ..exceptions.exceptions import *
 # 일출,일몰 크롤링 모듈
         #
         # long: 경도

@@ -28,7 +28,8 @@ class FileDataViewSet(viewsets.ModelViewSet):
         serializer = FileNameSerializer(data={'fileName': file_title})
         
         serializer = serializer_validator(serializer)
-        return Response(ResponseBody.generate(data=GetFileDataService.from_serializer(serializer, user_id).execute()), status=200)     
+        return Response(ResponseBody.generate(
+            data=GetFileDataService.from_serializer(serializer, user_id).execute()), status=200)     
     
     def summary(self, request, file_title):
         user_id = login_validator(request)
@@ -36,7 +37,9 @@ class FileDataViewSet(viewsets.ModelViewSet):
         serializer = FileNameSerializer(data={'fileName': file_title})
 
         serializer = serializer_validator(serializer)
-        return Response(ResponseBody.generate(data=GetDataSummaryService(serializer, user_id).execute()), status=200)
+        
+        return Response(ResponseBody.generate(
+            data=GetDataSummaryService(serializer, user_id).execute()), status=200)
     
     def process_outlier(self, request, file_title):
         user_id = login_validator(request)
@@ -45,8 +48,9 @@ class FileDataViewSet(viewsets.ModelViewSet):
         serializer.initial_data['fileName'] = file_title
 
         serializer = serializer_validator(serializer)
-        ProcessOutlierService.from_serializer(serializer, user_id).execute()
-        return Response(ResponseBody.generate(), status=200)
+        
+        return Response(ResponseBody.generate(
+            data=ProcessOutlierService.from_serializer(serializer, user_id).execute()), status=200)
 
         
     def process_time_series(self, request, file_title):

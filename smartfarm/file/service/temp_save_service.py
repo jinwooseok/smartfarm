@@ -1,5 +1,5 @@
 from .file_save_service import FileSaveService
-from .file_delete_service import FileDeleteService
+from ..repositorys import *
 from ...models import Temp, TempStatus, File
 from django.core import files
 import copy
@@ -21,7 +21,7 @@ class TempSaveService(FileSaveService):
         #데이터 배열을 csv파일로 만들기
         self.data_to_csv(file_title, self.file_data)
         
-        file = File.objects.get(user_id=self.user, file_title=file_title)
+        file = get_file_by_user_file_title(self.user, file_title)
         
         TempSaveService.save_file(file, file_title, self.statuses)
 
@@ -32,7 +32,6 @@ class TempSaveService(FileSaveService):
         file_open=files.File(f, name=file_title)
         try:
             #있는데 root만 달라진거면 새 root로 저장하고 기존 root 삭제
-            print(file)
             temp_instance = Temp.objects.get(file=file)
             if temp_instance.file_root != file_open:
                 temp_instance.delete()
@@ -40,6 +39,8 @@ class TempSaveService(FileSaveService):
         #없으면 새로 저장
         except Temp.DoesNotExist:
             Temp.objects.create(file=file, file_title=file_title, file_root=file_open)
+        for status in statuses:
+            TempStatus.objects.create(file=file, statuses=status)
         f.close()
         os.remove(file_title)
 

@@ -1,7 +1,8 @@
 import pandas as pd
 import numpy as np
-
 import json
+
+from ..exceptions.file_data_exceptions import DateConverterException
 ## -------------데이터 변경 클래스-----------------
 class DataProcess:
 
@@ -55,10 +56,10 @@ class DataProcess:
             elif date_type == "datetime64[ns]" or date_type == "<M8[ns]":    
                 date_series = pd.to_datetime(date_series,format='mixed',yearfirst=True,errors='coerce')
             else:
-                raise ValueError
+                raise DateConverterException()
             return date_series
         except:
-            raise ValueError    
+            raise DateConverterException() 
         
         
     

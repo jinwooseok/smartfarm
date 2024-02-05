@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from .masks import *
-
+from ..exceptions.exceptions import VarDataException
 class DailyFeatureGenerator():
     def __init__(self, data, var=None):
         self.data = data
@@ -10,10 +10,14 @@ class DailyFeatureGenerator():
     
     def execute(self):
         return_list = []
-        print(self.var)
+        
         for variable in self.var:
-            temp = list(variable.keys())[0]
-            standards = variable[temp]
+            try:
+                temp = list(variable.keys())[0]
+                standards = variable[temp]
+            except:
+                raise VarDataException(variable)
+            
             for standard in standards:
                 feature_df = DailyFeatureGenerator.generating_variable(self.data, self.date_series, temp, standard)
                 return_list.append(feature_df)
@@ -44,15 +48,18 @@ class DailyFeatureGenerator():
         }
         target_column = temp
         
-        timing_key = standard[0]
-        #타이밍이 들어있는 열을 찾는다.
-        if timing_key == '전체':
-            timing_series = date_series
-        else:
-            timing_series = data[timing_dict[timing_key]]
-        
-        function_key = standard[1]
-        function = functions_dict[function_key]
+        try:
+            timing_key = standard[0]
+            #타이밍이 들어있는 열을 찾는다.
+            if timing_key == '전체':
+                timing_series = date_series
+            else:
+                timing_series = data[timing_dict[timing_key]]
+            
+            function_key = standard[1]
+            function = functions_dict[function_key]
+        except:
+            raise VarDataException([temp, standard])
         
         period = 1
         

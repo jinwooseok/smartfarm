@@ -1,12 +1,9 @@
 import pandas as pd
-import datetime
-import requests
 from .weekly_transformer import WeeklyTransformer
 from .daily_time_classfier import DailyTimeClassifier
 from .get_sun_crawler import GetSunCrawler
-from ..exceptions.date_exceptions import NullDateException
+from ..exceptions.exceptions import *
 from .daily_feature_generator import DailyFeatureGenerator
-
 from ...file_data.utils.process import DataProcess
 #from .daily_feature_generator import DailyFeatureGenerator
 class ETLProcessFactory():
@@ -22,8 +19,12 @@ class ETLProcessFactory():
         file_type = self.file_type
         interval = self.interval
         self.data = self.data.dropna(subset=[self.data.columns[self.date_column]])
+        
         #날짜열 추출
+        if self.date_column < 0 or self.date_column >= len(self.data.columns):
+            raise DateColumnException()
         date_series = self.data.iloc[:,self.date_column]
+        
         #날짜열 드롭. 방해됨
         date_column_index = self.date_column
         self.data = DataProcess.drop_columns(self.data, [self.data.columns[date_column_index]])
