@@ -65,8 +65,8 @@ class RevisePage {
     <select name="thirdText" id="thirdText" class="thirdText" multiple size="6">
       <!-- js를 통해 입력 -->
     </select>
-    <button class="optionDelete" id="optionDelete">삭제</button>
-    <button class="optionADD" id="optionADD">추가</button>
+    <button class="optionDelete" id="optionDelete"><i class="fa-solid fa-arrow-left"></i></button>
+    <button class="optionADD" id="optionADD"><i class="fa-solid fa-arrow-right"></i></button>
     `;
   }
 
@@ -87,7 +87,7 @@ class RevisePage {
           <option id="defaultSelect" value="insolation">일사량</option>
           <option id="defaultSelect" value="precipitation">강수량</option>
         </select>
-        <button class="optionDelete" id="optionDelete">삭제</button>
+        <button class="optionDelete" id="optionDelete"><i class="fa-solid fa-arrow-left"></i></button>
       </div>
     
       <div class="totalVariableDIV">

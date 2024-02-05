@@ -97,7 +97,6 @@ const changeProgress = (step) => {
 }
 
 const clickEvent = async (event, id, targetClass) => {
-
 	const $$button = document.querySelectorAll('button');
 	Array.from($$button).map((button) => {
 		button.disabled = true;
@@ -106,23 +105,25 @@ const clickEvent = async (event, id, targetClass) => {
 	// 페이지 이동
 	if (id === "nextPage" || id === "prevPage") {
 
-		confirm(`이동 합니다.`) === true ? changeProgress(id) : null;
+		const go = confirm(`이동 합니다.`);
 
-		// 데이터 확인
-		if(targetClass.contains("setting")) {
-			submitData.fileType = checkRadioValue(document.querySelectorAll('input[name="type"]'));
-			submitData.startIndex = Number(document.querySelector("#startIndex").value);
-			submitData.dateColumn = Number(document.querySelector("#date").value);
-			submitData.interval =  checkRadioValue(document.querySelectorAll('input[name="period"]'));
+		if (go) {
+			changeProgress(id);
+			// 데이터 확인
+			if(targetClass.contains("setting")) {
+				submitData.fileType = checkRadioValue(document.querySelectorAll('input[name="type"]'));
+				submitData.startIndex = Number(document.querySelector("#startIndex").value);
+				submitData.dateColumn = Number(document.querySelector("#date").value);
+				submitData.interval =  checkRadioValue(document.querySelectorAll('input[name="period"]'));
+			}
+
+			// 전처리
+			if(targetClass.contains("treat")) {
+				Loading.StartLoading();
+				await ShowPreprocessPage.submit();
+				Loading.CloseLoading();
+			}
 		}
-
-		// 전처리
-		if(targetClass.contains("treat")) {
-			Loading.StartLoading();
-			await ShowPreprocessPage.submit();
-			Loading.CloseLoading();
-		}
-
 	}	
 
 	// periodSelectDIV
@@ -132,6 +133,15 @@ const clickEvent = async (event, id, targetClass) => {
 
 	if (id === "weekly" || id === "daily") {
 		document.querySelector("#elsePeriod").disabled = true;
+	}
+
+	/////
+	if (id === "deleteLine") {
+		document.querySelector(".SelectDIV").innerHTML = ShowPreprocessPage.templateDelete();
+	}
+
+	if (id === "changeValue") {
+		document.querySelector(".SelectDIV").innerHTML = ShowPreprocessPage.templatesChange();
 	}
 
 	///////////////////// revise

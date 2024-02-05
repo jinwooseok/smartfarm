@@ -250,7 +250,6 @@ button:hover{
   font-size: 30px;
 }
 
-
 /* 난이도 선택 */
 .reviseDIV {
   width: 1000px;
@@ -336,4 +335,10 @@ input[name="level"]:checked+label+.box {
 
 .fileSaveDIV>*:not(:nth-child(2)) {
   margin-top: 30px;
+}
+
+.optionADD,
+.optionDelete {
+	font-size: 14px;
+	text-align: center;
 }
