@@ -8,10 +8,11 @@ from django.db import transaction
 
 class TempSaveService(FileSaveService):
     
-    def __init__(self, user, file_title, file_data, statuses=None):
+    def __init__(self, user, file_title, file_data, file_type=None, statuses=None):
         self.user = user
         self.file_title = file_title
         self.file_data = file_data
+        self.file_type = file_type
         self.statuses = statuses
 
     @transaction.atomic
@@ -23,11 +24,11 @@ class TempSaveService(FileSaveService):
         
         file = get_file_by_user_file_title(self.user, file_title)
         
-        TempSaveService.save_file(file, file_title, self.statuses)
-
+        TempSaveService.save_file(file, file_title, self.file_type, self.statuses)
+        return file_title
 
     @staticmethod
-    def save_file(file, file_title, statuses):
+    def save_file(file, file_title, file_type, statuses):
         f = open(file_title,'rb')
         file_open=files.File(f, name=file_title)
         try:
@@ -35,12 +36,12 @@ class TempSaveService(FileSaveService):
             temp_instance = Temp.objects.get(file=file)
             if temp_instance.file_root != file_open:
                 temp_instance.delete()
-                Temp.objects.create(file=file, file_title=file_title, file_root=file_open)
+                instance = Temp.objects.create(file=file, file_title=file_title, file_type = file_type, file_root=file_open)
         #없으면 새로 저장
         except Temp.DoesNotExist:
-            Temp.objects.create(file=file, file_title=file_title, file_root=file_open)
+            instance = Temp.objects.create(file=file, file_title=file_title, file_type = file_type, file_root=file_open)
         for status in statuses:
-            TempStatus.objects.create(file=file, statuses=status)
+            TempStatus.objects.create(temp_id=instance.id, status_id=status)
         f.close()
         os.remove(file_title)
 

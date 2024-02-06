@@ -34,3 +34,4 @@ class ProcessOutlierService():
                 drop_index = drop_index+DataProcess.outlier_detector(numeric_column)
 
         return DataProcess.drop_rows(df, list(set(drop_index))), drop_index
+    

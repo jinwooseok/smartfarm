@@ -61,7 +61,15 @@ class DataProcess:
         except:
             raise DateConverterException() 
         
-        
+    #결측치 처리
+    @staticmethod
+    def nan_handler(data, method="drop"):
+        if method == "drop":
+            return data.dropna()
+        elif method == "fill":
+            return data.fillna(0)
+        else:
+            return data.fillna(method)
     
 
     #하나의 series를 받아서 결측치의 인덱스를 알려줌

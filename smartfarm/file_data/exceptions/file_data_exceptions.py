@@ -11,3 +11,9 @@ class DateConverterException(CustomBaseException):
         self.status_code = 461
         self.code = 461
         self.detail = '날짜 형식으로 변환할 수 없는 열입니다.'
+        
+class StandardDuplicateException(CustomBaseException):
+    def __init__(self,file_object, column_name):
+        self.status_code = 462
+        self.code = 462
+        self.detail = f'{file_object.file_title}의 {column_name}열에 중복 데이터가 있습니다. 처리 후 병합이 가능합니다.'
