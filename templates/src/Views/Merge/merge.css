@@ -135,6 +135,8 @@ button:hover{
 	flex-direction: column;
 	justify-content: space-evenly;
 	align-items: center;
+
+	text-align: center;
 }
 
 .selectDIV .card .cardTitle {
@@ -143,4 +145,5 @@ button:hover{
 
 .selectDIV .card>*{
 	margin-bottom: 10px;
+	width: 200px;
 }

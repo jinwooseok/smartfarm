@@ -1,4 +1,3 @@
-import setFileListSelectBox from "/templates/src/Utils/setFileListSelectBox.mjs";
 import API from "/templates/src/Utils/API.mjs";
 import Excel from "/templates/src/Model/Excel.mjs";
 
