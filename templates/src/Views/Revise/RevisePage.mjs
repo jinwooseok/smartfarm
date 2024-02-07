@@ -193,7 +193,7 @@ class RevisePage {
           if (
             value[1] !== "DIF" ||
             value[1] !== "GDD" ||
-            value[0] !== "일출전후t시간"
+            value[0] !== "일출전후2시간"
           ) {
             $selectedValueList.innerHTML += 
             `<Option value= '${defaultValue}${selectedValue}'>` +

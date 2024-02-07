@@ -1,15 +1,12 @@
-import API from "/templates/src/Utils/API.mjs";
 import Logout from "/templates/src/Utils/Logout.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
-import setFileListSelectBox from "/templates/src/Utils/FIleList.mjs";
+import cookies from "/templates/src/Utils/CsrfToken.mjs";
+import setFileListSelectBox from "/templates/src/Utils/setFileListSelectBox.mjs";
 
 import ShowFilePage from "./ShowFilePage.mjs";
 import ShowPreprocessPage from "./ShowPreprocessPage.mjs";
 import RevisePage from "./RevisePage.mjs";
 import Graph from "./Graph.mjs";
-
-// 순수 페이지 이동만 관리
-const $spreadSheetDIV = document.querySelector("#spreadSheetDIV");
 
 const $logoutBtn = document.querySelector("#logoutBtn");
 $logoutBtn.addEventListener("click", Logout);
@@ -37,18 +34,8 @@ const moveSelectedFileTitle = () => {
 
 $fileListSelectBox.addEventListener("change", moveSelectedFileTitle);
 
-// 시작 설정
-(async function () {
-	// 파일 목록 보여줌
-	setNowFileTitle(await setFileListSelectBox());
-
-	// 파일 데이터 그리기
-	Loading.StartLoading();
-	ShowFilePage.setFileTitle(fileName);
-	await ShowFilePage.setFileData();
-	ShowFilePage.showFile($spreadSheetDIV);
-	Loading.CloseLoading();
-}());
+// 파일 목록 보여줌
+setNowFileTitle(await setFileListSelectBox());
 
 const submitData = {
 	newFileName: '',
@@ -183,6 +170,7 @@ const clickEvent = async (event, id, targetClass) => {
 		document.querySelector(".box").innerHTML = RevisePage.templatesHard();
 	}
 
+	/////////////////////// 여기부터 해야함
 	// 그래프
 	if (id === "nextGraph") {
 		// 그래프 다음 데이터
@@ -214,7 +202,13 @@ const changeDiv = async (nowProgress) => {
 		$workDIV.innerHTML = ShowFilePage.templates();
 
 		const $spreadSheetDIV = document.querySelector("#spreadSheetDIV");
+
+		// 파일 데이터 그리기
+		Loading.StartLoading();
+		ShowFilePage.setFileTitle(fileName);
+		await ShowFilePage.setFileData();
 		ShowFilePage.showFile($spreadSheetDIV);
+		Loading.CloseLoading();
 	}
 
 	if (nowProgress === 1) { // 전처리
@@ -242,3 +236,5 @@ const changeDiv = async (nowProgress) => {
 	}
 
 }
+
+changeDiv(0)
