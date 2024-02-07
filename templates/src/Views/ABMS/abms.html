@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>ABMS</title>
+
+	<!-- css -->
+	<link rel="stylesheet" href="/templates/src/Views/ABMS/abms.css">
+</head>
+
+<body>
+	<div class="containerDIV" id="containerDIV">	
+		<div class="upperDIV">	
+			<div class="title">
+				<a href="/file-list/">전남대학교</br>융합 빅데이터 연구실</a>
+			</div>
+			<div class="logoutDIV">
+				<a class="logoutBtn" id="logoutBtn">로그아웃</a>
+			</div>
+		</div>
+		<div class="ABMSDIV">
+			<div class="abmsTypeSelect" id="abmsTypeSelect">
+				<select name="abmsType" id="abmsType" class="abmsType">
+					<option value="환경">환경</option>
+					<option value="완숙토마토">완숙토마토</option>
+					<option value="방울토마토">방울토마토</option>
+					<option value="참외">참외</option>
+					<option value="파프리카">파프리카</option>
+					<option value="오이">오이</option>
+					<option value="가지">가지</option>
+					<option value="국화">국화</option>
+					<option value="수박">수박</option>
+					<option value="레드향">레드향</option>
+				</select>
+
+				<span>날짜 열</span>
+				<input type="number" name="date" id="date" class="date" value="1">
+
+				<span>처리 시작 행</span>
+				<input type="number" name="startIndex" id="startIndex" class="startIndex" value="1">
+
+				<span>파일 이름</span>
+				<input type="text" name="abmsFileName" id="abmsFileName" class="abmsFileName">
+				<button id="abmsSave" class="abmsSave">저장하기</button>
+			</div>
+
+			<div class="abmsText" id="abmsText">
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+
+<script type="module" src="/templates/src/Views/ABMS/abms.mjs"></script>
+<script src="/templates/src/CDN/jquery-1.12.4.min.js"></script>

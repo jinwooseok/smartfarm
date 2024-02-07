@@ -1,4 +1,19 @@
 export const abmsTextValue = {
+  환경: {
+    농가명: "FRMHS_NM",
+    측정시간: "EXAMIN_DATETM",
+    온도_외부: "TP_EXTRL",
+    풍향_외부: "WD",
+    풍속_외부: "ARVLTY",
+    일사량_외부: "SOLRAD_QY",
+    누적일사량_외부: "ACCMLT_SOLRAD_QY",
+    강우감지: "RAIN_PRCP",
+    온도_내부: "TP_INNER",
+    상대습도_내부: "PARTN_HD_INNER",
+    잔존CO2: "SRVIVE_CO2",
+    토양온도: "SOIL_TP",
+    비고: "RM",
+  },
   완숙토마토: {
     농가명: "FRMHS_NM",
     조사일자: "EXAMIN_DATETM",

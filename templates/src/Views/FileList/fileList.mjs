@@ -1,5 +1,6 @@
 import API from "/templates/src/Utils/API.mjs";
 import Logout from "/templates/src/Utils/Logout.mjs";
+import cookies from "/templates/src/Utils/CsrfToken.mjs";
 
 const $checkAll = document.querySelector("#checkAll"); // 전체 선택 버튼
 const $$condition = document.querySelectorAll(".condition");

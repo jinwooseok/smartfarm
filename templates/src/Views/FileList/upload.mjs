@@ -137,9 +137,6 @@ const uploadFile = async () => {
 		fileData: JSON.stringify(sheetData),
 	};
 
-  console.log(sheetData[0]);
-  console.log(sheetData[sheetData.length-1]);
-
 	const response = await API("/files/save/", "post" , data);
 
   checkResponse(response);
@@ -147,8 +144,9 @@ const uploadFile = async () => {
 }
 
 const checkResponse = (code) => {
-  switch(code) {
-    case code.status === "success":
+  const value = code.status || code;
+  switch(value) {
+    case "success":
       location.replace("/file-list/");
       break;
     case 401 :
@@ -169,6 +167,3 @@ const checkResponse = (code) => {
 
 // 업로드 하고 다시 페이지 호출
 $fileUpload.addEventListener("click", uploadFile);
-
-
-// 파일 업로드 함수

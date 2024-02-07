@@ -1,7 +1,9 @@
 import API from "/templates/src/Utils/API.mjs";
 import Logout from "/templates/src/Utils/Logout.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
-import setFileListSelectBox from "/templates/src/Utils/FIleList.mjs";
+import setFileListSelectBox from "/templates/src/Utils/setFileListSelectBox.mjs";
+
+import MergePage from "./MergePage.mjs";
 
 const $logoutBtn = document.querySelector("#logoutBtn");
 $logoutBtn.addEventListener("click", Logout);
@@ -45,7 +47,17 @@ const clickEvent = async (event, id, targetClass) => {
 	}	
 
 	if (id === "merge") {
-		// 파일 병합
+		// 병합 데이터 전송
+		MergePage.setFileTitle($mergeFileName.value);
+		await MergePage.sendMergeInfo();
+
+		// 파일 데이터 그리기
+		Loading.StartLoading();
+		const $spreadSheetDIV = document.querySelector("#spreadSheetDIV");
+		const $mergeFileName = document.querySelector("#mergeFileName");
+		// await MergePage.setFileData();
+		// MergePage.showFile($spreadSheetDIV);
+		Loading.CloseLoading();
 	}
 
 	if (id === '시차'){
@@ -71,12 +83,9 @@ const changeDiv = async (nowProgress) => {
 	const $columnDIV = document.querySelector(".columnDIV");
 
 	if (nowProgress === 0) { // 병합
-		$columnDIV.innerHTML = `
-			0
-			<div class="buttonDIV" id="buttonDIV">
-				<button class="nextPage" id="nextPage">다음</button>
-			</div>
-		`
+		$columnDIV.innerHTML = MergePage.templates();
+		MergePage.inputSelectBoxValue(await setFileListSelectBox());
+		MergePage.setEventListener();
 	}
 
 	if (nowProgress === 1) { // 변수 선택
@@ -103,3 +112,5 @@ const changeDiv = async (nowProgress) => {
 
 	}
 }
+
+changeDiv(0);

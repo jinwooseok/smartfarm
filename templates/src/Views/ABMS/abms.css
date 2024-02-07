@@ -1,0 +1,142 @@
+*{
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+
+	/* overflow-y: hidden; */
+}
+
+a{
+	color: #007A33;
+	text-decoration: none;
+}
+
+li, ul{
+	list-style: none;
+}
+
+.containerDIV {
+	margin: 0 auto;
+
+	display: grid;
+	width: 1280px;
+	height: 100%;
+}
+
+.upperDIV {
+	width: 1280px;
+	height: 100px;
+	position: relative;
+}
+
+.upperDIV .title {
+	width: 200px;
+	height: 50px;
+	margin-top: 25px;
+	margin-left: 20px;
+
+	color: #007A33;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.upperDIV .logoutDIV {
+	position: absolute;
+	top: calc((100px - 28px)/2);
+	right: 25px;
+
+	display: inline-block;
+	text-align: center;
+}
+
+.upperDIV .logoutDIV .logoutBtn {
+	position: relative;
+	padding: 4px 12px;
+	border: 1px solid rgba(0, 0, 0, 0.21);
+	border-bottom: 4px solid rgba(0, 0, 0, 0.21);
+	border-radius: 4px;
+	background: #72B08E;
+
+	display: inline-block;
+
+	text-decoration: none;
+	font-size: 14px;
+	color: white;
+}
+
+.logoutBtn:active {
+	background: #87a86f;
+}
+
+button{
+	border: 1px solid #007A33;
+	border-radius: 10px;
+	margin-right: 8px;
+	padding: 5px 11px;
+	background-color: #007A33;
+	color: #fff;
+
+	float: right;
+}
+
+button:hover{
+	cursor: pointer;
+}
+
+.ABMSDIV{
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	justify-content: space-evenly;
+	align-items: center;
+}
+
+.ABMSDIV .abmsText {
+  width: 80%;
+  height: 100%;
+
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+
+  overflow-y: auto;
+}
+
+.ABMSDIV .abmsText>* {
+  width: 18%;
+  margin: 5px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+
+.ABMSDIV .abmsTypeSelect {
+  width: 20%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.ABMSDIV .abmsTypeSelect .abmsFileName {
+  width: 80%;
+	text-overflow: ellipsis;
+}
+
+.ABMSDIV .abmsTypeSelect .abmsType {
+  width: 80%;
+  margin-bottom: 15px;
+}
+
+.ABMSDIV .abmsTypeSelect input{
+	margin-bottom: 10px;
+}
+
+.ABMSDIV .abmsTypeSelect .abmsSave {
+  padding: 5px 8px;
+}
