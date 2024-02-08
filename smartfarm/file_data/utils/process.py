@@ -3,6 +3,7 @@ import numpy as np
 import json
 
 from ..exceptions.file_data_exceptions import DateConverterException
+from common.decorators import logging_time
 ## -------------데이터 변경 클래스-----------------
 class DataProcess:
 
@@ -73,6 +74,7 @@ class DataProcess:
     
 
     #하나의 series를 받아서 결측치의 인덱스를 알려줌
+    @logging_time
     @staticmethod
     def outlier_detector(data, window_size=10, threshold=3):
         outlier_indices = []

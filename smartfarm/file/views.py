@@ -14,11 +14,12 @@ from common.validators import login_validator, serializer_validator
 #파일 관련 뷰셋
 class FileViewSet(viewsets.GenericViewSet):
     def page(self, request):
+        login_validator(request)
         return render(request, 'src/Views/FileList/fileList.html')
 
     def list(self, request):
         paginator = PageNumberPagination()
-        paginator.page_size = 10
+        paginator.page_size = 20
         user_id = login_validator(request)
         file_object = filter_file_by_user(user_id)
         file_object = paginator.paginate_queryset(file_object, request)
@@ -60,6 +61,7 @@ class FileViewSet(viewsets.GenericViewSet):
         serializer = FileNameSerializer(data=request.data)
         
         serializer = serializer_validator(serializer)
+        
         return Response(ResponseBody.generate(data=GetFileDataService(serializer, user_id).execute()), status=200)  
 
 
