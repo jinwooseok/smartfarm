@@ -34,15 +34,6 @@ class FileSaveService():
 
         FileSaveService.save_file(self.user, self.file_title, self.statuses)
         
-        print("여기까지옴")
-        file = get_file_by_user_file_title(user_id=self.user, file_title=self.file_title)
-
-        feature_info_list = FeatureService.extract_feature(file.id, pd.DataFrame(self.file_data))
-        #변수 정보 저장
-        feature_serializer = FileFeatureSerializer(data=feature_info_list, many=True)
-        feature_serializer = serializer_validator(feature_serializer)
-        feature_serializer.save()
-        
     @staticmethod
     def data_to_csv(file_title, file_data):
         if type(file_data) is pd.DataFrame:
