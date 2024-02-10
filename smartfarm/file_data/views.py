@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from django.shortcuts import render
 from ..models import File
 from .serializers import *
+from django.http import HttpResponse
 from rest_framework.response import Response
 from common.response import *
 from ..file.serializers import FileNameSerializer
@@ -20,6 +21,9 @@ class FileDataViewSet(viewsets.ModelViewSet):
     queryset = File.objects.all()
 
     def page(self, request, file_title):
+        user_id = request.session.get('user')
+        if user_id == None:
+            return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n로그인 페이지로 돌아갑니다.');location.href='/users/sign-in/';</script>")
         return render(request, 'src/Views/Revise/revise.html')
       
     def details(self, request, file_title):
@@ -70,6 +74,9 @@ class FileDataViewSet(viewsets.ModelViewSet):
 
 class DataMergeViewSet(viewsets.GenericViewSet):
     def page(self, request):
+        user_id = request.session.get('user')
+        if user_id == None:
+            return HttpResponse("<script>alert('올바르지 않은 접근입니다.\\n로그인 페이지로 돌아갑니다.');location.href='/users/sign-in/';</script>")
         return render(request, 'src/Views/Merge/merge.html')
     
     def merge(self, request):
