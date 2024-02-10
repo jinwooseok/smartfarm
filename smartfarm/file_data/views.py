@@ -59,18 +59,15 @@ class FileDataViewSet(viewsets.ModelViewSet):
         
     def process_time_series(self, request, file_title):
         user_id = login_validator(request)
-        
+        print(file_title)
         data = request.data.copy()
         data['fileName'] = file_title
         
         serializer = ProcessTimeSeriesSerializer(data=data)
 
         serializer = serializer_validator(serializer)
-        ShiftDataService(serializer, user_id).execute()
+        ShiftDataService.from_serializer(serializer, user_id).execute()
         return Response(ResponseBody.generate(), status=200)
-    
-    def process_time_series():
-        return 0
 
 class DataMergeViewSet(viewsets.GenericViewSet):
     def page(self, request):

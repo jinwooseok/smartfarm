@@ -7,6 +7,8 @@ class ProcessOutlierSerializer(FileNameSerializer):
     
 class ProcessTimeSeriesSerializer(FileNameSerializer):
     windowSize = serializers.IntegerField()
+    count = serializers.IntegerField()
+    newFileName = serializers.CharField()
 
 class DataMergeSerializer(serializers.Serializer):
     fileName = serializers.ListField()
