@@ -34,6 +34,7 @@ class FileSaveService():
 
         FileSaveService.save_file(self.user, self.file_title, self.statuses)
         
+        print("여기까지옴")
         file = get_file_by_user_file_title(user_id=self.user, file_title=self.file_title)
 
         feature_info_list = FeatureService.extract_feature(file.id, pd.DataFrame(self.file_data))

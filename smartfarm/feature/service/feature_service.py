@@ -1,3 +1,4 @@
+from ...data_analytics.utils.rf_classifier import CustomRandomForestClassifier
 class FeatureService:
     @staticmethod
     def extract_feature(file_id,data):
