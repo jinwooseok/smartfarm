@@ -1,8 +1,10 @@
 import pandas as pd
 from ..utils.process import ETLProcessFactory
 from ...file.service.file_save_service import FileSaveService
+from ...file_data.service.get_file_data_service import GetFileDataService
+from ...file.utils.utils import search_file_absolute_path
 class TransABMSService():
-    def __init__(self, user, columns, new_file_name, date_column, start_index):
+    def __init__(self, user, columns, new_file_name, date_column, start_index, file_root):
         self.user = user
         self.columns = columns
         self.new_file_name = new_file_name
@@ -10,26 +12,40 @@ class TransABMSService():
         self.start_index = start_index
         self.file_type = "env"
         self.interval = "hourly"
+        self.file_root = file_root
+    
     @classmethod
-    def from_serializer(cls, user, serializer):
-        return cls(user, serializer.columns, serializer.new_file_name, serializer.date_column, serializer.start_index)
+    def from_serializer(cls, serializer, user) -> "TransABMSService":
+        return cls(user, serializer.validated_data['columns'], serializer.validated_data['newFileName']
+                   , serializer.validated_data['date'], serializer.validated_data['startIndex'], serializer.get_file_object(user).file_root)
     
     def execute(self):
-        df = pd.DataFrame()
-        dic = {}
+        file_absolute_path = search_file_absolute_path(self.file_root)
+        df = GetFileDataService.file_to_df(file_absolute_path)
+        var_list = []
+        no_touch_list = []
         for before_name, after_name in self.columns:
+            dic = {}
+            if before_name == "null":
+                no_touch_list.append(after_name)
+                continue
             df.rename(columns={before_name: after_name}, inplace=True)
             #그냥 농업데이터 처리 그대로 가져오고 모든 라인 전체 평균으로 처리
             if after_name in ["내부온도", "내부습도"]:
                 #전체평균 ,주간평균, 야간평균, 전체최저, 전체최고 생성
-                dic[after_name] = [["전체, 평균"], ["주간, 평균"], ["야간, 평균"], ["전체, 최저"], ["전체, 최고"]]
+                dic[after_name] = [["전체", "평균"], ["주간", "평균"], ["야간", "평균"], ["전체", "최소"], ["전체", "최대"]]
             elif after_name in ["외부온도"]:
                 #전체평균 ,주간평균, 야간평균 생성
-                dic[after_name] = [["전체, 평균"], ["주간, 평균"], ["야간, 평균"]]
+                dic[after_name] = [["전체", "평균"], ["주간", "평균"], ["야간", "평균"]]
+            elif after_name in ["FRMHS_NM", "EXAMIN_DATETM"]:
+                #날짜열이나 농가명은 제외
+                pass
             else:
-                dic[after_name] =[["전체, 평균"]]
+                dic[after_name] =[["전체", "평균"]]
+            var_list.append(dic)
+
         #프로세스 선정
-        process_factory = ETLProcessFactory(df, self.file_type, self.date_column, self.interval, var = dic)
+        process_factory = ETLProcessFactory(df, self.file_type, self.date_column, self.interval, var = var_list)
         #정적 메서드 핸들러
         result = process_factory.handler()
         #그렇게 컬럼 데이터를 만들고 농업전처리를 실행..하지만 이름은 맞춰줘야한다..

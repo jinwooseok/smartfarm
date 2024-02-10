@@ -1,34 +1,10 @@
+from .daily_feature_generator import DailyFeatureGenerator
+from ..exceptions.exceptions import *
 import pandas as pd
-import numpy as np
 from .masks import *
-from ..exceptions.exceptions import VarDataException
-class DailyFeatureGenerator():
-    def __init__(self, data, var=None):
-        self.data = data
-        self.date_series = data['날짜']
-        self.var = var
-    
-    def execute(self):
-        return_list = []
-        
-        for variable in self.var:
-            try:
-                temp = list(variable.keys())[0]
-                standards = variable[temp]
-            except:
-                raise VarDataException(variable)
-            
-            for standard in standards:
-                feature_df = self.generating_variable(self.data, self.date_series, temp, standard)
-                return_list.append(feature_df)
-        
-        merged_df = return_list[0]
-        for i in range(1, len(return_list)):
-            merged_df = pd.merge(merged_df, return_list[i], on='날짜', how='left')
-        return merged_df
-    
+
+class HourFeatureGenerator(DailyFeatureGenerator):
     def generating_variable(self, data, date_series, temp,standard, t_diff=2, div_DN=False, tbase=15): 
-        
         timing_dict = {
             '전체' : 'all',
             '주간' : 'day_night',
@@ -67,55 +43,21 @@ class DailyFeatureGenerator():
         date_list = []
         standard_date = date_series.iloc[0]
         last_date = date_series.iloc[-1]
+
         while last_date >= standard_date:
-            total_mask = DailyFeatureGenerator.total_mask(date_series, standard_date, period, timing_series, timing_key)
+            total_mask = HourFeatureGenerator.total_mask(date_series, standard_date, period, timing_series, timing_key)
             temp = DailyFeatureGenerator.daily_grouping(total_mask, data, target_column, function)
             temp_list.append(temp)
             date_list.append(standard_date)
-            standard_date += pd.Timedelta(days=period)
-        
+            standard_date += pd.Timedelta(hours=period)
         return_df = pd.DataFrame({'날짜':date_list, f'{timing_key}{function_key}{target_column}':temp_list})
         return return_df
     
     def total_mask(date_series, standard_date, period, timing_series, timing_key):
         daily_mask = daily_mask_generator(date_series, standard_date, period)
+        hour_mask = hour_mask_generator(date_series, standard_date, period)
         if timing_key == '전체':
             timing_mask = daily_mask
         else:
             timing_mask = timing_mask_generator(timing_series, timing_key)
-        return total_mask_generator([daily_mask, timing_mask])
-    
-    def daily_grouping(mask, data, target_column, function):
-        if mask.sum() == 0:
-            np.nan
-        else:
-            return function(data[target_column].loc[mask])
-   
-   
-    def DIF(data):
-        return max(data) - min(data)
-   
-    def GDD(data, tbase=15):
-        temp = (max(data)+min(data))/2 - tbase
-        if temp >= 0:
-            return temp
-        else:
-            return 0
-        
-    def mean(data):
-        if len(data) == 0:
-            return np.nan
-        else:
-            return sum(data)/len(data)
-
-    def min(data):
-        if len(data) == 0:
-            return np.nan
-        else:
-            return data.min()
-
-    def max(data):
-        if len(data) == 0:
-            return np.nan
-        else:
-            return data.max()
+        return total_mask_generator([daily_mask, hour_mask, timing_mask])

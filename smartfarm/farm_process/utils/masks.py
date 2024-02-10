@@ -7,7 +7,7 @@ def daily_mask_generator(date_series, standard_date, interval):
     return (date_series.dt.date >= standard_date.date()) & (date_series.dt.date < (standard_date + pd.Timedelta(days=interval)).date())
 
 def hour_mask_generator(date_series, standard_date, interval):
-    return (date_series.dt.hour >= standard_date) & (date_series.dt.hour < (standard_date + pd.Timedelta(hours=interval)))
+    return (date_series.dt.hour >= standard_date.hour) & (date_series.dt.hour < (standard_date + pd.Timedelta(hours=interval)).hour)
 
 def same_month_mask_generator(date_series, sun_date, i):
     return (sun_date.iloc[i].year == date_series.dt.year) & (sun_date.iloc[i].month == date_series.dt.month)

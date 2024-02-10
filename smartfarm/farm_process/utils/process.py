@@ -4,6 +4,7 @@ from .daily_time_classfier import DailyTimeClassifier
 from .get_sun_crawler import GetSunCrawler
 from ..exceptions.exceptions import *
 from .daily_feature_generator import DailyFeatureGenerator
+from .hour_feature_generator import HourFeatureGenerator
 from ...file_data.utils.process import DataProcess
 #from .daily_feature_generator import DailyFeatureGenerator
 class ETLProcessFactory():
@@ -18,6 +19,7 @@ class ETLProcessFactory():
     def handler(self):
         file_type = self.file_type
         interval = self.interval
+
         self.data = self.data.dropna(subset=[self.data.columns[self.date_column]])
         
         #날짜열 추출
@@ -68,7 +70,7 @@ class EnvirProcess:
         day_night_series, srise_to_noon_series, srise_diff_series = DailyTimeClassifier(sun_dataset, date_series).execute()
         
         concated_data = pd.concat([date_series, data, day_night_series, srise_to_noon_series, srise_diff_series], axis=1)
-        result_data = DailyFeatureGenerator(concated_data, var).execute()
+        result_data = HourFeatureGenerator(concated_data, var).execute()
         
         return result_data
         
@@ -85,7 +87,6 @@ class EnvirProcess:
     
     @staticmethod
     def start_end_extractor(date_series):
-        print(date_series)
         if date_series.isnull().sum() != 0:
             raise NullDateException()
         return date_series.iloc[0], date_series.iloc[-1]

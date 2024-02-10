@@ -7,3 +7,9 @@ class FarmProcessSerializer(FileNameSerializer):
     dateColumn = serializers.IntegerField()
     interval = serializers.ChoiceField(choices=[("daily","daily"),("weekly","weekly")])
     var = serializers.JSONField()
+
+class EnvABMSSerializer(FileNameSerializer):
+    newFileName = serializers.CharField()
+    date = serializers.IntegerField()
+    columns = serializers.JSONField()
+    startIndex = serializers.IntegerField()
