@@ -8,6 +8,7 @@ from .file.views import FileViewSet
 from .file_data.views import FileDataViewSet, DataMergeViewSet
 from .data_analytics.views import DataAnalyticsViewSet
 from .farm_process.views import DataABMSViewSet, FarmProcessViewSet
+from .feature.views import FeatureViewSet
 app_name='smartfarm'
 
 
@@ -32,11 +33,14 @@ urlpatterns = [
     path('files/<str:file_title>/data/summary/',FileDataViewSet.as_view({'get':'summary'})),
     path('files/<str:file_title>/data/preprocess/',FileDataViewSet.as_view({'post':'process_outlier'})),
     path('files/<str:file_title>/data/timeseries/',FileDataViewSet.as_view({'post':'process_time_series'})),
+    
+    #파일 변수 호출
+    path('files/<str:file_title>/data/feature/',FeatureViewSet.as_view({'get':'feature_list'})),
 
     #농업 처리 도메인관련
     path('files/<str:file_title>/data/farm/',FarmProcessViewSet.as_view({'post':'process_farm'})),
     path('abms/<str:file_title>/',DataABMSViewSet.as_view({'get':'page'})),
-    path('abms/<str:file_title>/env/',DataABMSViewSet.as_view({'get':'page'})),
+    path('abms/<str:file_title>/env/',DataABMSViewSet.as_view({'post':'process_abms'})),
 
 
     #분석
