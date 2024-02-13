@@ -15,8 +15,6 @@ $logoutBtn.addEventListener("click", Logout);
 
 let fileList;
 
-console.log(document.querySelector("pre").innerHTML)
-
 // 초기 파일 목록 만들기
 const setFileList = () => {
   fileList.map((file) => {
@@ -51,7 +49,6 @@ const setFileList = () => {
 };
 
 const movePage = (id, title) => {
-
   localStorage.setItem("fileTitle", JSON.stringify(title));
 
   switch (id) {

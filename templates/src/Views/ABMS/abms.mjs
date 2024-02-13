@@ -100,24 +100,26 @@ const setEnvData = () => {
 // abms 데이터 만들기
 $abmsSave.addEventListener("click", async() => {
 	const fileType = $abmsType.options[$abmsType.selectedIndex].value;
-	if (fileType !== "환경") {
-		const response = await API("/files/save/", "post", {
-			fileName: $abmsFileName.value,
-			fileData : JSON.stringify(setABMSdata()),
-		});
+  console.log(setEnvData())
 
-		response.status === "success" ? location.replace("/file-list/") : alert("에러");
-		return;
-	}
+	// if (fileType !== "환경") {
+	// 	const response = await API("/files/save/", "post", {
+	// 		fileName: $abmsFileName.value,
+	// 		fileData : JSON.stringify(setABMSdata()),
+	// 	});
 
-	const response = await API(`/abms/${fileName}/env/`, "post", {
-		startIndex : $startIndex.value,
-		date: $date.value,
-		columns: JSON.stringify(setEnvData()),
-		newFileName: $abmsFileName.value,
-	});
-	response.status === "success" ? location.replace("/file-list/") : alert("에러");
-	return;
+	// 	response.status === "success" ? location.replace("/file-list/") : alert("에러");
+	// 	return;
+	// }
+
+	// const response = await API(`/abms/${fileName}/env/`, "post", {
+	// 	startIndex : $startIndex.value,
+	// 	date: $date.value,
+	// 	columns: JSON.stringify(setEnvData()),
+	// 	newFileName: $abmsFileName.value,
+	// });
+	// response.status === "success" ? location.replace("/file-list/") : alert("에러");
+	// return;
 });
 
 $abmsType.addEventListener("change", () => {
