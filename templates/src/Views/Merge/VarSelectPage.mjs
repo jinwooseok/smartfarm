@@ -1,13 +1,12 @@
-import API from "/templates/src/Utils/API.mjs";
-
 class VarSelectPage {
 
 	#varList;
+	#selectedVarList = [];
 
 	constructor() {}
 
 	templates() {
-		const switchHtml = this.#makeVarList();
+		const switchHtml = this.#makeVarListDIV();
 		return `
 			<div class="varDIV" id="varDIV">
 				<div class="varListDIV" id="varListDIV">
@@ -17,19 +16,29 @@ class VarSelectPage {
 				</div>
 			</div>
 			<div class="buttonDIV" id="buttonDIV">
-				<button class="nextPage" id="nextPage">다음</button>
+				<button class="nextPage switchComplete" id="nextPage">다음</button>
 				<button class="prevPage" id="prevPage">이전</button>
 			</div>
 		`
 	}
 
-	#makeVarList() {
+	#makeVarListDIV() {
 		let html = '';
 
-		for(let name of this.#varList.featureName) {
+		// for(let name of this.#varList.featureName) {
+		// 	html += `
+		// 		<label class="switchLabel">
+		// 			<span>${name.fileName}</span>
+		// 			<input id="switch" role="switch" type="checkbox" checked/>
+		// 		</label>
+		// 	`
+		// }
+
+		const testList = ["123","456","789","asdsdf","assdfd","assdfasd","aswed","asewrd","aq12sd","adsfsd","aafdssd","aaaaasd"]
+		for(let name of testList) {
 			html += `
 				<label class="switchLabel">
-					<span>${name.fileName}</span>
+					<span>${name}</span>
 					<input id="switch" role="switch" type="checkbox" checked/>
 				</label>
 			`
@@ -38,8 +47,8 @@ class VarSelectPage {
 		return html;
 	}
 
-	makeCheckedList() {
-		const list = this.#setCheckedVar();
+	makeCheckedListDIV() {
+		const list = this.#setCheckedVarList();
 
 		let html = '';
 
@@ -52,7 +61,7 @@ class VarSelectPage {
 		return html;
 	}
 
-	#setCheckedVar() {
+	#setCheckedVarList() {
 		const $$switch = document.querySelectorAll("#switch");
 		const checkedVar = [];
 		for (let i = 0; i < $$switch.length; i++) {
