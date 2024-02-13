@@ -1,6 +1,7 @@
-import { abmsTextValue } from "../../Constant/variableList.mjs";
 import API from "/templates/src/Utils/API.mjs";
+import Loading from "/templates/src/Utils/Loading.mjs";
 import { setFileList } from "/templates/src/Utils/fileNameList.mjs";
+import { abmsTextValue } from "../../Constant/variableList.mjs";
 
 const $abmsType = document.querySelector("#abmsType");
 const $abmsText = document.querySelector("#abmsText");
@@ -111,6 +112,8 @@ const setEnvData = () => {
 
 // abms 데이터 만들기
 $abmsSave.addEventListener("click", async() => {
+  Loading.StartLoading();
+
 	const fileType = $abmsType.options[$abmsType.selectedIndex].value;
 
 	if (fileType !== "환경") {
@@ -119,6 +122,7 @@ $abmsSave.addEventListener("click", async() => {
 			fileData : JSON.stringify(setABMSdata()),
 		});
 
+    Loading.CloseLoading();
 		response.status === "success" ? location.replace("/file-list/") : alert("에러");
 		return;
 	}
@@ -129,7 +133,29 @@ $abmsSave.addEventListener("click", async() => {
 		columns: JSON.stringify(setEnvData()),
 		newFileName: $abmsFileName.value,
 	});
-	response.status === "success" ? location.replace("/file-list/") : alert("에러");
+
+  Loading.CloseLoading();
+  
+  switch(response.status) {
+    case "success" :
+      location.replace("/file-list/")
+      break;
+    case 470:
+      alert("날짜열에 null값이 존재합니다. 결측치를 제거해주세요.");
+      break;
+    case 471:
+      alert("날씨 API를 가져오는데 실패하였습니다. 잠시 후 다시 시도해주세요.");
+      break;
+    case 472:
+      alert("시작행이 1보다 작거나 데이터 길이를 초과합니다.");
+      break;
+    case 473:
+      alert("날짜열이 1보다 작거나 데이터 길이를 초과합니다.");
+      break;
+    case 474:
+      alert("{variable} 변수에서 오류가 발생했습니다.");
+      break;
+  }
 	return;
 });
 

@@ -5,9 +5,18 @@ import { getFileNameList } from "/templates/src/Utils/fileNameList.mjs";
 
 import MergePage from "./MergePage.mjs";
 import VarSelectPage from "./VarSelectPage.mjs";
+import TimeDifferenceDataPage from "./TimeDifferenceDataPage.mjs";
 
 const $logoutBtn = document.querySelector("#logoutBtn");
 $logoutBtn.addEventListener("click", Logout);
+
+const 시차데이터 = {
+	"feature": [],
+	"windowSize": 0,
+	"count": 0,
+	"dateColumn": 0,
+	"newFileName": ""
+}
 
 ///////////////////////// page 변환
 const changeProgress = (step) => {
@@ -44,6 +53,14 @@ const clickEvent = async (event, id, targetClass) => {
 
 
 	if (id === "nextPage" || id === "prevPage") {
+
+		if (targetClass.contains("switchComplete")) {
+			const $$text = document.querySelectorAll("p");
+			Array.from($$text).map((val) => {
+				시차데이터.feature.push(val.innerText);
+			});
+		}
+
 		confirm(`이동 합니다.`) === true ? changeProgress(id) : null;
 		
 	}	
@@ -58,22 +75,22 @@ const clickEvent = async (event, id, targetClass) => {
 
 		// 병합 데이터 전송
 		MergePage.setFileTitle($mergeFileName.value);
-		await MergePage.sendMergeInfo();
+		await MergePage.mergeData();
 
 		// 파일 데이터 그리기
-		Loading.StartLoading();
-		const $spreadSheetDIV = document.querySelector("#spreadSheetDIV");
+		// Loading.StartLoading();
+		// const $spreadSheetDIV = document.querySelector("#spreadSheetDIV");
 		// await MergePage.setFileData();
 		// MergePage.showFile($spreadSheetDIV);
-		Loading.CloseLoading();
+		// Loading.CloseLoading();
 	}
 
 	if (id === "switch") {
 		const $confirmDIV = document.querySelector(".confirmDIV");
-		$confirmDIV .innerHTML = VarSelectPage.makeCheckedList();
+		$confirmDIV.innerHTML = VarSelectPage.makeCheckedListDIV();
 	}
 
-	if (id === '시차'){
+	if (id === 'save'){
 
 	}
 
@@ -97,30 +114,22 @@ const changeDiv = async (nowProgress) => {
 
 	if (nowProgress === 0) { // 병합
 		$columnDIV.innerHTML = MergePage.templates();
-		MergePage.inputSelectBoxValue(await getFileNameList());
+		MergePage.inputValueToSelectBox(await getFileNameList());
 		MergePage.setEventListener();
 	}
 
 	if (nowProgress === 1) { // 변수 선택
 		const $mergeFileName = document.querySelector("#mergeFileName");
-		VarSelectPage.setVarList(await MergePage.postFilename($mergeFileName.value));
+		VarSelectPage.setVarList(await MergePage.getFileVarList($mergeFileName.value));
 		$columnDIV.innerHTML = VarSelectPage.templates();
-		VarSelectPage.setCheckedVar();
+		const $confirmDIV = document.querySelector(".confirmDIV");
+		$confirmDIV.innerHTML = VarSelectPage.makeCheckedListDIV();
 	}
 
 	if (nowProgress === 2) { // 시차 변수
-		$columnDIV.innerHTML = `
-		2
-			<div class="buttonDIV" id="buttonDIV">
-				<button class="save" id="save">저장</button>
-				<button class="prevPage" id="prevPage">이전</button>
-			</div>
-		`
+		$columnDIV.innerHTML = TimeDifferenceDataPage.templates();
 	}
 
-	if (nowProgress === 3) { // 파일 저장
-
-	}
 }
 
 changeDiv(0);
