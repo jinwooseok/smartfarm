@@ -9,8 +9,12 @@ from .exceptions.auth_exceptions import *
 from .service.save_user_service import SaveUserService
 from .service.auth_user_service import AuthUserService
 from common.validators import serializer_validator
+from django.http import HttpResponse
 class SignUpViewSet(viewsets.GenericViewSet):
     def page(self, request):
+        user_id = request.session.get('user')
+        if user_id != None:
+            return HttpResponse("<script>alert('올바르지 않은 접근입니다.');location.href='/file-list/';</script>")
         #로그인 하지 않았다면 페이지 렌더링
         return render(request, 'src/Views/Register/register.html')
     
@@ -34,6 +38,9 @@ class SignUpViewSet(viewsets.GenericViewSet):
 
 class SignInViewSet(viewsets.GenericViewSet):
     def page(self, request):
+        user_id = request.session.get('user')
+        if user_id != None:
+            return HttpResponse("<script>alert('올바르지 않은 접근입니다.');location.href='/file-list/';</script>")
         return render(request, 'src/Views/Login/login.html')
     
     @swagger_auto_schema(request_body=SignInSerializer)
