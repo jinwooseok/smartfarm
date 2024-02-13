@@ -1,7 +1,6 @@
 import Logout from "/templates/src/Utils/Logout.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
-import cookies from "/templates/src/Utils/CsrfToken.mjs";
-import setFileListSelectBox from "/templates/src/Utils/setFileListSelectBox.mjs";
+import { setFileList } from "/templates/src/Utils/fileNameList.mjs";
 
 import ShowFilePage from "./ShowFilePage.mjs";
 import ShowPreprocessPage from "./ShowPreprocessPage.mjs";
@@ -16,16 +15,6 @@ const $fileListSelectBox = document.querySelector("#fileListSelectBox");
 ////////////////////// 파일 변경
 const fileName = JSON.parse(localStorage.getItem("fileTitle"));
 
-const setNowFileTitle = (fileTitleLists) => {
-  fileTitleLists.map( (title) => {
-    if (title.fileName === fileName) {
-      $fileListSelectBox.innerHTML += `<Option value= '${title.fileName}' selected>` + title.fileName + `</option>`;
-    } else {
-      $fileListSelectBox.innerHTML += `<Option value= '${title.fileName}'>` + title.fileName + `</option>`;
-    }
-  });
-};
-
 const moveSelectedFileTitle = () => {
   const selectedFileTitle =  $fileListSelectBox.options[$fileListSelectBox.selectedIndex].value;
   localStorage.setItem("fileTitle", JSON.stringify(selectedFileTitle));
@@ -35,7 +24,7 @@ const moveSelectedFileTitle = () => {
 $fileListSelectBox.addEventListener("change", moveSelectedFileTitle);
 
 // 파일 목록 보여줌
-setNowFileTitle(await setFileListSelectBox());
+await setFileList($fileListSelectBox, fileName);
 
 const submitData = {
 	newFileName: '',

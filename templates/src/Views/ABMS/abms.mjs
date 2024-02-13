@@ -1,5 +1,6 @@
 import { abmsTextValue } from "../../Constant/variableList.mjs";
 import API from "/templates/src/Utils/API.mjs";
+import { setFileList } from "/templates/src/Utils/fileNameList.mjs";
 
 const $abmsType = document.querySelector("#abmsType");
 const $abmsText = document.querySelector("#abmsText");
@@ -7,6 +8,7 @@ const $abmsSave = document.querySelector("#abmsSave");
 const $abmsFileName = document.querySelector("#abmsFileName");
 const $startIndex = document.querySelector("#startIndex");
 const $date = document.querySelector("#date");
+const $fileListSelectBox = document.querySelector("#fileListSelectBox");
 
 const fileName = JSON.parse(localStorage.getItem("fileTitle"));
 $abmsFileName.value = fileName.replace(/(.csv|.xlsx|.xls)/g, "") +  "_ABMS";
@@ -15,6 +17,16 @@ const setFileData = async () =>{
 	const response = await API(`/files/${fileName}/data/`, "get");
 	return response.data;
 }
+
+const moveSelectedFileTitle = () => {
+  const selectedFileTitle =  $fileListSelectBox.options[$fileListSelectBox.selectedIndex].value;
+  localStorage.setItem("fileTitle", JSON.stringify(selectedFileTitle));
+  location.href = `/abms/${selectedFileTitle}/`;
+};
+
+await setFileList($fileListSelectBox, fileName);
+
+$fileListSelectBox.addEventListener("change", moveSelectedFileTitle);
 
 const data = await setFileData();
 const variableList = Object.keys(data[0]);
@@ -100,6 +112,7 @@ const setEnvData = () => {
 // abms 데이터 만들기
 $abmsSave.addEventListener("click", async() => {
 	const fileType = $abmsType.options[$abmsType.selectedIndex].value;
+
 	if (fileType !== "환경") {
 		const response = await API("/files/save/", "post", {
 			fileName: $abmsFileName.value,
