@@ -5,17 +5,23 @@ from ..exceptions.file_data_exceptions import FileNotCompleteException
 from ...models import File, Temp, FileStatus, TempStatus
 import pandas as pd
 class ShiftDataService():
-    def __init__(self, user, file_object, window_size, count, new_file_name):
+    def __init__(self, user, file_object, window_size, count, new_file_name, feature):
         self.user = user
         self.file_object = file_object
         self.window_size = window_size
         self.count = count
         self.new_file_name = new_file_name
+        self.feature = feature
         self.date_column = 0
         
     @classmethod    
     def from_serializer(cls, serializer, user):
-        return cls(user, serializer.get_temp_object_or_original(user, status_id = 5), serializer.validated_data["windowSize"], serializer.validated_data["count"], serializer.validated_data["newFileName"])
+        return cls(user
+                   ,serializer.get_temp_object_or_original(user, status_id = 5)
+                   ,serializer.validated_data["windowSize"]
+                   ,serializer.validated_data["count"]
+                   ,serializer.validated_data["newFileName"]
+                   ,serializer.validated_data["feature"])
     
     def execute(self):
         #전처리가 완료된 파일일 경우에만 실행// merge됐거나 전처리가 완료된...
@@ -27,6 +33,7 @@ class ShiftDataService():
         file_absolute_path = search_file_absolute_path(self.file_object.file_root)
         #변할 가능성 있음
         df = GetFileDataService.file_to_df(file_absolute_path)
+        df = df[self.feature]
         shifted_dfs = [df]
         original_columns = df.columns
         for i in range(self.count):
