@@ -21,7 +21,7 @@ class FeatureViewSet(viewsets.ModelViewSet):
         file_object = File.objects.get(user_id=user_id,file_title=file_title)
         queryset = FileFeature.objects.filter(file=file_object)
         serializer = FileFeatureSerializer(queryset.order_by('-feature_importance'), many=True)
-        return Response(ResponseBody.generate(serializer=serializer), status=200)
+        return Response(ResponseBody.generate(serializer=serializer.to_representation()), status=200)
     
     def create_feature_importance(self, request, file_title):
         user_id = login_validator(request)

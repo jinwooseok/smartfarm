@@ -16,7 +16,6 @@ class FeatureService:
                 "feature_importance": None,
                 "feature_selected" : False,
             }
-            print(column_info)
             feature_info_list.append(column_info)
         return feature_info_list
     
