@@ -4,6 +4,7 @@ import Loading from "/templates/src/Utils/Loading.mjs";
 import { getFileNameList } from "/templates/src/Utils/fileNameList.mjs";
 
 import MergePage from "./MergePage.mjs";
+import VarSelectPage from "./VarSelectPage.mjs";
 
 const $logoutBtn = document.querySelector("#logoutBtn");
 $logoutBtn.addEventListener("click", Logout);
@@ -44,9 +45,17 @@ const clickEvent = async (event, id, targetClass) => {
 
 	if (id === "nextPage" || id === "prevPage") {
 		confirm(`이동 합니다.`) === true ? changeProgress(id) : null;
+		
 	}	
 
 	if (id === "merge") {
+		const $mergeFileName = document.querySelector("#mergeFileName");
+
+		if ($mergeFileName.value === "") {
+			alert('파일 이름을 정해주세요')
+			return;
+		}
+
 		// 병합 데이터 전송
 		MergePage.setFileTitle($mergeFileName.value);
 		await MergePage.sendMergeInfo();
@@ -54,10 +63,14 @@ const clickEvent = async (event, id, targetClass) => {
 		// 파일 데이터 그리기
 		Loading.StartLoading();
 		const $spreadSheetDIV = document.querySelector("#spreadSheetDIV");
-		const $mergeFileName = document.querySelector("#mergeFileName");
 		// await MergePage.setFileData();
 		// MergePage.showFile($spreadSheetDIV);
 		Loading.CloseLoading();
+	}
+
+	if (id === "switch") {
+		const $confirmDIV = document.querySelector(".confirmDIV");
+		$confirmDIV .innerHTML = VarSelectPage.makeCheckedList();
 	}
 
 	if (id === '시차'){
@@ -89,13 +102,10 @@ const changeDiv = async (nowProgress) => {
 	}
 
 	if (nowProgress === 1) { // 변수 선택
-		$columnDIV.innerHTML = `
-		1
-			<div class="buttonDIV" id="buttonDIV">
-				<button class="nextPage" id="nextPage">다음</button>
-				<button class="prevPage" id="prevPage">이전</button>
-			</div>
-		`
+		const $mergeFileName = document.querySelector("#mergeFileName");
+		VarSelectPage.setVarList(await MergePage.postFilename($mergeFileName.value));
+		$columnDIV.innerHTML = VarSelectPage.templates();
+		VarSelectPage.setCheckedVar();
 	}
 
 	if (nowProgress === 2) { // 시차 변수

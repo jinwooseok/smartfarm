@@ -167,9 +167,7 @@ function AllCheck() {
   const $$listAll = document.querySelectorAll(".list");
 
   for (let i = 0; i < $AllCheckBox.length; i++) {
-    console.log("$AllCheckBox[i]", $AllCheckBox[i].style.display )
     if ($$listAll[i].style.display === "flex") {
-      console.log("$AllCheckBox[i]", $AllCheckBox[i].checked )
       $AllCheckBox[i].checked = this.checked;
     }
   }

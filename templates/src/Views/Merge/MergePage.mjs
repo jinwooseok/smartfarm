@@ -3,7 +3,7 @@ import Excel from "/templates/src/Model/Excel.mjs";
 
 class MergePage {
 
-	#mergeDataList;
+	#mergeDataList = [];
 	#fileDate;
 	#fileTitle
 
@@ -13,6 +13,7 @@ class MergePage {
 			<div class="card">
 				<p class="cardTitle">생육</p>
 				<select name="growthSelectBox" id="growthSelectBox" class="growthSelectBox">
+					<option value="null" selected></option>
 				</select>
 				<select name="growthVariable" id="growthVariable" class="growthVariable">
 				</select>
@@ -21,6 +22,7 @@ class MergePage {
 			<div class="card">
 				<p class="cardTitle">환경</p>
 				<select name="environmentSelectBox" id="environmentSelectBox" class="environmentSelectBox">
+					<option value="null" selected></option>
 				</select>
 				<select name="environmentVariable" id="environmentVariable" class="environmentVariable">
 				</select>
@@ -29,6 +31,7 @@ class MergePage {
 			<div class="card">
 				<p class="cardTitle">생산량</p>
 				<select name="outputSelectBox" id="outputSelectBox" class="outputSelectBox">
+					<option value="null" selected></option>
 				</select>
 				<select name="outputVariable" id="outputVariable" class="outputVariable">
 				</select>
@@ -57,15 +60,15 @@ class MergePage {
 			output: document.querySelector("#outputSelectBox"),
 		};
 		list.map( (title) => {
-			$selectBoxes.growth.innerHTML += `<Option value= '${title.fileName}' selected>` + title.fileName + `</option>`;
-			$selectBoxes.environment.innerHTML += `<Option value= '${title.fileName}' selected>` + title.fileName + `</option>`;
-			$selectBoxes.output.innerHTML += `<Option value= '${title.fileName}' selected>` + title.fileName + `</option>`;
+			$selectBoxes.growth.innerHTML += `<Option value='${title.fileName}'>` + title.fileName + `</option>`;
+			$selectBoxes.environment.innerHTML += `<Option value='${title.fileName}'>` + title.fileName + `</option>`;
+			$selectBoxes.output.innerHTML += `<Option value='${title.fileName}'>` + title.fileName + `</option>`;
 		});
 	}
 
-	async #postFilename (name) {
-		const response = await API(`files/${name}/data/feature/` ,"get");
-		console.log("postFIleName", response);
+	async postFilename (name) {
+		const response = await API(`/files/${name}/data/feature/` ,"get");
+		return response.data;
 	};
 
 	async #updateVariableOptions ($selectBox, $variable, index) {
@@ -78,13 +81,10 @@ class MergePage {
 			return;
 		}
 		
-		console.log(title);
-		const data = await this.#postFilename(title);
-		this.#mergeDataList[index] = data;
-
-		const dataColumn = Object.keys(JSON.parse(data)[0]);
-		for (let column of dataColumn) {
-			$variable.innerHTML += `<Option value='${column}'>${column}</option>`;
+		const data = await this.postFilename(title);
+		
+		for (let column of data) {
+			$variable.innerHTML += `<Option value='${column.featureName}'>${column.featureName}</option>`;
 		}
 	}
 
@@ -109,11 +109,17 @@ class MergePage {
 	}
 
 	#setMergeVariable() {
+		const $variables = {
+			growth: document.querySelector("#growthVariable"),
+			environment: document.querySelector("#environmentVariable"),
+			output: document.querySelector("#outputVariable"),
+		};
+
 		const $variableSelectBoxes = [$variables.growth, $variables.environment, $variables.output];
 
 		const columnName = $variableSelectBoxes
 			.map($selectBox => $selectBox.options[$selectBox.selectedIndex]?.value)
-			.filter(title => title !== "null");
+			.filter(title => title !== undefined);
 	
 		return columnName;
 	}
