@@ -15,19 +15,15 @@ class SaveModelService(FileSaveService):
         model_file_name = self.convert_file_name(self.user, self.model_name, ".pkl")
         model_meta_file_name = self.convert_file_name(self.user, self.model_name+"_meta", ".json")   
         #모델 저장
-        model_object = self.save_model(self.model, self.model_meta, model_file_name, model_meta_file_name)
-        self.save_model_feature(model_object, self.model_meta)
+        self.save_model(self.model, self.model_meta, model_file_name, model_meta_file_name)
+    
         #모델 정보 저장
         
     def model_form(self, user, model_name, model_meta_name):
         return LearnedModel(user=user
                             ,original_file_name=self.file_object.file_title
                             ,model_name=model_name
-                            ,model_meta_name=model_meta_name)
-    
-    def save_model_feature(self, model_object, model_meta):
-    
-        
+                            ,model_meta_name=model_meta_name)     
 
     def save_model(self, model, model_meta, model_file_name, model_info_file_name):
         model_form = self.model_form(self.user, model_file_name, model_info_file_name)

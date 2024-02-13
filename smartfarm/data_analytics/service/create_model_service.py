@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 from ...file_data.service.get_file_data_service import GetFileDataService
 from ...file.utils.utils import search_file_absolute_path
 from .save_model_service import SaveModelService
+from ..utils.rf_classifier import CustomRandomForestClassifier
 
 class CreateModelService():
     def __init__(self, model_name, x_value, y_value, train_size, model, file_object):
@@ -34,29 +35,19 @@ class CreateModelService():
         model = self.model_handler()
         model.fit(X_train, y_train)
         
-        #모델 저장
-        SaveModelService(model).execute()
-        
         # 학습된 모델의 변수와 가중치 정보 추출
-        model_info = {
+        model_meta = {
             'feature_names': x_df.columns,
             'target_names': y_df.unique(),
             'model_params': model.get_params(),
             'model_weights': model.feature_importances_
         }
         
-        #return 설정하기
+        #모델 저장
+        SaveModelService(model, self.model_name, model_meta).execute()
         
     def model_handler(self):
         if self.model == "random":
-            return RandomForestClassifier(n_estimators=100, random_state=42)
-    
-    def load_model(self):
-        # 저장된 모델 정보 불러오기
-        loaded_model_info = joblib.load('model_info.joblib')
-
-        # 불러온 모델 정보 확인
-        print("Feature Names:", loaded_model_info['feature_names'])
-        print("Target Names:", loaded_model_info['target_names'])
-        print("Model Parameters:", loaded_model_info['model_params'])
-        print("Model Weights:", loaded_model_info['model_weights'])
+            model = CustomRandomForestClassifier()
+            model.fit(self.x_value, self.y_value)
+            return model.learned_model
