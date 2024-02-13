@@ -68,12 +68,11 @@ class TempFeature(models.Model):
 
 class LearnedModel(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,default=000000)
-    original_file_name = models.CharField(max_length=200)
-    
-    model_name = models.CharField(max_length=200)
-    model_root = models.CharField(max_length=200)
-    model_meta_name = models.CharField(max_length=200)
-    model_meta_root = models.CharField(max_length=200)
+    original_file_name = models.CharField(max_length=200, default=None)
+    model_name = models.CharField(max_length=200, default=None)
+    model_root = models.CharField(max_length=200, default=None)
+    model_meta_name = models.CharField(max_length=200, default=None)
+    model_meta_root = models.CharField(max_length=200, default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
