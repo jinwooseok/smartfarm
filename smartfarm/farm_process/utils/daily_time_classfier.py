@@ -19,9 +19,9 @@ class DailyTimeClassifier:
         ment = f'일출전후{t}시간'
 
         noon_time = datetime.datetime.strptime(f"{self.noon}:00","%H:%M").time()
-        day_night_series = pd.Series(np.zeros(len(date_series)))
-        srise_to_noon_series = pd.Series(np.zeros(len(date_series)))
-        srise_diff_series = pd.Series(np.zeros(len(date_series)))
+        day_night_series = pd.Series(np.zeros(len(date_series)), index=range(1, len(date_series) + 1))
+        srise_to_noon_series = pd.Series(np.zeros(len(date_series)), index=range(1, len(date_series) + 1))
+        srise_diff_series = pd.Series(np.zeros(len(date_series)), index=range(1, len(date_series) + 1))
         
         day_night_series.name = "day_night"
         srise_to_noon_series.name = "srise_to_noon"

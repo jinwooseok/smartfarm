@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from .masks import *
 from ..exceptions.exceptions import VarDataException
+from ...file_data.utils.process import DataProcess
 class DailyFeatureGenerator():
     def __init__(self, data, var=None):
         self.data = data
@@ -42,7 +43,7 @@ class DailyFeatureGenerator():
             '최소' : DailyFeatureGenerator.min,
             '최대' : DailyFeatureGenerator.max,
             '평균' : DailyFeatureGenerator.mean,
-            '누적' : sum,
+            '누적' : DailyFeatureGenerator.sum,
             'DIF' : DailyFeatureGenerator.DIF,
             'GDD' : DailyFeatureGenerator.GDD
         }
@@ -86,10 +87,13 @@ class DailyFeatureGenerator():
         return total_mask_generator([daily_mask, timing_mask])
     
     def daily_grouping(mask, data, target_column, function):
+        data = DataProcess.to_numeric_or_none(data[target_column])
+        if data is None:
+            return np.nan
         if mask.sum() == 0:
-            np.nan
+            return np.nan
         else:
-            return function(data[target_column].loc[mask])
+            return function(data.loc[mask])
    
    
     def DIF(data):
@@ -101,6 +105,12 @@ class DailyFeatureGenerator():
             return temp
         else:
             return 0
+    
+    def sum(data):
+        if len(data) == 0:
+            return np.nan
+        else:
+            return sum(data)
         
     def mean(data):
         if len(data) == 0:
