@@ -1,6 +1,5 @@
 function parse_cookies() {
 	const cookies = {};
-	console.log("cookie",document.cookie);
 	if (document.cookie && document.cookie !== '') {
 			document.cookie.split(';').forEach(function (cookie) {
 					let data = cookie.trim().match(/(\w+)=(.*)/);
