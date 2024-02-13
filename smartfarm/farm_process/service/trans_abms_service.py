@@ -3,6 +3,7 @@ from ..utils.process import ETLProcessFactory
 from ...file.service.file_save_service import FileSaveService
 from ...file_data.service.get_file_data_service import GetFileDataService
 from ...file.utils.utils import search_file_absolute_path
+from ...file_data.utils.process import DataProcess
 class TransABMSService():
     def __init__(self, user, columns, new_file_name, date_column, start_index, file_root):
         self.user = user
@@ -23,11 +24,9 @@ class TransABMSService():
         file_absolute_path = search_file_absolute_path(self.file_root)
         df = GetFileDataService.file_to_df(file_absolute_path)
         var_list = []
-        no_touch_list = []
         for before_name, after_name in self.columns:
             dic = {}
-            if before_name == "null":
-                no_touch_list.append(after_name)
+            if before_name not in df.columns:
                 continue
             df.rename(columns={before_name: after_name}, inplace=True)
             #그냥 농업데이터 처리 그대로 가져오고 모든 라인 전체 평균으로 처리
@@ -37,9 +36,6 @@ class TransABMSService():
             elif after_name in ["외부온도"]:
                 #전체평균 ,주간평균, 야간평균 생성
                 dic[after_name] = [["전체", "평균"], ["주간", "평균"], ["야간", "평균"]]
-            elif after_name in ["FRMHS_NM", "EXAMIN_DATETM"]:
-                #날짜열이나 농가명은 제외
-                pass
             else:
                 dic[after_name] =[["전체", "평균"]]
             var_list.append(dic)
