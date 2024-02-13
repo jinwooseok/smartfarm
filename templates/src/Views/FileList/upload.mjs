@@ -138,9 +138,7 @@ const uploadFile = async () => {
 	};
 
 	const response = await API("/files/save/", "post" , data);
-
   checkResponse(response);
-  
 }
 
 const checkResponse = (code) => {

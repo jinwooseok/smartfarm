@@ -25,25 +25,14 @@ class VarSelectPage {
 	#makeVarListDIV() {
 		let html = '';
 
-		// for(let name of this.#varList.featureName) {
-		// 	html += `
-		// 		<label class="switchLabel">
-		// 			<span>${name.fileName}</span>
-		// 			<input id="switch" role="switch" type="checkbox" checked/>
-		// 		</label>
-		// 	`
-		// }
-
-		const testList = ["123","456","789","asdsdf","assdfd","assdfasd","aswed","asewrd","aq12sd","adsfsd","aafdssd","aaaaasd"]
-		for(let name of testList) {
+		for(let variables of this.#varList) {
 			html += `
 				<label class="switchLabel">
-					<span>${name}</span>
+					<span>${variables}</span>
 					<input id="switch" role="switch" type="checkbox" checked/>
 				</label>
 			`
 		}
-
 		return html;
 	}
 
@@ -75,6 +64,10 @@ class VarSelectPage {
 
 	async setVarList(list) {
 		this.#varList = list;
+	}
+
+	getVarList() {
+		return this.#varList;
 	}
 }
 

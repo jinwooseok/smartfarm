@@ -5,14 +5,12 @@ export const getFileNameList = async ()=> {
 	return response.data;
 }
 
-export const setFileList = async ($div, fileName) => {
-	const data = await getFileNameList();
-	
+export const setFileList = ($div, data, fileName='') => {	
   data.map( (title) => {
     if (title.fileName === fileName) {
-      $div.innerHTML += `<Option value= '${title.fileName}' selected>` + title.fileName + `</option>`;
+      $div.innerHTML += `<Option value= '${title || title.fileName}' selected>` + title || title.fileName + `</option>`;
     } else {
-      $div.innerHTML += `<Option value= '${title.fileName}'>` + title.fileName + `</option>`;
+      $div.innerHTML += `<Option value= '${title || title.fileName}'>` + title || title.fileName + `</option>`;
     }
   });
 };

@@ -69,6 +69,7 @@ class ShowFilePage {
 
 	async setFileData() {
 		const response = await API(`/files/${this.#fileTitle}/data/`, "get");
+		console.log(response.data)
 		this.#fileDate = response.data;
 	}
 
