@@ -29,6 +29,7 @@ class TransABMSService():
             
         df = df.iloc[self.start_index-1:]
         
+        after_list = [column[1] for column in self.columns]
         var_list = []
         for before_name, after_name in self.columns:
             dic = {}
@@ -56,7 +57,10 @@ class TransABMSService():
         #날짜 > 일시, 전체평균 붙은 경우 전체평균 빼기, 전체최소****>**** 최저, 전체최대****>**** 최고, 주간평균****>**** 주간, 야간평균****>**** 야간
         for column in result.columns:
             result.rename(columns={column:self.naming_variable(column)}, inplace=True)
-        
+        for column in after_list:
+            if column not in result.columns:
+                result[column] = pd.Series(dtype=float)
+        result = result[after_list]
         FileSaveService(self.user, self.new_file_name, result, statuses=2).execute()
     
     @staticmethod
