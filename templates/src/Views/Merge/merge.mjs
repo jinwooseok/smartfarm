@@ -1,7 +1,7 @@
 import API from "/templates/src/Utils/API.mjs";
 import Logout from "/templates/src/Utils/Logout.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
-import setFileListSelectBox from "/templates/src/Utils/setFileListSelectBox.mjs";
+import { getFileNameList } from "/templates/src/Utils/fileNameList.mjs";
 
 import MergePage from "./MergePage.mjs";
 
@@ -84,7 +84,7 @@ const changeDiv = async (nowProgress) => {
 
 	if (nowProgress === 0) { // 병합
 		$columnDIV.innerHTML = MergePage.templates();
-		MergePage.inputSelectBoxValue(await setFileListSelectBox());
+		MergePage.inputSelectBoxValue(await getFileNameList());
 		MergePage.setEventListener();
 	}
 
