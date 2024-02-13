@@ -35,8 +35,9 @@ urlpatterns = [
     path('files/<str:file_title>/data/timeseries/',FileDataViewSet.as_view({'post':'process_time_series'})),
     
     #파일 변수 호출
+    
     path('files/<str:file_title>/data/feature/',FeatureViewSet.as_view({'get':'feature_list'})),
-
+    path('files/<str:file_title>/data/feature/importance/',FeatureViewSet.as_view({'get':'feature_importance'})),
     #농업 처리 도메인관련
     path('files/<str:file_title>/data/farm/',FarmProcessViewSet.as_view({'post':'process_farm'})),
     path('abms/<str:file_title>/',DataABMSViewSet.as_view({'get':'page'})),
@@ -45,6 +46,8 @@ urlpatterns = [
 
     #분석
     path('analytics/<str:file_title>/',DataAnalyticsViewSet.as_view({'get':'page'})),
+    path('analytics/<str:file_title>/model/',DataAnalyticsViewSet.as_view({'post':'create_model'})),
+    
     #병합
     path('merge/',DataMergeViewSet.as_view({'get':'page','post':'merge'})),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
