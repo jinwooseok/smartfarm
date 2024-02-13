@@ -1,6 +1,6 @@
 import Logout from "/templates/src/Utils/Logout.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
-import { setFileList } from "/templates/src/Utils/fileNameList.mjs";
+import { getFileNameList, setFileList } from "/templates/src/Utils/fileNameList.mjs";
 
 import ShowFilePage from "./ShowFilePage.mjs";
 import ShowPreprocessPage from "./ShowPreprocessPage.mjs";
@@ -23,8 +23,8 @@ const moveSelectedFileTitle = () => {
 
 $fileListSelectBox.addEventListener("change", moveSelectedFileTitle);
 
-// 파일 목록 보여줌
-await setFileList($fileListSelectBox, fileName);
+const fileList = await getFileNameList();
+setFileList($fileListSelectBox, fileList, fileName);
 
 const submitData = {
 	newFileName: '',
@@ -203,7 +203,7 @@ const changeDiv = async (nowProgress) => {
 	if (nowProgress === 1) { // 전처리
 		ShowPreprocessPage.setFileTitle(fileName);
 
-		$workDIV.innerHTML = await ShowPreprocessPage.templates();
+		$workDIV.innerHTML = ShowPreprocessPage.templates();
 
 		// 그래프 보여주는 부분
 		const $$columnName = document.querySelectorAll("#columnName");

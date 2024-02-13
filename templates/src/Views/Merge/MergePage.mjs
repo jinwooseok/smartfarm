@@ -4,7 +4,6 @@ import Excel from "/templates/src/Model/Excel.mjs";
 class MergePage {
 
 	#fileDate;
-	#fileTitle;
 
 	templates() {
 		return `
@@ -47,7 +46,7 @@ class MergePage {
 		</div>
 
 		<div class="buttonDIV" id="buttonDIV">
-			<button class="nextPage" id="nextPage">다음</button>
+			<button class="nextPage" id="nextPage" >다음</button>
 		</div>
 		`
 	}
@@ -145,21 +144,15 @@ class MergePage {
 		const data = {
 			mergeDataNames : JSON.stringify(namesToMerge),
 			mergeStandardVarList : JSON.stringify(columnsToMerge),
-			newFileName : this.#fileTitle
 		}
 
 		const response = await API("/merge/", "post", data);
-		console.log("sendMergeInfo", response);
+		const returnData = Object.values(response.data);
+		this.#setFileData(returnData[0]);
 	}
 
-	setFileTitle(fileName) {
-		this.#fileTitle = fileName;
-		console.log(fileName);
-	}
-
-	async setFileData() {
-		const response = await API(`/files/${this.#fileTitle}/data/`, "get");
-		this.#fileDate = response.data;
+	#setFileData(data) {
+		this.#fileDate = data;
 	}
 
 	showFile(element) {

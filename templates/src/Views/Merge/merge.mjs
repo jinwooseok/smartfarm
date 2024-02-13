@@ -1,7 +1,7 @@
 import API from "/templates/src/Utils/API.mjs";
 import Logout from "/templates/src/Utils/Logout.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
-import { getFileNameList } from "/templates/src/Utils/fileNameList.mjs";
+import { getFileNameList, setFileList } from "/templates/src/Utils/fileNameList.mjs";
 
 import MergePage from "./MergePage.mjs";
 import VarSelectPage from "./VarSelectPage.mjs";
@@ -9,7 +9,7 @@ import TimeDifferenceDataPage from "./TimeDifferenceDataPage.mjs";
 
 const $logoutBtn = document.querySelector("#logoutBtn");
 $logoutBtn.addEventListener("click", Logout);
-
+let merged = false;
 const 시차데이터 = {
 	"feature": [],
 	"windowSize": 0,
@@ -54,6 +54,11 @@ const clickEvent = async (event, id, targetClass) => {
 
 	if (id === "nextPage" || id === "prevPage") {
 
+		if (!merged) {
+			alert("병합하기 버튼을 클릭해 병합을 먼저 진행해 주세요");
+			return;
+		}
+
 		if (targetClass.contains("switchComplete")) {
 			const $$text = document.querySelectorAll("p");
 			Array.from($$text).map((val) => {
@@ -73,16 +78,17 @@ const clickEvent = async (event, id, targetClass) => {
 			return;
 		}
 
+		시차데이터.newFileName = document.querySelector("#mergeFileName").value;
+
 		// 병합 데이터 전송
-		MergePage.setFileTitle($mergeFileName.value);
 		await MergePage.mergeData();
+		merged = true;
 
 		// 파일 데이터 그리기
-		// Loading.StartLoading();
-		// const $spreadSheetDIV = document.querySelector("#spreadSheetDIV");
-		// await MergePage.setFileData();
-		// MergePage.showFile($spreadSheetDIV);
-		// Loading.CloseLoading();
+		Loading.StartLoading();
+		const $spreadSheetDIV = document.querySelector("#spreadSheetDIV");
+		MergePage.showFile($spreadSheetDIV);
+		Loading.CloseLoading();
 	}
 
 	if (id === "switch") {
@@ -91,7 +97,16 @@ const clickEvent = async (event, id, targetClass) => {
 	}
 
 	if (id === 'save'){
+		시차데이터.windowSize = document.querySelector("#windowSize").value;
+		시차데이터.count = document.querySelector("#count").value;
+		시차데이터.dateColumn = document.querySelector("#dateBox").options[document.querySelector("#dateBox").selectedIndex]?.value;
+		console.log(시차데이터)
+		const response = await API(`/files/${시차데이터.newFileName}/data/timeseries/`, "post", 시차데이터);
+		console.log("시차", response)
 
+		// if(response.status === "success") {
+		// 	location.replace("/file-list/");
+		// }
 	}
 
 	Array.from($$button).map((button) => {
@@ -120,14 +135,18 @@ const changeDiv = async (nowProgress) => {
 
 	if (nowProgress === 1) { // 변수 선택
 		const $mergeFileName = document.querySelector("#mergeFileName");
-		VarSelectPage.setVarList(await MergePage.getFileVarList($mergeFileName.value));
+		VarSelectPage.setVarList(Object.keys(MergePage.getFileData()[0])); // 87번 줄 엑셀 데이터 Object.keys(MergePage.getFileData()[0]);
 		$columnDIV.innerHTML = VarSelectPage.templates();
+
 		const $confirmDIV = document.querySelector(".confirmDIV");
 		$confirmDIV.innerHTML = VarSelectPage.makeCheckedListDIV();
 	}
 
 	if (nowProgress === 2) { // 시차 변수
 		$columnDIV.innerHTML = TimeDifferenceDataPage.templates();
+
+		const $dateBox = document.querySelector("#dateBox");
+		setFileList($dateBox, 시차데이터.feature)
 	}
 
 }

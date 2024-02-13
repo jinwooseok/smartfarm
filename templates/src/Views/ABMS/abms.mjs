@@ -1,6 +1,6 @@
 import API from "/templates/src/Utils/API.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
-import { setFileList } from "/templates/src/Utils/fileNameList.mjs";
+import { getFileNameList, setFileList } from "/templates/src/Utils/fileNameList.mjs";
 import { abmsTextValue } from "../../Constant/variableList.mjs";
 
 const $abmsType = document.querySelector("#abmsType");
@@ -10,6 +10,7 @@ const $abmsFileName = document.querySelector("#abmsFileName");
 const $startIndex = document.querySelector("#startIndex");
 const $date = document.querySelector("#date");
 const $fileListSelectBox = document.querySelector("#fileListSelectBox");
+const $dateBox = document.querySelector("#dateBox");
 
 const fileName = JSON.parse(localStorage.getItem("fileTitle"));
 $abmsFileName.value = fileName.replace(/(.csv|.xlsx|.xls)/g, "") +  "_ABMS";
@@ -25,12 +26,13 @@ const moveSelectedFileTitle = () => {
   location.href = `/abms/${selectedFileTitle}/`;
 };
 
-await setFileList($fileListSelectBox, fileName);
-
+const fileList = await getFileNameList();
+setFileList($fileListSelectBox, fileList, fileName);
 $fileListSelectBox.addEventListener("change", moveSelectedFileTitle);
 
 const data = await setFileData();
 const variableList = Object.keys(data[0]);
+setFileList($dateBox, variableList);
 
 // 종류 선택
 const generateColumnHTML = (columnSet) => {
@@ -40,7 +42,6 @@ const generateColumnHTML = (columnSet) => {
       <div id="columnBox" class="columnBox">
         ${columnName}
         <select name="${columnName}" id="${columnId}">
-          <option value="null"></option>
         </select>
       </div>
     `
@@ -140,6 +141,9 @@ $abmsSave.addEventListener("click", async() => {
     case "success" :
       location.replace("/file-list/")
       break;
+    case 461:
+      alert("날짜 형식으로 변환할 수 없는 열입니다.");
+      break;    
     case 470:
       alert("날짜열에 null값이 존재합니다. 결측치를 제거해주세요.");
       break;
