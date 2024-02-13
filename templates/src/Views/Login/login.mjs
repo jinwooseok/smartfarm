@@ -9,14 +9,6 @@ const $showPasswordText = document.querySelector("#showPasswordText");
 const $EmailError = document.querySelector("#EmailError");
 const $passwordError = document.querySelector("#passwordError");
 
-
-const getLoginInfo = async() => {
-	const response = await API("/users/sign-in/", "get");
-	console.log(response);
-}
-
-getLoginInfo()
-
 // test@test.com 형식
 const idPattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
 

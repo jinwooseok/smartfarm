@@ -83,6 +83,14 @@ button:hover{
 	cursor: pointer;
 }
 
+.fileSelectDIV {
+  width: 1280px;
+  margin: 20px auto;
+
+  display: flex;
+  justify-content: right;
+}
+
 .ABMSDIV{
 	display: flex;
 	flex-wrap: wrap;

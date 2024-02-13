@@ -1,6 +1,5 @@
 import API from "/templates/src/Utils/API.mjs";
 import Logout from "/templates/src/Utils/Logout.mjs";
-import cookies from "/templates/src/Utils/CsrfToken.mjs";
 
 const $checkAll = document.querySelector("#checkAll"); // 전체 선택 버튼
 const $$condition = document.querySelectorAll(".condition");
@@ -14,8 +13,6 @@ const $logoutBtn = document.querySelector("#logoutBtn");
 $logoutBtn.addEventListener("click", Logout);
 
 let fileList;
-
-console.log(document.querySelector("pre").innerHTML)
 
 // 초기 파일 목록 만들기
 const setFileList = () => {
@@ -34,14 +31,14 @@ const setFileList = () => {
       <div class="revise" id="revise">
       데이터 처리
       </div>
+      <div class="merge" id="merge">
+        파일 병합
+      </div>
       <div class="analyze" id="analyze">
         데이터 분석
       </div>
       <div class="ABMS" id="ABMS">
         ABMS
-      </div>
-      <div class="merge" id="merge">
-        파일 병합
       </div>
     `;
 
@@ -51,7 +48,6 @@ const setFileList = () => {
 };
 
 const movePage = (id, title) => {
-
   localStorage.setItem("fileTitle", JSON.stringify(title));
 
   switch (id) {
