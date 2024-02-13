@@ -30,7 +30,7 @@ class FeatureViewSet(viewsets.ModelViewSet):
         data['fileName'] = file_title
         serializer = GetFeatureImportanceSerializer(data=data)
         serializer = serializer_validator(serializer)
-        queryset = FeatureImportanceService.from_serializer(serializer).execute()
+        queryset = FeatureImportanceService.from_serializer(serializer, user_id).execute()
         
         return Response(ResponseBody.generate(
             serializer=FileFeatureSerializer(queryset, many=True)), status=200)

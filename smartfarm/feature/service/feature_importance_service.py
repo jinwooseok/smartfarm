@@ -9,10 +9,10 @@ class FeatureImportanceService:
         self.file_object = file_object
     
     @classmethod
-    def from_serializer(cls, serializer: GetFeatureImportanceSerializer):
+    def from_serializer(cls, serializer: GetFeatureImportanceSerializer, user):
         return cls(serializer.validated_data['xValue']
                    ,serializer.validated_data['yValue']
-                   ,serializer.get_file_object())
+                   ,serializer.get_file_object(user))
 
     def get_feature_importance(self):
         queryset = FileFeature.objects.filter(file=self.file_object)
