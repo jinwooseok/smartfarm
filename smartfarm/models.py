@@ -1,5 +1,7 @@
 from django.db import models
 from users.models import User
+import os
+import joblib
 
 # Create your models here.
 def user_file_path(instance, file_root):
@@ -65,14 +67,34 @@ class TempFeature(models.Model):
     feature_selected = models.BooleanField(default=False)
 
 class LearnedModel(models.Model):
-    file = models.ForeignKey(File,on_delete=models.CASCADE,default=000000)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,default=000000)
+    original_file_name = models.CharField(max_length=200)
+    
     model_name = models.CharField(max_length=200)
-    model_meta_root = models.FileField(upload_to=user_model_path, max_length=200)
+    model_root = models.CharField(max_length=200)
+    model_meta_name = models.CharField(max_length=200)
+    model_meta_root = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    def save(self, model, model_info, *args, **kwargs):
+        # joblib.dump를 사용하여 파일 저장
+        self.model_root = self.get_model_file_path()
+        self.model_meta_root = self.get_model_meta_file_path()
+        joblib.dump(model, self.model_root)
+        joblib.dump(model_info, self.get_model_file_path())
+        super().save(*args, **kwargs)
+
+    def get_model_file_path(self):
+        # 파일이 저장될 경로 반환
+        return os.path.join('media', user_model_path(self, self.model_name))
+    
+    def get_model_meta_file_path(self):
+        # 파일이 저장될 경로 반환
+        return os.path.join('media', user_model_path(self, self.model_meta_name))
 
 class ModelFeature(models.Model):
     model = models.ForeignKey(LearnedModel,on_delete=models.CASCADE,default=000000)
-    feature_order = models.IntegerField()
     feature_name = models.CharField(max_length=200)
+    feature_type = models.Choices('feature','target')
     weight = models.FloatField(null=True)
