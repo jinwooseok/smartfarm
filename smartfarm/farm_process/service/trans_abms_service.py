@@ -3,7 +3,7 @@ from ..utils.process import ETLProcessFactory
 from ...file.service.file_save_service import FileSaveService
 from ...file_data.service.get_file_data_service import GetFileDataService
 from ...file.utils.utils import search_file_absolute_path
-from ...file_data.utils.process import DataProcess
+from ..exceptions.exceptions import StartIndexException
 class TransABMSService():
     def __init__(self, user, columns, new_file_name, date_column, start_index, file_root):
         self.user = user
@@ -23,6 +23,12 @@ class TransABMSService():
     def execute(self):
         file_absolute_path = search_file_absolute_path(self.file_root)
         df = GetFileDataService.file_to_df(file_absolute_path)
+        #데이터프레임 윗부분 자르기
+        if self.start_index < 1 or self.start_index > len(df):
+            raise StartIndexException()
+            
+        df = df.iloc[self.start_index-1:]
+        
         var_list = []
         for before_name, after_name in self.columns:
             dic = {}
@@ -36,6 +42,8 @@ class TransABMSService():
             elif after_name in ["외부온도"]:
                 #전체평균 ,주간평균, 야간평균 생성
                 dic[after_name] = [["전체", "평균"], ["주간", "평균"], ["야간", "평균"]]
+            elif after_name in ["일시"]:
+                continue
             else:
                 dic[after_name] =[["전체", "평균"]]
             var_list.append(dic)
