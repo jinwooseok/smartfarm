@@ -3,6 +3,7 @@ from django.dispatch import receiver
 from ...models import LearnedModel
 from ...feature.serializers import ModelFeatureSerializer
 from ...feature.service.feature_service import FeatureService
+from common.validators import serializer_validator
 
 @receiver(post_save, sender=LearnedModel)
 def create_file(sender, instance, **kwargs):

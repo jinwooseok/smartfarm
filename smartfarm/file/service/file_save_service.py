@@ -68,12 +68,11 @@ class FileSaveService():
     
     @staticmethod
     def file_form(user, file_title, file_root):
-        instance = File(
+        return File(
                     user_id=user,
                     file_title=file_title,
                     file_root=file_root
                 )
-        return instance
 
     #input : id, file이름 output: 중복되지 않는 파일이름
     @staticmethod
