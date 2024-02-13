@@ -1,20 +1,24 @@
 from ...file.utils.utils import *
 from .get_file_data_service import GetFileDataService
-from ...file.service.temp_save_service import TempSaveService
+from ...file.service.temp_save_service import FileSaveService
 from ..exceptions.file_data_exceptions import StandardDuplicateException
 from ..utils.process import DataProcess
 
 import pandas as pd
 
 class MergeDataService():
-    def __init__(self, user, file_object_list, column_name_list):
+    def __init__(self, user, file_object_list, column_name_list, new_file_name):
         self.user = user
         self.file_object_list = file_object_list
         self.column_name_list = column_name_list
+        self.new_file_name = new_file_name
         
     @classmethod    
     def from_serializer(cls, serializer, user):
-        return cls(user, serializer.get_file_object_list(user), serializer.validated_data['columnName'])
+        return cls(user
+                    ,serializer.get_file_object_list(user)
+                    ,serializer.validated_data['mergeStandardVarList']
+                    ,serializer.validated_data['newFileName'])
     
     def execute(self):
         dfs = []
@@ -45,8 +49,8 @@ class MergeDataService():
             merged_data.info(memory_usage=True)
             merged_data = pd.merge(merged_data, dfs[i], on='기준', suffixes=(f'_{i}', f'_{i+1}'), how='outer', sort=True)
         
-        file_title = self.file_object_list[0].file_title
-        file_title = TempSaveService(self.user, file_title, merged_data, statuses=[4]).execute()
+        file_title = self.new_file_name
+        file_title = FileSaveService(self.user, file_title, merged_data, statuses=[2]).execute()
         
         return {file_title: DataProcess.df_to_json_object(merged_data)}
 

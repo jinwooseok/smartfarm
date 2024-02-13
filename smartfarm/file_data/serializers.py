@@ -8,14 +8,17 @@ class ProcessOutlierSerializer(FileNameSerializer):
 class ProcessTimeSeriesSerializer(FileNameSerializer):
     windowSize = serializers.IntegerField()
     count = serializers.IntegerField()
+    dateColumn = serializers.IntegerField()
     newFileName = serializers.CharField()
+    feature = serializers.JSONField()
 
 class DataMergeSerializer(serializers.Serializer):
-    fileName = serializers.ListField()
-    columnName = serializers.ListField()
+    mergeStandardVarList = serializers.JSONField()
+    mergeDataNames = serializers.JSONField()
+    newFileName = serializers.CharField()
     
     def get_file_object_list(self, user):
-        file_object_list = File.objects.filter(user=user, file_title__in=self.data['fileName'])
-        if len(file_object_list) != len(self.data['fileName']):
+        file_object_list = File.objects.filter(user=user, file_title__in=self.data['mergeDataNames'])
+        if len(file_object_list) != len(self.data['mergeDataNames']):
             raise FileNotFoundException()
         return file_object_list
