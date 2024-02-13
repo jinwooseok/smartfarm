@@ -51,16 +51,8 @@ class ETLProcessFactory():
             return 0
         
     def to_weekly(data, date_series, period):
-        result_data = WeeklyTransformer.execute(data, date_series, period)
+        result_data = WeeklyTransformer(data, date_series, period).execute()
         return result_data
-        
-# class GrowthProcess(ETLProcess):
-#     def execute(self):
-#         data = self.data
-#         date = self.date
-#         result=ma(data,date)
-#         return result        
-
 
 class EnvirProcess:
     @staticmethod
