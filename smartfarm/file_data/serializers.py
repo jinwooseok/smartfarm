@@ -15,7 +15,6 @@ class ProcessTimeSeriesSerializer(FileNameSerializer):
 class DataMergeSerializer(serializers.Serializer):
     mergeStandardVarList = serializers.JSONField()
     mergeDataNames = serializers.JSONField()
-    newFileName = serializers.CharField()
     
     def get_file_object_list(self, user):
         file_object_list = File.objects.filter(user=user, file_title__in=self.data['mergeDataNames'])

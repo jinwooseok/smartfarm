@@ -29,7 +29,11 @@ class TransABMSService():
             
         df = df.iloc[self.start_index-1:]
         
-        after_list = [column[1] for column in self.columns]
+        after_list = ['일시', '내부온도', '내부온도 주간', '내부온도 야간', '내부온도 최저', '내부온도 최고', '내부습도',
+       '내부습도 주간', '내부습도 야간', '내부습도 최저', '내부습도 최고', '이슬점', 'CO2농도', '외부온도',
+       '외부온도 주간', '외부온도 야간', '외부습도', '풍향', '풍속', '외부일사', '외부누적일사량', '외부광량',
+       '내부일사', '내부광량', '감우', '포화수분', '절대습도', '수분부족분', '토양수분', '토양온도', '토양EC',
+       '급액EC', '급액PH', '급액수온', '토양장력', '함수저울']
         var_list = []
         for before_name, after_name in self.columns:
             dic = {}

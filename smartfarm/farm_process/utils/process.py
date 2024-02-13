@@ -26,7 +26,7 @@ class ETLProcessFactory():
         if self.date_column < 0 or self.date_column >= len(self.data.columns):
             raise DateColumnException()
         date_series = self.data.iloc[:,self.date_column]
-        
+        print(date_series)
         #날짜열 드롭. 방해됨
         date_column_index = self.date_column
         self.data = DataProcess.drop_columns(self.data, [self.data.columns[date_column_index]])
