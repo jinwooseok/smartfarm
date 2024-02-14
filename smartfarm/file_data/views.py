@@ -59,10 +59,10 @@ class FileDataViewSet(viewsets.ModelViewSet):
         
     def process_time_series(self, request, file_title):
         user_id = login_validator(request)
-
+        
         data = request.data.copy()
         data['fileName'] = file_title
-        
+        data['feature']=data['feature[]']
         serializer = ProcessTimeSeriesSerializer(data=data)
 
         serializer = serializer_validator(serializer)

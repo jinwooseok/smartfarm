@@ -47,9 +47,8 @@ class MergeDataService():
             merged_data.info(memory_usage=True)
             merged_data = pd.merge(merged_data, dfs[i], on='기준', suffixes=(f'_{i}', f'_{i+1}'), how='outer', sort=True)
         
-        file_title = file_object.file_title
-        file_title = TempSaveService(self.user, file_title, merged_data, statuses=[4]).execute()
-        
+        file_title = TempSaveService(self.user, file_object.file_title, merged_data, statuses=[4]).execute()
+
         return {file_title: DataProcess.df_to_json_object(merged_data)}
 
         
