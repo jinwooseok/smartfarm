@@ -1,1 +1,43 @@
-분석
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>분석</title>
+
+	<!-- css -->
+	<link rel="stylesheet" href="/templates/src/Views/Analyze/analyze.css">
+</head>
+<body>
+	<div class="containerDIV" id="containerDIV">	
+		<div class="upperDIV">	
+			<div class="title">
+				<a href="/file-list/">전남대학교</br>융합 빅데이터 연구실</a>
+			</div>
+			<div class="logoutDIV">
+				<a class="logoutBtn" id="logoutBtn">로그아웃</a>
+			</div>
+		</div>
+		<div class="rowDIV">
+			<div class="progressDIV">	
+				<div class="nowProgressDIV">
+					<div class="progress now">이름 미정</div>
+					<div class="progress">방법 선택</div>
+				</div>
+			</div>
+			<div class="columnDIV">
+				<div class="fileSelectDIV">
+					<select name="fileListSelectBox" id="fileListSelectBox" class="fileListSelectBox">
+					</select>
+				</div>
+				<div class="workDIV">
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+
+<script type="module" src="/templates/src/Views/Analyze/analyze.mjs"></script>
+<script src="/templates/src/CDN/billboard.js"></script>
+<script src="/templates/src/CDN/jquery-1.12.4.min.js"></script>
