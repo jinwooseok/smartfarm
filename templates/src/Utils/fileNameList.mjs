@@ -5,12 +5,15 @@ export const getFileNameList = async ()=> {
 	return response.data;
 }
 
-export const setFileList = ($div, data, fileName='') => {	
+export const setFileList = ($div, data, fileName='') => {
   data.map( (title) => {
-    if (title.fileName === fileName) {
-      $div.innerHTML += `<Option value= '${title || title.fileName}' selected>` + title || title.fileName + `</option>`;
+    const value = typeof title === 'string' ? title : title.fileName;
+    if (value === fileName) {
+      $div.innerHTML += `<Option value= '${value}' selected>` + value + `</option>`;
     } else {
-      $div.innerHTML += `<Option value= '${title || title.fileName}'>` + title || title.fileName + `</option>`;
+      $div.innerHTML += `<Option value= '${value}'>` + value + `</option>`;
     }
   });
 };
+
+// A && B = A가 true면 B확인, A가false 면 

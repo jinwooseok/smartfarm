@@ -197,6 +197,9 @@ const changeDiv = async (nowProgress) => {
 		ShowFilePage.setFileTitle(fileName);
 		await ShowFilePage.setFileData();
 		ShowFilePage.showFile($spreadSheetDIV);
+		const $dateBox = document.querySelector("#dateBox");
+		const list = ShowFilePage.getFileDate();
+		setFileList($dateBox, Object.keys(list[0]));
 		Loading.CloseLoading();
 	}
 

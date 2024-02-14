@@ -148,7 +148,9 @@ button:hover{
 }
 
 .spreadSheetDIV{
-	width: 1000px;
+	width: 960px;
+	overflow-x: auto;
+  overflow-y: hidden;
 }
 /* ///////////////// */
 .varDIV{

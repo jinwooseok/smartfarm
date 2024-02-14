@@ -17,7 +17,9 @@ class ShowFilePage {
 		<div class="settingDIV">
 			<div class="dateDIV">
 				<span>날짜 열</span>
-				<input type="number" name="date" id="date" class="date" value="1">
+				<select name="dateBox" id="dateBox" class="dateBox">
+					<option value="null" selected></option>
+				</select>
 			</div>
 
 			<div class="startDIV">

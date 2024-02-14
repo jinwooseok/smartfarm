@@ -132,12 +132,11 @@ const uploadFile = async () => {
 	const data = {
 		fileName: $fileName.value,
 		fileData: JSON.stringify(sheetData),
-    startIndex: $startIndex.value,
-    dateColumn: $dateBox.options[$dateBox.selectedIndex]?.value,
+    // startIndex: $startIndex.value,
+    // dateColumn: $dateBox.options[$dateBox.selectedIndex]?.value,
 	};
-  console.log(data);
-	// const response = await API("/files/save/", "post" , data);
-  // checkResponse(response);
+	const response = await API("/files/save/", "post" , data);
+  checkResponse(response);
 }
 
 const checkResponse = (code) => {

@@ -4,6 +4,7 @@ import Excel from "/templates/src/Model/Excel.mjs";
 class MergePage {
 
 	#fileDate;
+	#mergeFIleName = '';
 
 	templates() {
 		return `
@@ -148,11 +149,8 @@ class MergePage {
 
 		const response = await API("/merge/", "post", data);
 		const returnData = Object.values(response.data);
-		this.#setFileData(returnData[0]);
-	}
-
-	#setFileData(data) {
-		this.#fileDate = data;
+		this.#fileDate = returnData[0];
+		this.#mergeFIleName = Object.keys(response.data);
 	}
 
 	showFile(element) {
@@ -162,6 +160,10 @@ class MergePage {
 
 	getFileData() {
 		return this.#fileDate;
+	}
+
+	getMergeFileName(){
+		return this.#mergeFIleName
 	}
 }
 
