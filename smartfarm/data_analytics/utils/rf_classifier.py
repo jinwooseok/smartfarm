@@ -5,8 +5,9 @@ class CustomRandomForestClassifier():
         self.model = RandomForestClassifier(n_estimators=n_estimators, random_state=random_state)
         self.learned_model = None
     
-    def fit(self, X, y):
-        self.learned_model = self.model.fit(X, y)
+    def fit(self, x_dataset, y_dataset):
+        self.learned_model = self.model.fit(x_dataset, y_dataset)
+        return self.learned_model
 
     def feature_importances(self):
         return self.learned_model.feature_importances_

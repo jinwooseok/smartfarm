@@ -12,8 +12,11 @@ class FileFeatureSerializer(serializers.ModelSerializer):
         representation['featureOrder'] = representation.pop('feature_order')
         representation['featureName'] = representation.pop('feature_name')
         representation['featureType'] = representation.pop('feature_type')
-        representation['featureImportance'] = representation.pop('feature_importance')
+        feature_importance = representation['feature_importance']
+        if feature_importance is not None:
+            representation['featureImportance'] = round(feature_importance, 2)
         representation['featureSelected'] = representation.pop('feature_selected')
+        
         return representation
 
 class ModelFeatureSerializer(serializers.Serializer):
