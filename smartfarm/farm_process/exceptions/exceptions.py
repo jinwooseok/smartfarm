@@ -18,12 +18,6 @@ class StartIndexException(CustomBaseException):
         self.code = 472
         self.detail = '시작행이 1보다 작거나 데이터 길이를 초과합니다.'
         
-class DateColumnException(CustomBaseException):
-    def __init__(self):
-        self.status_code = 473
-        self.code = 473
-        self.detail = '날짜열이 1보다 작거나 데이터 길이를 초과합니다.'
-        
 class VarDataException(CustomBaseException):
     def __init__(self, variable):
         self.status_code = 474

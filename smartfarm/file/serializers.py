@@ -17,16 +17,16 @@ class FileNameModelSerializer(serializers.ModelSerializer):
         model = File
         fields = ('fileName',)
     
-    def get_file_object(self, user):
+    def get_file_object(self, user)->File:
         return get_file_by_user_file_title(user, self.data['fileName'])
             
 class FileNameSerializer(serializers.Serializer):
     fileName = serializers.CharField()
     
-    def get_file_object(self, user):
+    def get_file_object(self, user)->File:
         return get_file_by_user_file_title(user, self.data['fileName'])
     
-    def get_temp_object(self, user, status_id):
+    def get_temp_object(self, user, status_id)->Temp:
         file_object = self.get_file_object(user)
         file_id = file_object.id
         return get_temp_by_file_id_status_id(file_id, status_id)

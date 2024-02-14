@@ -10,12 +10,12 @@ class FarmProcessService():
     def __init__(self, serializer, user):
         self.new_file_name = serializer.validated_data['newFileName']
         self.file_type = serializer.validated_data['fileType']
-        self.start_index = serializer.validated_data['startIndex']
-        self.date_column = serializer.validated_data['dateColumn']
         self.interval = serializer.validated_data['interval']
         self.var = serializer.validated_data['var']
         self.file_object = serializer.get_file_object(user)
         self.file_root = self.file_object.file_root
+        self.date_column = self.file_object.date_column
+        self.start_index = self.file_object.start_index
         self.user = user
     
     def execute(self):

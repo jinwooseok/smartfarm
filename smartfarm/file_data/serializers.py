@@ -9,7 +9,6 @@ class ProcessOutlierSerializer(FileNameSerializer):
 class ProcessTimeSeriesSerializer(FileNameSerializer):
     windowSize = serializers.IntegerField()
     count = serializers.IntegerField()
-    dateColumn = serializers.CharField()
     newFileName = serializers.CharField()
     feature = serializers.ListField(child=serializers.CharField())
     

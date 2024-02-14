@@ -12,7 +12,7 @@ class ShiftDataService():
         self.count = count
         self.new_file_name = new_file_name
         self.feature = feature
-        self.date_column = date_column
+        self.date_column = file_object.date_column
         
     @classmethod    
     def from_serializer(cls, serializer, user):
@@ -21,8 +21,7 @@ class ShiftDataService():
                    ,serializer.validated_data["windowSize"]
                    ,serializer.validated_data["count"]
                    ,serializer.validated_data["newFileName"]
-                   ,serializer.validated_data["feature"]
-                   ,serializer.validated_data["dateColumn"])
+                   ,serializer.validated_data["feature"])
     
     def execute(self):
         #전처리가 완료된 파일일 경우에만 실행// merge됐거나 전처리가 완료된...

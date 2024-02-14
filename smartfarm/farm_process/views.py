@@ -31,8 +31,8 @@ class FarmProcessViewSet(viewsets.GenericViewSet):
         user_id = login_validator(request)
         data = request.data.copy()
         data['fileName'] = file_title
-        serializer = FarmProcessSerializer(data = data)
-        serializer = serializer_validator(serializer)
+        serializer:FarmProcessSerializer = FarmProcessSerializer(data = data)
+        serializer:FarmProcessSerializer = serializer_validator(serializer)
         data=FarmProcessService(serializer, user_id).execute()
         return Response(ResponseBody.generate(), status=200)
     

@@ -17,8 +17,13 @@ class TransABMSService():
     
     @classmethod
     def from_serializer(cls, serializer, user) -> "TransABMSService":
-        return cls(user, serializer.validated_data['columns'], serializer.validated_data['newFileName']
-                   , serializer.validated_data['date'], serializer.validated_data['startIndex'], serializer.get_file_object(user).file_root)
+        file_object = serializer.get_file_object(user)
+        return cls(user
+                   ,serializer.validated_data['columns']
+                   ,serializer.validated_data['newFileName']
+                   ,file_object.date_column
+                   ,file_object.start_index
+                   ,file_object.file_root)
     
     def execute(self):
         file_absolute_path = search_file_absolute_path(self.file_root)
