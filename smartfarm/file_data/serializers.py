@@ -26,5 +26,7 @@ class DataMergeSerializer(serializers.Serializer):
     mergeDataNames = serializers.JSONField()
     
     def get_file_object_list(self, user):
-        file_object_list = File.objects.filter(user=user, file_title__in=self.data['mergeDataNames'])
+        file_object_list = []
+        for file_title in self.data['mergeDataNames']:
+            file_object_list.append(get_file_by_user_file_title(user, file_title))
         return file_object_list

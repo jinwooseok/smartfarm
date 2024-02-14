@@ -85,7 +85,6 @@ class LearnedModel(models.Model):
         self.model_root = self.get_model_file_path()
         self.model_meta_root = self.get_model_meta_file_path()
         if model_meta['model_name'] == 'Linear Regression':
-            print(self.model_root)
             model.save(self.model_root)
         else:
             with open(self.model_root, 'w') as f:

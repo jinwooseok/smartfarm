@@ -12,6 +12,5 @@ class ResponseBody():
             instance = ResponseBody(data = serializer.data, message=message)
         else:
             instance = ResponseBody()
-        print(instance.data)
         return {"status":instance.status,"data":instance.data,"message":instance.message}
     

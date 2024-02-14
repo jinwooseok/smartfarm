@@ -76,7 +76,6 @@ class DailyFeatureGenerator():
             standard_date += pd.Timedelta(days=period)
         
         return_df = pd.DataFrame({'날짜':date_list, f'{timing_key}{function_key}{target_column}':temp_list})
-        print(return_df)
         return return_df
     
     def total_mask(date_series, standard_date, period, timing_series, timing_key):

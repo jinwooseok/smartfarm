@@ -19,14 +19,12 @@ class FeatureImportanceService:
 
     def execute(self):
         model = CustomLinearRegression()
-        print(self.file_object.id, self.x_value)
         queryset = FileFeature.objects.filter(file=self.file_object.id)
         file_absolute_path = search_file_absolute_path(self.file_object.file_root)
         df = GetFileDataService.file_to_df(file_absolute_path)
         model.fit(df[self.x_value], df[self.y_value])
         importances = model.feature_importances()
         for idx, name in enumerate(self.x_value):
-            print(queryset, name)
             feature_obj = queryset.get(feature_name=name)
             feature_obj.feature_importance = importances[idx]
             feature_obj.save()

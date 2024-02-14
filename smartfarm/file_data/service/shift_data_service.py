@@ -47,7 +47,6 @@ class ShiftDataService():
 
             # 리스트에 저장된 데이터프레임을 concat하여 합침
         merged_df = pd.concat(shifted_dfs, axis=1)
-        print(merged_df)
         #df = self.rolling_data(df, self.window_size, self.date_column)
         FileSaveService(self.user, self.new_file_name, merged_df, statuses=5).execute()
     
