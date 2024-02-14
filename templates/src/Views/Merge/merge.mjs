@@ -100,9 +100,9 @@ const clickEvent = async (event, id, targetClass) => {
 		시차데이터.windowSize = document.querySelector("#windowSize").value;
 		시차데이터.count = document.querySelector("#count").value;
 		시차데이터.dateColumn = document.querySelector("#dateBox").options[document.querySelector("#dateBox").selectedIndex]?.value;
-		console.log(시차데이터)
-		const response = await API(`/files/${시차데이터.newFileName}/data/timeseries/`, "post", 시차데이터);
-		console.log("시차", response)
+		시차데이터.feature = JSON.stringify(시차데이터.feature);
+		const timeDiffName = MergePage.getMergeFileName();
+		const response = await API(`/files/${timeDiffName}/data/timeseries/`, "post", 시차데이터);
 
 		// if(response.status === "success") {
 		// 	location.replace("/file-list/");
@@ -134,7 +134,6 @@ const changeDiv = async (nowProgress) => {
 	}
 
 	if (nowProgress === 1) { // 변수 선택
-		const $mergeFileName = document.querySelector("#mergeFileName");
 		VarSelectPage.setVarList(Object.keys(MergePage.getFileData()[0])); // 87번 줄 엑셀 데이터 Object.keys(MergePage.getFileData()[0]);
 		$columnDIV.innerHTML = VarSelectPage.templates();
 
@@ -146,7 +145,7 @@ const changeDiv = async (nowProgress) => {
 		$columnDIV.innerHTML = TimeDifferenceDataPage.templates();
 
 		const $dateBox = document.querySelector("#dateBox");
-		setFileList($dateBox, 시차데이터.feature)
+		setFileList($dateBox, 시차데이터.feature);
 	}
 
 }

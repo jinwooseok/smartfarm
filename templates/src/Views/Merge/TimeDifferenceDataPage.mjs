@@ -1,6 +1,3 @@
-import API from "/templates/src/Utils/API.mjs";
-import { getFileNameList, setFileList } from "/templates/src/Utils/fileNameList.mjs";
-
 class TimeDifferenceDataPage {
 	templates() {
 		return `

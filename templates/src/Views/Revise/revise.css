@@ -132,6 +132,11 @@ li, ul{
 	height: 100px;
 	text-align: center;
 	border-right: 1px solid #000;
+	
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 
 .settingDIV>*:last-child{
