@@ -6,3 +6,4 @@ secrets.json
 *.xls
 secrets.yaml
 debug.log
+/media/
