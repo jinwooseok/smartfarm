@@ -12,7 +12,6 @@ class ShiftDataService():
         self.count = count
         self.new_file_name = new_file_name
         self.feature = feature
-        self.date_column = file_object.date_column
         
     @classmethod    
     def from_serializer(cls, serializer, user):

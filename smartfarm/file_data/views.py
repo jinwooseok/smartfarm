@@ -62,7 +62,6 @@ class FileDataViewSet(viewsets.ModelViewSet):
         
         data = request.data.copy()
         data['fileName'] = file_title
-        data['feature']=data['feature[]']
         serializer = ProcessTimeSeriesSerializer(data=data)
 
         serializer = serializer_validator(serializer)
