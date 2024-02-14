@@ -20,13 +20,13 @@ class DailyFeatureGenerator():
         }
         #입력받았을 때 호출할 함수
         functions_dict = {
-            '최소' : DailyFeatureGenerator.min,
-            '최대' : DailyFeatureGenerator.max,
-            '평균' : DailyFeatureGenerator.mean,
-            '누적' : DailyFeatureGenerator.sum,
-            'DIF' : DailyFeatureGenerator.DIF,
-            'GDD' : DailyFeatureGenerator.GDD,
-            '온도차' : DailyFeatureGenerator.sub
+            '최소' : self.min,
+            '최대' : self.max,
+            '평균' : self.mean,
+            '누적' : self.sum,
+            'DIF' : self.DIF,
+            'GDD' : self.GDD,
+            '온도차' : self.sub
         }
         data=self.data
         return_list = []
@@ -39,57 +39,60 @@ class DailyFeatureGenerator():
             for standard in standards:
                 timing_key, function_key = standard
                 function = functions_dict[function_key]
-                data[temp] = DataProcess.to_numeric_or_none(data[temp])
+                data[temp] = DataProcess.to_numeric_or_nan(data[temp])
                 target_data = data[['날짜',temp]][(data[timing_dict[timing_key]]==timing_key)]
                 if timing_key == '전체':
                     target_data = data[['날짜',temp]]
                 grouped_df = target_data.groupby(pd.Grouper(key='날짜', freq='D')).agg({temp: function})
-                print(grouped_df)
+                
                 new_name = f'{timing_key}{function_key}{temp}'
                 grouped_df.rename(columns={temp:new_name}, inplace=True)
                 return_list.append(grouped_df)
         return pd.concat(return_list, axis=1).reset_index()
     
     #def generating_variable(self, data, temp, standard, t_diff=2, div_DN=False, tbase=15): 
-    def DIF(data):
-        if len(data) == 0:
+    def DIF(self, data):
+        if DailyFeatureGenerator.is_valid(data)==False:
             return np.nan
         return max(data) - min(data)
    
-    def GDD(data, tbase=15):
-        if len(data) == 0:
+    def GDD(self, data, tbase=15):
+        if self.is_valid(data)==False:
             return np.nan
         temp = (max(data)+min(data))/2 - tbase
         if temp >= 0:
             return temp
         else:
             return 0
-    def sub(data):
-        if len(data) == 0:
+    def sub(self, data):
+        if self.is_valid(data)==False:
             return np.nan
-        else:
-            return max(data) - min(data)
+        return max(data) - min(data)
         
-    def sum(data):
-        if len(data) == 0:
+    def sum(self, data):
+        if self.is_valid(data)==False:
             return np.nan
-        else:
-            return sum(data)
+        return sum(data)
         
-    def mean(data):
-        if len(data) == 0:
+    def mean(self, data):
+        if self.is_valid(data)==False:
             return np.nan
-        else:
-            return sum(data)/len(data)
+        return sum(data)/len(data)
 
-    def min(data):
-        if len(data) == 0:
+    def min(self, data):
+        if self.is_valid(data)==False:
             return np.nan
-        else:
-            return data.min()
+        return data.min()
 
-    def max(data):
-        if len(data) == 0:
+    def max(self, data):
+        if self.is_valid(data)==False:
             return np.nan
+        return data.max()
+    
+    def is_valid(self, data):
+        if None in data:
+            return False
+        elif len(data) == 0:
+            return False
         else:
-            return data.max()
+            return True

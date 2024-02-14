@@ -15,13 +15,13 @@ class HourFeatureGenerator(DailyFeatureGenerator):
         }
         #입력받았을 때 호출할 함수
         functions_dict = {
-            '최소' : DailyFeatureGenerator.min,
-            '최대' : DailyFeatureGenerator.max,
-            '평균' : DailyFeatureGenerator.mean,
-            '누적' : DailyFeatureGenerator.sum,
-            'DIF' : DailyFeatureGenerator.DIF,
-            'GDD' : DailyFeatureGenerator.GDD,
-            '온도차' : DailyFeatureGenerator.sub
+            '최소' : self.min,
+            '최대' : self.max,
+            '평균' : self.mean,
+            '누적' : self.sum,
+            'DIF' : self.DIF,
+            'GDD' : self.GDD,
+            '온도차' : self.sub
         }
         data=self.data
         return_list = []
@@ -34,10 +34,11 @@ class HourFeatureGenerator(DailyFeatureGenerator):
             for standard in standards:
                 timing_key, function_key = standard
                 function = functions_dict[function_key]
-                data[temp] = DataProcess.to_numeric_or_none(data[temp])
+                data[temp] = DataProcess.to_numeric_or_nan(data[temp])
                 target_data = data[['날짜',temp]][(data[timing_dict[timing_key]]==timing_key)]
                 if timing_key == '전체':
                     target_data = data[['날짜',temp]]
+                print(target_data)
                 grouped_df = target_data.groupby(pd.Grouper(key='날짜', freq='H')).agg({temp: function})
                 new_name = f'{timing_key}{function_key}{temp}'
                 grouped_df.rename(columns={temp:new_name}, inplace=True)

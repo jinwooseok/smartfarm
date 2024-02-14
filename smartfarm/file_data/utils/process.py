@@ -44,6 +44,14 @@ class DataProcess:
         else:
             return None
         
+    @staticmethod
+    def to_numeric_or_nan(series):
+        numeric_series = pd.to_numeric(series, errors='coerce').astype(float)
+        if numeric_series.notnull().sum() > 0:
+            return numeric_series
+        else:
+            return np.nan
+        
     #다양한 날짜 형식 처리, 타입 처리 전엔 항상 날짜의 형태의 문자열로 처리, 날짜 열만 따로 호출함.
     def date_converter(date_series):
         date_type = date_series.dtype
