@@ -40,9 +40,6 @@ class TimeDifferenceDataPage {
 		`
 	}
 
-	add() {
-		const dateSelectHtml = setFileList();
-	}
 }
 
 export default new TimeDifferenceDataPage();
