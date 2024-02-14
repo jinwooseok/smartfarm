@@ -41,11 +41,12 @@ class FileNameSerializer(serializers.Serializer):
         file_id = file_object.id
         if get_temp_or_none_by_file_id_status_id(file_id, status_id) is None:
             return file_object
-        
         return get_temp_by_file_id_status_id(file_id, status_id)
 
 class FileSaveSerializer(FileNameSerializer):
     fileData = serializers.JSONField()
+    dateColumn = serializers.CharField(allow_null=True, default=None)
+    startIndex = serializers.IntegerField(allow_null=True, default=None)
 
 
 class FileDeleteSerializer(FileNameSerializer):
