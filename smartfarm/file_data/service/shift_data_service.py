@@ -5,7 +5,7 @@ from ..exceptions.file_data_exceptions import FileNotCompleteException
 from ...models import File, Temp, FileStatus, TempStatus
 import pandas as pd
 class ShiftDataService():
-    def __init__(self, user, file_object, window_size, count, new_file_name, feature, date_column):
+    def __init__(self, user, file_object, window_size, count, new_file_name, feature):
         self.user = user
         self.file_object = file_object
         self.window_size = window_size
@@ -16,8 +16,10 @@ class ShiftDataService():
         
     @classmethod    
     def from_serializer(cls, serializer, user):
+        file_object = serializer.get_temp_object_or_original(user, status_id = 4)
+        print(file_object)
         return cls(user
-                   ,serializer.get_temp_object_or_original(user, status_id = 4)
+                   ,file_object
                    ,serializer.validated_data["windowSize"]
                    ,serializer.validated_data["count"]
                    ,serializer.validated_data["newFileName"]

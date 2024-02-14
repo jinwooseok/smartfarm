@@ -33,8 +33,7 @@ class FileSaveService():
         self.file_title = self.convert_file_name(self.user, self.file_title)
         #데이터 배열을 csv파일로 만들기
         self.data_to_csv(self.file_title, self.file_data)
-
-        FileSaveService.save_file(self.user, self.file_title, self.statuses)
+        self.save_file()
     
     def save_file(self):
         try:
