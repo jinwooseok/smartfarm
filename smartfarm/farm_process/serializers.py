@@ -8,5 +8,4 @@ class FarmProcessSerializer(FileNameSerializer):
 
 class EnvABMSSerializer(FileNameSerializer):
     newFileName = serializers.CharField()
-    date = serializers.CharField()
     columns = serializers.JSONField()
