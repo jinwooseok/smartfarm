@@ -1,7 +1,6 @@
 class VarSelectPage {
 
 	#varList;
-	#selectedVarList = [];
 
 	constructor() {}
 
