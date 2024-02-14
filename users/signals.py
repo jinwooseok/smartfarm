@@ -6,6 +6,13 @@ from django.conf import settings
 @receiver(post_save, sender=User)
 def create_directory(sender, instance, **kwargs):
     # 사용자가 생성될 때마다 사용자의 디렉토리를 생성
-    os.makedirs(os.path.join(settings.MEDIA_ROOT, str(instance.id)))
+    try:
+        os.makedirs(os.path.join(settings.MEDIA_ROOT, str(instance.id)))
+    except:
+        pass
+    
     for dir in ['file', 'temp', 'model']:
-        os.makedirs(os.path.join(settings.MEDIA_ROOT, str(instance.id), dir)) 
+        try:
+            os.makedirs(os.path.join(settings.MEDIA_ROOT, str(instance.id), dir)) 
+        except:
+            pass
