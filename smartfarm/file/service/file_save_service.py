@@ -76,9 +76,9 @@ class FileSaveService():
 
     #input : id, file이름 output: 중복되지 않는 파일이름
     @staticmethod
-    def convert_file_name(user, file_title):
+    def convert_file_name(user, file_title, suffix=".csv"):
         no_suffix_file_title = FileSaveService.remove_file_suffix(file_title)
-        processed_file_title = FileSaveService.process_duplicated_file_name(user, no_suffix_file_title)
+        processed_file_title = FileSaveService.process_duplicated_file_name(user, no_suffix_file_title, suffix)
         return processed_file_title
     
     @staticmethod
@@ -88,10 +88,10 @@ class FileSaveService():
         return file_title
     
     @staticmethod
-    def process_duplicated_file_name(user, file_title):
+    def process_duplicated_file_name(user, file_title, suffix):
         file_title_copy = copy.copy(file_title)
         unique=1
-        while exist_file_by_user_file_title(user, file_title_copy + ".csv"):
+        while exist_file_by_user_file_title(user, file_title_copy + suffix):
             file_title_copy=file_title+"_"+str(unique)
             unique+=1
-        return file_title_copy + ".csv"
+        return file_title_copy + suffix

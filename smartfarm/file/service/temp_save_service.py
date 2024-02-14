@@ -49,10 +49,10 @@ class TempSaveService(FileSaveService):
 
     #input : id, file이름 output: 중복되지 않는 파일이름
     @staticmethod
-    def convert_file_name(user, file_title):
+    def convert_file_name(user, file_title, suffix=".csv"):
         no_suffix_file_title = FileSaveService.remove_file_suffix(file_title)
-        processed_file_title = TempSaveService.process_duplicated_file_name(user, no_suffix_file_title, ".csv")
-        return processed_file_title + ".csv"
+        processed_file_title = TempSaveService.process_duplicated_file_name(user, no_suffix_file_title, suffix)
+        return processed_file_title
 
     @staticmethod
     def process_duplicated_file_name(file_id, file_title, suffix):
@@ -61,4 +61,4 @@ class TempSaveService(FileSaveService):
         while Temp.objects.filter(file_id=file_id, file_title=file_title_copy+suffix).exists():
             file_title_copy=file_title+"_"+str(unique)
             unique+=1
-        return file_title_copy
+        return file_title_copy + suffix
