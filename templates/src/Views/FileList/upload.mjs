@@ -31,6 +31,7 @@ let selectedFile;
 let sheetData = "";
 
 const fileSetting = () => {
+  $file.innerHTML = "";
   $fileIcon.style.display = "none";
   $fileUploadDrag.style.display = "none";
   $fileName.value = selectedFile.name.replace(/\s/g, "_");
@@ -75,14 +76,13 @@ const parseCSV = (csvContent) => {
 
   // 나머지 줄 처리
   for (let i = 1; i < lines.length - 1; i++) {
-    const values = lines[i].split(',');
+    const values = lines[i].replace(/"(\d+),(\d+)"/g, '$1$2').split(',');
     const entry = {};
     headers.forEach((header, index) => {
       entry[header] = values[index];
     });
     result.push(entry);
   }
-
   return result;
 }
 

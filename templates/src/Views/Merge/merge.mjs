@@ -132,7 +132,7 @@ const changeDiv = async (nowProgress) => {
 	}
 
 	if (nowProgress === 1) { // 변수 선택
-		VarSelectPage.setVarList(Object.keys(MergePage.getFileData()[0])); // 87번 줄 엑셀 데이터 Object.keys(MergePage.getFileData()[0]);
+		VarSelectPage.setVarList(Object.keys(MergePage.getFileData()[0]));
 		$columnDIV.innerHTML = VarSelectPage.templates();
 
 		const $confirmDIV = document.querySelector(".confirmDIV");

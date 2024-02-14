@@ -1,10 +1,10 @@
-*{
+*:not(dialog) {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
-
-	/* overflow-y: hidden; */
+	overflow-y: hidden;
 }
+
 
 a{
 	color: #007A33;
@@ -89,4 +89,227 @@ li, ul{
 .now{
 	background-color: #007A33;
 	color: #fff;
+}
+
+.uploadDialog {
+	width: 500px;
+	height: 350px;
+	border: 1px solid #000;
+	border-radius: 20px;
+
+	display: none;
+	flex-direction: column;
+	justify-content: start;
+	align-items: center;
+
+	position: relative;
+}
+
+.file {
+	width: 100%;
+	height: 100%;
+	border: 2px dashed #007A33;
+	border-radius: 10px;
+
+	overflow-x: hidden;
+	overflow-y: hidden;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	position: relative;
+}
+
+.file .icon {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.file i {
+	content: "f56f";
+	font: var(--fa-font-solid);
+	margin-bottom: 10px;
+
+	font-size: 100px;
+}
+
+.file span {
+	font-size: 18px;
+}
+
+.file p {
+	font-size: 13px;
+}
+
+.buttonDIV input[type="number"] {
+	width: 100px;
+}
+
+.buttonDIV {
+	margin-top: 13px;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.buttonDIV input[type="file"] {
+	display: none;
+}
+
+.buttonDIV label,
+.fileUpload,
+.closeUploadPopup {
+	display: inline-block;
+	padding: 3px 8px;
+	border: 1px solid #ebebeb;
+	border-bottom-color: #e2e2e2;
+	border-radius: .25em;
+
+	margin-left: 10px;
+
+	color: #fff;
+	font-size: inherit;
+	line-height: normal;
+	background-color: #007A33;
+
+	vertical-align: middle;
+
+	cursor: pointer;
+}
+
+.buttonContainer .fileName {
+	display: inline-block;
+	padding: 3px 8px;
+	border: 1px solid #ebebeb;
+	border-bottom-color: #e2e2e2;
+	border-radius: .25em;
+
+	vertical-align: middle;
+	background-color: #f5f5f5;
+
+	font-size: inherit;
+	line-height: normal;
+
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+.fileSelectDIV {
+  width: 1000px;
+  margin: 0 auto;
+  margin-top: 10px;
+
+  display: flex;
+  justify-content: right;
+}
+
+.columnDIV {
+	width: 1080px;
+}
+
+.center{
+	width: 800px;
+	margin: 20px auto;
+
+	justify-content: space-around;
+}
+
+.center>* {
+	width: 200px;
+	height: 100px;
+	border: 1px solid #000;
+	border-radius: 10px;
+
+	text-align: center;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+	align-items: center;
+}
+
+.moveDIV p,
+.uploadDIV p{
+	font-size: 14px;
+}
+
+button{
+	border: 1px solid #007A33;
+	border-radius: 10px;
+	margin-right: 8px;
+	padding: 5px 11px;
+	background-color: #007A33;
+	color: #fff;
+
+	float: right;
+}
+
+button:hover{
+	cursor: pointer;
+}
+
+.variableDIV {
+	text-align: center;
+	margin-right: 30px;
+}
+
+.variableDIV .columnList,
+.variableDIV .listDIV>* {
+  width: 600px;
+  height: 30px;
+  line-height: 26px;
+
+  /* display: -webkit-inline-box; */
+
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	align-items: center;
+
+	text-align: center;
+}
+
+.variableDIV .listDIV{
+	width: 600px;
+	height: 270px;
+
+	overflow-y: scroll;
+}
+
+.variableDIV .featureName{
+  width: 180px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.variableDIV .featureType,
+.variableDIV .featureImportance,
+.variableDIV .switchDIV{
+  width: 110px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.fieldsetDIV{
+	display: flex;
+	flex-direction: column;
+	justify-content: space-evenly;
+}
+
+fieldset {
+	border: none;
 }

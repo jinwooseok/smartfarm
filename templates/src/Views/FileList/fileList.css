@@ -343,7 +343,7 @@ a {
 	font-size: 13px;
 }
 
-.serttingDIV{
+.settingDIV{
 	height: 70px;
 
 	display: flex;
@@ -352,7 +352,7 @@ a {
 	align-items: center;
 }
 
-.serttingDIV>*{
+.settingDIV>*{
 	width: 200px;
 	text-align: center;
 }
