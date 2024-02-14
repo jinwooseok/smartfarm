@@ -4,75 +4,83 @@ from django.core import files
 import copy
 import os
 from django.db import transaction
-
 from ..utils.utils import *
 from ..exceptions.file_exception import *
 
-from ...feature.serializers import FileFeatureSerializer
-from ...feature.service.feature_service import FeatureService
-from common.validators import serializer_validator
 from ..repositorys import *
 
 class FileSaveService():
     
-    def __init__(self, user, file_title, file_data, statuses=1):
+    def __init__(self, user, file_title, file_data, date_column=None, start_index=None, statuses=1):
         self.user = user
-        self.file_title = file_title
-        self.file_data = file_data
-        self.statuses = statuses
+        self.file_title:str = file_title
+        self.file_data:list = file_data
+        self.statuses:int = statuses
+        self.date_column:str = date_column
+        self.start_index:str = start_index
 
     @classmethod
     def from_serializer(cls, serializer, user) -> 'FileSaveService':
-        return cls(user, serializer.validated_data['fileName'], serializer.validated_data['fileData'])
+        return cls(user
+                   ,serializer.validated_data['fileName']
+                   ,serializer.validated_data['fileData']
+                   ,serializer.validated_data['dateColumn']
+                   ,serializer.validated_data['startIndex'])
 
     @transaction.atomic
-    def execute(self):
+    def execute(self) -> None:
         #파일명 중복 체크
         self.file_title = self.convert_file_name(self.user, self.file_title)
         #데이터 배열을 csv파일로 만들기
         self.data_to_csv(self.file_title, self.file_data)
 
         FileSaveService.save_file(self.user, self.file_title, self.statuses)
-        
-    @staticmethod
-    def data_to_csv(file_title, file_data):
-        if type(file_data) is pd.DataFrame:
-            return FileSaveService.df_to_csv(file_title, file_data)
-        elif type(file_data) is list:
-            return FileSaveService.json_to_csv(file_title, file_data)
-        else:
-            raise DataToCsvException()
-
-    @staticmethod
-    def df_to_csv(file_title, file_data):
-        file_data.to_csv(file_title, index = False)
     
-    @staticmethod
-    def json_to_csv(file_title, file_data):
-        data = pd.DataFrame(file_data)
-        data.to_csv(file_title, index = False)
-
-    @staticmethod
-    def save_file(user, file_title, statuses):
+    def save_file(self):
         try:
-            f = open(file_title,'rb')
-            file_open=files.File(f, name=file_title)
-            instance = FileSaveService.file_form(user, file_title, file_open)
+            f = open(self.file_title,'rb')
+            file_open=files.File(f, name=self.file_title)
+            instance = self.file_form(self.user
+                                      ,self.file_title
+                                      ,file_open
+                                      ,self.date_column
+                                      ,self.start_index)
             instance.save()
         except:
             raise FileSaveException()
         
-        FileStatus.objects.create(status_id=statuses, file_id=instance.id)
+        FileStatus.objects.create(status_id=self.statuses, file_id=instance.id)
         f.close()
-        os.remove(file_title)
+        os.remove(self.file_title)
     
     @staticmethod
-    def file_form(user, file_title, file_root):
+    def file_form(user, file_title, file_root, date_column, start_index):
         return File(
                     user_id=user,
                     file_title=file_title,
-                    file_root=file_root
+                    file_root=file_root,
+                    date_column=date_column,
+                    start_index=start_index
+                    
                 )
+    
+    @staticmethod
+    def data_to_csv(file_title, file_data):
+        if type(file_data) is pd.DataFrame:
+            FileSaveService.df_to_csv(file_title, file_data)
+        elif type(file_data) is list:
+            FileSaveService.json_to_csv(file_title, file_data)
+        else:
+            raise DataToCsvException()
+
+    @staticmethod
+    def df_to_csv(file_title, file_data:list)->None:
+        file_data.to_csv(file_title, index = False)
+    
+    @staticmethod
+    def json_to_csv(file_title, file_data:pd.DataFrame)->None:
+        data = pd.DataFrame(file_data)
+        data.to_csv(file_title, index = False)
 
     #input : id, file이름 output: 중복되지 않는 파일이름
     @staticmethod
