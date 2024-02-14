@@ -14,7 +14,6 @@ const 시차데이터 = {
 	"feature": [],
 	"windowSize": 0,
 	"count": 0,
-	"dateColumn": 0,
 	"newFileName": ""
 }
 
@@ -99,14 +98,13 @@ const clickEvent = async (event, id, targetClass) => {
 	if (id === 'save'){
 		시차데이터.windowSize = document.querySelector("#windowSize").value;
 		시차데이터.count = document.querySelector("#count").value;
-		시차데이터.dateColumn = document.querySelector("#dateBox").options[document.querySelector("#dateBox").selectedIndex]?.value;
 		시차데이터.feature = JSON.stringify(시차데이터.feature);
 		const timeDiffName = MergePage.getMergeFileName();
 		const response = await API(`/files/${timeDiffName}/data/timeseries/`, "post", 시차데이터);
 
-		// if(response.status === "success") {
-		// 	location.replace("/file-list/");
-		// }
+		if(response.status === "success") {
+			location.replace("/file-list/");
+		}
 	}
 
 	Array.from($$button).map((button) => {

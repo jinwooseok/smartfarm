@@ -29,8 +29,6 @@ setFileList($fileListSelectBox, fileList, fileName);
 const submitData = {
 	newFileName: '',
 	fileType: "", // typeDIv
-	startIndex: 1, // startIndex
-	dateColumn: 1, // date
 	interval: "", //periodDIV
 	var: "",
 }
@@ -88,8 +86,6 @@ const clickEvent = async (event, id, targetClass) => {
 			// 데이터 확인
 			if(targetClass.contains("setting")) {
 				submitData.fileType = checkRadioValue(document.querySelectorAll('input[name="type"]'));
-				submitData.startIndex = Number(document.querySelector("#startIndex").value);
-				submitData.dateColumn = Number(document.querySelector("#date").value);
 				submitData.interval =  checkRadioValue(document.querySelectorAll('input[name="period"]'));
 			}
 
@@ -197,16 +193,12 @@ const changeDiv = async (nowProgress) => {
 		ShowFilePage.setFileTitle(fileName);
 		await ShowFilePage.setFileData();
 		ShowFilePage.showFile($spreadSheetDIV);
-		const $dateBox = document.querySelector("#dateBox");
-		const list = ShowFilePage.getFileDate();
-		setFileList($dateBox, Object.keys(list[0]));
 		Loading.CloseLoading();
 	}
 
 	if (nowProgress === 1) { // 전처리
 		ShowPreprocessPage.setFileTitle(fileName);
-
-		$workDIV.innerHTML = ShowPreprocessPage.templates();
+		$workDIV.innerHTML = await ShowPreprocessPage.templates();
 
 		// 그래프 보여주는 부분
 		const $$columnName = document.querySelectorAll("#columnName");

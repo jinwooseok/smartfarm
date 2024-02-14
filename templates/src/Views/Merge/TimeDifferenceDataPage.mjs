@@ -14,12 +14,6 @@ class TimeDifferenceDataPage {
 		</div>
 
 		<div class="settingDIV">
-			<div class="dateDIV">
-				<span>날짜 열 이름</span>
-				<select name="dateBox" id="dateBox" class="dateBox">
-					<option value="null" selected></option>
-				</select>
-			</div>
 			<div class="countDIV">
 				<span>count</span>
 				<input type="number" name="count" id="count" class="count" value="1">

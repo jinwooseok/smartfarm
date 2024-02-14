@@ -15,18 +15,6 @@ class ShowFilePage {
 		</div>
 
 		<div class="settingDIV">
-			<div class="dateDIV">
-				<span>날짜 열</span>
-				<select name="dateBox" id="dateBox" class="dateBox">
-					<option value="null" selected></option>
-				</select>
-			</div>
-
-			<div class="startDIV">
-				<span>처리 시작 행</span>
-				<input type="number" name="startIndex" id="startIndex" class="startIndex" value="1">
-			</div>
-
 			<div class="periodSelectDIV">
 				<span>주기 선택</span>
 				<div class="radioDIV" id="periodDIV">
@@ -71,7 +59,6 @@ class ShowFilePage {
 
 	async setFileData() {
 		const response = await API(`/files/${this.#fileTitle}/data/`, "get");
-		console.log(response.data)
 		this.#fileDate = response.data;
 	}
 
