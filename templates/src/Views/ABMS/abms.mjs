@@ -7,10 +7,7 @@ const $abmsType = document.querySelector("#abmsType");
 const $abmsText = document.querySelector("#abmsText");
 const $abmsSave = document.querySelector("#abmsSave");
 const $abmsFileName = document.querySelector("#abmsFileName");
-const $startIndex = document.querySelector("#startIndex");
-const $date = document.querySelector("#date");
 const $fileListSelectBox = document.querySelector("#fileListSelectBox");
-const $dateBox = document.querySelector("#dateBox");
 
 const fileName = JSON.parse(localStorage.getItem("fileTitle"));
 $abmsFileName.value = fileName.replace(/(.csv|.xlsx|.xls)/g, "") +  "_ABMS";
@@ -32,7 +29,6 @@ $fileListSelectBox.addEventListener("change", moveSelectedFileTitle);
 
 const data = await setFileData();
 const variableList = Object.keys(data[0]);
-setFileList($dateBox, variableList);
 
 // 종류 선택
 const generateColumnHTML = (columnSet) => {
@@ -129,8 +125,6 @@ $abmsSave.addEventListener("click", async() => {
 	}
 
 	const response = await API(`/abms/${fileName}/env/`, "post", {
-		startIndex : $startIndex.value,
-		date: $date.value,
 		columns: JSON.stringify(setEnvData()),
 		newFileName: $abmsFileName.value,
 	});
