@@ -23,6 +23,8 @@ class File(models.Model):
     file_type = models.CharField(max_length=200,null=True)
     file_title = models.CharField(max_length=200)
     file_root = models.FileField(upload_to=user_file_path,null=True)
+    date_column = models.CharField(max_length=200,null=True)
+    start_index = models.IntegerField(null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     statuses = models.ManyToManyField('FileStatusCode', through='FileStatus')
