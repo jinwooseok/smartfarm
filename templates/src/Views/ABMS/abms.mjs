@@ -87,7 +87,6 @@ const setABMSdata = () =>{
       addObjectToABMSData[abmsColumn[index]] = (row[value] || row[`${value} `]) ?? 'null';
     });
     abmsData.push(addObjectToABMSData);
-		console.log(addObjectToABMSData)
   })
   return abmsData;
 };

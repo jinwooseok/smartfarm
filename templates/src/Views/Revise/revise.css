@@ -171,8 +171,6 @@ button:hover{
   text-align: center;
 
   border: 1px solid #000;
-
-	overflow: scroll;
 }
 
 .fileStaticDataDIV .titleListDIV,
@@ -195,6 +193,8 @@ button:hover{
 .fileStaticDataDIV .listDIV{
 	width: 1000px;
 	height: 270px;
+
+	overflow-y: scroll;
 }
 
 .fileStaticDataDIV .columnName {
@@ -252,6 +252,10 @@ button:hover{
 
 .graphDIV .buttonContainer i {
   font-size: 30px;
+}
+
+.radioDIV>*{
+	margin-right: 5px;
 }
 
 /* 난이도 선택 */

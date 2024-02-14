@@ -9,7 +9,6 @@ class ShowPreprocessPage{
 	}
 
 	async templates() {
-		
 		const staticHtml = await this.drawHtml();
 		const html = `
 		<div class="rowDIV">
@@ -69,7 +68,6 @@ class ShowPreprocessPage{
 				<span>변경 값 선택</span>
 				<div class="radioDIV" id="changeValueDIV">
 					<input type="radio" name="Value" id="zero" value="zero" checked><label for="zero">0</label>
-					<input type="radio" name="Value" id=empty" value="empty"><label for="empty">공백</label>
 					<input type="radio" name="Value" id=null" value="null"><label for="null">null</label>
 					<input type="radio" name="Value" id=mean" value="mean"><label for="mean">평균</label>
 				</div>
@@ -100,7 +98,6 @@ class ShowPreprocessPage{
 			<span>변경 값 선택</span>
 			<div class="radioDIV" id="changeValueDIV">
 				<input type="radio" name="Value" id="zero" value="zero" checked><label for="zero">0</label>
-				<input type="radio" name="Value" id=empty" value="empty"><label for="empty">공백</label>
 				<input type="radio" name="Value" id=null" value="null"><label for="null">null</label>
 				<input type="radio" name="Value" id=mean" value="mean"><label for="mean">평균</label>
 			</div>
@@ -109,7 +106,6 @@ class ShowPreprocessPage{
 
 	async submit() {
 		const response = await API(`/files/${this.#fileTitle}/data/preprocess/`, "post");
-		console.log(response, "treat");
 	}
 
 	async drawHtml() {

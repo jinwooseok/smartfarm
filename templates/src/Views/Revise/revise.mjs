@@ -193,16 +193,12 @@ const changeDiv = async (nowProgress) => {
 		ShowFilePage.setFileTitle(fileName);
 		await ShowFilePage.setFileData();
 		ShowFilePage.showFile($spreadSheetDIV);
-		const $dateBox = document.querySelector("#dateBox");
-		const list = ShowFilePage.getFileDate();
-		setFileList($dateBox, Object.keys(list[0]));
 		Loading.CloseLoading();
 	}
 
 	if (nowProgress === 1) { // 전처리
 		ShowPreprocessPage.setFileTitle(fileName);
-
-		$workDIV.innerHTML = ShowPreprocessPage.templates();
+		$workDIV.innerHTML = await ShowPreprocessPage.templates();
 
 		// 그래프 보여주는 부분
 		const $$columnName = document.querySelectorAll("#columnName");
