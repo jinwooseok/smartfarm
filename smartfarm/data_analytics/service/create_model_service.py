@@ -5,6 +5,7 @@ from ...file_data.service.get_file_data_service import GetFileDataService
 from ...file.utils.utils import search_file_absolute_path
 from .save_model_service import SaveModelService
 from ..utils.rf_classifier import CustomRandomForestClassifier
+from ..utils.linear import CustomLinearRegression
 
 class CreateModelService():
     def __init__(self, model_name, x_value, y_value, train_size, model, file_object):
@@ -32,22 +33,15 @@ class CreateModelService():
         #모델 train_set 설정
         X_train, X_test, y_train, y_test = train_test_split(x_df, y_df, test_size=0.2, random_state=42)
         # 모델 생성 및 학습
-        model = self.model_handler()
-        model.fit(X_train, y_train)
+        model = self.model_handler(X_train, y_train)
+        SaveModelService(self.file_object, model.learned_model, self.model_name, model.meta()).execute()
         
-        # 학습된 모델의 변수와 가중치 정보 추출
-        model_meta = {
-            'feature_names': x_df.columns,
-            'target_names': y_df.unique(),
-            'model_params': model.get_params(),
-            'model_weights': model.feature_importances_
-        }
-        
-        #모델 저장
-        SaveModelService(model, self.model_name, model_meta).execute()
-        
-    def model_handler(self):
+    def model_handler(self, x_train, y_train):
         if self.model == "random":
-            model = CustomRandomForestClassifier()
-            model.fit(self.x_value, self.y_value)
-            return model.learned_model
+            model = CustomRandomForestClassifier(x_train, y_train)
+            model.fit()
+            return model 
+        elif self.model == "linear":
+            model = CustomLinearRegression(x_train, y_train)
+            model.fit()
+            return model

@@ -2,13 +2,14 @@ from ...file.service.file_save_service import FileSaveService
 from django.db import transaction
 from ...models import LearnedModel, ModelFeature, File
 import copy
+import json
 class SaveModelService(FileSaveService):
-    def __init__(self, file_object, model, model_name, model_meta):
+    def __init__(self, file_object, model, model_name, model_meta) -> "SaveModelService":
         self.model = model
         self.file_object : File = file_object
-        self.model_name = model_name
-        self.model_meta = model_meta
-    
+        self.model_name : str = model_name
+        self.model_meta : dict = model_meta
+        self.user = file_object.user
     @transaction.atomic
     def execute(self):
         #파일명 중복체크

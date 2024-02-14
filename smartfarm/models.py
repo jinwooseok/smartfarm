@@ -1,7 +1,9 @@
 from django.db import models
 from users.models import User
 import os
-import joblib
+import pickle
+from django.conf import settings
+import json
 
 # Create your models here.
 def user_file_path(instance, file_root):
@@ -76,21 +78,27 @@ class LearnedModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
-    def save(self, model, model_info, *args, **kwargs):
+    def save(self, model, model_meta : dict, *args, **kwargs):
         # joblib.dump를 사용하여 파일 저장
         self.model_root = self.get_model_file_path()
         self.model_meta_root = self.get_model_meta_file_path()
-        joblib.dump(model, self.model_root)
-        joblib.dump(model_info, self.get_model_file_path())
+        if model_meta['model_name'] == 'Linear Regression':
+            print(self.model_root)
+            model.save(self.model_root)
+        else:
+            with open(self.model_root, 'w') as f:
+                pickle.dump(model, f)
+        with open(self.model_meta_root, 'w') as f:
+            json.dump(model_meta, f, , ensure_ascii=False)
         super().save(*args, **kwargs)
 
     def get_model_file_path(self):
         # 파일이 저장될 경로 반환
-        return os.path.join('media', user_model_path(self, self.model_name))
+        return os.path.join(settings.MEDIA_ROOT, user_model_path(self, self.model_name))
     
     def get_model_meta_file_path(self):
         # 파일이 저장될 경로 반환
-        return os.path.join('media', user_model_path(self, self.model_meta_name))
+        return os.path.join(settings.MEDIA_ROOT, user_model_path(self, self.model_meta_name))
 
 class ModelFeature(models.Model):
     model = models.ForeignKey(LearnedModel,on_delete=models.CASCADE,default=000000)

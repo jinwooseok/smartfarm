@@ -19,7 +19,7 @@ class DataAnalyticsViewSet(viewsets.GenericViewSet):
         user_id = login_validator(request)
         data = request.data.copy()
         data['fileName'] = file_title
-        serializer = CreateModelSerializer(data=request.data)
+        serializer = CreateModelSerializer(data=data)
         serializer = serializer_validator(serializer)
         CreateModelService.from_serializer(serializer, user_id).execute()
         return Response(ResponseBody.generate(),status=201)
