@@ -1,5 +1,4 @@
 import API from "/templates/src/Utils/API.mjs";
-// import cookies from "/templates/src/Utils/CsrfToken.mjs";
 
 const $id = document.querySelector("#registerID");
 const $password = document.querySelector("#registerPassword");

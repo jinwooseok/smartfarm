@@ -279,7 +279,7 @@ a {
 
 .uploadDialog {
 	width: 500px;
-	height: 300px;
+	height: 350px;
 	border: 1px solid #000;
 	border-radius: 20px;
 
@@ -341,8 +341,26 @@ a {
 	font-size: 13px;
 }
 
+.serttingDIV{
+	height: 70px;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.serttingDIV>*{
+	width: 200px;
+	text-align: center;
+}
+
+.buttonDIV input[type="number"] {
+	width: 100px;
+}
+
 .buttonDIV {
-	margin-top: 10px;
+	margin-top: 13px;
 
 	display: flex;
 	flex-direction: row;
