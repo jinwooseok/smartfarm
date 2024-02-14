@@ -89,7 +89,7 @@ class LearnedModel(models.Model):
             with open(self.model_root, 'w') as f:
                 pickle.dump(model, f)
         with open(self.model_meta_root, 'w') as f:
-            json.dump(model_meta, f, , ensure_ascii=False)
+            json.dump(model_meta, f, ensure_ascii=False)
         super().save(*args, **kwargs)
 
     def get_model_file_path(self):
