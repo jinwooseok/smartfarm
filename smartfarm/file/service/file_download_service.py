@@ -9,6 +9,11 @@ class FileDownloadService:
         self.file_name = serializer.data['fileName']
         self.file_root = serializer.get_file_object(user).file_root
     
+    def from_serializer(cls, serializer, user) -> 'FileDownloadService':
+        file_name = serializer.data['fileName']
+        file_root = serializer.get_file_object(user).file_root
+        return cls(serializer, user)
+    
     def execute(self):
         file_absolute_path = search_file_absolute_path(self.file_root)
         return self.attach_file(self.file_name, file_absolute_path)
