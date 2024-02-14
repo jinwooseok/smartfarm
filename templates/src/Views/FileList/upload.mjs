@@ -1,10 +1,15 @@
 import API from "/templates/src/Utils/API.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
+import Excel from "/templates/src/Model/Excel.mjs";
+import { setFileList } from "/templates/src/Utils/fileNameList.mjs";
 
+const $file = document.querySelector(".file");
 const $uploadDialog = document.querySelector("#uploadDialog");
 const $upload = document.querySelector("#upload");
 const $fileUpload = document.querySelector("#fileUpload");
 const $closeUploadPopup = document.querySelector("#closeUploadPopup");
+const $dateBox = document.querySelector("#dateBox");
+const $startIndex = document.querySelector("#startIndex");
 
 const $fileUploadDrag = document.querySelector("#fileUploadDrag");
 const $fileUploadInput = document.querySelector("#fileUploadInput");
@@ -27,19 +32,25 @@ let sheetData = "";
 
 const fileSetting = () => {
   $fileIcon.style.display = "none";
-  // $fileUploadDrag.style.display = "none";
+  $fileUploadDrag.style.display = "none";
   $fileName.value = selectedFile.name.replace(/\s/g, "_");
 }
 
-const readXlsxFileContent = (file) => {
+const readFileContent = (file, fileType) => {
   const reader = new FileReader();
-
   Loading.StartLoading();
 
   reader.onload = function (event) {
-    const fileContent =  event.target.result;
-    const workbook = XLSX.read(fileContent, { type: "binary" });
-    sheetData = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[workbook.SheetNames[0]]);
+    const fileContent = event.target.result;
+    if (fileType === 'xlsx') {
+      const workbook = XLSX.read(fileContent, { type: 'binary' });
+      sheetData = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[workbook.SheetNames[0]]);
+    } else if (fileType === 'csv') {
+      sheetData = parseCSV(fileContent);
+    }
+
+    new Excel(sheetData.slice(0, 30), $file);
+    setFileList($dateBox, Object.keys(sheetData[0]));
     Loading.CloseLoading();
   };
 
@@ -48,26 +59,12 @@ const readXlsxFileContent = (file) => {
     Loading.CloseLoading();
   };
 
-  reader.readAsBinaryString(file);
-}
-
-const readCsvFileContent = (file) => {
-  const reader = new FileReader();
-  Loading.StartLoading();
-
-  reader.onload = function (event) {
-    const fileContent =  event.target.result;
-    sheetData = parseCSV(fileContent);
-    Loading.CloseLoading();
-  };
-
-  reader.onerror = function (event) {
-    console.error(event.target.error);
-    Loading.CloseLoading();
-  };
-
-  reader.readAsText(file, 'EUC-KR');
-}
+  if (fileType === 'xlsx') {
+    reader.readAsBinaryString(file);
+  } else if (fileType === 'csv') {
+    reader.readAsText(file, 'EUC-KR');
+  }
+};
 
 const parseCSV = (csvContent) => {
   const lines = csvContent.split('\n');
@@ -119,12 +116,12 @@ const showFile = () => {
     $fileName.value.toLowerCase().includes("xls") ||
     $fileName.value.toLowerCase().includes("xlsx") 
   ) {
-    readXlsxFileContent(selectedFile);
+    readFileContent(selectedFile, 'xlsx');
     return;
   }
 
   if ($fileName.value.toLowerCase().includes("csv")) {
-    readCsvFileContent(selectedFile);
+    readFileContent(selectedFile, 'csv');
     return;
   }
 }
@@ -135,10 +132,12 @@ const uploadFile = async () => {
 	const data = {
 		fileName: $fileName.value,
 		fileData: JSON.stringify(sheetData),
+    startIndex: $startIndex.value,
+    dateColumn: $dateBox.options[$dateBox.selectedIndex]?.value,
 	};
-
-	const response = await API("/files/save/", "post" , data);
-  checkResponse(response);
+  console.log(data);
+	// const response = await API("/files/save/", "post" , data);
+  // checkResponse(response);
 }
 
 const checkResponse = (code) => {
