@@ -11,7 +11,7 @@ class ETLProcessFactory():
     def __init__(self, data, file_type, date_column, interval, lat_lon = [38,126], var = None):
         self.data = data
         self.file_type = file_type
-        self.date_column = date_column - 1
+        self.date_column = date_column
         self.lat, self.lon= lat_lon
         self.interval = interval
         self.var = var
@@ -20,16 +20,11 @@ class ETLProcessFactory():
         file_type = self.file_type
         interval = self.interval
 
-        self.data = self.data.dropna(subset=[self.data.columns[self.date_column]])
+        self.data = self.data.dropna(subset=self.date_column)
         
-        #날짜열 추출
-        if self.date_column < 0 or self.date_column >= len(self.data.columns):
-            raise DateColumnException()
-        date_series = self.data.iloc[:,self.date_column]
-        print(date_series)
-        #날짜열 드롭. 방해됨
-        date_column_index = self.date_column
-        self.data = DataProcess.drop_columns(self.data, [self.data.columns[date_column_index]])
+        date_series = self.data[self.date_column]
+
+        self.data = DataProcess.drop_columns(self.data, [self.date_column])
         #날짜열은 날짜형식으로 변환 후 date_series로 관리
         date_series = DataProcess.date_converter(date_series)
         #그 후 핸들링
