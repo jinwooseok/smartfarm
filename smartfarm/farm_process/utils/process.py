@@ -19,7 +19,6 @@ class ETLProcessFactory():
     def handler(self):
         file_type = self.file_type
         interval = self.interval
-
         self.data = self.data.dropna(subset=self.date_column)
         
         date_series = self.data[self.date_column]

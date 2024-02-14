@@ -5,11 +5,10 @@ from ...file_data.service.get_file_data_service import GetFileDataService
 from ...file.utils.utils import search_file_absolute_path
 from ..exceptions.exceptions import StartIndexException
 class TransABMSService():
-    def __init__(self, user, columns, new_file_name, date_column, start_index, file_root):
+    def __init__(self, user, columns, new_file_name, start_index, file_root):
         self.user = user
         self.columns = columns
         self.new_file_name = new_file_name
-        self.date_column = date_column
         self.start_index = start_index
         self.file_type = "env"
         self.interval = "hourly"
@@ -21,7 +20,6 @@ class TransABMSService():
         return cls(user
                    ,serializer.validated_data['columns']
                    ,serializer.validated_data['newFileName']
-                   ,file_object.date_column
                    ,file_object.start_index
                    ,file_object.file_root)
     
@@ -31,8 +29,7 @@ class TransABMSService():
         #데이터프레임 윗부분 자르기
         if self.start_index < 1 or self.start_index > len(df):
             raise StartIndexException()
-            
-        df = df.iloc[self.start_index-1:]
+        df = df.iloc[self.start_index-1:].reset_index(drop=True)
         
         after_list = ['일시', '내부온도', '내부온도 주간', '내부온도 야간', '내부온도 최저', '내부온도 최고', '내부습도',
        '내부습도 주간', '내부습도 야간', '내부습도 최저', '내부습도 최고', '이슬점', 'CO2농도', '외부온도',
@@ -59,7 +56,7 @@ class TransABMSService():
             var_list.append(dic)
 
         #프로세스 선정
-        process_factory = ETLProcessFactory(df, self.file_type, self.date_column, self.interval, var = var_list)
+        process_factory = ETLProcessFactory(df, self.file_type, '일시', self.interval, var = var_list)
         #정적 메서드 핸들러
         result = process_factory.handler()
         #그렇게 컬럼 데이터를 만들고 농업전처리를 실행..하지만 이름은 맞춰줘야한다..
