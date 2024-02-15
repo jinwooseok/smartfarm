@@ -9,6 +9,22 @@ class FeatureGenerator():
         self.date_series = data['날짜']
         self.var = var
         self.interval= interval
+        self.timing_dict = {
+            '전체' : '날짜',
+            '주간' : 'day_night',
+            '야간' : 'day_night',
+            '일출부터정오' : 'srise_to_noon',
+            f'일출전후2시간' : 'srise_diff'
+        }
+        self.functions_dict = {
+            '최소' : self.min,
+            '최대' : self.max,
+            '평균' : self.mean,
+            '누적' : self.sum,
+            'DIF' : self.DIF,
+            'GDD' : self.GDD,
+            '온도차' : self.sub
+        }
         
     def execute(self):
         data=self.data
@@ -37,26 +53,6 @@ class FeatureGenerator():
         new_name = f'{timing_key}{function_key}{temp}'
         grouped_df.rename(columns={temp:new_name}, inplace=True)
         return grouped_df
-
-    def timing_dict(self):
-        {
-            '전체' : '날짜',
-            '주간' : 'day_night',
-            '야간' : 'day_night',
-            '일출부터정오' : 'srise_to_noon',
-            f'일출전후2시간' : 'srise_diff'
-        }
-    
-    def functions_dict(self):
-        return {
-            '최소' : self.min,
-            '최대' : self.max,
-            '평균' : self.mean,
-            '누적' : self.sum,
-            'DIF' : self.DIF,
-            'GDD' : self.GDD,
-            '온도차' : self.sub
-        }
     
     #def generating_variable(self, data, temp, standard, t_diff=2, div_DN=False, tbase=15): 
     def DIF(self, data):

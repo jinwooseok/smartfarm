@@ -44,8 +44,7 @@ class ETLProcessFactory():
         if file_type=="output":
             output_process = OutputProcess()
             if interval=="daily":
-                return output_process.y_split(self.data, date_series
-                                                  , self.lat, self.lon, self.var)
+                return output_process.y_split(self.data, date_series)
             elif interval=="weekly":                                     
                 return ETLProcessFactory.to_weekly(self.data, date_series, period=7)
             return 0
@@ -57,12 +56,12 @@ class ETLProcessFactory():
 class EnvirProcess:
     def minute_to_hour(self, data, date_series, lat, lon, var=None):
         concated_data = self.time_classifier(data, date_series, lat, lon)
-        result_data = FeatureGenerator(concated_data, var, "H").execute()
+        result_data = FeatureGenerator(concated_data, 'H', var).execute()
         return result_data
         
     def hour_to_daily(self, data, date_series, lat, lon, var = None):        
         concated_data = self.time_classifier(data, date_series, lat, lon)
-        result_data = FeatureGenerator(concated_data, var, "D").execute()
+        result_data = FeatureGenerator(concated_data, 'D', var).execute()
         return result_data
     
     def start_end_extractor(date_series):
@@ -77,18 +76,17 @@ class EnvirProcess:
         
         return pd.concat([date_series, data, day_night_series, srise_to_noon_series, srise_diff_series], axis=1)
 class OutputProcess:
-    def y_split(self, df,date_ind,d_ind):
-        if df.isnull().sum != 0:
-                df.dropna()
-        everyday=pd.date_range(df.iloc[0,date_ind],df.iloc[-1,date_ind])
-        df2=pd.DataFrame({"날짜":everyday})
-        date_temp=pd.to_datetime(df.iloc[:,date_ind])#date_temp type:datetime, serialize, 2020-11-03,...
-        for i in range(0,len(date_temp)-1):#serialize
-                mask = (df2.iloc[:,0] > date_temp[i]) & (df2.iloc[:,0] <= date_temp[i+1])#행추출
-                yield_data=df.iloc[i+1,d_ind]
-                print(yield_data)
-                df2.loc[mask,"생산량"]=int(yield_data)/((date_temp[i+1]-date_temp[i]).days)
+    def y_split(self, data, date_series):
+                
+        everyday=pd.date_range(date_series.min(), date_series.max(), freq='D')
+        return_df=pd.DataFrame({"날짜":list(everyday),"생산량":[0]*len(everyday)})
+        print(return_df)
+        backward_date=date_series.iloc[0]
+        for idx, date in enumerate(date_series.iloc[1:]):
+            mask = (return_df['날짜'] >= backward_date) & (return_df['날짜'] < date)#행추출
+            return_df["생산량"][mask]=int(data.iloc[idx])/(date-backward_date).days
+            backward_date=date
 
-        return df2
+        return return_df
 
     
