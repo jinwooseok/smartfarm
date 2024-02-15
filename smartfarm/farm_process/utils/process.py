@@ -3,8 +3,7 @@ from .weekly_transformer import WeeklyTransformer
 from .daily_time_classfier import DailyTimeClassifier
 from .get_sun_crawler import GetSunCrawler
 from ..exceptions.exceptions import *
-from .daily_feature_generator import DailyFeatureGenerator
-from .hour_feature_generator import HourFeatureGenerator
+from .feature_generator import FeatureGenerator
 from ...file_data.utils.process import DataProcess
 #from .daily_feature_generator import DailyFeatureGenerator
 class ETLProcessFactory():
@@ -28,20 +27,27 @@ class ETLProcessFactory():
         date_series = DataProcess.date_converter(date_series)
         #그 후 핸들링
         if file_type=="env":
+            envir_process = EnvirProcess()
             if interval=="hourly":
-                return EnvirProcess.minute_to_hour(self.data, date_series
+                return envir_process.minute_to_hour(self.data, date_series
                                                   , self.lat, self.lon, self.var)
             elif interval=="daily":
-                return EnvirProcess.hour_to_daily(self.data, date_series
+                return envir_process.hour_to_daily(self.data, date_series
                                                   , self.lat, self.lon, self.var)
             elif interval=="weekly":                                     
-                period = 7
-                return ETLProcessFactory.to_weekly(self.data, date_series, period)
+                return ETLProcessFactory.to_weekly(self.data, date_series, period=7)
+        
         if file_type=="growth":
             if interval=="weekly":
-                period = 7
-                return ETLProcessFactory.to_weekly(self.data, date_series, period)
+                return ETLProcessFactory.to_weekly(self.data, date_series, period=7)
+        
         if file_type=="output":
+            output_process = OutputProcess()
+            if interval=="daily":
+                return output_process.y_split(self.data, date_series
+                                                  , self.lat, self.lon, self.var)
+            elif interval=="weekly":                                     
+                return ETLProcessFactory.to_weekly(self.data, date_series, period=7)
             return 0
         
     def to_weekly(data, date_series, period):
@@ -49,63 +55,40 @@ class ETLProcessFactory():
         return result_data
 
 class EnvirProcess:
-    @staticmethod
-    def minute_to_hour(data, date_series, lat, lon, var=None):
-        start_date, end_date = EnvirProcess.start_end_extractor(date_series)
-        sun_dataset = GetSunCrawler(start_date, end_date, lat, lon).execute()
-        day_night_series, srise_to_noon_series, srise_diff_series = DailyTimeClassifier(sun_dataset, date_series).execute()
-        
-        concated_data = pd.concat([date_series, data, day_night_series, srise_to_noon_series, srise_diff_series], axis=1)
-        result_data = HourFeatureGenerator(concated_data, var).execute()
-        
+    def minute_to_hour(self, data, date_series, lat, lon, var=None):
+        concated_data = self.time_classifier(data, date_series, lat, lon)
+        result_data = FeatureGenerator(concated_data, var, "H").execute()
         return result_data
         
-    @staticmethod
-    def hour_to_daily(data, date_series, lat, lon, var = None):        
-        start_date, end_date = EnvirProcess.start_end_extractor(date_series)
-        sun_dataset = GetSunCrawler(start_date, end_date, lat, lon).execute()
-        day_night_series, srise_to_noon_series, srise_diff_series = DailyTimeClassifier(sun_dataset, date_series).execute()
-        
-        concated_data = pd.concat([date_series, data, day_night_series, srise_to_noon_series, srise_diff_series], axis=1)
-        result_data = DailyFeatureGenerator(concated_data, var).execute()
-        
+    def hour_to_daily(self, data, date_series, lat, lon, var = None):        
+        concated_data = self.time_classifier(data, date_series, lat, lon)
+        result_data = FeatureGenerator(concated_data, var, "D").execute()
         return result_data
     
-    @staticmethod
     def start_end_extractor(date_series):
         if date_series.isnull().sum() != 0:
             raise NullDateException()
         return date_series.iloc[0], date_series.iloc[-1]
 
+    def time_classifier(self, data, date_series, lat, lon):
+        start_date, end_date = EnvirProcess.start_end_extractor(date_series)
+        sun_dataset = GetSunCrawler(start_date, end_date, lat, lon).execute()
+        day_night_series, srise_to_noon_series, srise_diff_series = DailyTimeClassifier(sun_dataset, date_series).execute()
+        
+        return pd.concat([date_series, data, day_night_series, srise_to_noon_series, srise_diff_series], axis=1)
+class OutputProcess:
+    def y_split(self, df,date_ind,d_ind):
+        if df.isnull().sum != 0:
+                df.dropna()
+        everyday=pd.date_range(df.iloc[0,date_ind],df.iloc[-1,date_ind])
+        df2=pd.DataFrame({"날짜":everyday})
+        date_temp=pd.to_datetime(df.iloc[:,date_ind])#date_temp type:datetime, serialize, 2020-11-03,...
+        for i in range(0,len(date_temp)-1):#serialize
+                mask = (df2.iloc[:,0] > date_temp[i]) & (df2.iloc[:,0] <= date_temp[i+1])#행추출
+                yield_data=df.iloc[i+1,d_ind]
+                print(yield_data)
+                df2.loc[mask,"생산량"]=int(yield_data)/((date_temp[i+1]-date_temp[i]).days)
 
-# class OutputProcess(ETLProcess):
-#     def execute():
-#         data = df.data
-#         date=df.date
-#         d_ind=1
-#         if self.DorW=="days":
-#             result=y_split(data,date,d_ind)
-#             result['날짜']=result['날짜'].astype('str')
-#         if self.DorW=="weeks":
-#             result=y_split(data,date,d_ind)
-#             result = making_weekly2(data, date)
-#             result['날짜']=result['날짜'].astype('str')
-#         return result
-#         pass 
-    
-#     @staticmethod
-#     def y_split(df,date_ind,d_ind):
-#         if df.isnull().sum != 0:
-#                 df.dropna()
-#         everyday=pd.date_range(df.iloc[0,date_ind],df.iloc[-1,date_ind])
-#         df2=pd.DataFrame({"날짜":everyday})
-#         date_temp=pd.to_datetime(df.iloc[:,date_ind])#date_temp type:datetime, serialize, 2020-11-03,...
-#         for i in range(0,len(date_temp)-1):#serialize
-#                 mask = (df2.iloc[:,0] > date_temp[i]) & (df2.iloc[:,0] <= date_temp[i+1])#행추출
-#                 yield_data=df.iloc[i+1,d_ind]
-#                 print(yield_data)
-#                 df2.loc[mask,"생산량"]=int(yield_data)/((date_temp[i+1]-date_temp[i]).days)
-
-#         return df2
+        return df2
 
     

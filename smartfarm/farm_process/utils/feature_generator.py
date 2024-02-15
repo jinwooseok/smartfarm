@@ -3,31 +3,14 @@ import numpy as np
 from .masks import *
 from ..exceptions.exceptions import VarDataException
 from ...file_data.utils.process import DataProcess
-class DailyFeatureGenerator():
-    def __init__(self, data, var=None):
+class FeatureGenerator():
+    def __init__(self, data, interval, var=None):
         self.data = data
         self.date_series = data['날짜']
         self.var = var
-    
+        self.interval= interval
+        
     def execute(self):
-        return_list = []
-        timing_dict = {
-            '전체' : '날짜',
-            '주간' : 'day_night',
-            '야간' : 'day_night',
-            '일출부터정오' : 'srise_to_noon',
-            f'일출전후2시간' : 'srise_diff'
-        }
-        #입력받았을 때 호출할 함수
-        functions_dict = {
-            '최소' : self.min,
-            '최대' : self.max,
-            '평균' : self.mean,
-            '누적' : self.sum,
-            'DIF' : self.DIF,
-            'GDD' : self.GDD,
-            '온도차' : self.sub
-        }
         data=self.data
         return_list = []
         for variable in self.var:
@@ -37,22 +20,47 @@ class DailyFeatureGenerator():
             except:
                 raise VarDataException(variable)
             for standard in standards:
-                timing_key, function_key = standard
-                function = functions_dict[function_key]
-                data[temp] = DataProcess.to_numeric_or_nan(data[temp])
-                target_data = data[['날짜',temp]][(data[timing_dict[timing_key]]==timing_key)]
-                if timing_key == '전체':
-                    target_data = data[['날짜',temp]]
-                grouped_df = target_data.groupby(pd.Grouper(key='날짜', freq='D')).agg({temp: function})
-                
-                new_name = f'{timing_key}{function_key}{temp}'
-                grouped_df.rename(columns={temp:new_name}, inplace=True)
+                grouped_df = self.grouping_data(data, temp, standard) 
                 return_list.append(grouped_df)
         return pd.concat(return_list, axis=1).reset_index()
     
+    #data : 원본 데이터 , temp : 변수명, standard : 표준 [시간, 함수]
+    def grouping_data(self, data, temp, standard, t_diff=2, div_DN=False, tbase=15):
+        timing_key, function_key = standard
+        function = self.functions_dict[function_key]
+        data[temp] = DataProcess.to_numeric_or_nan(data[temp])
+        target_data = data[['날짜',temp]][(data[self.timing_dict[timing_key]]==timing_key)]
+        if timing_key == '전체':
+            target_data = data[['날짜',temp]]
+        grouped_df = target_data.groupby(pd.Grouper(key='날짜', freq=self.interval)).agg({temp: function})
+        
+        new_name = f'{timing_key}{function_key}{temp}'
+        grouped_df.rename(columns={temp:new_name}, inplace=True)
+        return grouped_df
+
+    def timing_dict(self):
+        {
+            '전체' : '날짜',
+            '주간' : 'day_night',
+            '야간' : 'day_night',
+            '일출부터정오' : 'srise_to_noon',
+            f'일출전후2시간' : 'srise_diff'
+        }
+    
+    def functions_dict(self):
+        return {
+            '최소' : self.min,
+            '최대' : self.max,
+            '평균' : self.mean,
+            '누적' : self.sum,
+            'DIF' : self.DIF,
+            'GDD' : self.GDD,
+            '온도차' : self.sub
+        }
+    
     #def generating_variable(self, data, temp, standard, t_diff=2, div_DN=False, tbase=15): 
     def DIF(self, data):
-        if DailyFeatureGenerator.is_valid(data)==False:
+        if self.is_valid(data)==False:
             return np.nan
         return max(data) - min(data)
    
