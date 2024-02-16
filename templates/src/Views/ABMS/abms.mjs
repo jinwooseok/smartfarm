@@ -1,7 +1,8 @@
 import API from "/templates/src/Utils/API.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
 import { getFileNameList, setFileList } from "/templates/src/Utils/fileNameList.mjs";
-import { abmsTextValue } from "../../Constant/variableList.mjs";
+import { abmsTextValue } from "/templates/src/Constant/variableList.mjs";
+import responseMessage from "/templates/src/Constant/responseMessage.mjs";
 
 const $abmsType = document.querySelector("#abmsType");
 const $abmsText = document.querySelector("#abmsText");
@@ -14,7 +15,8 @@ $abmsFileName.value = fileName.replace(/(.csv|.xlsx|.xls)/g, "") +  "_ABMS";
 
 const setFileData = async () =>{
 	const response = await API(`/files/${fileName}/data/`, "get");
-	return response.data;
+	const status = response.status || response;
+  return responseMessage[status] === "success" ? response.data : alert(responseMessage[status]);
 }
 
 const moveSelectedFileTitle = () => {
@@ -92,7 +94,6 @@ const setABMSdata = () =>{
 };
 
 const setEnvData = () => {
-	// [[before,after],[before,after]]
 	const abmsData = [];
 
 	const $columnBox = document.querySelectorAll("#columnBox");
@@ -130,29 +131,8 @@ $abmsSave.addEventListener("click", async() => {
 
   Loading.CloseLoading();
   
-  switch(response.status) {
-    case "success" :
-      location.replace("/file-list/")
-      break;
-    case 461:
-      alert("날짜 형식으로 변환할 수 없는 열입니다.");
-      break;    
-    case 470:
-      alert("날짜열에 null값이 존재합니다. 결측치를 제거해주세요.");
-      break;
-    case 471:
-      alert("날씨 API를 가져오는데 실패하였습니다. 잠시 후 다시 시도해주세요.");
-      break;
-    case 472:
-      alert("시작행이 1보다 작거나 데이터 길이를 초과합니다.");
-      break;
-    case 473:
-      alert("날짜열이 1보다 작거나 데이터 길이를 초과합니다.");
-      break;
-    case 474:
-      alert("{variable} 변수에서 오류가 발생했습니다.");
-      break;
-  }
+  const status = response.status || response;
+  responseMessage[status] === "success" ? location.replace("/file-list/") : alert(responseMessage[status]);
 	return;
 });
 

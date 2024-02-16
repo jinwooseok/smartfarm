@@ -27,9 +27,9 @@ setFileList($fileListSelectBox, fileList, fileName);
 
 const getVarList = async () => {
   const response = await API(`/files/${fileName}/data/feature/`, "get");
-
+  const status = response.status || response;
   if (response.status === "success") {
-    await ToolPage.setVarList(response.data);
+    return responseMessage[status] === "success" ? await ToolPage.setVarList(response.data) : alert(responseMessage[status]);
   }
 }
 
@@ -52,9 +52,10 @@ const clickEvent = async (event, id, targetClass) => {
       yValue: document.querySelector(".yValue").options[document.querySelector(".yValue").selectedIndex]?.value,
       xValue: JSON.stringify(ToolPage.setCheckedVarList()),
     }
-    console.log(data);
     const response = await API(`/analytics/${fileName}/model/`, "post", data);
-  }
+    const status = response.status || response;
+    alert(responseMessage[status]);
+   }
 
   if (
     id === "fileUpload" ||
@@ -84,3 +85,4 @@ window.addEventListener("click", (event) => {
 		clickEvent(event, targetId, targetClass);
 	}
 })
+

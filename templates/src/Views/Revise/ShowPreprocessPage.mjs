@@ -1,7 +1,6 @@
 import API from "/templates/src/Utils/API.mjs";
 
 class ShowPreprocessPage{
-
 	#staticData;
 	#fileTitle;
 
@@ -106,6 +105,8 @@ class ShowPreprocessPage{
 
 	async submit() {
 		const response = await API(`/files/${this.#fileTitle}/data/preprocess/`, "post");
+		const status = response.status || response;
+		return status;
 	}
 
 	async drawHtml() {

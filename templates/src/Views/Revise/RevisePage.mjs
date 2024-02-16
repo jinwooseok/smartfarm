@@ -1,5 +1,6 @@
 import ShowFilePage from "./ShowFilePage.mjs";
-import { reviseDefaultValue } from "../../Constant/variableList.mjs";
+import { reviseDefaultValue } from "/templates/src/Constant/variableList.mjs";
+import responseMessage from "/templates/src/Constant/responseMessage.mjs";
 import API from "/templates/src/Utils/API.mjs";
 
 class RevisePage {
@@ -15,7 +16,8 @@ class RevisePage {
   async submit(fileName, submitData) {
     console.log("var",submitData.var)
     const response = await API(`/files/${fileName}/data/farm/`, "post", submitData);
-		console.log("save", response)
+		const status = response.status || response;
+    responseMessage[status] === "success" ? location.replace("/file-list/") : alert(responseMessage[status]);
   }
 
   templatesEasy() {

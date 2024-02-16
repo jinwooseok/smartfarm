@@ -15,7 +15,7 @@ class VarSelectPage {
 				</div>
 			</div>
 			<div class="buttonDIV" id="buttonDIV">
-				<button class="nextPage switchComplete" id="nextPage">다음</button>
+				<button class="save switchComplete" id="save">저장</button>
 				<button class="prevPage" id="prevPage">이전</button>
 			</div>
 		`

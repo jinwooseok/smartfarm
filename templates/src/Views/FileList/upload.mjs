@@ -2,6 +2,7 @@ import API from "/templates/src/Utils/API.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
 import Excel from "/templates/src/Model/Excel.mjs";
 import { setFileList } from "/templates/src/Utils/fileNameList.mjs";
+import responseMessage from "/templates/src/Constant/responseMessage.mjs";
 
 const $file = document.querySelector(".file");
 const $uploadDialog = document.querySelector("#uploadDialog");
@@ -11,14 +12,31 @@ const $closeUploadPopup = document.querySelector("#closeUploadPopup");
 const $dateBox = document.querySelector("#dateBox");
 const $startIndex = document.querySelector("#startIndex");
 
-const $fileUploadDrag = document.querySelector("#fileUploadDrag");
 const $fileUploadInput = document.querySelector("#fileUploadInput");
 const $fileIcon = document.querySelector("#fileIcon");
 const $fileName = document.querySelector("#fileName");
 
+
+const fileHtml = `
+  <div class="icon">
+  <i class="fa-solid fa-cloud-arrow-up" id="fileIcon"></i>
+    <span>파일을 선택하세요</span>
+  </div>
+  `
+
+let selectedFile;
+let sheetData = "";
+
+const fileSetting = (status) => {
+  $file.innerHTML = status === "start" ? fileHtml : "";
+  $fileIcon.style.display = status === "start" ? "flex" : "none";
+  $fileName.value = status === "start" ? "선택한 파일 이름" : selectedFile.name.replace(/\s/g, "_");
+}
+
 // 파일 업로드 버튼 팝업창 관리 함수
 $upload.addEventListener("click", () => {
-	$uploadDialog.style.display = "flex";
+  fileSetting("start");
+  $uploadDialog.style.display = "flex";
 	$uploadDialog.showModal();
 })
 
@@ -26,16 +44,6 @@ $closeUploadPopup.addEventListener("click", () => {
   $uploadDialog.style.display = "none";
   $uploadDialog.close();
 });
-
-let selectedFile;
-let sheetData = "";
-
-const fileSetting = () => {
-  $file.innerHTML = "";
-  $fileIcon.style.display = "none";
-  $fileUploadDrag.style.display = "none";
-  $fileName.value = selectedFile.name.replace(/\s/g, "_");
-}
 
 const readFileContent = (file, fileType) => {
   const reader = new FileReader();
@@ -86,32 +94,8 @@ const parseCSV = (csvContent) => {
   return result;
 }
 
-$fileUploadInput.addEventListener("change", (event) => {
-  selectedFile = event.target.files[0];
-  if (!selectedFile) {
-    return;
-  }
-  showFile();
-});
-
-$fileUploadDrag.addEventListener("dragenter", (event) => {
-  event.preventDefault();
-  $fileUploadDrag.style.backgroundColor = "#999";
-});
-
-$fileUploadDrag.addEventListener("dragleave", (event) => {
-  event.preventDefault();
-  $fileUploadDrag.style.backgroundColor = "";
-});
-
-$fileUploadDrag.addEventListener("drop", (event) => {
-  event.preventDefault();
-  selectedFile = event.dataTransfer.files[0];
-  showFile();
-});
-
 const showFile = () => {
-  fileSetting();
+  fileSetting("setting");
   if (
     $fileName.value.toLowerCase().includes("xls") ||
     $fileName.value.toLowerCase().includes("xlsx") 
@@ -126,6 +110,13 @@ const showFile = () => {
   }
 }
 
+$fileUploadInput.addEventListener("change", (event) => {
+  selectedFile = event.target.files[0];
+  if (!selectedFile) {
+    return;
+  }
+  showFile();
+});
 
 // 파일 업로드
 const uploadFile = async () => {
@@ -136,29 +127,8 @@ const uploadFile = async () => {
     dateColumn: $dateBox.options[$dateBox.selectedIndex]?.value,
 	};
 	const response = await API("/files/save/", "post" , data);
-  checkResponse(response);
-}
-
-const checkResponse = (code) => {
-  const value = code.status || code;
-  switch(value) {
-    case "success":
-      location.replace("/file-list/");
-      break;
-    case 401 :
-      alert("로그인이 필요합니다.");
-      location.replace("/users/sign-in/");
-      break;
-    case 452 :
-        alert("DB에 파일이 존재하지 않습니다.");
-        break;
-    case 454 :
-      alert("파일 저장에 실패하였습니다.");
-      break;
-    case 456 :
-      alert("데이터를 csv로 변환할 수 없습니다.");
-      break;
-  }
+  const status = response.status || response;
+  responseMessage[status] === "success" ? location.replace("/file-list/") : alert(responseMessage[status]);
 }
 
 // 업로드 하고 다시 페이지 호출
