@@ -1,6 +1,7 @@
 import Logout from "/templates/src/Utils/Logout.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
 import { getFileNameList, setFileList } from "/templates/src/Utils/fileNameList.mjs";
+import responseMessage from "/templates/src/Constant/responseMessage.mjs";
 
 import ShowFilePage from "./ShowFilePage.mjs";
 import ShowPreprocessPage from "./ShowPreprocessPage.mjs";
@@ -82,18 +83,19 @@ const clickEvent = async (event, id, targetClass) => {
 		const go = confirm(`이동 합니다.`);
 
 		if (go) {
-			changeProgress(id);
 			// 데이터 확인
 			if(targetClass.contains("setting")) {
 				submitData.fileType = checkRadioValue(document.querySelectorAll('input[name="type"]'));
 				submitData.interval =  checkRadioValue(document.querySelectorAll('input[name="period"]'));
+				changeProgress(id);
 			}
 
 			// 전처리
 			if(targetClass.contains("treat")) {
 				Loading.StartLoading();
-				await ShowPreprocessPage.submit();
+				const status = await ShowPreprocessPage.submit();
 				Loading.CloseLoading();
+				responseMessage[status] === "success" ? changeProgress(id) : alert(responseMessage[status]);
 			}
 		}
 	}	

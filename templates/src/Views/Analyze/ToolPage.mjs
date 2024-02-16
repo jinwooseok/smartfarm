@@ -1,5 +1,4 @@
 class ToolPage {
-	
 	#varList;
 	#featureNameList = [];
 

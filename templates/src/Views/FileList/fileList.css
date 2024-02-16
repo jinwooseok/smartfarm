@@ -310,11 +310,6 @@ a {
 	position: relative;
 }
 
-.fileUploadDrag {
-	width: 300%;
-	height: 100%;
-}
-
 .file .icon {
 	position: absolute;
 	top: 50%;

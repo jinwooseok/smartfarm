@@ -83,10 +83,9 @@
 		<!-- 파일 등록 클릭 시 팝업 창 -->
 	<dialog class="uploadDialog" id="uploadDialog">
 		<div class="file">
-			<input type="file" id="fileUploadDrag" class="fileUploadDrag" name="fileUploadDrag" accept=".xls, .xlsx, .csv">
 			<div class="icon">
 				<i class="fa-solid fa-cloud-arrow-up" id="fileIcon"></i>
-				<span>파일을 드래그하세요</span>
+				<span>파일을 선택하세요</span>
 			</div>
 		</div>
 		<div class="settingDIV">
@@ -102,7 +101,7 @@
 			</div>
 		</div>
 		<div class="buttonDIV">
-			<input type="file" name="fileUploadInput" id="fileUploadInput" class="fileUploadInput" accept=".csv">
+			<input type="file" name="fileUploadInput" id="fileUploadInput" class="fileUploadInput" accept=".xls, .xlsx, .csv">
 			<label for="fileUploadInput">선택</label>
 			<input id="fileName" name="fileName" class="fileName" value="선택한 파일 이름" disabled="disabled">
 			<button class="fileUpload" id="fileUpload">등록</button>

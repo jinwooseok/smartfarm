@@ -1,6 +1,8 @@
 import API from "/templates/src/Utils/API.mjs";
 import Logout from "/templates/src/Utils/Logout.mjs";
 
+import responseMessage from "/templates/src/Constant/responseMessage.mjs";
+
 const $checkAll = document.querySelector("#checkAll"); // 전체 선택 버튼
 const $$condition = document.querySelectorAll(".condition");
 const $fileContainer = document.querySelector("#fileContainer");
@@ -101,12 +103,6 @@ const setOnClick = () => {
 (async function () {
   // 파일 불러오는 API
   const response = await API("/files/", "get");
-  if (response === 401) {
-    alert("로그인이 필요합니다.");
-    location.replace("/users/sign-in/");
-    return;
-  }
-
   fileList = response.data;
   setFileList();
   setOnClick();
@@ -240,12 +236,8 @@ const clickDownloadButton = () => {
 
 	downloadTitle?.map( async (title) => {
 		const response = await API("/files/download/", "post", {fileName: title});
-		if(response.status === "success") {
-			downloadToCsv(response.data, title);
-      return;
-		}
-
-    alert("ERROR");
+    const status = response.status || response;
+    responseMessage[status] === "success" ? downloadToCsv(response.data, title) : alert(responseMessage[status]);
   }); 
 }
 
@@ -264,11 +256,8 @@ const deleteCheckedItems = (checkedItems) => {
 
   deleteList?.map( async (name) => {
     const response = await API("/files/delete/", "delete", {fileName : JSON.stringify(name)});
-    if (response.status === "success") {
-      location.href = "/file-list/";
-    } else {
-      alert("삭제 실패");
-    }
+    const status = response.status || response;
+    responseMessage[status] === "success" ? location.replace("/file-list/") : alert(responseMessage[status]);
   });
 }
 
@@ -279,7 +268,7 @@ const clickDeleteButton = () => {
     return;
   }
 
-  const yesOrNo = confirm("정말 삭제하나요?");
+  const yesOrNo = confirm(`파일 ${checkedItems.length}를 삭제합니다.`);
   if (yesOrNo) {
     deleteCheckedItems(checkedItems);
     $checkAll.checked = false;
@@ -303,7 +292,6 @@ const searchInputTest = (event) => {
     $checkAll.checked = false;
     showFileList(text);
   }, 200);
-
 }
 
 $search.addEventListener("keyup", searchInputTest);
