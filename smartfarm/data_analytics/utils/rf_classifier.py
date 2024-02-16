@@ -6,6 +6,7 @@ class CustomRandomForestClassifier():
         self.learned_model = None
         self.x_dataset = x_dataset
         self.y_dataset = y_dataset
+        self.random_state = random_state
     
     def fit(self):
         self.learned_model = self.model.fit(self.x_dataset, self.y_dataset)
@@ -19,5 +20,6 @@ class CustomRandomForestClassifier():
                 'model_name' : 'Random Forest Classifier',
                 'feature_names': list(self.x_dataset.columns),
                 'target_names': self.y_dataset.name,
-                'model_weights': self.learned_model.feature_importances_
+                'model_weights': self.learned_model.feature_importances_,
+                'random_state': self.random_state
             }

@@ -38,17 +38,20 @@ class CreateModelService():
         x_df = df[self.x_value]
         y_df = df[self.y_value]
         #모델 train_set 설정
-        X_train, X_test, y_train, y_test = train_test_split(x_df, y_df, test_size=0.2, random_state=42)
-        # 모델 생성 및 학습
-        model = self.model_handler(X_train, y_train)
-        SaveModelService(self.file_object, model.learned_model, self.model_name, model.meta()).execute()
+        random_state = 42
+        X_train, X_test, y_train, y_test = train_test_split(x_df, y_df, test_size=self.train_size, random_state=random_state)
         
-    def model_handler(self, x_train, y_train):
+        # 모델 생성 및 학습
+        model = self.model_handler(X_train, y_train, random_state)
+        result = model.predict(X_test)
+        SaveModelService(self.file_object, model.learned_model, self.model_name, model.meta()).execute()
+        return result
+    def model_handler(self, x_train, y_train, random_state=42):
         if self.model == "random":
-            model = CustomRandomForestClassifier(x_train, y_train)
+            model = CustomRandomForestClassifier(x_train, y_train, random_state)
             model.fit()
             return model 
         elif self.model == "linear":
-            model = CustomLinearRegression(x_train, y_train)
+            model = CustomLinearRegression(x_train, y_train, random_state)
             model.fit()
             return model
