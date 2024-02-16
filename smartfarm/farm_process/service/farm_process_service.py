@@ -18,8 +18,6 @@ class FarmProcessService():
     
     def execute(self):
         instance = GetTempDataService.get_temp_file(self.file_object.id, status_id=1)
-        if instance is None:
-            instance = self.file_object
         
         file_absolute_path = search_file_absolute_path(instance.file_root)
         df = GetFileDataService.file_to_df(file_absolute_path)
