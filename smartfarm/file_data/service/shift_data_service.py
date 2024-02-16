@@ -1,8 +1,7 @@
 from .get_file_data_service import GetFileDataService
 from ...file.utils.utils import search_file_absolute_path
 from ...file.service.file_save_service import FileSaveService
-from ..exceptions.file_data_exceptions import FileNotCompleteException
-from ...models import File, Temp, FileStatus, TempStatus
+from ...file.service.temp_save_service import TempSaveService
 import pandas as pd
 class ShiftDataService():
     def __init__(self, user, file_object, window_size, count, new_file_name, xValue, yValue):
@@ -44,7 +43,7 @@ class ShiftDataService():
         shifted_dfs.append(y_df)
         merged_df = pd.concat(shifted_dfs, axis=1)
         #df = self.rolling_data(df, self.window_size, self.date_column)
-        FileSaveService(self.user, self.new_file_name, merged_df, statuses=5).execute()
+        TempSaveService(self.user, self.file_object.file_title, merged_df, statuses=[5]).execute()
     
     @staticmethod
     def rolling_data(df, window_size, date_column):

@@ -2,6 +2,7 @@ import joblib
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from ...file_data.service.get_file_data_service import GetFileDataService
+from ...file_data.service.get_temp_data_service import GetTempDataService
 from ...file.utils.utils import search_file_absolute_path
 from .save_model_service import SaveModelService
 from ..utils.rf_classifier import CustomRandomForestClassifier
@@ -26,8 +27,14 @@ class CreateModelService():
                    ,serializer.validated_data['trainSize'])
 
     def execute(self):
-        file_absolute_path = search_file_absolute_path(self.file_object.file_root)
+        instance = GetTempDataService.get_temp_file(self.file_object.id, status_id=5)
+        
+        if instance is None:
+            instance = self.file_object
+            
+        file_absolute_path = search_file_absolute_path(instance.file_root)
         df = GetFileDataService.file_to_df(file_absolute_path)
+        
         x_df = df[self.x_value]
         y_df = df[self.y_value]
         #모델 train_set 설정
