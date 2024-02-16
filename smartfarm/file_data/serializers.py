@@ -10,7 +10,8 @@ class ProcessTimeSeriesSerializer(FileNameSerializer):
     windowSize = serializers.IntegerField()
     count = serializers.IntegerField()
     newFileName = serializers.CharField()
-    feature = serializers.JSONField()
+    xValue = serializers.JSONField()
+    yValue = serializers.CharField()
     
     def get_temp_object_or_original(self, user,  status_id):
         file_objects = filter_file_by_user(user)

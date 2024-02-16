@@ -8,7 +8,7 @@ from ..utils.rf_classifier import CustomRandomForestClassifier
 from ..utils.linear import CustomLinearRegression
 
 class CreateModelService():
-    def __init__(self, model_name, x_value, y_value, train_size, model, file_object):
+    def __init__(self, model_name, x_value, y_value, model, file_object, train_size=0.7):
         self.model_name = model_name
         self.x_value = x_value
         self.y_value = y_value
@@ -19,11 +19,11 @@ class CreateModelService():
     @classmethod
     def from_serializer(cls, serializer, user) -> "CreateModelService":
         return cls(serializer.validated_data['modelName']
-                   , serializer.validated_data['xValue']
-                   , serializer.validated_data['yValue']
-                   , serializer.validated_data['trainSize']
-                   , serializer.validated_data['model']
-                   , serializer.get_file_object(user))
+                   ,serializer.validated_data['xValue']
+                   ,serializer.validated_data['yValue']
+                   ,serializer.validated_data['model']
+                   ,serializer.get_file_object(user)
+                   ,serializer.validated_data['trainSize'])
 
     def execute(self):
         file_absolute_path = search_file_absolute_path(self.file_object.file_root)

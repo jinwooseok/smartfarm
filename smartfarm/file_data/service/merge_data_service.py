@@ -32,10 +32,10 @@ class MergeDataService():
                 df = GetFileDataService.file_to_df(file_absolute_path)
                 if df.duplicated(subset=self.column_name_list[i]).any():
                     raise StandardDuplicateException(file_object,self.column_name_list[i])
-                df.rename(columns={self.column_name_list[i]:"기준"}, inplace=True)
+                df.rename(columns={self.column_name_list[i]:"날짜"}, inplace=True)
                 
-                if type(df['기준']) is not object:
-                    df['기준'] = df['기준'].astype('object')
+                if type(df['날짜']) is not object:
+                    df['날짜'] = df['날짜'].astype('object')
                 
                 dfs.append(df)
                 #메모리 제거
@@ -45,9 +45,9 @@ class MergeDataService():
     
         for i in range(1, len(dfs)):
             merged_data.info(memory_usage=True)
-            merged_data = pd.merge(merged_data, dfs[i], on='기준', suffixes=(f'_{i}', f'_{i+1}'), how='outer', sort=True)
+            merged_data = pd.merge(merged_data, dfs[i], on='날짜', suffixes=(f'_{i}', f'_{i+1}'), how='outer', sort=True)
         
-        file_title = TempSaveService(self.user, file_object.file_title, merged_data, statuses=[4]).execute()
+        file_title = file_object.file_title
 
         return {file_title: DataProcess.df_to_json_object(merged_data)}
 
