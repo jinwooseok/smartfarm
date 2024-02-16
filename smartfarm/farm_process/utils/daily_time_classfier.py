@@ -3,7 +3,7 @@ import pandas as pd
 import datetime
 from .masks import *
 class DailyTimeClassifier:
-    def __init__(self, sun_df, date_series, t=3, noon=12):
+    def __init__(self, sun_df, date_series, t=2, noon=12):
         self.sun_df = sun_df
         self.date_series = date_series
         self.t = t
