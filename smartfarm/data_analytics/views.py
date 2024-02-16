@@ -21,5 +21,5 @@ class DataAnalyticsViewSet(viewsets.GenericViewSet):
         data['fileName'] = file_title
         serializer = CreateModelSerializer(data=data)
         serializer = serializer_validator(serializer)
-        CreateModelService.from_serializer(serializer, user_id).execute()
-        return Response(ResponseBody.generate(),status=201)
+        return Response(ResponseBody.generate(
+            data=CreateModelService.from_serializer(serializer, user_id).execute()),status=201)
