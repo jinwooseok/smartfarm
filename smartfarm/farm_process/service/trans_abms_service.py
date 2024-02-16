@@ -5,11 +5,10 @@ from ...file_data.service.get_file_data_service import GetFileDataService
 from ...file.utils.utils import search_file_absolute_path
 from ..exceptions.exceptions import StartIndexException
 class TransABMSService():
-    def __init__(self, user, columns, new_file_name, start_index, file_root):
+    def __init__(self, user, columns, new_file_name, file_root):
         self.user = user
         self.columns = columns
         self.new_file_name = new_file_name
-        self.start_index = start_index
         self.file_type = "env"
         self.interval = "hourly"
         self.file_root = file_root
@@ -26,10 +25,6 @@ class TransABMSService():
     def execute(self):
         file_absolute_path = search_file_absolute_path(self.file_root)
         df = GetFileDataService.file_to_df(file_absolute_path)
-        #데이터프레임 윗부분 자르기
-        if self.start_index < 1 or self.start_index > len(df):
-            raise StartIndexException()
-        df = df.iloc[self.start_index-1:].reset_index(drop=True)
         
         after_list = ['일시', '내부온도', '내부온도 주간', '내부온도 야간', '내부온도 최저', '내부온도 최고', '내부습도',
        '내부습도 주간', '내부습도 야간', '내부습도 최저', '내부습도 최고', '이슬점', 'CO2농도', '외부온도',
@@ -67,7 +62,7 @@ class TransABMSService():
             if column not in result.columns:
                 result[column] = pd.Series(dtype=float)
         result = result[after_list]
-        FileSaveService(self.user, self.new_file_name, result, "일시",1, statuses=2).execute()
+        FileSaveService(self.user, self.new_file_name, result, statuses=2).execute()
     
     @staticmethod
     def naming_variable(column_name):

@@ -6,7 +6,7 @@ import os
 from django.db import transaction
 from ..utils.utils import *
 from ..exceptions.file_exception import *
-
+from ...farm_process.exceptions.exceptions import StartIndexException
 from ..repositorys import *
 
 class FileSaveService():
@@ -14,7 +14,7 @@ class FileSaveService():
     def __init__(self, user, file_title, file_data, date_column=None, start_index=1, statuses=1):
         self.user = user
         self.file_title:str = file_title
-        self.file_data:list = file_data
+        self.file_data = file_data
         self.statuses:int = statuses
         self.date_column:str = date_column
         self.start_index:int = start_index
@@ -32,6 +32,21 @@ class FileSaveService():
         #파일명 중복 체크
         self.file_title = self.convert_file_name(self.user, self.file_title)
         #데이터 배열을 csv파일로 만들기
+        if type(self.file_data) is not pd.DataFrame:
+            self.file_data = pd.DataFrame(self.file_data)
+        
+        if self.start_index < 1 or self.start_index > len(self.file_data):
+            raise StartIndexException()
+        elif self.start_index > 1:
+            self.file_data = self.file_data[self.start_index-1:]
+            self.start_index = 1
+        
+        if self.date_column is None:
+            self.date_column = self.file_data.columns[0]
+        
+        if self.date_column != self.file_data.columns[0]:
+            date_series = self.file_data.pop(self.date_column)
+            self.file_data.insert(0, self.date_column, date_series)
         self.data_to_csv(self.file_title, self.file_data)
         self.save_file()
     
@@ -60,7 +75,6 @@ class FileSaveService():
                     file_root=file_root,
                     date_column=date_column,
                     start_index=start_index
-                    
                 )
     
     @staticmethod

@@ -45,8 +45,8 @@ class FileNameSerializer(serializers.Serializer):
 
 class FileSaveSerializer(FileNameSerializer):
     fileData = serializers.JSONField()
-    dateColumn = serializers.CharField(allow_null=True, default=None)
-    startIndex = serializers.IntegerField(allow_null=True, default=None)
+    dateColumn = serializers.CharField(allow_null=True, default=None, required=False)
+    startIndex = serializers.IntegerField(allow_null=True, default=1, required=False)
 
 
 class FileDeleteSerializer(FileNameSerializer):

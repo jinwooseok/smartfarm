@@ -7,10 +7,9 @@ from .feature_generator import FeatureGenerator
 from ...file_data.utils.process import DataProcess
 #from .daily_feature_generator import DailyFeatureGenerator
 class ETLProcessFactory():
-    def __init__(self, data, file_type, date_column, interval, lat_lon = [38,126], var = None):
+    def __init__(self, data, file_type, interval, lat_lon = [38,126], var = None):
         self.data = data
         self.file_type = file_type
-        self.date_column = date_column
         self.lat, self.lon= lat_lon
         self.interval = interval
         self.var = var
@@ -18,22 +17,20 @@ class ETLProcessFactory():
     def handler(self):
         file_type = self.file_type
         interval = self.interval
-        self.data = self.data.dropna(subset=self.date_column)
-        
-        date_series = self.data[self.date_column]
+        date_name = self.data.columns[0]
+        self.data = self.data.dropna(subset=date_name)
+        date_series = self.data.iloc[:, 0]
 
-        self.data = DataProcess.drop_columns(self.data, [self.date_column])
+        self.data = DataProcess.drop_columns(self.data, [date_name])
         #날짜열은 날짜형식으로 변환 후 date_series로 관리
         date_series = DataProcess.date_converter(date_series)
         #그 후 핸들링
         if file_type=="env":
             envir_process = EnvirProcess()
             if interval=="hourly":
-                return envir_process.minute_to_hour(self.data, date_series
-                                                  , self.lat, self.lon, self.var)
+                return envir_process.minute_to_hour(self.data, date_series, self.lat, self.lon, self.var)
             elif interval=="daily":
-                return envir_process.hour_to_daily(self.data, date_series
-                                                  , self.lat, self.lon, self.var)
+                return envir_process.hour_to_daily(self.data, date_series, self.lat, self.lon, self.var)
             elif interval=="weekly":                                     
                 return ETLProcessFactory.to_weekly(self.data, date_series, period=7)
         
