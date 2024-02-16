@@ -11,13 +11,13 @@ from ..repositorys import *
 
 class FileSaveService():
     
-    def __init__(self, user, file_title, file_data, date_column=None, start_index=None, statuses=1):
+    def __init__(self, user, file_title, file_data, date_column=None, start_index=1, statuses=1):
         self.user = user
         self.file_title:str = file_title
         self.file_data:list = file_data
         self.statuses:int = statuses
         self.date_column:str = date_column
-        self.start_index:str = start_index
+        self.start_index:int = start_index
 
     @classmethod
     def from_serializer(cls, serializer, user) -> 'FileSaveService':
