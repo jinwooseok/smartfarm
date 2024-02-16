@@ -67,7 +67,7 @@ class TransABMSService():
             if column not in result.columns:
                 result[column] = pd.Series(dtype=float)
         result = result[after_list]
-        FileSaveService(self.user, self.new_file_name, result, "날짜",1, statuses=2).execute()
+        FileSaveService(self.user, self.new_file_name, result, "일시",1, statuses=2).execute()
     
     @staticmethod
     def naming_variable(column_name):
