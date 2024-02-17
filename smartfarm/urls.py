@@ -49,7 +49,6 @@ urlpatterns = [
     path('analytics/<str:file_title>/model/',DataAnalyticsViewSet.as_view({'post':'create_model'})),
     path('analytics/<str:model_title>/model/download/',DataAnalyticsViewSet.as_view({'get':'download_model'})),\
     path('analytics/<str:model_title>/model/predict/',DataAnalyticsViewSet.as_view({'post':'predict'})),
-    path('analytics/model/',DataAnalyticsViewSet.as_view({'get':'get_model_list'})),
     #병합
     path('merge/',DataMergeViewSet.as_view({'get':'page','post':'merge'})),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
