@@ -6,6 +6,7 @@ from common.response import *
 from django.http import HttpResponse
 from common.validators import login_validator, serializer_validator
 from .service.create_model_service import CreateModelService
+from .service.download_model_service import DownloadModelService
 #데이터 분석 관련 뷰셋
 class DataAnalyticsViewSet(viewsets.GenericViewSet):
     
@@ -23,3 +24,25 @@ class DataAnalyticsViewSet(viewsets.GenericViewSet):
         serializer = serializer_validator(serializer)
         return Response(ResponseBody.generate(
             data=CreateModelService.from_serializer(serializer, user_id).execute()),status=201)
+    
+    def download_model(self, request, model_title):
+        user_id = login_validator(request)
+        data = request.data.copy()
+        data['modelName'] = model_title
+        serializer = ModelNameSerializer(data=data)
+        serializer = serializer_validator(serializer)
+        return DownloadModelService(serializer, user_id).execute()
+    
+    def predict(self, request, model_title):
+        user_id = login_validator(request)
+        data = request.data.copy()
+        data['modelName'] = model_title
+        serializer = ModelNameSerializer(data=data)
+        serializer = serializer_validator(serializer)
+        # return Response(ResponseBody.generate(
+        #     data=PredictModelService.from_serializer(serializer, user_id).execute()),status=200)
+    
+    # def get_model_list(self, request):
+    #     user_id = login_validator(request)
+    #     return Response(ResponseBody.generate(
+    #         data=GetModelListService(user_id).execute()),status=200)
