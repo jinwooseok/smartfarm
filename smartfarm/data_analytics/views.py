@@ -31,7 +31,7 @@ class DataAnalyticsViewSet(viewsets.GenericViewSet):
         data['modelName'] = model_title
         serializer = ModelNameSerializer(data=data)
         serializer = serializer_validator(serializer)
-        return DownloadModelService(serializer, user_id).execute()
+        return DownloadModelService.from_serializer(serializer, user_id).execute()
     
     def predict(self, request, model_title):
         user_id = login_validator(request)

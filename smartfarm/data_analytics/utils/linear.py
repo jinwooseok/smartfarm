@@ -20,7 +20,7 @@ class CustomLinearRegression:
     
     def meta(self):
         return {
-                'model_name' : 'Linear Regression',
+                'model' : 'Linear Regression',
                 'feature_names': list(self.x_dataset.columns),
                 'target_names': self.y_dataset.name,
                 'model_weights': self.learned_model.params.values.tolist(),
@@ -28,7 +28,6 @@ class CustomLinearRegression:
             }
     
     def predict(self, x_test, y_test):
-        print(x_test)
         y_pred = self.learned_model.predict(x_test)
         # 예측 결과 평가
         mse = mean_squared_error(y_test, y_pred)
@@ -36,7 +35,7 @@ class CustomLinearRegression:
 
         # 추가적인 예측 결과 리턴
         return {
-            'model_name' : 'Linear Regression',
+            'model' : 'Linear Regression',
             'feature_names': list(self.x_dataset.columns),
             'target_names': self.y_dataset.name,
             'model_weights': self.learned_model.params.values.tolist(),

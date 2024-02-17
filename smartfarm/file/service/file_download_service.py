@@ -4,11 +4,11 @@ from django.conf import settings
 from ..utils.utils import *
 from ..exceptions.file_exception import *
 class FileDownloadService:
-    
-    def __init__(self, serializer, user):
-        self.file_name = serializer.data['fileName']
-        self.file_root = serializer.get_file_object(user).file_root
-        self.content_type = 'text/csv'
+    def __init__(self, file_name, file_root, content_type):
+        self.file_name = file_name
+        self.file_root = file_root
+        self.content_type = content_type
+
     def execute(self):
         file_absolute_path = search_file_absolute_path(self.file_root)
         return self.attach_file(file_absolute_path)
