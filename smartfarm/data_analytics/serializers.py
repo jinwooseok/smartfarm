@@ -17,3 +17,8 @@ class ModelNameSerializer(serializers.Serializer):
             return LearnedModel.objects.get(user=user, model_name=self.data['modelName'])
         except LearnedModel.DoesNotExist:
             raise FileNotFoundException()
+        
+class PredictModelSerializer(ModelNameSerializer):
+    testData = serializers.JSONField()
+    xValue = serializers.CharField()
+    yValue = serializers.CharField()
