@@ -31,7 +31,7 @@ class ShiftDataService():
         x_df = df[self.xValue]
         y_df = df[self.yValue]
         shifted_dfs = [x_df]
-        original_columns = df.columns
+        original_columns = x_df.columns
         for i in range(self.count):
             # 데이터프레임을 이동시킴
             x_df = x_df.shift(periods=self.window_size, axis=0)

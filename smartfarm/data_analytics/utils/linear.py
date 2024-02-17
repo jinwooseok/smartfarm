@@ -12,7 +12,7 @@ class CustomLinearRegression:
         self.random_state = random_state
         
     def fit(self):
-        self.learned_model = self.model(endog=self.x_dataset, exog=self.y_dataset).fit()
+        self.learned_model = self.model(endog=self.y_dataset, exog=self.x_dataset).fit()
         return self.learned_model
     
     def feature_importances(self):
@@ -28,6 +28,7 @@ class CustomLinearRegression:
             }
     
     def predict(self, x_test, y_test):
+        print(x_test)
         y_pred = self.learned_model.predict(x_test)
         # 예측 결과 평가
         mse = mean_squared_error(y_test, y_pred)
@@ -40,7 +41,6 @@ class CustomLinearRegression:
             'target_names': self.y_dataset.name,
             'model_weights': self.learned_model.params.values.tolist(),
             'random_state': self.random_state,
-            'predictions': y_pred,
             'mean_squared_error': mse,
             'r2_score': r2
         }

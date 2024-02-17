@@ -31,16 +31,15 @@ class CreateModelService():
         
         file_absolute_path = search_file_absolute_path(instance.file_root)
         df = GetFileDataService.file_to_df(file_absolute_path)
-        
+        df = df.dropna(axis=0)
         x_df = df[self.x_value]
         y_df = df[self.y_value]
         #모델 train_set 설정
         random_state = 42
         X_train, X_test, y_train, y_test = train_test_split(x_df, y_df, test_size=self.train_size, random_state=random_state)
-        
         # 모델 생성 및 학습
         model = self.model_handler(X_train, y_train, random_state)
-        result = model.predict(X_test)
+        result = model.predict(X_test, y_test)
         SaveModelService(self.file_object, model.learned_model, self.model_name, model.meta()).execute()
         return result
     def model_handler(self, x_train, y_train, random_state=42):
