@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from common.validators import login_validator, serializer_validator
 from .service.create_model_service import CreateModelService
 from .service.download_model_service import DownloadModelService
+from .service.predict_model_service import PredictModelService
 #데이터 분석 관련 뷰셋
 class DataAnalyticsViewSet(viewsets.GenericViewSet):
     
@@ -39,8 +40,8 @@ class DataAnalyticsViewSet(viewsets.GenericViewSet):
         data['modelName'] = model_title
         serializer = ModelNameSerializer(data=data)
         serializer = serializer_validator(serializer)
-        # return Response(ResponseBody.generate(
-        #     data=PredictModelService.from_serializer(serializer, user_id).execute()),status=200)
+        return Response(ResponseBody.generate(
+            data=PredictModelService.from_serializer(serializer, user_id).execute()),status=200)
     
     # def get_model_list(self, request):
     #     user_id = login_validator(request)
