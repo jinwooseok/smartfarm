@@ -245,7 +245,7 @@ export const reviseDefaultValue = Object.freeze( [
   "야간_최소_",
   "야간_최대_",
 
-  "주간_DIF_",
+  "전체_DIF_",
   "주간_GDD_",
   
   "일출전후2시간_온도차_",
