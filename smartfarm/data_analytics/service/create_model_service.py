@@ -40,7 +40,8 @@ class CreateModelService():
         # 모델 생성 및 학습
         model = self.model_handler(X_train, y_train, random_state)
         result = model.predict(X_test, y_test)
-        SaveModelService(self.file_object, model.learned_model, self.model_name, model.meta()).execute()
+        model_object = SaveModelService(self.file_object, model.learned_model, self.model_name, model.meta()).execute()
+        result['model_name'] = model_object.model_name
         return result
     def model_handler(self, x_train, y_train, random_state=42):
         if self.model == "random":

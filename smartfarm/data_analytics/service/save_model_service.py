@@ -14,10 +14,11 @@ class SaveModelService(FileSaveService):
     def execute(self):
         #파일명 중복체크
         model_file_name = self.convert_file_name(self.user, self.model_name, ".pkl")
+        print(model_file_name)
         model_meta_file_name = self.convert_file_name(self.user, self.model_name+"_meta", ".json")   
         #모델 저장
-        self.save_model(self.model, self.model_meta, model_file_name, model_meta_file_name)
-    
+        model_object = self.save_model(self.model, self.model_meta, model_file_name, model_meta_file_name)
+        return model_object
         #모델 정보 저장
         
     def model_form(self, user, model_name, model_meta_name):
@@ -29,12 +30,13 @@ class SaveModelService(FileSaveService):
     def save_model(self, model, model_meta, model_file_name, model_info_file_name):
         model_form = self.model_form(self.user, model_file_name, model_info_file_name)
         model_form.save(model, model_meta)
+        return model_form
         
-    def process_duplicated_file_name(user, file_title, suffix):
+    def process_duplicated_file_name(self, user, file_title, suffix):
         file_title_copy = copy.copy(file_title)
         unique=1
         queryset = LearnedModel.objects.filter(user=user)
-        while queryset.filter(file_title=file_title_copy+suffix).exists():
+        while queryset.filter(model_name=file_title_copy+suffix).exists():
             file_title_copy=file_title+"_"+str(unique)
             unique+=1
         return file_title_copy + suffix

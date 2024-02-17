@@ -84,7 +84,7 @@ class LearnedModel(models.Model):
         # joblib.dump를 사용하여 파일 저장
         self.model_root = self.get_model_file_path()
         self.model_meta_root = self.get_model_meta_file_path()
-        if model_meta['model_name'] == 'Linear Regression':
+        if model_meta['model'] == 'Linear Regression':
             model.save(self.model_root)
         else:
             with open(self.model_root, 'w') as f:
