@@ -2,51 +2,27 @@ import API from "/templates/src/Utils/API.mjs";
 import responseMessage from "/templates/src/Constant/responseMessage.mjs";
 
 class ToolPage {
-	#varList;
-	#featureNameList = [];
+
+	#xVarList;
 
 	templates() {
-		const switchHtml = this.#makeVarListDIV();
+
+		const xHtml = this.#drawXListHtml();
 		return `
 		<div class="rowDIV">
-			<div class="variableDIV">
-				<div class="columnList">
-					<div class="featureName">
-						변수 이름
-					</div>
-					<div class="featureType" id="featureType">
-						변수 타입
-					</div>
-					<div class="featureImportance" id=	"featureImportance">
-						변수 중요도
-					</div>
-					<div class="switchDIV" id="switchDIV">
-						선택
-					</div>
-				</div>
-				<div class="listDIV" id="listDIV">
-					${switchHtml}
-				</div>
-			</div>
 
-			<div class="timeDIV">
-				<fieldset class="timeDiffDIV">
-					<legend>시차 변수 선택</legend>
-					<div class="timeDiffUseDIV" id="timeDiffUseDIV">
-						<input type="radio" name="time" id="not" value="not" checked><label for="not">사용 x</label>
-						<input type="radio" name="time" id="use" value="use"><label for="use">사용</label>
-					</div>
-					</select>
-				</fieldset>
+			<fieldset class="xDIV">
+				<legend>x 값</legend>	
+				<div class="variableDIV">
+					${xHtml}
+				</div>
+			</fieldset>
 
-				<button class="timeDiffBtn" id="timeDiffCreate" disabled>시차변수 생성</button>
-			</div>
 
 			<div class="fieldsetDIV">
 				<fieldset class="yDIV">
 					<legend>y 값</legend>
-					<select name="yValue" id="yValue" class="yValue">
-					</select>
+					<input type="text" name="yValueInput" class="yValueInput" id="yValueInput" disabled>
 				</fieldset>
 
 				<fieldset class="trainSizeDIV">
@@ -58,94 +34,78 @@ class ToolPage {
 					<legend>모델 이름</legend>
 					<input type="text" name="modelName" class="modelName" id="modelName" placeholder="모델 이름">
 				</fieldset>
+			</div>
 
-				<button class="create" id="create">모델 생성</button>
+			<div class="tollDIV">
+				<fieldset>
+					<legend>분석 도구 선택</legend>
+					<div class="toolSelectDIV" id="toolSelectDIV">
+						<input type="radio" name="classify" id="classify" value="classify"><label for="classify">분류</label>
+						<input type="radio" name="regress" id="regress" value="regress"><label for="regress">회귀</label>
+					</div>
+				</fieldset>
 			</div>
 		</div>
 		`
 	}
 
 	onClickTimeDIff(id) {
-		if (id === "use") {
+		if (id === "classify") {
 			return `
 			<fieldset class="timeDiffDIV">
-				<legend>시차 변수 선택</legend>
-				<div class="timeDiffUseDIV" id="timeDiffUseDIV">
-					<input type="radio" name="time" id="not" value="not"><label for="not">사용 x</label>
-					<input type="radio" name="time" id="use" value="use" checked><label for="use">사용</label>
+				<legend>분석 도구 선택</legend>
+				<div class="toolSelectDIV" id="toolSelectDIV">
+					<input type="radio" name="classify" id="classify" value="classify" checked><label for="classify">분류</label>
+					<input type="radio" name="regress" id="regress" value="regress"><label for="regress">회귀</label>
 				</div>
-				</select>
+
+				<fieldset class="typeDIV">
+					<legend>분석 종류</legend>
+					<select name="technique" id="technique" class="technique">
+						<option value="rf">랜텀포레스트</option>
+					</select>
+				</fieldset>
 			</fieldset>
 
-			<fieldset class="countDIV">
-				<legend>count</legend>
-				<input type="number" name="count" class="count" id="count" placeholder="count">
-			</fieldset>
-
-			<fieldset class="windowSizeDIV">
-				<legend>windowSize</legend>
-				<input type="number" name="windowSize" class="windowSize" id="windowSize" placeholder="windowSize">
-			</fieldset>
-
-			<button class="timeDiffBtn" id="timeDiffCreate">시차변수 생성</button>
+			<button class="create" id="create">모델 생성</button>
 			`
 		}
 		return `
 		<fieldset class="timeDiffDIV">
-			<legend>시차 변수 선택</legend>
-			<div class="timeDiffUseDIV" id="timeDiffUseDIV">
-				<input type="radio" name="time" id="not" value="not" checked><label for="not">사용 x</label>
-				<input type="radio" name="time" id="use" value="use" ><label for="use">사용</label>
+			<legend>분석 도구 선택</legend>
+			<div class="toolSelectDIV" id="toolSelectDIV">
+				<input type="radio" name="classify" id="classify" value="classify"><label for="classify">분류</label>
+				<input type="radio" name="regress" id="regress" value="regress" checked><label for="regress">회귀</label>
 			</div>
-			</select>
+
+			<fieldset class="typeDIV">
+					<legend>분석 종류</legend>
+					<select name="technique" id="technique" class="technique">
+						<option value="linear">선형회귀분석</option>
+						<option value="lstm">로지스틱회귀분석</option>
+					</select>
+				</fieldset>
 		</fieldset>
 
-		<button class="timeDiffBtn" id="timeDiffCreate" disabled>시차변수 생성</button>
+		<button class="create" id="create">모델 생성</button>
 		`
 	}
 
-	#makeVarListDIV() {
-		let html = '';
+	setSelectedX(values) {
+		this.#xVarList = values; //[1,2,3] 배열 형식
+	}
 
-		for(let variables of this.#varList) {
-			this.#featureNameList.push(variables.featureName)
+	#drawXListHtml() {
+		let html = ''
+		this.#xVarList.map((x) => {
 			html += `
-				<label class="switchLabel">
-					<div class="featureName">
-						${variables.featureName}
-					</div>
-					<div class="featureType" id="featureType">
-						${variables.featureType}
-					</div>
-					<div class="featureImportance" id="featureImportance">
-						${variables.feature_importance}
-					</div>
-					<div class="switchDIV">
-						<input class="switch" id="switch" role="switch" type="checkbox" checked/>
-					</div>
-				</label>
+				<div>
+					<p id="${x}">${x}</p>
+				</div>
 			`
-		}
+		});
+
 		return html;
-	}
-
-	setCheckedVarList() {
-		const $$switch = document.querySelectorAll("#switch");
-		const checkedVar = [];
-		for (let i = 0; i < $$switch.length; i++) {
-			if ($$switch[i].checked) {
-				checkedVar.push($$switch[i].parentElement.parentElement.childNodes[1].innerText);
-			}
-		}
-		return checkedVar;
-	}
-
-	async setVarList(fileName) {
-		const response = await API(`/files/${fileName}/data/feature/`, "get");
-		const status = response.status || response;
-		if (response.status === "success") {
-			return responseMessage[status] === "success" ? this.#varList = response.data : alert(responseMessage[status]);
-		}
 	}
 
 	async postModelData(data) {
@@ -154,15 +114,6 @@ class ToolPage {
     alert(responseMessage[status]);
 	}
 
-	async postTimeDiffData(data) {
-		const response = await API(`/files/${timeDiffName}/data/timeseries/`, "post", data);
-		const status = response.status || response;
-		responseMessage[status] === "success" ? location.replace("/file-list/") : alert(responseMessage[status]);
-	} 
-
-	getFeatureNameList() {
-		return this.#featureNameList;
-	}
 } 
 
 export default new ToolPage();

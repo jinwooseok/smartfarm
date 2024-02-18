@@ -121,8 +121,6 @@ button:hover{
   height: 30px;
   line-height: 26px;
 
-  /* display: -webkit-inline-box; */
-
 	display: flex;
 	flex-direction: row;
 	justify-content: space-evenly;
@@ -154,7 +152,6 @@ button:hover{
   white-space: nowrap;
 }
 
-.fieldsetDIV,
 .timeDIV{
 	width: 200px;
 	margin-right: 10px;
@@ -164,6 +161,21 @@ button:hover{
 	justify-content: space-evenly;	
 }
 
+.fieldsetDIV{
+	margin-right: 20px;
+}
+
+.tollDIV{
+	display: flex;
+	flex-direction: column;
+}
+
 fieldset {
 	border: none;
+	margin-bottom: 10px;
+}
+
+.buttonDIV {
+	width: 1000px;
+	margin : 20px auto;
 }
