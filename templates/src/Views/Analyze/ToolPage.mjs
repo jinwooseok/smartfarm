@@ -1,111 +1,119 @@
+import API from "/templates/src/Utils/API.mjs";
+import responseMessage from "/templates/src/Constant/responseMessage.mjs";
+
 class ToolPage {
-	#varList;
-	#featureNameList = [];
+
+	#xVarList;
 
 	templates() {
-		const switchHtml = this.#makeVarListDIV();
+
+		const xHtml = this.#drawXListHtml();
 		return `
 		<div class="rowDIV">
-			<div class="variableDIV">
-				<div class="columnList">
-					<div class="featureName">
-						변수 이름
-					</div>
-					<div class="featureType" id="featureType">
-						변수 타입
-					</div>
-					<div class="featureImportance" id=	"featureImportance">
-						변수 중요도
-					</div>
-					<div class="switchDIV" id="switchDIV">
-						선택
-					</div>
+
+			<fieldset class="xDIV">
+				<legend>x 값</legend>	
+				<div class="variableDIV">
+					${xHtml}
 				</div>
-				<div class="listDIV" id="listDIV">
-					${switchHtml}
-				</div>
-			</div>
+			</fieldset>
+
+
 			<div class="fieldsetDIV">
 				<fieldset class="yDIV">
 					<legend>y 값</legend>
-					<select name="yValue" id="yValue" class="yValue">
-					
-					</select>
-				</fieldset>
-
-				<fieldset class="typeDIV">
-					<legend>분석 종류</legend>
-					<select name="technique" id="technique" class="technique">
-						<option value="linear">선형회귀분석</option>
-						<option value="lstm">로지스틱회귀분석</option>
-						<option value="rf">랜텀포레스트</option>
-					</select>
+					<input type="text" name="yValueInput" class="yValueInput" id="yValueInput" disabled>
 				</fieldset>
 
 				<fieldset class="trainSizeDIV">
 					<legend>trainSize</legend>
-					<input type="text" name="trainSize" class="trainSize" id="trainSize" placeholder="0~1">
+					<input type="text" name="trainSize" class="trainSize" id="trainSize" value="0.7">
 				</fieldset>
 
 				<fieldset class="nameDIV">
 					<legend>모델 이름</legend>
 					<input type="text" name="modelName" class="modelName" id="modelName" placeholder="모델 이름">
 				</fieldset>
+			</div>
 
-				<button class="create" id="create">생성하기</button>
+			<div class="tollDIV">
+				<fieldset>
+					<legend>분석 도구 선택</legend>
+					<div class="toolSelectDIV" id="toolSelectDIV">
+						<input type="radio" name="classify" id="classify" value="classify"><label for="classify">분류</label>
+						<input type="radio" name="regress" id="regress" value="regress"><label for="regress">회귀</label>
+					</div>
+				</fieldset>
 			</div>
 		</div>
 		`
 	}
 
-	async setVarList(list) {
-		this.#varList = list;
-	}
+	onClickTimeDIff(id) {
+		if (id === "classify") {
+			return `
+			<fieldset class="timeDiffDIV">
+				<legend>분석 도구 선택</legend>
+				<div class="toolSelectDIV" id="toolSelectDIV">
+					<input type="radio" name="classify" id="classify" value="classify" checked><label for="classify">분류</label>
+					<input type="radio" name="regress" id="regress" value="regress"><label for="regress">회귀</label>
+				</div>
 
-	#makeVarListDIV() {
-		let html = '';
+				<fieldset class="typeDIV">
+					<legend>분석 종류</legend>
+					<select name="technique" id="technique" class="technique">
+						<option value="rf">랜텀포레스트</option>
+					</select>
+				</fieldset>
+			</fieldset>
 
-		for(let variables of this.#varList) {
-			this.#featureNameList.push(variables.featureName)
-			html += `
-				<label class="switchLabel">
-					<div class="featureName">
-						${variables.featureName}
-					</div>
-					<div class="featureType" id="featureType">
-						${variables.featureType}
-					</div>
-					<div class="featureImportance" id="featureImportance">
-						${variables.feature_importance}
-					</div>
-					<div class="switchDIV">
-						<input class="switch" id="switch" role="switch" type="checkbox" checked/>
-					</div>
-				</label>
+			<button class="create" id="create">모델 생성</button>
 			`
 		}
+		return `
+		<fieldset class="timeDiffDIV">
+			<legend>분석 도구 선택</legend>
+			<div class="toolSelectDIV" id="toolSelectDIV">
+				<input type="radio" name="classify" id="classify" value="classify"><label for="classify">분류</label>
+				<input type="radio" name="regress" id="regress" value="regress" checked><label for="regress">회귀</label>
+			</div>
+
+			<fieldset class="typeDIV">
+					<legend>분석 종류</legend>
+					<select name="technique" id="technique" class="technique">
+						<option value="linear">선형회귀분석</option>
+						<option value="lstm">로지스틱회귀분석</option>
+					</select>
+				</fieldset>
+		</fieldset>
+
+		<button class="create" id="create">모델 생성</button>
+		`
+	}
+
+	setSelectedX(values) {
+		this.#xVarList = values; //[1,2,3] 배열 형식
+	}
+
+	#drawXListHtml() {
+		let html = ''
+		this.#xVarList.map((x) => {
+			html += `
+				<div>
+					<p id="${x}">${x}</p>
+				</div>
+			`
+		});
+
 		return html;
 	}
 
-	setCheckedVarList() {
-		const $$switch = document.querySelectorAll("#switch");
-		const checkedVar = [];
-		for (let i = 0; i < $$switch.length; i++) {
-			if ($$switch[i].checked) {
-				checkedVar.push($$switch[i].parentElement.parentElement.childNodes[1].innerText);
-			}
-		}
-
-		return checkedVar;
+	async postModelData(data) {
+		const response = await API(`/analytics/${fileName}/model/`, "post", data);
+    const status = response.status || response;
+    alert(responseMessage[status]);
 	}
 
-	// 파일 정보 받기
-
-	// API 연동
-
-	getFeatureNameList() {
-		return this.#featureNameList;
-	}
 } 
 
 export default new ToolPage();

@@ -1,11 +1,11 @@
 import API from "/templates/src/Utils/API.mjs";
 import Logout from "/templates/src/Utils/Logout.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
-import { getFileNameList, setFileList } from "/templates/src/Utils/fileNameList.mjs";
+import { getFileNameList } from "/templates/src/Utils/fileNameList.mjs";
 import responseMessage from "/templates/src/Constant/responseMessage.mjs";
 
 import MergePage from "./MergePage.mjs";
-import VarSelectPage from "../Analyze/VarSelectPage.mjs";
+import VarSelectPage from "./VarSelectPage.mjs";
 
 const $logoutBtn = document.querySelector("#logoutBtn");
 $logoutBtn.addEventListener("click", Logout);
