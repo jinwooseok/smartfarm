@@ -13,9 +13,3 @@ def main_page(request):
     if user_id != None:
         return HttpResponse("<script>alert('올바르지 않은 접근입니다.');location.href='/file-list/';</script>")
     return render(request,'src/Views/Main/main.html')
-
-# @api_view(['GET'])
-# def download_guide(request):
-#     file_name = 'smartfarm_guidebook.pdf'
-#     return attach_file(file_name, os.path.join(settings.MEDIA_ROOT, file_name))
-
