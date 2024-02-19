@@ -4,12 +4,11 @@ from ...file.service.file_save_service import FileSaveService
 from ...file.service.temp_save_service import TempSaveService
 import pandas as pd
 class ShiftDataService():
-    def __init__(self, user, file_object, window_size, count, new_file_name, xValue, yValue):
+    def __init__(self, user, file_object, window_size, count, xValue, yValue):
         self.user = user
         self.file_object = file_object
         self.window_size = window_size
         self.count = count
-        self.new_file_name = new_file_name
         self.xValue = xValue
         self.yValue = yValue
         
@@ -20,7 +19,6 @@ class ShiftDataService():
                    ,file_object
                    ,serializer.validated_data["windowSize"]
                    ,serializer.validated_data["count"]
-                   ,serializer.validated_data["newFileName"]
                    ,serializer.validated_data["xValue"]
                    ,serializer.validated_data["yValue"])
     
