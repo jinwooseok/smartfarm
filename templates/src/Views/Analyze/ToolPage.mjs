@@ -2,7 +2,6 @@ import API from "/templates/src/Utils/API.mjs";
 import responseMessage from "/templates/src/Constant/responseMessage.mjs";
 
 class ToolPage {
-
 	#xVarList;
 
 	templates() {
@@ -46,6 +45,10 @@ class ToolPage {
 				</fieldset>
 			</div>
 		</div>
+		<div class="buttonDIV" id="buttonDIV">
+			<button class="nextPage" id="nextPage">다음</button>
+			<button class="prevPage" id="prevPage">이전</button>
+		</div>	
 		`
 	}
 
@@ -108,7 +111,21 @@ class ToolPage {
 		return html;
 	}
 
-	async postModelData(data) {
+	validateData(data) {
+		const {modelName, model, trainSize, yValue, xValue} = data;
+
+		if (modelName === "모델 이름" || modelName ==="") {
+			alert("이름을 정해주세요");
+			return;
+		}
+
+		if (trainSize > 0 || trainSize < 0) {
+			alert("trainSize는 0~1로 입력해주세요");
+			return;
+		}
+	}
+
+	async postModelData(fileName, data) {
 		const response = await API(`/analytics/${fileName}/model/`, "post", data);
     const status = response.status || response;
     alert(responseMessage[status]);

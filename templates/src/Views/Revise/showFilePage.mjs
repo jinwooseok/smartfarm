@@ -60,7 +60,8 @@ class ShowFilePage {
 
 	async setFileData() {
 		const response = await API(`/files/${this.#fileTitle}/data/`, "get");
-		this.#fileDate = response.data;
+		const status = response.status || response;
+		responseMessage[status] === "success" ? this.#fileDate = response.data : alert(responseMessage[status]);
 	}
 
 	showFile(element) {
