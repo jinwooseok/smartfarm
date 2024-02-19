@@ -3,6 +3,7 @@ import pandas as pd
 import requests
 from dateutil.relativedelta import relativedelta
 from ..exceptions.exceptions import *
+from common.decorators import logging_time
 # 일출,일몰 크롤링 모듈
         #
         # long: 경도
@@ -16,7 +17,7 @@ class GetSunCrawler():
         self.start_date = start_date
         self.end_date = end_date
         self.service_key = "KrL1x60Wlerl6EMB6sls2UUFYHp5PDj0jaRyBUDt%2Fh3ginr04Btpg%2BF8hCjIsE%2FyXHan%2BC7J3IkPLCekCdHT6A%3D%3D"
-        
+    @logging_time    
     def execute(self):
         start_date = self.start_date        
         end_date = self.end_date

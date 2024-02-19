@@ -20,7 +20,6 @@ class ETLProcessFactory():
         date_name = self.data.columns[0]
         self.data = self.data.dropna(subset=date_name)
         date_series = self.data.iloc[:, 0]
-
         self.data = DataProcess.drop_columns(self.data, [date_name])
         #날짜열은 날짜형식으로 변환 후 date_series로 관리
         date_series = DataProcess.date_converter(date_series)
@@ -77,7 +76,6 @@ class OutputProcess:
                 
         everyday=pd.date_range(date_series.min(), date_series.max(), freq='D')
         return_df=pd.DataFrame({"날짜":list(everyday),"생산량":[0]*len(everyday)})
-        print(return_df)
         backward_date=date_series.iloc[0]
         for idx, date in enumerate(date_series.iloc[1:]):
             mask = (return_df['날짜'] >= backward_date) & (return_df['날짜'] < date)#행추출

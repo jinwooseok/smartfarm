@@ -19,7 +19,6 @@ class TransABMSService():
         return cls(user
                    ,serializer.validated_data['columns']
                    ,serializer.validated_data['newFileName']
-                   ,file_object.start_index
                    ,file_object.file_root)
     
     def execute(self):
@@ -51,7 +50,7 @@ class TransABMSService():
             var_list.append(dic)
 
         #프로세스 선정
-        process_factory = ETLProcessFactory(df, self.file_type, '일시', self.interval, var = var_list)
+        process_factory = ETLProcessFactory(df, self.file_type, self.interval, var = var_list)
         #정적 메서드 핸들러
         result = process_factory.handler()
         #그렇게 컬럼 데이터를 만들고 농업전처리를 실행..하지만 이름은 맞춰줘야한다..

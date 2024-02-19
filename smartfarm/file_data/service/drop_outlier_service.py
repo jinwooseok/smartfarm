@@ -27,11 +27,10 @@ class ProcessOutlierService():
 
     @staticmethod
     def outlier_dropper(df):
-        drop_index = []
+        drop_index = set()
         for column in df.columns:
             numeric_column = DataProcess.to_numeric_or_none(df[column])
             if numeric_column is not None:
-                drop_index = drop_index+DataProcess.outlier_detector(numeric_column)
-
-        return DataProcess.drop_rows(df, list(set(drop_index))), drop_index
+                drop_index = drop_index.union(DataProcess.outlier_detector(numeric_column))
+        return df.drop(drop_index), drop_index
     

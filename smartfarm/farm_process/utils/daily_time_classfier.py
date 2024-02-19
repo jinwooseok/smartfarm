@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import datetime
 from .masks import *
+from common.decorators import logging_time
 class DailyTimeClassifier:
     def __init__(self, sun_df, date_series, t=2, noon=12):
         self.sun_df = sun_df
@@ -9,6 +10,7 @@ class DailyTimeClassifier:
         self.t = t
         self.noon = noon
     #일출일몰 데이터, 날짜 데이터
+    @logging_time
     def execute(self):
         sun_date = self.sun_df['날짜']
         sun_rise = self.sun_df['일출']
@@ -19,9 +21,9 @@ class DailyTimeClassifier:
         ment = f'일출전후{t}시간'
 
         noon_time = datetime.datetime.strptime(f"{self.noon}:00","%H:%M").time()
-        day_night_series = pd.Series(np.zeros(len(date_series)))
-        srise_to_noon_series = pd.Series(np.zeros(len(date_series)))
-        srise_diff_series = pd.Series(np.zeros(len(date_series)))
+        day_night_series = pd.Series([None] * len(date_series))
+        srise_to_noon_series = pd.Series([None] * len(date_series))
+        srise_diff_series = pd.Series([None] * len(date_series))
         
         day_night_series.name = "day_night"
         srise_to_noon_series.name = "srise_to_noon"

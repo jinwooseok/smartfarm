@@ -3,6 +3,7 @@ import numpy as np
 from .masks import *
 from ..exceptions.exceptions import VarDataException
 from ...file_data.utils.process import DataProcess
+from common.decorators import logging_time
 class FeatureGenerator():
     def __init__(self, data, interval, var=None):
         self.data = data
@@ -26,7 +27,7 @@ class FeatureGenerator():
             'GDD' : self.GDD,
             '온도차' : self.sub
         }
-        
+    @logging_time
     def execute(self):
         data=self.data
         return_list = []
@@ -79,7 +80,6 @@ class FeatureGenerator():
         else:
             return 0
     def sub(self, data):
-        print(data)
         if self.is_valid(data)==False:
             return np.nan
         return max(data) - min(data)
