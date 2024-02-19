@@ -13,14 +13,25 @@ $logoutBtn.addEventListener("click", Logout);
 const totalData = {
   x: [],
   y: '',
+  fileData: "",
+  timeDiffData: "",
+  time: false,
 }
 
 const fileName = JSON.parse(localStorage.getItem("fileTitle"));
 
-const clickEvent = async (event, id,) => {
+const checkRadioValue = (htmlTag) => {
+  for (let i = 0; i < htmlTag.length; i++) {
+    if (htmlTag[i].checked) {
+      return htmlTag[i].value;
+    }
+  }
+}
 
+const clickEvent = async (event, id,) => {
   if (id === "nextPage" || id === "prevPage") {
-    confirm(`이동 합니다.`) === true ? changeProgress(id) : null;		
+    confirm(`이동 합니다.`) === true ? changeProgress(id) : null;
+    return;
 	}	
 
   if (id === "create") {
@@ -30,9 +41,10 @@ const clickEvent = async (event, id,) => {
       trainSize: document.querySelector(".trainSize").value,
       yValue: totalData.y,
       xValue: JSON.stringify(totalData.x),
+      fileData: totalData.time ? JSON.stringify(totalData.timeDiffData) : JSON.stringify(totalData.fileData),
     };
-    console.log("create", data)
-    // await ToolPage.postModelData(data);
+    await ToolPage.postModelData(fileName, data);
+    return;
   }
 
   if (
@@ -41,6 +53,7 @@ const clickEvent = async (event, id,) => {
     ) {
     const $timeDIV = document.querySelector(".timeDIV");
     $timeDIV.innerHTML = VarPage.onClickTimeDIff(id);
+    return;
   }
 
   if (
@@ -49,17 +62,20 @@ const clickEvent = async (event, id,) => {
     ) {
     const $tollDIV = document.querySelector(".tollDIV");
     $tollDIV.innerHTML = ToolPage.onClickTimeDIff(id);
+    return;
   }
 
   if (id === "timeDiffCreate") {
     const data = {
-      feature: JSON.stringify(VarPage.setCheckedVarList()),
+      xValue: JSON.stringify(VarPage.setCheckedVarList()),
+      yValue: document.querySelector(".yValue").options[document.querySelector(".yValue").selectedIndex]?.value,
       windowSize: document.querySelector("#windowSize").value,
       count: document.querySelector("#count").value,
-      newFileName: document.querySelector(".modelName").value,
+      fileData: JSON.stringify(totalData.fileData),
     };
-    console.log("timeDiffCreate", data)
-    // await VarPage.postTimeDiffData(data);
+    totalData.timeDiffData = await VarPage.postTimeDiffData(fileName, data);
+    totalData.timeDiffData !== "" ? totalData.time = true : totalData.time = false;
+    return;
   }
 }
 
@@ -98,33 +114,39 @@ window.addEventListener("click", (event) => {
 
 const changeDiv = async (nowProgress) => {
 	if (nowProgress === 0) { // 모델 설정 - 변수
-    await VarPage.setVarList(fileName);
+    if (VarPage.getVarList() === ""){
+      await VarPage.setVarList(fileName);
+    }
     const $workDIV = document.querySelector(".workDIV");
     $workDIV.innerHTML = VarPage.templates();
   
     const $yValue = document.querySelector(".yValue");
+    $yValue.innerHTML = "";
     setFileList($yValue, VarPage.getFeatureNameList()); 
+
+    totalData.time = false;
+    totalData.timeDiffData = "";
 	}
 
 	if (nowProgress === 1) { // 모델 설정 - 도구
-    totalData.x = VarPage.setCheckedVarList();
+    const timeDIffRadio = checkRadioValue(document.querySelectorAll('input[name="time"]'));
+    if (totalData.time && timeDIffRadio === "use") {
+      totalData.x = Object.keys(totalData.timeDiffData[0]);
+    } else {
+      totalData.x = VarPage.setCheckedVarList();
+    }
     totalData.y = document.querySelector(".yValue").options[document.querySelector(".yValue").selectedIndex]?.value
 
-		ToolPage.setSelectedX(VarPage.getXValues());
+		ToolPage.setSelectedX(totalData.x);
     const $workDIV = document.querySelector(".workDIV");
     $workDIV.innerHTML =ToolPage.templates();
 
     const $yValueInput = document.querySelector(".yValueInput");
     $yValueInput.value = totalData.y;
 	}
-
 }
 
 window.onload = async () => {
-  await VarPage.setVarList(fileName);
-  const $workDIV = document.querySelector(".workDIV");
-  $workDIV.innerHTML = VarPage.templates();
-
-  const $yValue = document.querySelector(".yValue");
-  setFileList($yValue, VarPage.getFeatureNameList()); 
+  totalData.fileData = await VarPage.setFileData(fileName);
+  changeDiv(0)
 }
