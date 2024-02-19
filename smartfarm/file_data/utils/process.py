@@ -62,10 +62,10 @@ class DataProcess:
                 date_series = pd.to_datetime(date_series,format='mixed',yearfirst=True,errors='coerce')
             elif date_type in [int, np.int64]:
                 date_series = pd.to_datetime(date_series.astype(str),format='mixed',yearfirst=True,errors='coerce')
-            elif date_type in [float, np.float64]:
-                excel_base_date = datetime(1899, 12, 30)
-                excel_base_date + timedelta(days=excel_date)
-                df['날짜열'] = df['날짜열'].apply(convert_excel_date)
+            # elif date_type in [float, np.float64]:
+            #     excel_base_date = datetime(1899, 12, 30)
+            #     excel_base_date + timedelta(days=excel_date)
+            #     df['날짜열'] = df['날짜열'].apply(convert_excel_date)
             elif date_type == "datetime64[ns]" or date_type == "<M8[ns]":    
                 date_series = pd.to_datetime(date_series,format='mixed',yearfirst=True,errors='coerce')
             else:
