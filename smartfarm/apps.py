@@ -7,3 +7,6 @@ class NmhAppConfig(AppConfig):
     
     def ready(self):
         from .file.utils import signals  # 시그널 파일을 임포트합니다.
+        from .data_analytics.utils import signals
+        # from . import scheduler
+        # scheduler.start()
