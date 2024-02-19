@@ -41,8 +41,8 @@ class CreateModelService():
         # 모델 생성 및 학습
         model = self.model_handler(X_train, y_train, random_state)
         result = model.predict(X_test, y_test)
-        if LearnedModel.objects.filter(user=self.file_object.user, model_name=self.model_name).exists():
-            LearnedModel.objects.filter(user=self.file_object.user, model_name=self.model_name).delete()
+        if LearnedModel.objects.filter(user=self.file_object.user, original_file_name = self.file_object.file_title).exists():
+            LearnedModel.objects.filter(user=self.file_object.user, original_file_name = self.file_object.file_title).delete()
         model_object = SaveModelService(self.file_object, model.learned_model, self.model_name, model.meta()).execute()
         result['model_name'] = model_object.model_name
         return result
