@@ -2,12 +2,12 @@ import API from "/templates/src/Utils/API.mjs";
 import responseMessage from "/templates/src/Constant/responseMessage.mjs";
 
 class VarPage {
-	#varList;
+	#varList = "";
 	#featureNameList = [];
 	#xValues = [];
 
 	templates() {
-		const switchHtml = this.#makeVarListDIV();
+		const switchHtml = this.#makeVarListDIV(); // 목록이 두번 만들어짐
 		return `
 		<div class="rowDIV">
 			<div class="variableDIV">
@@ -71,12 +71,12 @@ class VarPage {
 
 			<fieldset class="countDIV">
 				<legend>count</legend>
-				<input type="number" name="count" class="count" id="count" placeholder="count">
+				<input type="number" name="count" class="count" id="count" value="1">
 			</fieldset>
 
 			<fieldset class="windowSizeDIV">
 				<legend>windowSize</legend>
-				<input type="number" name="windowSize" class="windowSize" id="windowSize" placeholder="windowSize">
+				<input type="number" name="windowSize" class="windowSize" id="windowSize" value="1">
 			</fieldset>
 
 			<button class="timeDiffBtn" id="timeDiffCreate">시차변수 생성</button>
@@ -97,7 +97,7 @@ class VarPage {
 
 	#makeVarListDIV() {
 		let html = '';
-
+		this.#featureNameList = [];
 		for(let variables of this.#varList) {
 			this.#featureNameList.push(variables.featureName)
 			html += `
@@ -129,7 +129,7 @@ class VarPage {
 			}
 		}
 		this.#xValues = checkedVar;
-		return checkedVar
+		return checkedVar;
 	}
 
 	async setVarList(fileName) {
@@ -140,13 +140,24 @@ class VarPage {
 		}
 	}
 
-	async postTimeDiffData(data) {
+	async postTimeDiffData(timeDiffName, data) {
 		const response = await API(`/files/${timeDiffName}/data/timeseries/`, "post", data);
 		const status = response.status || response;
-		responseMessage[status] === "success" ? this.#xValues = response.data : alert(responseMessage[status]);
-	} 
+		return responseMessage[status] === "success" ? response.data : alert(responseMessage[status]);
+	}
+
+	async setFileData(fileTitle) {
+		const response = await API(`/files/${fileTitle}/data/`, "get");
+		const status = response.status || response;
+		return responseMessage[status] === "success" ? response.data : alert(responseMessage[status]);
+	}
+
+	getVarList() {
+		return this.#varList;
+	}
 
 	getFeatureNameList() {
+		console.log(this.#featureNameList)
 		return this.#featureNameList;
 	}
 

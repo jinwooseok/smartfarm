@@ -15,5 +15,3 @@ export const setFileList = ($div, data, fileName='') => {
     }
   });
 };
-
-// A && B = A가 true면 B확인, A가false 면 
