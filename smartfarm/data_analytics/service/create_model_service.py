@@ -7,6 +7,7 @@ from ...file.utils.utils import search_file_absolute_path
 from .save_model_service import SaveModelService
 from ..utils.rf_classifier import CustomRandomForestClassifier
 from ..utils.linear import CustomLinearRegression
+import pandas as pd
 
 class CreateModelService():
     def __init__(self, model_name, x_value, y_value, model, file_object, file_data, train_size=0.7):
@@ -31,7 +32,8 @@ class CreateModelService():
     def execute(self):
         # file_absolute_path = search_file_absolute_path(instance.file_root)
         # df = GetFileDataService.file_to_df(file_absolute_path)
-        df = self.file_data
+        json_data = self.file_data
+        df = pd.DataFrame(json_data)
         df = df.dropna(axis=0)
         x_df = df[self.x_value]
         y_df = df[self.y_value]

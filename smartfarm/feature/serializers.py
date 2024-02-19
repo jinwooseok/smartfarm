@@ -19,7 +19,7 @@ class FileFeatureSerializer(serializers.ModelSerializer):
         
         return representation
 
-class ModelFeatureSerializer(serializers.Serializer):
+class ModelFeatureSerializer(serializers.ModelSerializer):
     class Meta:
         model = ModelFeature
         fields = ['model','feature_name','feature_type','weight']

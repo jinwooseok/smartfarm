@@ -1,6 +1,6 @@
 from django.db.models.signals import pre_delete, post_save
 from django.dispatch import receiver
-from ...models import File, Temp
+from ...models import File, Temp, LearnedModel
 import os
 from ..exceptions.file_exception import *
 from ..utils.utils import *
@@ -16,7 +16,11 @@ def delete_file(sender, instance, **kwargs):
 def delete_temp(sender, instance, **kwargs):
     delete_local_file(search_file_absolute_path(instance.file_root))
     
-
+@receiver(pre_delete, sender=LearnedModel)
+def delete_file(sender, instance, **kwargs):
+    delete_local_file(search_file_absolute_path(instance.model_root))
+    delete_local_file(search_file_absolute_path(instance.model_meta_root))
+    
 def delete_local_file(file_path):
     try:
         os.remove(search_file_absolute_path(file_path))
