@@ -41,10 +41,9 @@ class FileSaveService():
             self.file_data = self.file_data[self.start_index-1:]
             self.start_index = 1
         
-        if self.date_column is None:
-            self.date_column = self.file_data.columns[0]
-        
-        if self.date_column != self.file_data.columns[0]:
+        if self.date_column == 'null':
+            pass
+        elif self.date_column != self.file_data.columns[0]:
             date_series = self.file_data.pop(self.date_column)
             self.file_data.insert(0, self.date_column, date_series)
         self.data_to_csv(self.file_title, self.file_data)
