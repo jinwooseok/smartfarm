@@ -3,6 +3,7 @@ from ...file.utils.utils import search_file_absolute_path
 from ...file.service.file_save_service import FileSaveService
 from ...file.service.temp_save_service import TempSaveService
 import pandas as pd
+from ..utils.process import DataProcess
 class ShiftDataService():
     def __init__(self, user, file_object, window_size, count, xValue, yValue):
         self.user = user
@@ -41,7 +42,7 @@ class ShiftDataService():
         shifted_dfs.append(y_df)
         merged_df = pd.concat(shifted_dfs, axis=1)
         #df = self.rolling_data(df, self.window_size, self.date_column)
-        TempSaveService(self.user, self.file_object.file_title, merged_df, statuses=[5]).execute()
+        return DataProcess.df_to_json_object(merged_df)
     
     @staticmethod
     def rolling_data(df, window_size, date_column):

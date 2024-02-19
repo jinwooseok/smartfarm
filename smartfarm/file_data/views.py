@@ -65,8 +65,8 @@ class FileDataViewSet(viewsets.ModelViewSet):
         serializer = ProcessTimeSeriesSerializer(data=data)
 
         serializer = serializer_validator(serializer)
-        ShiftDataService.from_serializer(serializer, user_id).execute()
-        return Response(ResponseBody.generate(), status=200)
+        return Response(ResponseBody.generate(
+            data=ShiftDataService.from_serializer(serializer, user_id).execute()), status=200)
 
 class DataMergeViewSet(viewsets.GenericViewSet):
     def page(self, request):

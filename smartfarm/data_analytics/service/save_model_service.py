@@ -3,6 +3,7 @@ from django.db import transaction
 from ...models import LearnedModel, ModelFeature, File
 import copy
 import json
+import datetime
 class SaveModelService(FileSaveService):
     def __init__(self, file_object, model, model_name, model_meta) -> "SaveModelService":
         self.model = model
@@ -33,10 +34,4 @@ class SaveModelService(FileSaveService):
         return model_form
         
     def process_duplicated_file_name(self, user, file_title, suffix):
-        file_title_copy = copy.copy(file_title)
-        unique=1
-        queryset = LearnedModel.objects.filter(user=user)
-        while queryset.filter(model_name=file_title_copy+suffix).exists():
-            file_title_copy=file_title+"_"+str(unique)
-            unique+=1
-        return file_title_copy + suffix
+        return file_title+"_" + datetime.datetime.now().strftime("%Y%m%d%H%M%S") + suffix
