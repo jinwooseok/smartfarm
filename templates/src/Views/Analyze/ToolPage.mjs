@@ -5,18 +5,15 @@ class ToolPage {
 	#xVarList;
 
 	templates() {
-
 		const xHtml = this.#drawXListHtml();
 		return `
 		<div class="rowDIV">
-
 			<fieldset class="xDIV">
 				<legend>x 값</legend>	
 				<div class="variableDIV">
 					${xHtml}
 				</div>
 			</fieldset>
-
 
 			<div class="fieldsetDIV">
 				<fieldset class="yDIV">
@@ -44,9 +41,12 @@ class ToolPage {
 					</div>
 				</fieldset>
 			</div>
+
+			<div class="modelResultDIV">
+			</div>
 		</div>
 		<div class="buttonDIV" id="buttonDIV">
-			<button class="nextPage" id="nextPage">다음</button>
+			<button class="nextPage analyze" id="nextPage">분석</button>
 			<button class="prevPage" id="prevPage">이전</button>
 		</div>	
 		`
@@ -94,6 +94,23 @@ class ToolPage {
 		`
 	}
 
+	drawModelResult(result) {
+		return `
+			<div class="modelDIV">
+				<div class="resultTitle">모델 이름</div>
+				<div class="resultText">${result["model"]}</div>
+			</div>
+			<div class="MSEDIV">
+				<div class="resultTitle">MSE</div>
+				<div class="resultText">${result["mean_squared_error"]}</div>
+			</div>
+			<div class="R2DIV">
+				<div class="resultTitle">R2</div>
+				<div class="resultText">${result["r2_score"]}</div>
+			</div>
+		`
+	}
+
 	setSelectedX(values) {
 		this.#xVarList = values; //[1,2,3] 배열 형식
 	}
@@ -128,7 +145,7 @@ class ToolPage {
 	async postModelData(fileName, data) {
 		const response = await API(`/analytics/${fileName}/model/`, "post", data);
     const status = response.status || response;
-    alert(responseMessage[status]);
+		return responseMessage[status] === "success" ? response.data : alert(responseMessage[status]);
 	}
 
 } 
