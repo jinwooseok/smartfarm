@@ -2,12 +2,11 @@ import API from "/templates/src/Utils/API.mjs";
 import responseMessage from "/templates/src/Constant/responseMessage.mjs";
 
 class VarPage {
-	#varList = "";
-	#featureNameList = [];
-	#xValues = [];
+	#fileFeatureInfo = ""; // 파일 변수 중요도 및 특징 겍체
+	#featureNameList = []; // 파일 변수 이름 목록
+	#fileData = "";
 
 	templates() {
-		const switchHtml = this.#makeVarListDIV(); // 목록이 두번 만들어짐
 		return `
 		<div class="rowDIV">
 			<div class="variableDIV">
@@ -26,7 +25,7 @@ class VarPage {
 					</div>
 				</div>
 				<div class="listDIV" id="listDIV">
-					${switchHtml}
+			
 				</div>
 			</div>
 
@@ -46,8 +45,6 @@ class VarPage {
 						</div>
 						</select>
 					</fieldset>
-
-					<button class="timeDiffBtn" id="timeDiffCreate" disabled>시차변수 생성</button>
 				</div>
 			</div>
 		</div>
@@ -74,11 +71,6 @@ class VarPage {
 				<input type="number" name="count" class="count" id="count" value="1">
 			</fieldset>
 
-			<fieldset class="windowSizeDIV">
-				<legend>windowSize</legend>
-				<input type="number" name="windowSize" class="windowSize" id="windowSize" value="1">
-			</fieldset>
-
 			<button class="timeDiffBtn" id="timeDiffCreate">시차변수 생성</button>
 			`
 		}
@@ -90,26 +82,25 @@ class VarPage {
 				<input type="radio" name="time" id="use" value="use" ><label for="use">사용</label>
 			</div>
 		</fieldset>
-
-		<button class="timeDiffBtn" id="timeDiffCreate" disabled>시차변수 생성</button>
 		`
 	}
 
-	#makeVarListDIV() {
-		let html = '';
+	makeVarListDIV(list) {
+		console.log("makeVarListDIV 변수 목록", list)
+		let html= "";
 		this.#featureNameList = [];
-		for(let variables of this.#varList) {
-			this.#featureNameList.push(variables.featureName)
+		for(let variables of list) {
+			this.#featureNameList.push(variables.featureName);
 			html += `
 				<label class="switchLabel">
 					<div class="featureName">
 						${variables.featureName}
 					</div>
 					<div class="featureType" id="featureType">
-						${variables.featureType}
+						${variables.type}
 					</div>
 					<div class="featureImportance" id="featureImportance">
-						${variables.feature_importance}
+						${variables.importance}
 					</div>
 					<div class="switchDIV">
 						<input class="switch" id="switch" role="switch" type="checkbox" checked/>
@@ -128,15 +119,22 @@ class VarPage {
 				checkedVar.push($$switch[i].parentElement.parentElement.childNodes[1].innerText);
 			}
 		}
-		this.#xValues = checkedVar;
 		return checkedVar;
 	}
 
-	async setVarList(fileName) {
+	async setFileFeatureInfo(fileName) {
 		const response = await API(`/files/${fileName}/data/feature/`, "get");
 		const status = response.status || response;
 		if (response.status === "success") {
-			return responseMessage[status] === "success" ? this.#varList = response.data : alert(responseMessage[status]);
+			return responseMessage[status] === "success" ? this.#fileFeatureInfo = response.data : alert(responseMessage[status]);
+		}
+	}
+
+	async setImportanceOfFeature(fileName, data) {
+		const response = await API(`/files/${fileName}/data/feature/`, "post", data);
+		const status = response.status || response;
+		if (response.status === "success") {
+			return responseMessage[status] === "success" ? this.#fileFeatureInfo = response.data : alert(responseMessage[status]);
 		}
 	}
 
@@ -149,20 +147,19 @@ class VarPage {
 	async setFileData(fileTitle) {
 		const response = await API(`/files/${fileTitle}/data/`, "get");
 		const status = response.status || response;
-		return responseMessage[status] === "success" ? response.data : alert(responseMessage[status]);
+		return responseMessage[status] === "success" ? this.#fileData = response.data : alert(responseMessage[status]);
 	}
 
-	getVarList() {
-		return this.#varList;
+	getFileFeatureInfo() {
+		return this.#fileFeatureInfo;
 	}
 
 	getFeatureNameList() {
-		console.log(this.#featureNameList)
 		return this.#featureNameList;
 	}
 
-	getXValues() {
-		return this.#xValues;
+	getFileData() {
+		return this.#fileData;
 	}
 } 
 
