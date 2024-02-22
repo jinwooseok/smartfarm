@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     #크로스도메인 보안 관련
     'corsheaders',
     'rest_framework',
-    'drf_yasg',
 
 ]
 

@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from rest_framework import exceptions,viewsets
 from rest_framework.response import Response
-from drf_yasg.utils import swagger_auto_schema
 
 from common.response import ResponseBody
 from .serializers import *
@@ -27,8 +26,7 @@ class SignUpViewSet(viewsets.GenericViewSet):
         serializer = serializer_validator(serializer)
         SaveUserService.from_serializer(serializer).execute()
         return Response(ResponseBody.generate(),status=201)
-    
-    @swagger_auto_schema(request_body=EmailValidationSerializer)
+
     def valid_email(self, request):
         serializer = EmailValidationSerializer(data=request.data)
         serializer = serializer_validator(serializer)
@@ -43,7 +41,6 @@ class SignInViewSet(viewsets.GenericViewSet):
             return HttpResponse("<script>alert('올바르지 않은 접근입니다.');location.href='/file-list/';</script>")
         return render(request, 'src/Views/Login/login.html')
     
-    @swagger_auto_schema(request_body=SignInSerializer)
     def sign_in(self, request):
         serializer = SignInSerializer(data=request.data)
 

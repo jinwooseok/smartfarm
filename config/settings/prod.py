@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'users',
     #크로스도메인 보안 관련
     'corsheaders',
+    'rest_framework',
 
 ]
 
@@ -166,9 +167,57 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880
 DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 
 REST_FRAMEWORK = {
-   'DEFAULT_AUTHENTICATION_CLASSES': (
-   'rest_framework.authentication.TokenAuthentication',
-   )
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+    'EXCEPTION_HANDLER': 'common.base_exception_handler.base_exception_handler',
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE':10
+}
+
+DEFAULT_LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        }
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+        },
+        'django.server': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'django.server',
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'debug.log')
+            }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console','file'],
+            'level': 'INFO',
+        },
+        'django.server': {
+            'handlers': ['django.server','file'],
+            'level': 'INFO',
+            'propagate': False,
+        }
+    }
 }
 
 CACHES = {
@@ -180,6 +229,15 @@ CACHES = {
         }
     }
 }
-
-SESSION_COOKIE_AGE = 600
+ESSION_COOKIE_AGE = 6000
 SESSION_SAVE_EVERY_REQUEST = True
+
+USE_ETAGS = False
+
+# SESSION_COOKIE_SECURE = True
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_CREDENTIALS = True
+
+SESSION_COOKIE_SAMESITE = None
