@@ -4,9 +4,7 @@ import numpy as np
 def calculate_correlation(df, var1, var2):
     type_var1 = df[var1].dtype
     type_var2 = df[var2].dtype
-    print(type_var1, type_var2)
     if type_var1 in ['int64','float64'] and type_var2 in ['int64','float64']: # 연속형 - 연속형
-        print(pearsonr(df[var1], df[var2])[0])
         return round(pearsonr(df[var1], df[var2])[0], 6)
 
     elif type_var1 == 'object' and type_var2 == 'object': # 범주형 - 범주형
