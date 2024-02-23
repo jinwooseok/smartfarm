@@ -27,6 +27,7 @@ const clickEvent = async (event, id,) => {
     confirm(`이동 합니다.`) === true ? changeProgress(id) : null;
 
     if (event.target.classList.contains("analyze")) {
+
       Loading.StartLoading();
       const data = {
         yValue: globalData.y,
@@ -79,11 +80,12 @@ const clickEvent = async (event, id,) => {
       fileData: JSON.stringify(VarPage.getFileData()),
     };
     const response = await ToolPage.postModelData(fileName, data); // 결과
-    const $modelResultDIV = document.querySelector(".modelResultDIV");
-    $modelResultDIV.style.display = "flex";
-    $modelResultDIV.innerHTML = ToolPage.drawModelResult(response);
-
-    document.querySelector(".analyze").disabled = false;
+    if (response) {
+      const $modelResultDIV = document.querySelector(".modelResultDIV");
+      $modelResultDIV.style.display = "flex";
+      $modelResultDIV.innerHTML = ToolPage.drawModelResult(response);
+      document.querySelector(".analyze").disabled = false;
+    }
 
     return;
   }
