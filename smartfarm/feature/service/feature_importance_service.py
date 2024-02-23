@@ -17,6 +17,7 @@ class FeatureImportanceService:
     def execute(self):
         df = pd.DataFrame(self.data)
         response = []
+        print(self.x_value)
         for idx, name in enumerate(self.x_value):
             feature_importance = calculate_correlation(df, name, self.y_value)
             if feature_importance is not None and np.isnan(feature_importance):
@@ -31,6 +32,6 @@ class FeatureImportanceService:
         return {
             "featureOrder": feature_order,
             "featureName": feature_name,
-            "featureType": feature_type,
-            "featureImportance": feature_importance
+            "type": feature_type,
+            "importance": feature_importance
         }

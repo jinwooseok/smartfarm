@@ -1,18 +1,19 @@
-from django.shortcuts import render
+import numpy as np
 import pandas as pd
-#분석도구들을 모아놓은 파일
-import statsmodels.api as sm  
+#분석도구들을 모아놓은 파회귀 모델 종류일
+from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 class CustomLinearRegression:
     def __init__(self, x_dataset, y_dataset, random_state):
-        self.model = sm.OLS
+        self.model = LinearRegression()
         self.learned_model = None
         self.x_dataset = x_dataset
         self.y_dataset = y_dataset
         self.random_state = random_state
+        self.model_name = 'Linear Regression'
         
     def fit(self):
-        self.learned_model = self.model(endog=self.y_dataset, exog=self.x_dataset).fit()
+        self.learned_model = self.model.fit(self.x_dataset, self.y_dataset)
         return self.learned_model
     
     def feature_importances(self):
@@ -20,28 +21,31 @@ class CustomLinearRegression:
     
     def meta(self):
         return {
-                'model' : 'Linear Regression',
-                'feature_names': list(self.x_dataset.columns),
-                'target_names': self.y_dataset.name,
-                'model_weights': self.learned_model.params.values.tolist(),
-                'random_state': self.random_state
-            }
+            'model': self.model_name,
+            'featureNames': list(self.x_dataset.columns),
+            'targetNames': self.y_dataset.name,
+            'randomState': self.random_state
+        }
     
     def predict(self, x_test, y_test):
         y_pred = self.learned_model.predict(x_test)
-        y_pred.name = y_test.name + '_pred'
+        y_pred = np.round(y_pred, decimals=4)
+        
+        x_test = x_test.reset_index(drop=True)
+        y_test = y_test.reset_index(drop=True)
+        y_pred = pd.Series(y_pred, name=y_test.name + '_pred').reset_index(drop=True)
+        
         # 예측 결과 평가
         mse = mean_squared_error(y_test, y_pred)
         r2 = r2_score(y_test, y_pred)
-
         # 추가적인 예측 결과 리턴
         return {
-            'model' : 'Linear Regression',
+            'model' : self.model_name,
             'featureNames': list(self.x_dataset.columns),
             'targetNames': self.y_dataset.name,
             'randomState': self.random_state,
-            'MSE': mse,
-            'R2': r2,
+            'MSE': round(mse, 4),
+            'R2': round(r2, 4),
             'testData': pd.concat([x_test, y_test, y_pred], axis=1).to_dict(orient='records'),
             'yPred': y_pred.tolist(),
             'y': y_test.tolist()

@@ -5,7 +5,7 @@ from ...file_data.service.get_file_data_service import GetFileDataService
 from ...file_data.service.get_temp_data_service import GetTempDataService
 from ...file.utils.utils import search_file_absolute_path
 from .save_model_service import SaveModelService
-from ..utils.rf_classifier import CustomRandomForestClassifier
+from ..utils.rf_model import CustomRandomForestClassifier
 from ..utils.linear import CustomLinearRegression
 import pandas as pd
 
@@ -48,9 +48,9 @@ class CreateModelService():
             if LearnedModel.objects.filter(user=self.file_object.user, original_file_name = self.file_object.file_title).exists():
                 LearnedModel.objects.filter(user=self.file_object.user, original_file_name = self.file_object.file_title).delete()
             model_object = SaveModelService(self.file_object, model.learned_model, self.model_name, model.meta()).execute()
-            result['model_name'] = model_object.model_name
+            result['model_file_name'] = model_object.model_name
         else:
-            result['model_name'] = self.model_name
+            result['model_file_name'] = self.model_name
         return result
     
     def model_handler(self, x_train, y_train, random_state=42):

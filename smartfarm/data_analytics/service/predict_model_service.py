@@ -1,4 +1,4 @@
-from ..utils.rf_classifier import CustomRandomForestClassifier
+from ..utils.rf_model import CustomRandomForestClassifier
 from ..utils.linear import CustomLinearRegression
 import pickle
 class PredictModelService:
