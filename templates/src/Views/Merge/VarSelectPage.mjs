@@ -38,11 +38,8 @@ class VarSelectPage {
 		const list = this.#setCheckedVarList();
 		let html = '';
 		for(let text of list) {
-			html += `
-				<p>${text}</p>
-			`
+			html += `<p>${text}</p>`;
 		}
-
 		return html;
 	}
 
