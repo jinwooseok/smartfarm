@@ -201,6 +201,10 @@ button:hover{
   white-space: nowrap;
 }
 
+.switchLabel{
+	overflow-y: hidden;
+}
+
 .timeDIV{
 	width: 200px;
 	margin-right: 10px;
@@ -240,7 +244,7 @@ fieldset {
 }
 
 .resultDIV{
-	height: 400px;
+	height: 450px;
 }
 
 .resultDIV .modelResultDIV{
