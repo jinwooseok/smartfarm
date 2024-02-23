@@ -4,6 +4,7 @@ from rest_framework.views import exception_handler
 from rest_framework.response import Response
 from .base_exception import CustomBaseException
 from .exception_codes import STATUS_RSP_INTERNAL_ERROR
+from django.http import Http404
 import logging
 import traceback
 def base_exception_handler(exc, context):
@@ -39,6 +40,10 @@ def base_exception_handler(exc, context):
             status_code = 404
             code = response.status_code
             msg = exc.detail
+        elif isinstance(exc, Http404):
+            status_code = 404
+            code = response.status_code
+            msg = "페이지가 존재하지 않습니다."
         elif isinstance(exc, exceptions.MethodNotAllowed):
             status_code = 403
             code = response.status_code
