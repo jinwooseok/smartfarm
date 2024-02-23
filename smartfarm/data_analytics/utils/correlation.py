@@ -1,28 +1,40 @@
 import pandas as pd
-from scipy.stats import pearsonr, pointbiserialr, chi2_contingency, cramer_v
-
+from scipy.stats import pearsonr, pointbiserialr, chi2_contingency
+import numpy as np
 def calculate_correlation(df, var1, var2):
     type_var1 = df[var1].dtype
     type_var2 = df[var2].dtype
-    
-    if type_var1 == 'int64' and type_var2 == 'int64':
-        # 연속형 - 연속형
-        correlation_coefficient, _ = pearsonr(df[var1], df[var2])
-        return correlation_coefficient
+    print(type_var1, type_var2)
+    if type_var1 in ['int64','float64'] and type_var2 in ['int64','float64']: # 연속형 - 연속형
+        print(pearsonr(df[var1], df[var2])[0])
+        return pearsonr(df[var1], df[var2])[0]
 
-    elif type_var1 == 'object' and type_var2 == 'object':
-        # 범주형 - 범주형
+    elif type_var1 == 'object' and type_var2 == 'object': # 범주형 - 범주형
         contingency_table = pd.crosstab(df[var1], df[var2])
-        chi2, _, _, _ = chi2_contingency(contingency_table)
+        if contingency_table.shape[0]==2:
+            correct=False
+        else:
+            correct=True
+        chi2 = chi2_contingency(contingency_table, correction=correct)[0]
         
-        if len(contingency_table) == 2:
-            # 범주 2개인 경우 phi 상관계수
+        if len(df[var1].value_counts())==1 :
+            return None
+        elif len(df[var2].value_counts())==1:
+            return None
+        
+        elif len(contingency_table) == 2:        # 범주 2개인 경우 phi 상관계수
             phi_coefficient = (chi2 / len(df))**0.5
             return phi_coefficient
-        else:
-            # 범주 3개 이상인 경우 cramer's v
-            cramer_v_coefficient = (chi2 / (len(df) * (min(len(contingency_table), len(contingency_table.columns)) - 1)))**0.5
-            return cramer_v_coefficient
+        
+        else:   
+            n = sum(contingency_table.sum())
+            phi2 = chi2/n
+            r,k = contingency_table.shape
+            phi2corr = max(0, phi2 - ((k-1)*(r-1))/(n-1))    
+            rcorr = r - ((r-1)**2)/(n-1)
+            kcorr = k - ((k-1)**2)/(n-1)
+            result=np.sqrt(phi2corr / min( (kcorr-1), (rcorr-1)))
+            return round(result,6)
 
     elif (type_var1 == 'int64' and type_var2 == 'object') or (type_var1 == 'object' and type_var2 == 'int64'):
         # 연속형 - 범주형 or 범주형 - 연속형
@@ -31,8 +43,7 @@ def calculate_correlation(df, var1, var2):
         else:
             var_continuous, var_categorical = var2, var1
 
-        point_biserial_coefficient, _ = pointbiserialr(df[var_continuous], df[var_categorical])
-        return point_biserial_coefficient
+        return pointbiserialr(df[var_continuous], df[var_categorical])[0]
 
     else:
         return None
