@@ -35,6 +35,7 @@ class CreateModelService():
         df.dropna(axis=0, subset=self.x_value+[self.y_value], inplace=True) #nan 제거
         if len(df) < len(self.x_value) + 1:
             raise DataCountException(len(self.x_value), len(df))
+        
         x_df = df[self.x_value]
         y_df = df[self.y_value]
         #모델 train_set 설정
@@ -53,14 +54,19 @@ class CreateModelService():
     
     def model_handler(self, x_train, y_train, random_state=42):
         if self.model == "rf":
+            if len(nominal_columns) > 0:
+                raise ModelTypeException(nominal_columns, "명목형 혹은 범주형")
             if y_train.dtype is not object:
                 raise ModelTypeException(y_train.name, "연속형")
             model = CustomRandomForestClassifier(x_train, y_train, random_state)
             model.fit()
             return model 
         elif self.model == "linear":
+            nominal_columns = x_train.select_dtypes(include=['object', 'category']).columns
+            if len(nominal_columns) > 0:
+                raise ModelTypeException(nominal_columns, "명목형 혹은 범주형")
             if y_train.dtype is object:
-                raise ModelTypeException(y_train.name, "명목형")
+                raise ModelTypeException(y_train.name, "명목형 혹은 범주형")
             model = CustomLinearRegression(x_train, y_train, random_state)
             model.fit()
             return model
