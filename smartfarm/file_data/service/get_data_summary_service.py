@@ -11,7 +11,9 @@ class GetDataSummaryService():
     def execute(self):
         file_absolute_path = search_file_absolute_path(self.file_root)
         df = GetFileDataService.file_to_df(file_absolute_path)
-        return GetDataSummaryService.to_summary(df.drop(columns=[self.file_object.date_column], axis=1))
+        if self.file_object.date_column is not None:
+            df.drop(columns=[self.file_object.date_column], axis=1, inplace=True)
+        return GetDataSummaryService.to_summary(df)
         # return json.loads(DataProcess.df_to_json_string(data))
     
     @staticmethod

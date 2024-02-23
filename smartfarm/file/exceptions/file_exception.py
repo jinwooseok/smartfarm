@@ -29,3 +29,9 @@ class DataToCsvException(CustomBaseException):
         self.status_code = 456
         self.code = 456
         self.detail = 'csv파일로 변환할 수 없는 데이터입니다.'
+        
+class DateColumnException(CustomBaseException):
+    def __init__(self):
+        self.status_code = 457
+        self.code = 457
+        self.detail = '날짜열이 설정되지 않았습니다.'

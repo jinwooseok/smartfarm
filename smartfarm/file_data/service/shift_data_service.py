@@ -40,9 +40,4 @@ class ShiftDataService():
             # 리스트에 저장된 데이터프레임을 concat하여 합침
         shifted_dfs.append(y_df)
         merged_df = pd.concat(shifted_dfs, axis=1)
-        #df = self.rolling_data(df, self.window_size, self.date_column)
         return DataProcess.df_to_json_object(merged_df)
-    
-    @staticmethod
-    def rolling_data(df, window_size, date_column):
-        return df.rolling(on=[date_column], window=window_size)

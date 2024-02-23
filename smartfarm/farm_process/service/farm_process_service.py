@@ -5,6 +5,7 @@ from ...file.service.temp_delete_service import TempDeleteService
 from ..utils.process import ETLProcessFactory
 from ...file_data.service.get_temp_data_service import GetTempDataService
 from ..exceptions.exceptions import StartIndexException
+from ...file.exceptions.file_exception import DateColumnException
 
 class FarmProcessService():
     def __init__(self, serializer, user):
@@ -17,6 +18,8 @@ class FarmProcessService():
         self.user = user
     
     def execute(self):
+        if self.file_object.date_column is None:
+            raise DateColumnException()  
         instance = GetTempDataService.get_temp_file(self.file_object.id, status_id=1)
         
         file_absolute_path = search_file_absolute_path(instance.file_root)
