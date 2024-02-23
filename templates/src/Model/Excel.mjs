@@ -7,7 +7,7 @@ export default class Excel {
     // 데이터와 div를 생성할 때 매개변수로
     this.#excelData = data; // 데이터
     this.#excelColumn = this.#makeCol(this.#excelData); // 열 데이터 만들기
-
+    box.innerHtml = "";
     // excel 그리기
     jspreadsheet(box, {
       data: this.#excelData,
