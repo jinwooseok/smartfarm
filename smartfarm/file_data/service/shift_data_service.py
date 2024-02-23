@@ -28,6 +28,7 @@ class ShiftDataService():
         df = GetFileDataService.file_to_df(file_absolute_path)
         x_df = df[self.xValue]
         y_df = df[self.yValue]
+        y_df.name = 'y'
         shifted_dfs = [x_df]
         original_columns = x_df.columns
         for i in range(self.count):
@@ -40,4 +41,5 @@ class ShiftDataService():
             # 리스트에 저장된 데이터프레임을 concat하여 합침
         shifted_dfs.append(y_df)
         merged_df = pd.concat(shifted_dfs, axis=1)
+
         return DataProcess.df_to_json_object(merged_df)
