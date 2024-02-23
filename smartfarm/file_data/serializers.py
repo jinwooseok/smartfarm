@@ -7,7 +7,6 @@ class ProcessOutlierSerializer(FileNameSerializer):
     pass
     
 class ProcessTimeSeriesSerializer(FileNameSerializer):
-    windowSize = serializers.IntegerField()
     count = serializers.IntegerField()
     xValue = serializers.JSONField()
     yValue = serializers.CharField()

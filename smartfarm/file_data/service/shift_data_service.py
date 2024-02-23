@@ -5,10 +5,10 @@ from ...file.service.temp_save_service import TempSaveService
 import pandas as pd
 from ..utils.process import DataProcess
 class ShiftDataService():
-    def __init__(self, user, file_object, window_size, count, xValue, yValue):
+    def __init__(self, user, file_object, count, xValue, yValue):
         self.user = user
         self.file_object = file_object
-        self.window_size = window_size
+        self.window_size = 1
         self.count = count
         self.xValue = xValue
         self.yValue = yValue
@@ -18,7 +18,6 @@ class ShiftDataService():
         file_object = serializer.get_file_object(user)
         return cls(user
                    ,file_object
-                   ,serializer.validated_data["windowSize"]
                    ,serializer.validated_data["count"]
                    ,serializer.validated_data["xValue"]
                    ,serializer.validated_data["yValue"])
