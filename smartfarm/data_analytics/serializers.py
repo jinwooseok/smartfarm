@@ -8,7 +8,7 @@ class CreateModelSerializer(FileNameSerializer):
     yValue = serializers.CharField()
     trainSize = serializers.FloatField()
     fileData = serializers.JSONField()
-    model = serializers.ChoiceField(choices=[("linear","linear"),("ridge","ridge"),("lasso","lasso"),("elastic","elastic"),("decision","decision"),("random","random"),("gradient","gradient"),("adaboost","adaboost"),("xgboost","xgboost"),("lightgbm","lightgbm"),("catboost","catboost")])
+    model = serializers.ChoiceField(choices=[("linear","linear"),("ridge","ridge"),("lasso","lasso"),("elastic","elastic"),("decision","decision"),("rf","rf"),("gradient","gradient"),("adaboost","adaboost"),("xgboost","xgboost"),("lightgbm","lightgbm"),("catboost","catboost")])
 
 class ModelNameSerializer(serializers.Serializer):
     modelName = serializers.CharField()

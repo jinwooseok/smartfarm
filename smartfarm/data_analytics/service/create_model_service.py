@@ -54,7 +54,7 @@ class CreateModelService():
         return result
     
     def model_handler(self, x_train, y_train, random_state=42):
-        if self.model == "random":
+        if self.model == "rf":
             model = CustomRandomForestClassifier(x_train, y_train, random_state)
             model.fit()
             return model 
