@@ -8,6 +8,11 @@ def calculate_correlation(df, var1, var2):
         return round(pearsonr(df[var1], df[var2])[0], 6)
 
     elif type_var1 == 'object' and type_var2 == 'object': # 범주형 - 범주형
+        if len(df[var1].value_counts())==1 :
+            return None
+        elif len(df[var2].value_counts())==1:
+            return None
+        
         contingency_table = pd.crosstab(df[var1], df[var2])
         if contingency_table.shape[0]==2:
             correct=False
@@ -15,12 +20,7 @@ def calculate_correlation(df, var1, var2):
             correct=True
         chi2 = chi2_contingency(contingency_table, correction=correct)[0]
         
-        if len(df[var1].value_counts())==1 :
-            return None
-        elif len(df[var2].value_counts())==1:
-            return None
-        
-        elif len(contingency_table) == 2:        # 범주 2개인 경우 phi 상관계수
+        if len(contingency_table) == 2:        # 범주 2개인 경우 phi 상관계수
             phi_coefficient = (chi2 / len(df))**0.5
             return round(phi_coefficient,6)
         
