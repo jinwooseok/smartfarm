@@ -29,6 +29,7 @@ class CustomLinearRegression:
     
     def predict(self, x_test, y_test):
         y_pred = self.learned_model.predict(x_test)
+        y_pred.name = y_test.name + '_pred'
         # 예측 결과 평가
         mse = mean_squared_error(y_test, y_pred)
         r2 = r2_score(y_test, y_pred)
@@ -36,10 +37,12 @@ class CustomLinearRegression:
         # 추가적인 예측 결과 리턴
         return {
             'model' : 'Linear Regression',
-            'feature_names': list(self.x_dataset.columns),
-            'target_names': self.y_dataset.name,
-            'model_weights': self.learned_model.params.values.tolist(),
-            'random_state': self.random_state,
-            'mean_squared_error': mse,
-            'r2_score': r2
+            'featureNames': list(self.x_dataset.columns),
+            'targetNames': self.y_dataset.name,
+            'randomState': self.random_state,
+            'MSE': mse,
+            'R2': r2,
+            'testData': pd.concat([x_test, y_test, y_pred], axis=1).to_dict(orient='records'),
+            'yPred': y_pred.tolist(),
+            'y': y_test.tolist()
         }
