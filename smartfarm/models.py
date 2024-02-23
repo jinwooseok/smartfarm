@@ -84,13 +84,10 @@ class LearnedModel(models.Model):
         # joblib.dump를 사용하여 파일 저장
         self.model_root = self.get_model_file_path()
         self.model_meta_root = self.get_model_meta_file_path()
-        if model_meta['model'] == 'Linear Regression':
-            model.save(self.model_root)
-        else:
-            with open(self.model_root, 'w') as f:
-                pickle.dump(model, f)
-        with open(self.model_meta_root, 'w') as f:
-            json.dump(model_meta, f, ensure_ascii=False).encode('utf8')
+        with open(self.model_root, 'wb') as f:
+            pickle.dump(model, f)
+        with open(self.model_meta_root, 'w', encoding='utf-8') as f:
+            json.dump(model_meta, f, ensure_ascii=False)
         super().save(*args, **kwargs)
 
     def get_model_file_path(self):

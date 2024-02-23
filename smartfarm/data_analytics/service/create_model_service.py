@@ -1,8 +1,15 @@
 from ...models import LearnedModel
 from sklearn.model_selection import train_test_split
 from .save_model_service import SaveModelService
-from ..utils.rf_model import CustomRandomForestClassifier
+from ..utils.rf_model import CustomRandomForestClassifier, CustomRandomForestRegressor
 from ..utils.linear import CustomLinearRegression
+from ..utils.lasso import CustomLassoRegression
+from ..utils.ridge import CustomRidgeRegression
+from ..utils.logistic import CustomLogisticRegression
+from ..utils.svm import CustomSVC, CustomSVR
+from ..utils.gradient_boosting import CustomGradientBoosting
+from ..utils.elasticnet import CustomElasticNet
+
 import pandas as pd
 from ..exceptions.model_type_exception import ModelTypeException
 from ..exceptions.data_count_exception import DataCountException
@@ -47,11 +54,9 @@ class CreateModelService():
         # 모델 생성 및 학습
         model = self.model_handler(X_train, y_train, random_state)
         result = model.predict(X_test, y_test)
-        if self.is_save is True:
-            if LearnedModel.objects.filter(user=self.file_object.user, original_file_name = self.file_object.file_title).exists():
-                LearnedModel.objects.filter(user=self.file_object.user, original_file_name = self.file_object.file_title).delete()
-            model_object = SaveModelService(self.file_object, model.learned_model, self.model_name, model.meta()).execute()
-            result['modelFileName'] = model_object.model_name
+        # if self.is_save is True:
+        model_object = SaveModelService(self.file_object, model.learned_model, self.model_name, model.meta()).execute()
+        result['modelFileName'] = model_object.model_name
         return result
     
     def model_handler(self, x_train, y_train, random_state=42):
@@ -61,6 +66,17 @@ class CreateModelService():
             model = CustomRandomForestClassifier(x_train, y_train, random_state)
             model.fit()
             return model 
+        
+        elif self.model == "rfr":
+            nominal_columns = x_train.select_dtypes(include=['object', 'category']).columns
+            if len(nominal_columns) > 0:
+                raise ModelTypeException(nominal_columns, "명목형 혹은 범주형")
+            if y_train.dtype is object:
+                raise ModelTypeException(y_train.name, "명목형 혹은 범주형")
+            model = CustomRandomForestRegressor(x_train, y_train, random_state)
+            model.fit()
+            return model
+        
         elif self.model == "linear":
             nominal_columns = x_train.select_dtypes(include=['object', 'category']).columns
             if len(nominal_columns) > 0:
@@ -70,3 +86,82 @@ class CreateModelService():
             model = CustomLinearRegression(x_train, y_train, random_state)
             model.fit()
             return model
+        
+        elif self.model == "lasso":
+            nominal_columns = x_train.select_dtypes(include=['object', 'category']).columns
+            if len(nominal_columns) > 0:
+                raise ModelTypeException(nominal_columns, "명목형 혹은 범주형")
+            if y_train.dtype is object:
+                raise ModelTypeException(y_train.name, "명목형 혹은 범주형")
+            model = CustomLassoRegression(x_train, y_train, random_state)
+            model.fit()
+            return model
+        
+        elif self.model == "ridge":
+            nominal_columns = x_train.select_dtypes(include=['object', 'category']).columns
+            if len(nominal_columns) > 0:
+                raise ModelTypeException(nominal_columns, "명목형 혹은 범주형")
+            if y_train.dtype is object:
+                raise ModelTypeException(y_train.name, "명목형 혹은 범주형")
+            model = CustomRidgeRegression(x_train, y_train, random_state)
+            model.fit()
+            return model
+        
+        elif self.model == "logistic":
+            if y_train.dtype is not object:
+                raise ModelTypeException(y_train.name, "연속형")
+            model = CustomLogisticRegression(x_train, y_train, random_state)
+            model.fit()
+            return model
+         
+        elif self.model == "svc":
+            if y_train.dtype is not object:
+                raise ModelTypeException(y_train.name, "연속형")
+            model = CustomSVC(x_train, y_train, random_state)
+            model.fit()
+            return model
+        
+        elif self.model == "svr":
+            if y_train.dtype is object:
+                raise ModelTypeException(y_train.name, "명목형 혹은 범주형")
+            model = CustomSVR(x_train, y_train, random_state)
+            model.fit()
+            return model
+        
+        elif self.model == "knn":
+            raise ModelTypeException("KNN", "KNN은 아직 지원하지 않습니다.")
+        elif self.model == "dt":
+            raise ModelTypeException("Decision Tree", "Decision Tree는 아직 지원하지 않습니다.")
+        
+        elif self.model == "gb":
+            nominal_columns = x_train.select_dtypes(include=['object', 'category']).columns
+            if len(nominal_columns) > 0:
+                raise ModelTypeException(nominal_columns, "명목형 혹은 범주형")
+            if y_train.dtype is object:
+                raise ModelTypeException(y_train.name, "명목형 혹은 범주형")
+            model = CustomGradientBoosting(x_train, y_train, random_state)
+            model.fit()
+            return model
+        
+        elif self.model == "elastic":
+            nominal_columns = x_train.select_dtypes(include=['object', 'category']).columns
+            if len(nominal_columns) > 0:
+                raise ModelTypeException(nominal_columns, "명목형 혹은 범주형")
+            if y_train.dtype is object:
+                raise ModelTypeException(y_train.name, "명목형 혹은 범주형")
+            model = CustomElasticNet(x_train, y_train, random_state)
+            model.fit()
+            return model
+        
+        elif self.model == "xgb":
+            raise ModelTypeException("XGBoost", "XGBoost는 아직 지원하지 않습니다.")
+        elif self.model == "lgbm":
+            raise ModelTypeException("LightGBM", "LightGBM은 아직 지원하지 않습니다.")
+        elif self.model == "catboost":
+            raise ModelTypeException("CatBoost", "CatBoost는 아직 지원하지 않습니다.")
+        elif self.model == "ada":
+            raise ModelTypeException("AdaBoost", "AdaBoost는 아직 지원하지 않습니다.")
+        elif self.model == "naive":
+            raise ModelTypeException("Naive Bayes", "Naive Bayes는 아직 지원하지 않습니다.")
+        else:
+            raise ModelTypeException(self.model, "지원하지 않는 모델입니다.")

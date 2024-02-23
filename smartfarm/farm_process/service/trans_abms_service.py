@@ -6,13 +6,13 @@ from ...file.utils.utils import search_file_absolute_path
 from ..exceptions.exceptions import StartIndexException
 from ...file.exceptions.file_exception import DateColumnException
 class TransABMSService():
-    def __init__(self, user, columns, new_file_name, file_root):
+    def __init__(self, user, columns, new_file_name, file_object):
         self.user = user
         self.columns = columns
         self.new_file_name = new_file_name
         self.file_type = "env"
         self.interval = "hourly"
-        self.file_root = file_root
+        self.file_object = file_object
     
     @classmethod
     def from_serializer(cls, serializer, user) -> "TransABMSService":
@@ -20,12 +20,12 @@ class TransABMSService():
         return cls(user
                    ,serializer.validated_data['columns']
                    ,serializer.validated_data['newFileName']
-                   ,file_object.file_root)
+                   ,file_object)
     
     def execute(self):
         if self.file_object.date_column is None:
             raise DateColumnException()  
-        file_absolute_path = search_file_absolute_path(self.file_root)
+        file_absolute_path = search_file_absolute_path(self.file_object.file_root)
         df = GetFileDataService.file_to_df(file_absolute_path)
         
         after_list = ['일시', '내부온도', '내부온도 주간', '내부온도 야간', '내부온도 최저', '내부온도 최고', '내부습도',
