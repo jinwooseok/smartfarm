@@ -3,7 +3,7 @@ import pandas as pd
 from ...data_analytics.utils.correlation import calculate_correlation
 
 class FeatureImportanceService:
-    def __init__(self, x_value, y_value, data=None):
+    def __init__(self, x_value, y_value, data):
         self.x_value = x_value
         self.y_value = y_value
         self.data = data

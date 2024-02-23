@@ -10,7 +10,7 @@ from ..utils.linear import CustomLinearRegression
 import pandas as pd
 
 class CreateModelService():
-    def __init__(self, model_name, x_value, y_value, model, file_object, file_data, train_size=0.7):
+    def __init__(self, model_name, x_value, y_value, model, file_object, file_data, train_size=0.7, is_save=False):
         self.model_name = model_name
         self.x_value = x_value
         self.y_value = y_value
@@ -18,6 +18,7 @@ class CreateModelService():
         self.model = model
         self.file_object = file_object
         self.file_data = file_data
+        self.is_save = is_save
     
     @classmethod
     def from_serializer(cls, serializer, user) -> "CreateModelService":
@@ -43,11 +44,15 @@ class CreateModelService():
         # 모델 생성 및 학습
         model = self.model_handler(X_train, y_train, random_state)
         result = model.predict(X_test, y_test)
-        if LearnedModel.objects.filter(user=self.file_object.user, original_file_name = self.file_object.file_title).exists():
-            LearnedModel.objects.filter(user=self.file_object.user, original_file_name = self.file_object.file_title).delete()
-        model_object = SaveModelService(self.file_object, model.learned_model, self.model_name, model.meta()).execute()
-        result['model_name'] = model_object.model_name
+        if self.is_save is True:
+            if LearnedModel.objects.filter(user=self.file_object.user, original_file_name = self.file_object.file_title).exists():
+                LearnedModel.objects.filter(user=self.file_object.user, original_file_name = self.file_object.file_title).delete()
+            model_object = SaveModelService(self.file_object, model.learned_model, self.model_name, model.meta()).execute()
+            result['model_name'] = model_object.model_name
+        else:
+            result['model_name'] = self.model_name
         return result
+    
     def model_handler(self, x_train, y_train, random_state=42):
         if self.model == "random":
             model = CustomRandomForestClassifier(x_train, y_train, random_state)
