@@ -1,6 +1,5 @@
 import Excel from "/templates/src/Model/Excel.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
-import API from "/templates/src/Utils/API.mjs";
 
 class ResultPage {
 	#fileData;
@@ -66,7 +65,7 @@ class ResultPage {
 		// x 및 y 스케일 생성
 		const xScale = d3
 			.scaleLinear()
-			.domain([d3.min(this.#graphData, (d) => d.y_pred)-3, d3.max(this.#graphData, (d) => d.y_pred)+3]) // y_pred의 최대값을 x의 최대값으로 설정
+			.domain([d3.min(this.#graphData, (d) => d.yPred)-3, d3.max(this.#graphData, (d) => d.yPred)+3]) // yPred의 최대값을 x의 최대값으로 설정
 			.range([0, svgWidth]);
 
 		const yScale = d3
@@ -80,7 +79,7 @@ class ResultPage {
 			.data(this.#graphData)
 			.enter()
 			.append("circle")
-			.attr("cx", (d) => xScale(d.y_pred))
+			.attr("cx", (d) => xScale(d.yPred))
 			.attr("cy", (d) => yScale(d.y))
 			.attr("r", 5)
 			.attr("fill", "steelblue")
@@ -90,7 +89,7 @@ class ResultPage {
 				// 툴팁 표시
 				tooltip.transition().duration(200).style("opacity", 0.9);
 				tooltip
-					.html(`y_pred: ${d.y_pred}, y: ${d.y}`)
+					.html(`yPred: ${d.yPred}, y: ${d.y}`)
 					.style("visibility", "visible")
 					.style("left", event.pageX + 10 + "px")
 					.style("top", event.pageY - 15 + "px");
@@ -123,25 +122,23 @@ class ResultPage {
 			.style("opacity", 0);
 	}
 
-	async setModelResult(modelName, data) {
-		const response = await API(`/analytics/${modelName}/`, "post", data);
-		const status = response.status;
+	setModelResult(data) {
 		Loading.CloseLoading()
-		if (status === "success") {
-			this.#modelResult = response.data;
-			this.#fileData = this.#modelResult.testData;
-			this.#setGraphData();
-		}
-		console.log("분석 결과", this.#modelResult)
+		this.#modelResult = data;
+		this.#fileData = this.#modelResult.testData;
+		this.#setGraphData();
 		return;
 	}
 
 	#setGraphData() {
+		console.log("this.#modelResult", this.#modelResult)
 		const y = this.#modelResult.y;
-		const y_pred = this.#modelResult.y_pred;
+		const yPred = this.#modelResult.yPred;
+		console.log(y)
+		console.log(yPred)
 		this.#graphData = [];
 		for(let i in y) {
-			const obj = {y:y[i], y_pred: y_pred[i]};
+			const obj = {y:y[i], yPred: yPred[i]};
 			this.#graphData.push(obj)
 		}
 	}
