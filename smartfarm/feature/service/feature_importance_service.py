@@ -12,7 +12,7 @@ class FeatureImportanceService:
     def from_serializer(cls, serializer: GetFeatureImportanceSerializer, user):
         return cls(serializer.validated_data['xValue']
                    ,serializer.validated_data['yValue']
-                   ,serializer.validated_data['data'])
+                   ,serializer.validated_data['fileData'])
 
     def execute(self):
         df = pd.DataFrame(self.data)

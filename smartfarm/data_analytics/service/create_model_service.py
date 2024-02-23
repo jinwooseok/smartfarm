@@ -44,7 +44,6 @@ class CreateModelService():
         # 모델 생성 및 학습
         model = self.model_handler(X_train, y_train, random_state)
         result = model.predict(X_test, y_test)
-        print(result)
         if self.is_save is True:
             if LearnedModel.objects.filter(user=self.file_object.user, original_file_name = self.file_object.file_title).exists():
                 LearnedModel.objects.filter(user=self.file_object.user, original_file_name = self.file_object.file_title).delete()
