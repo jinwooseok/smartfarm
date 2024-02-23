@@ -96,10 +96,10 @@ class VarPage {
 						${variables.featureName}
 					</div>
 					<div class="featureType" id="featureType">
-						${variables.featureType}
+						${variables.type}
 					</div>
 					<div class="featureImportance" id="featureImportance">
-						${variables.featureImportance}
+						${variables.importance}
 					</div>
 					<div class="switchDIV">
 						<input class="switch" id="switch" role="switch" type="checkbox" checked/>
@@ -134,10 +134,12 @@ class VarPage {
 	}
 
 	async postTimeDiffData(fileName, data) {
+		console.log("시차", data)
 		const response = await API(`/files/${fileName}/data/timeseries/`, "post", data);
 		const status = response.status;
 		if (status === "success") {
 			this.#fileData = response.data;
+			console.log("시차완",response.data)
 			await this.setImportanceOfFeature(fileName, {
 				xValue: JSON.stringify(Object.keys(response.data[0])),
 				yValue: data.yValue,

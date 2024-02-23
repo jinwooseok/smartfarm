@@ -2,7 +2,7 @@ import API from "/templates/src/Utils/API.mjs";
 import Excel from "/templates/src/Model/Excel.mjs";
 
 class MergePage {
-	#fileDate;
+	#fileData;
 	#mergeFIleName = '';
 
 	templates() {
@@ -152,7 +152,7 @@ class MergePage {
 
 		if (status === "success") {
 			const returnData = Object.values(response.data);
-			this.#fileDate = returnData[0];
+			this.#fileData = returnData[0];
 			this.#mergeFIleName = Object.keys(response.data);
 		}
 		return;
@@ -160,11 +160,11 @@ class MergePage {
 
 	showFile(element) {
 		element.innerHTML = "";
-		new Excel(this.#fileDate, element);
+		new Excel(this.#fileData, element);
 	}
 
 	getFileData() {
-		return this.#fileDate;
+		return this.#fileData;
 	}
 
 	getMergeFileName(){
