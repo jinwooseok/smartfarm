@@ -18,6 +18,7 @@ const globalData = {
   x: [],
   y: '',
   modelName : "",
+  modelData : {},
 }
 
 const fileName = JSON.parse(localStorage.getItem("fileTitle"));
@@ -29,12 +30,7 @@ const clickEvent = async (event, id,) => {
     if (event.target.classList.contains("analyze")) {
 
       Loading.StartLoading();
-      const data = {
-        yValue: globalData.y,
-        xValue: JSON.stringify(globalData.x),
-        fileData: JSON.stringify(VarPage.getFileData()),
-      };
-      ResultPage.setModelResult(globalData.modelName, data);
+      ResultPage.setModelResult(globalData.modelData);
     }
 
     return;
@@ -42,7 +38,7 @@ const clickEvent = async (event, id,) => {
 
   if (id === "modelDown") {
     Loading.StartLoading();
-    await API(`/analytics/${globalData.modelName}/model/download/`, "get");
+    await API(`/analytics/${globalData.modelData.modelFileName}/model/download/`, "get");
     Loading.CloseLoading();
     return;
   }
@@ -65,7 +61,7 @@ const clickEvent = async (event, id,) => {
       modelName : "",
       파일 데이터 = > VarPage.getFileData()
     */
-    changeProgress(3, 3);
+    changeProgress(2, 2);
   }
 
   if (id === "create") {
@@ -84,6 +80,7 @@ const clickEvent = async (event, id,) => {
       const $modelResultDIV = document.querySelector(".modelResultDIV");
       $modelResultDIV.style.display = "flex";
       $modelResultDIV.innerHTML = ToolPage.drawModelResult(response);
+      globalData.modelData = response;
       document.querySelector(".analyze").disabled = false;
     }
 
@@ -160,10 +157,10 @@ const changeProgress = (step, index=0) => {
 		changeDiv(nowIndex-1);
 	}
 
-  if (index === 3) {
+  if (index === 2) {
     progress[nowIndex].classList.remove('now');
-		progress[3].classList.add('now');
-    changeDiv(3)
+		progress[2].classList.add('now');
+    changeDiv(2)
   }
 }
 
