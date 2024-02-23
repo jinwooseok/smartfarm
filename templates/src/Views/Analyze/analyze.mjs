@@ -122,7 +122,6 @@ const clickEvent = async (event, id,) => {
 
   if (id ==="yValue") {
     const $yValue = document.querySelector("#yValue");
-    Loading.StartLoading();
     $yValue.addEventListener("change", async(event) => {
       await VarPage.setImportanceOfFeature(fileName, {
         xValue: JSON.stringify(VarPage.getFeatureNameList()),

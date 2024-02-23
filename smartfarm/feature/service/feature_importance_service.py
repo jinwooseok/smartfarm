@@ -15,10 +15,13 @@ class FeatureImportanceService:
                    ,serializer.validated_data['fileData'])
 
     def execute(self):
+        print(self.data)
         df = pd.DataFrame(self.data)
+        df.replace('', np.nan, inplace=True)
         response = []
         print(self.x_value)
         for idx, name in enumerate(self.x_value):
+            print(df[name].dtype)
             feature_importance = calculate_correlation(df, name, self.y_value)
             if feature_importance is not None and np.isnan(feature_importance):
                 feature_importance = 'nan'
