@@ -27,7 +27,7 @@ class FarmProcessService():
         #정적 메서드 핸들러
         result = process_factory.handler()
         #저장
-        FileSaveService(self.user, self.new_file_name, result, 1, 1,statuses=2).execute()
+        FileSaveService(self.user, self.new_file_name, result, '날짜', 1,statuses=2).execute()
         #임시파일 삭제
         TempDeleteService(self.user, instance).execute()
         
