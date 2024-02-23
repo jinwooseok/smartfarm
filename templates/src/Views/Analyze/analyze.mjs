@@ -1,5 +1,7 @@
 import Logout from "/templates/src/Utils/Logout.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
+import downloadToCsv from "/templates/src/Utils/DownloadToCsv.mjs";
+import API from "/templates/src/Utils/API.mjs";
 import { setFileList } from "/templates/src/Utils/fileNameList.mjs";
 
 import ToolPage from "./ToolPage.mjs";
@@ -25,7 +27,7 @@ const clickEvent = async (event, id,) => {
     confirm(`이동 합니다.`) === true ? changeProgress(id) : null;
 
     if (event.target.classList.contains("analyze")) {
-      console.log("3")
+      Loading.StartLoading();
       const data = {
         yValue: globalData.y,
         xValue: JSON.stringify(globalData.x),
@@ -37,13 +39,20 @@ const clickEvent = async (event, id,) => {
     return;
 	}
 
+  if (id === "modelDown") {
+    Loading.StartLoading();
+    await API(`/analytics/${globalData.modelName}/model/download/`, "get");
+    Loading.CloseLoading();
+    return;
+  }
+
   if (id === "fileDown") {
     const $mergeFileName = document.querySelector("#mergeFileName");
     if ($mergeFileName.value === "") {
 			alert('파일 이름을 정해주세요')
 			return;
 		}
-    downloadToCsv(ResultPage.getFileData(), $mergeFileName.value)
+    downloadToCsv(ResultPage.getFileData(), $mergeFileName.value);
   }
 
   if (id === "modelSelect") {
@@ -55,10 +64,11 @@ const clickEvent = async (event, id,) => {
       modelName : "",
       파일 데이터 = > VarPage.getFileData()
     */
-    changeDiv(3);
+    changeProgress(3, 3);
   }
 
   if (id === "create") {
+    Loading.StartLoading();
     globalData.modelName = document.querySelector(".modelName").value
     const data = {
       modelName: globalData.modelName,
@@ -72,6 +82,9 @@ const clickEvent = async (event, id,) => {
     const $modelResultDIV = document.querySelector(".modelResultDIV");
     $modelResultDIV.style.display = "flex";
     $modelResultDIV.innerHTML = ToolPage.drawModelResult(response);
+
+    document.querySelector(".analyze").disabled = false;
+
     return;
   }
 
@@ -94,6 +107,7 @@ const clickEvent = async (event, id,) => {
   }
 
   if (id === "timeDiffCreate") {
+    Loading.StartLoading();
     const data = {
       xValue: JSON.stringify(VarPage.setCheckedVarList()),
       yValue: document.querySelector(".yValue").options[document.querySelector(".yValue").selectedIndex]?.value,
@@ -108,9 +122,8 @@ const clickEvent = async (event, id,) => {
 
   if (id ==="yValue") {
     const $yValue = document.querySelector("#yValue");
-
+    Loading.StartLoading();
     $yValue.addEventListener("change", async(event) => {
-      console.log(event.target.value)
       await VarPage.setImportanceOfFeature(fileName, {
         xValue: JSON.stringify(VarPage.getFeatureNameList()),
         yValue: event.target.value,
@@ -122,7 +135,7 @@ const clickEvent = async (event, id,) => {
   }
 }
 
-const changeProgress = (step) => {
+const changeProgress = (step, index=0) => {
 	const $$progress = document.querySelectorAll(".progress");
 	const progress = Array.from($$progress);
 
@@ -145,6 +158,12 @@ const changeProgress = (step) => {
 		progress[nowIndex-1].classList.add('now');
 		changeDiv(nowIndex-1);
 	}
+
+  if (index === 3) {
+    progress[nowIndex].classList.remove('now');
+		progress[3].classList.add('now');
+    changeDiv(3)
+  }
 }
 
 window.addEventListener("click", (event) => {
@@ -204,41 +223,6 @@ const changeDiv = async (nowProgress) => {
     ResultPage.drawExcel($spreadSheetDIV);
   }
 }
-
-const downloadToCsv = (data, title) => {
-  const jsonData = data;
-
-  let toCsv = '';
-  let row="";
-
-  for(let i in jsonData[0]){
-    row += i+","; // 열 입력
-  }
-  row = row.slice(0,-1);
-  toCsv += row +"\r\n";
-
-  toCsv += jsonData.reduce((csv, rowObject) => {
-    const row = Object.values(rowObject).join(",") + "\r\n";
-    return csv + row;
-  }, "");
-
-  if (toCsv === "") {
-    alert("Invalid data");
-    return;
-  }
-
-  const fileName = title;
-  const uri = "data:text/csv;charset=utf-8,\uFEFF" + encodeURI(toCsv);
-
-  const link = document.createElement("a");
-  link.href = uri;
-  link.style.visibility = "hidden";
-  link.download = fileName;
-
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
 
 window.onload = async () => {
   changeDiv(0);

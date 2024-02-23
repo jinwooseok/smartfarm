@@ -1,5 +1,5 @@
-import API from "/templates/src/Utils/API.mjs";
 import Excel from "/templates/src/Model/Excel.mjs";
+import Loading from "/templates/src/Utils/Loading.mjs";
 
 class ResultPage {
 	#fileData;
@@ -25,7 +25,7 @@ class ResultPage {
 		</div>
 		<div class="buttonDIV" id="buttonDIV">
 			<button class="modelDown" id="modelDown">모델 다운</button>
-			<button class="modelDown" id="modelDown">파일 다운</button>
+			<button class="fileDown" id="fileDown">파일 다운</button>
 			<button class="prevPage" id="prevPage">이전</button>
 		</div>	
 		`
@@ -49,14 +49,13 @@ class ResultPage {
 	}
 
 	drawExcel(element) {
-		console.log(this.#fileData)
 		element.innerHTML = "";
 		new Excel(this.#fileData, element);
 	}
 
 	drawGraph() {
 		const svgWidth = 600;
-		const svgHeight = 400;
+		const svgHeight = 450;
 		const svg = d3
 			.select("#graphDIV")
 			.append("svg")
@@ -126,6 +125,7 @@ class ResultPage {
 	async setModelResult(modelName, data) {
 		// const response = await API(await API(`/analytics/${modelName}/`, "post", data);
 		// const status = response.status;
+		Loading.CloseLoading()
 		// return status === "success" ? this.#modelResult = response.data : null;
 		this.#modelResult = {
 					"model": "Linear Regression",
@@ -470,6 +470,18 @@ class ResultPage {
 			const obj = {y:y[i], y_pred: y_pred[i]};
 			this.#graphData.push(obj)
 		}
+	}
+
+	getFileData() {
+		return this.#fileData;
+	}
+
+	getGraphData() {
+		return this.#graphData;
+	}
+
+	getModelResult() {
+		return this.#modelResult;
 	}
 }
 

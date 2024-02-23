@@ -1,4 +1,5 @@
 import API from "/templates/src/Utils/API.mjs";
+import Loading from "/templates/src/Utils/Loading.mjs";
 
 class ToolPage {
 	#xVarList;
@@ -45,7 +46,7 @@ class ToolPage {
 			</div>
 		</div>
 		<div class="buttonDIV" id="buttonDIV">
-			<button class="nextPage analyze" id="nextPage">분석</button>
+			<button class="nextPage analyze" id="nextPage" disabled>분석</button>
 			<button class="prevPage" id="prevPage">이전</button>
 		</div>	
 		`
@@ -94,7 +95,6 @@ class ToolPage {
 	}
 
 	drawModelResult(result) {
-		console.log(result)
 		return `
 			<div class="modelDIV">
 				<div class="resultTitle">모델 이름</div>
@@ -146,6 +146,7 @@ class ToolPage {
 		this.validateData(data);
 		const response = await API(`/analytics/${fileName}/model/`, "post", data);
     const status = response.status;
+		Loading.CloseLoading();
 		return status === "success" ? response.data : null;
 	}
 
