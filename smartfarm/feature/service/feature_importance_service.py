@@ -20,7 +20,9 @@ class FeatureImportanceService:
         for idx, name in enumerate(self.x_value):
             feature_importance = calculate_correlation(df, name, self.y_value)
             if feature_importance is not None and np.isnan(feature_importance):
-                feature_importance = None
+                feature_importance = 'nan'
+            elif feature_importance is not None and np.isfinite(feature_importance)!=True:
+                feature_importance = 'inf'
             form = self.importance_form(idx, name, str(df[name].dtype), feature_importance)
             response.append(form)
         return response
