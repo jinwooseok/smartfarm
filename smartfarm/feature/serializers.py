@@ -27,3 +27,4 @@ class ModelFeatureSerializer(serializers.ModelSerializer):
 class GetFeatureImportanceSerializer(FileNameSerializer):
     xValue = serializers.JSONField()
     yValue = serializers.CharField()
+    data = serializers.JSONField()

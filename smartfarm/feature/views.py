@@ -30,8 +30,5 @@ class FeatureViewSet(viewsets.ModelViewSet):
         data['fileName'] = file_title
         serializer = GetFeatureImportanceSerializer(data=data)
         serializer = serializer_validator(serializer)
-        
-        queryset = FeatureImportanceService.from_serializer(serializer, user_id).execute()
-        
-        serializer = FileFeatureSerializer(queryset.order_by('-feature_importance'), many=True)
-        return Response(ResponseBody.generate(serializer=serializer), status=200)
+    
+        return Response(ResponseBody.generate(data=FeatureImportanceService.from_serializer(serializer, user_id).execute()), status=200)
