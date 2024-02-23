@@ -26,8 +26,11 @@ class ShiftDataService():
     def execute(self):
         if self.yValue in self.xValue:
             raise YValueDuplicateException(self.yValue)
-        if None in [self.xValue, self.yValue]:
-            raise RequiredValueException()
+        elif None in self.xValue:
+            raise RequiredValueException(self.xValue)
+        elif None in self.yValue:
+            raise RequiredValueException(self.yValue)
+        
         file_absolute_path = search_file_absolute_path(self.file_object.file_root)
         #변할 가능성 있음
         df = GetFileDataService.file_to_df(file_absolute_path)

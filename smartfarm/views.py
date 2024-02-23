@@ -7,9 +7,10 @@ from django.shortcuts import render
 
 from rest_framework.decorators import api_view
 from django.http import HttpResponse
+from django.shortcuts import redirect
 @api_view(['GET'])
 def main_page(request):
     user_id = request.session.get('user')
     if user_id != None:
-        return HttpResponse("<script>alert('올바르지 않은 접근입니다.');location.href='/file-list/';</script>")
+        return redirect('/file-list/')
     return render(request,'src/Views/Main/main.html')
