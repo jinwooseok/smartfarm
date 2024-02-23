@@ -94,6 +94,7 @@ class ToolPage {
 	}
 
 	drawModelResult(result) {
+		console.log(result)
 		return `
 			<div class="modelDIV">
 				<div class="resultTitle">모델 이름</div>
@@ -135,13 +136,14 @@ class ToolPage {
 			return;
 		}
 
-		if (trainSize > 0 || trainSize < 0) {
+		if (Number(trainSize) < 0 && Number(trainSize) > 1) {
 			alert("trainSize는 0~1로 입력해주세요");
 			return;
 		}
 	}
 
 	async postModelData(fileName, data) {
+		this.validateData(data);
 		const response = await API(`/analytics/${fileName}/model/`, "post", data);
     const status = response.status;
 		return status === "success" ? response.data : null;

@@ -2,7 +2,7 @@
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
-	overflow-y: hidden;
+	overflow-y: auto;
 }
 
 a{
@@ -67,6 +67,11 @@ li, ul{
 
 .logoutBtn:active {
 	background: #87a86f;
+}
+
+.workDIV{
+	width: 1000px;
+	margin: 0 auto;
 }
 
 .rowDIV{
@@ -234,6 +239,15 @@ fieldset {
 	text-align: center;
 }
 
+.resultDIV{
+	height: 400px;
+}
+
+.resultDIV .modelResultDIV{
+	display: flex;
+}
+
+
 .modelResultDIV > *{
 	display: flex;
 	flex-direction: row;
@@ -254,4 +268,8 @@ fieldset {
 .resultText {
 	width: 200px;
 	font-size: 15px;
+}
+
+.spreadSheetDIV{
+	margin-top: 20px;
 }
