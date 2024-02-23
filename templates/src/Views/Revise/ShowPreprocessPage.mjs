@@ -150,6 +150,7 @@ class ShowPreprocessPage{
 
 	async setStaticData() {
 		const response = await API(`/files/${this.#fileTitle}/data/summary/`, "get");
+		console.log(response.data)
 		this.#staticData = response.data;
 	}
 

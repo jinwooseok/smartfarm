@@ -41,6 +41,7 @@ $upload.addEventListener("click", () => {
 })
 
 $closeUploadPopup.addEventListener("click", () => {
+  $dateBox.innerHTML = "";
   $uploadDialog.style.display = "none";
   $uploadDialog.close();
 });

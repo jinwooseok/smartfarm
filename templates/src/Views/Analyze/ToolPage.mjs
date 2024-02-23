@@ -98,15 +98,15 @@ class ToolPage {
 		return `
 			<div class="modelDIV">
 				<div class="resultTitle">모델 이름</div>
-				<div class="resultText">${result["model"]}</div>
+				<div class="resultText">${result.model_name}</div>
 			</div>
 			<div class="MSEDIV">
 				<div class="resultTitle">MSE</div>
-				<div class="resultText">${result["mean_squared_error"]}</div>
+				<div class="resultText">${result.MSE}</div>
 			</div>
 			<div class="R2DIV">
 				<div class="resultTitle">R2</div>
-				<div class="resultText">${result["r2_score"]}</div>
+				<div class="resultText">${result.R2}</div>
 			</div>
 		`
 	}
