@@ -23,7 +23,6 @@ class FeatureImportanceService:
                 feature_importance = None
             form = self.importance_form(idx, name, str(df[name].dtype), feature_importance)
             response.append(form)
-        print(response)
         return response
     
     def importance_form(self, feature_order, feature_name, feature_type, feature_importance):
