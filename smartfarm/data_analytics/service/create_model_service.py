@@ -48,9 +48,7 @@ class CreateModelService():
             if LearnedModel.objects.filter(user=self.file_object.user, original_file_name = self.file_object.file_title).exists():
                 LearnedModel.objects.filter(user=self.file_object.user, original_file_name = self.file_object.file_title).delete()
             model_object = SaveModelService(self.file_object, model.learned_model, self.model_name, model.meta()).execute()
-            result['model_file_name'] = model_object.model_name
-        else:
-            result['model_file_name'] = self.model_name
+            result['modelFileName'] = model_object.model_name
         return result
     
     def model_handler(self, x_train, y_train, random_state=42):
