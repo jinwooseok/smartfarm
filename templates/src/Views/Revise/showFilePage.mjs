@@ -1,6 +1,5 @@
 import API from "/templates/src/Utils/API.mjs";
 import Excel from "/templates/src/Model/Excel.mjs";
-import responseMessage from "/templates/src/Constant/responseMessage.mjs";
 
 class ShowFilePage {
 
@@ -60,8 +59,8 @@ class ShowFilePage {
 
 	async setFileData() {
 		const response = await API(`/files/${this.#fileTitle}/data/`, "get");
-		const status = response.status || response;
-		responseMessage[status] === "success" ? this.#fileDate = response.data : alert(responseMessage[status]);
+		const status = response.status;
+		status === "success" ? this.#fileDate = response.data : null;
 	}
 
 	showFile(element) {

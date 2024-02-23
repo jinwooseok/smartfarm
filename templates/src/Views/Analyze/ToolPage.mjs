@@ -1,5 +1,4 @@
 import API from "/templates/src/Utils/API.mjs";
-import responseMessage from "/templates/src/Constant/responseMessage.mjs";
 
 class ToolPage {
 	#xVarList;
@@ -144,8 +143,8 @@ class ToolPage {
 
 	async postModelData(fileName, data) {
 		const response = await API(`/analytics/${fileName}/model/`, "post", data);
-    const status = response.status || response;
-		return responseMessage[status] === "success" ? response.data : alert(responseMessage[status]);
+    const status = response.status;
+		return status === "success" ? response.data : null;
 	}
 
 } 

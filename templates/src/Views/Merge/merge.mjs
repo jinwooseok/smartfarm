@@ -2,7 +2,6 @@ import API from "/templates/src/Utils/API.mjs";
 import Logout from "/templates/src/Utils/Logout.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
 import { getFileNameList } from "/templates/src/Utils/fileNameList.mjs";
-import responseMessage from "/templates/src/Constant/responseMessage.mjs";
 
 import MergePage from "./MergePage.mjs";
 import VarSelectPage from "./VarSelectPage.mjs";
@@ -110,9 +109,11 @@ const clickEvent = async (event, id, targetClass) => {
 		const response = await API(`/files/save/`, "post", {
 			fileName: managedData.fileTitle,
 			fileData: JSON.stringify(managedData.saveData),
+			startIndex: 1,
+			dateColumn: VarSelectPage.getVarList()[0],
 		});
-		const status = response.status || response;
-		responseMessage[status] === "success" ? location.replace("/file-list/") : alert(responseMessage[status]);
+		const status = response.status;
+		status === "success" ? location.replace("/file-list/") : null;
 	}
 
 	Array.from($$button).map((button) => {

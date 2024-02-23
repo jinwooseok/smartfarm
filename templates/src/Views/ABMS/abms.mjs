@@ -2,7 +2,6 @@ import API from "/templates/src/Utils/API.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
 import { getFileNameList, setFileList } from "/templates/src/Utils/fileNameList.mjs";
 import { abmsTextValue } from "/templates/src/Constant/variableList.mjs";
-import responseMessage from "/templates/src/Constant/responseMessage.mjs";
 
 const $abmsType = document.querySelector("#abmsType");
 const $abmsText = document.querySelector("#abmsText");
@@ -15,8 +14,8 @@ $abmsFileName.value = fileName.replace(/(.csv|.xlsx|.xls)/g, "") +  "_ABMS";
 
 const setFileData = async () =>{
 	const response = await API(`/files/${fileName}/data/`, "get");
-	const status = response.status || response;
-  return responseMessage[status] === "success" ? response.data : alert(responseMessage[status]);
+	const status = response.status
+  return status === "success" ? response.data : null;
 }
 
 const moveSelectedFileTitle = () => {
@@ -131,8 +130,8 @@ $abmsSave.addEventListener("click", async() => {
 
   Loading.CloseLoading();
   
-  const status = response.status || response;
-  responseMessage[status] === "success" ? location.replace("/file-list/") : alert(responseMessage[status]);
+  const status = response.status;
+  status === "success" ? location.replace("/file-list/") : null;
 	return;
 });
 

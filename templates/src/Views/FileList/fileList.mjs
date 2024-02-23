@@ -1,8 +1,6 @@
 import API from "/templates/src/Utils/API.mjs";
 import Logout from "/templates/src/Utils/Logout.mjs";
 
-import responseMessage from "/templates/src/Constant/responseMessage.mjs";
-
 const $checkAll = document.querySelector("#checkAll"); // 전체 선택 버튼
 const $$condition = document.querySelectorAll(".condition");
 const $fileContainer = document.querySelector("#fileContainer");
@@ -103,9 +101,12 @@ const setOnClick = () => {
 (async function () {
   // 파일 불러오는 API
   const response = await API("/files/", "get");
-  fileList = response.data;
-  setFileList();
-  setOnClick();
+  const status = response.status;
+  if (status === "success") {
+    fileList = response.data;
+    setFileList();
+    setOnClick();
+  };
 }());
 
 // 파일 목록 보여주는 함수
@@ -236,8 +237,8 @@ const clickDownloadButton = () => {
 
 	downloadTitle?.map( async (title) => {
 		const response = await API("/files/download/", "post", {fileName: title});
-    const status = response.status || response;
-    responseMessage[status] === "success" ? downloadToCsv(response.data, title) : alert(responseMessage[status]);
+    const status = response.status;
+	  return status === "success" ? downloadToCsv(response.data, title) : null;
   }); 
 }
 
@@ -256,8 +257,8 @@ const deleteCheckedItems = (checkedItems) => {
 
   deleteList?.map( async (name) => {
     const response = await API("/files/delete/", "delete", {fileName : JSON.stringify(name)});
-    const status = response.status || response;
-    responseMessage[status] === "success" ? location.replace("/file-list/") : alert(responseMessage[status]);
+    const status = response.status;
+  	return status === "success" ? location.replace("/file-list/") : null;
   });
 }
 
@@ -268,7 +269,7 @@ const clickDeleteButton = () => {
     return;
   }
 
-  const yesOrNo = confirm(`파일 ${checkedItems.length}를 삭제합니다.`);
+  const yesOrNo = confirm(`파일 ${checkedItems.length}개를 삭제합니다.`);
   if (yesOrNo) {
     deleteCheckedItems(checkedItems);
     $checkAll.checked = false;

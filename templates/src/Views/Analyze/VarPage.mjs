@@ -1,5 +1,4 @@
 import API from "/templates/src/Utils/API.mjs";
-import responseMessage from "/templates/src/Constant/responseMessage.mjs";
 
 class VarPage {
 	#fileFeatureInfo = ""; // 파일 변수 중요도 및 특징 겍체
@@ -97,10 +96,10 @@ class VarPage {
 						${variables.featureName}
 					</div>
 					<div class="featureType" id="featureType">
-						${variables.type}
+						${variables.featureType}
 					</div>
 					<div class="featureImportance" id="featureImportance">
-						${variables.importance}
+						${variables.featureImportance}
 					</div>
 					<div class="switchDIV">
 						<input class="switch" id="switch" role="switch" type="checkbox" checked/>
@@ -124,30 +123,34 @@ class VarPage {
 
 	async setFileFeatureInfo(fileName) {
 		const response = await API(`/files/${fileName}/data/feature/`, "get");
-		const status = response.status || response;
-		if (response.status === "success") {
-			return responseMessage[status] === "success" ? this.#fileFeatureInfo = response.data : alert(responseMessage[status]);
-		}
+		const status = response.status;
+		return status === "success" ? this.#fileFeatureInfo = response.data : null;
 	}
 
 	async setImportanceOfFeature(fileName, data) {
 		const response = await API(`/files/${fileName}/data/feature/importance/`, "post", data);
-		const status = response.status || response;
-		if (response.status === "success") {
-			return responseMessage[status] === "success" ? this.#fileFeatureInfo = response.data : alert(responseMessage[status]);
-		}
+		const status = response.status;
+		return status === "success" ? this.#fileFeatureInfo = response.data : null;
 	}
 
-	async postTimeDiffData(timeDiffName, data) {
-		const response = await API(`/files/${timeDiffName}/data/timeseries/`, "post", data);
-		const status = response.status || response;
-		return responseMessage[status] === "success" ? response.data : alert(responseMessage[status]);
+	async postTimeDiffData(fileName, data) {
+		const response = await API(`/files/${fileName}/data/timeseries/`, "post", data);
+		const status = response.status;
+		if (status === "success") {
+			this.#fileData = response.data;
+			await this.setImportanceOfFeature(fileName, {
+				xValue: JSON.stringify(Object.keys(response.data[0])),
+				yValue: data.yValue,
+				fileData: JSON.stringify(response.data),
+			})
+			return;
+		}
 	}
 
 	async setFileData(fileTitle) {
 		const response = await API(`/files/${fileTitle}/data/`, "get");
-		const status = response.status || response;
-		return responseMessage[status] === "success" ? this.#fileData = response.data : alert(responseMessage[status]);
+		const status = response.status;
+		return status === "success" ? this.#fileData = response.data : null;
 	}
 
 	getFileFeatureInfo() {

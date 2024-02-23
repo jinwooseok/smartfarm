@@ -105,7 +105,7 @@ class ShowPreprocessPage{
 
 	async submit() {
 		const response = await API(`/files/${this.#fileTitle}/data/preprocess/`, "post");
-		const status = response.status || response;
+		const status = response.status;
 		return status;
 	}
 
@@ -150,7 +150,6 @@ class ShowPreprocessPage{
 
 	async setStaticData() {
 		const response = await API(`/files/${this.#fileTitle}/data/summary/`, "get");
-		console.log(response.data)
 		this.#staticData = response.data;
 	}
 
