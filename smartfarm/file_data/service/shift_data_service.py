@@ -4,6 +4,7 @@ from ...file.service.file_save_service import FileSaveService
 from ...file.service.temp_save_service import TempSaveService
 import pandas as pd
 from ..utils.process import DataProcess
+from ..exceptions.file_data_exceptions import YValueDuplicateException, RequiredValueException
 class ShiftDataService():
     def __init__(self, user, file_object, count, xValue, yValue):
         self.user = user
@@ -23,12 +24,15 @@ class ShiftDataService():
                    ,serializer.validated_data["yValue"])
     
     def execute(self):
+        if self.yValue in self.xValue:
+            raise YValueDuplicateException(self.yValue)
+        if None in [self.xValue, self.yValue]:
+            raise RequiredValueException()
         file_absolute_path = search_file_absolute_path(self.file_object.file_root)
         #변할 가능성 있음
         df = GetFileDataService.file_to_df(file_absolute_path)
         x_df = df[self.xValue]
         y_df = df[self.yValue]
-        y_df.name = 'y'
         shifted_dfs = [x_df]
         original_columns = x_df.columns
         for i in range(self.count):

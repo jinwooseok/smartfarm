@@ -17,3 +17,15 @@ class StandardDuplicateException(CustomBaseException):
         self.status_code = 462
         self.code = 462
         self.detail = f'{file_object.file_title}의 {column_name}열에 중복 데이터가 있습니다. 처리 후 병합이 가능합니다.'
+        
+class YValueDuplicateException(CustomBaseException):
+    def __init__(self,value):
+        self.status_code = 463
+        self.code = 463
+        self.detail = f'{value}이 독립변수와 반응변수에 중복되어 있습니다.'
+        
+class RequiredValueException(CustomBaseException):
+    def __init__(self):
+        self.status_code = 464
+        self.code = 464
+        self.detail = f'필수값이 누락되었습니다.'
