@@ -1,6 +1,5 @@
 import API from "/templates/src/Utils/API.mjs";
 import Excel from "/templates/src/Model/Excel.mjs";
-import responseMessage from "/templates/src/Constant/responseMessage.mjs";
 
 class MergePage {
 	#fileDate;
@@ -68,8 +67,8 @@ class MergePage {
 
 	async getFileVarList (name) {
 		const response = await API(`/files/${name}/data/feature/` ,"get");
-		const status = response.status || response;
-		return responseMessage[status] === "success" ? response.data : alert(responseMessage[status]);
+		const status = response.status;
+		return status === "success" ? response.data : null;
 	};
 
 	async #handleChangeUpdateVarOptions ($selectBox, $variable, index) {
@@ -149,15 +148,14 @@ class MergePage {
 		}
 
 		const response = await API("/merge/", "post", data);
-		const status = response.status || response;
+		const status = response.status;
 
-		if (responseMessage[status] === "success") {
+		if (status === "success") {
 			const returnData = Object.values(response.data);
 			this.#fileDate = returnData[0];
 			this.#mergeFIleName = Object.keys(response.data);
-		} else {
-			alert(responseMessage[status]);
 		}
+		return;
 	}
 
 	showFile(element) {

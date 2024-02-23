@@ -36,9 +36,7 @@ class VarSelectPage {
 
 	makeCheckedListDIV() {
 		const list = this.#setCheckedVarList();
-
 		let html = '';
-
 		for(let text of list) {
 			html += `
 				<p>${text}</p>

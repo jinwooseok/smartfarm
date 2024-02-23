@@ -28,7 +28,6 @@ const clickEvent = async (event, id,) => {
 
   if (id === "modelSelect") {
     // 기타 설정
-    console.log("X")
     changeDiv(3);
   }
 
@@ -90,25 +89,25 @@ const clickEvent = async (event, id,) => {
       count: document.querySelector("#count").value,
       fileData: JSON.stringify(VarPage.getFileData()),
     };
-    const response = await VarPage.postTimeDiffData(fileName, data);
-    console.log("시차 리턴 데이터", response) // 변수 목록 수정 VarPage.makeVarListDIV(list)
-    console.log(Object.keys(response[0]));
-    // const $listDIV = document.querySelector('#listDIV');
-    // $listDIV.innerHTML = VarPage.makeVarListDIV(VarPage.getFileFeatureInfo());
+    await VarPage.postTimeDiffData(fileName, data);
+    const $listDIV = document.querySelector('#listDIV');
+    $listDIV.innerHTML = VarPage.makeVarListDIV(VarPage.getFileFeatureInfo());
     return;
   }
 
   if (id ==="yValue") {
-    // 변수 중요도
-    const data = {
-      xValue: JSON.stringify(VarPage.getFeatureNameList()),
-      yValue: document.querySelector(".yValue").options[document.querySelector(".yValue").selectedIndex]?.value,
-      fileData: JSON.stringify(VarPage.getFileData()),
-    }
-    console.log("변수 중요도", data);
-    await VarPage.setImportanceOfFeature(fileName, data);
-    const $listDIV = document.querySelector('#listDIV');
-    $listDIV.innerHTML = VarPage.makeVarListDIV(VarPage.getFileFeatureInfo());
+    const $yValue = document.querySelector("#yValue");
+
+    $yValue.addEventListener("change", async(event) => {
+      console.log(event.target.value)
+      await VarPage.setImportanceOfFeature(fileName, {
+        xValue: JSON.stringify(VarPage.getFeatureNameList()),
+        yValue: event.target.value,
+        fileData: JSON.stringify(VarPage.getFileData()),
+      });
+      const $listDIV = document.querySelector('#listDIV');
+      $listDIV.innerHTML = VarPage.makeVarListDIV(VarPage.getFileFeatureInfo());
+    });
   }
 }
 
@@ -171,7 +170,7 @@ const changeDiv = async (nowProgress) => {
     globalData.y = document.querySelector(".yValue").options[document.querySelector(".yValue").selectedIndex]?.value
 
 		ToolPage.setSelectedX(globalData.x);
-    $workDIV.innerHTML =ToolPage.templates();
+    $workDIV.innerHTML = ToolPage.templates();
 
     const $yValueInput = document.querySelector(".yValueInput");
     $yValueInput.value = globalData.y;

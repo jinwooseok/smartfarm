@@ -1,7 +1,6 @@
 import Logout from "/templates/src/Utils/Logout.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
 import { getFileNameList, setFileList } from "/templates/src/Utils/fileNameList.mjs";
-import responseMessage from "/templates/src/Constant/responseMessage.mjs";
 
 import ShowFilePage from "./ShowFilePage.mjs";
 import ShowPreprocessPage from "./ShowPreprocessPage.mjs";
@@ -95,7 +94,7 @@ const clickEvent = async (event, id, targetClass) => {
 				Loading.StartLoading();
 				const status = await ShowPreprocessPage.submit();
 				Loading.CloseLoading();
-				responseMessage[status] === "success" ? changeProgress(id) : alert(responseMessage[status]);
+				status === "success" ? changeProgress(id) : null;
 			}
 		}
 	}	

@@ -29,7 +29,6 @@ const submitLoginInfo = async () =>{
     email: $email.value,
     password: $password.value,
   };
-
   return await API("/users/sign-in/", "post", data);
 }
 

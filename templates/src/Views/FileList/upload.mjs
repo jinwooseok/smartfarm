@@ -2,7 +2,6 @@ import API from "/templates/src/Utils/API.mjs";
 import Loading from "/templates/src/Utils/Loading.mjs";
 import Excel from "/templates/src/Model/Excel.mjs";
 import { setFileList } from "/templates/src/Utils/fileNameList.mjs";
-import responseMessage from "/templates/src/Constant/responseMessage.mjs";
 
 const $file = document.querySelector(".file");
 const $uploadDialog = document.querySelector("#uploadDialog");
@@ -128,8 +127,8 @@ const uploadFile = async () => {
     dateColumn: $dateBox.options[$dateBox.selectedIndex]?.value,
 	};
 	const response = await API("/files/save/", "post" , data);
-  const status = response.status || response;
-  responseMessage[status] === "success" ? location.replace("/file-list/") : alert(responseMessage[status]);
+  const status = response.status;
+	return status === "success" ? location.replace("/file-list/") : null;
 }
 
 // 업로드 하고 다시 페이지 호출
