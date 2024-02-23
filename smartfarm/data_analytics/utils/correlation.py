@@ -7,7 +7,7 @@ def calculate_correlation(df, var1, var2):
     print(type_var1, type_var2)
     if type_var1 in ['int64','float64'] and type_var2 in ['int64','float64']: # 연속형 - 연속형
         print(pearsonr(df[var1], df[var2])[0])
-        return pearsonr(df[var1], df[var2])[0]
+        return round(pearsonr(df[var1], df[var2])[0], 6)
 
     elif type_var1 == 'object' and type_var2 == 'object': # 범주형 - 범주형
         contingency_table = pd.crosstab(df[var1], df[var2])
@@ -24,7 +24,7 @@ def calculate_correlation(df, var1, var2):
         
         elif len(contingency_table) == 2:        # 범주 2개인 경우 phi 상관계수
             phi_coefficient = (chi2 / len(df))**0.5
-            return phi_coefficient
+            return round(phi_coefficient,6)
         
         else:   
             n = sum(contingency_table.sum())
@@ -43,7 +43,7 @@ def calculate_correlation(df, var1, var2):
         else:
             var_continuous, var_categorical = var2, var1
 
-        return pointbiserialr(df[var_continuous], df[var_categorical])[0]
+        return round(pointbiserialr(df[var_continuous], df[var_categorical])[0],6)
 
     else:
         return None
