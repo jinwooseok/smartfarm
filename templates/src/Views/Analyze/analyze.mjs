@@ -5,6 +5,7 @@ import { setFileList } from "/templates/src/Utils/fileNameList.mjs";
 import ToolPage from "./ToolPage.mjs";
 import VarPage from "./VarPage.mjs";
 import SelectPage from "./SelectPage.mjs";
+import ResultPage from "./ResultPage.mjs";
 
 const $logoutBtn = document.querySelector("#logoutBtn");
 $logoutBtn.addEventListener("click", Logout);
@@ -27,7 +28,8 @@ const clickEvent = async (event, id,) => {
 
   if (id === "modelSelect") {
     // 기타 설정
-    changeProgress(3);
+    console.log("X")
+    changeDiv(3);
   }
 
   if (id === "create") {
@@ -91,17 +93,22 @@ const clickEvent = async (event, id,) => {
     const response = await VarPage.postTimeDiffData(fileName, data);
     console.log("시차 리턴 데이터", response) // 변수 목록 수정 VarPage.makeVarListDIV(list)
     console.log(Object.keys(response[0]));
+    // const $listDIV = document.querySelector('#listDIV');
+    // $listDIV.innerHTML = VarPage.makeVarListDIV(VarPage.getFileFeatureInfo());
     return;
   }
 
   if (id ==="yValue") {
     // 변수 중요도
     const data = {
-      xValue: JSON.stringify(VarPage.getFileFeatureInfo()),
+      xValue: JSON.stringify(VarPage.getFeatureNameList()),
       yValue: document.querySelector(".yValue").options[document.querySelector(".yValue").selectedIndex]?.value,
       fileData: JSON.stringify(VarPage.getFileData()),
     }
     console.log("변수 중요도", data);
+    await VarPage.setImportanceOfFeature(fileName, data);
+    const $listDIV = document.querySelector('#listDIV');
+    $listDIV.innerHTML = VarPage.makeVarListDIV(VarPage.getFileFeatureInfo());
   }
 }
 
@@ -172,7 +179,7 @@ const changeDiv = async (nowProgress) => {
 
   if (nowProgress === 3) { // 분석 결과
     // 엑셀, 산점도 그래프, 분석 결과
-
+    $workDIV.innerHTML = ResultPage.templates();
   }
 }
 

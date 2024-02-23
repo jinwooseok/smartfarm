@@ -131,7 +131,7 @@ class VarPage {
 	}
 
 	async setImportanceOfFeature(fileName, data) {
-		const response = await API(`/files/${fileName}/data/feature/`, "post", data);
+		const response = await API(`/files/${fileName}/data/feature/importance/`, "post", data);
 		const status = response.status || response;
 		if (response.status === "success") {
 			return responseMessage[status] === "success" ? this.#fileFeatureInfo = response.data : alert(responseMessage[status]);

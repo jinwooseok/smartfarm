@@ -6,6 +6,7 @@ export const getFileNameList = async ()=> {
 }
 
 export const setFileList = ($div, data, fileName='') => {
+  $div.innerHTML = "";
   data.map( (title) => {
     const value = typeof title === 'string' ? title : title.fileName;
     if (value === fileName) {
