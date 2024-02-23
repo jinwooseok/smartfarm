@@ -1,5 +1,6 @@
 import pandas as pd
 from scipy.stats import pearsonr, pointbiserialr, chi2_contingency
+from .encoder import Encoder
 import numpy as np
 def calculate_correlation(data, var1, var2):
     df = data.copy()
@@ -18,7 +19,8 @@ def calculate_correlation(data, var1, var2):
         return round(pearsonr(df[var1], df[var2])[0], 6)
 
     elif type_var1 == 'object' and type_var2 == 'object': # 범주형 - 범주형
-        
+        df[var1] = Encoder.encode(df[var1], method='label')
+        df[var2] = Encoder.encode(df[var2], method='label')        
         contingency_table = pd.crosstab(df[var1], df[var2])
         if contingency_table.shape[0]==2:
             correct=False
@@ -47,7 +49,9 @@ def calculate_correlation(data, var1, var2):
             var_continuous, var_categorical = var1, var2
         else:
             var_continuous, var_categorical = var2, var1
-
+            
+        df[var_categorical] = Encoder.encode(df[var_categorical], method='label')
+        print(round(pointbiserialr(df[var_continuous], df[var_categorical])[0],6))
         return round(pointbiserialr(df[var_continuous], df[var_categorical])[0],6)
 
     else:

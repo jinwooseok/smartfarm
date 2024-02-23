@@ -41,7 +41,7 @@ class FileSaveService():
             self.file_data = self.file_data[self.start_index-1:]
             self.start_index = 1
         
-        if self.date_column == 'null':
+        if self.date_column == None:
             pass
         elif self.date_column != self.file_data.columns[0]:
             try:
