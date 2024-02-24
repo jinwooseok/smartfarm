@@ -1,6 +1,7 @@
 from ..serializers import GetFeatureImportanceSerializer
 import pandas as pd
 from ...data_analytics.utils.correlation import calculate_correlation
+from ...exceptions import *
 import numpy as np
 class FeatureImportanceService:
     def __init__(self, x_value, y_value, data):
@@ -16,6 +17,10 @@ class FeatureImportanceService:
 
     def execute(self):
         df = pd.DataFrame(self.data)
+        for name in self.x_value+[self.y_value]:
+            if name not in df.columns:
+                raise InvalidFeatureException(name)
+        
         df.replace('', np.nan, inplace=True)
         response = []
         for idx, name in enumerate(self.x_value):

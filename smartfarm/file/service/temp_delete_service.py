@@ -1,5 +1,5 @@
 from .file_delete_service import FileDeleteService
-from ..exceptions.file_exception import *
+from ...exceptions import *
 from ..utils.utils import *
 class TempDeleteService(FileDeleteService):
     @classmethod    

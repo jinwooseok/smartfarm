@@ -6,7 +6,6 @@ def calculate_correlation(data, var1, var2):
     df = data.copy()
     type_var1 = df[var1].dtype
     type_var2 = df[var2].dtype
-    
     df = df.replace([np.inf, -np.inf], np.nan).dropna(subset=[var1, var2])
     
     if len(df[var1].value_counts())<=1 :

@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from ..file.serializers import FileNameSerializer
 from ..file.repositorys import *
-from ..file.exceptions.file_exception import FileNotFoundException
-from ..models import File
+from ..exceptions import *
+
 class ProcessOutlierSerializer(FileNameSerializer):
     pass
     

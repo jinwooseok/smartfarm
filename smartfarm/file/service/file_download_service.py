@@ -1,8 +1,7 @@
 from django.http import HttpResponse
 import os
-from django.conf import settings
 from ..utils.utils import *
-from ..exceptions.file_exception import *
+from ...exceptions import *
 class FileDownloadService:
     def __init__(self, file_name, file_root, content_type):
         self.file_name = file_name

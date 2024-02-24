@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from .masks import *
-from ..exceptions.exceptions import VarDataException
+from ...exceptions import *
 from ...file_data.utils.process import DataProcess
 from common.decorators import logging_time
 class FeatureGenerator():

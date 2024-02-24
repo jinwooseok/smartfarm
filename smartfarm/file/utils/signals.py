@@ -2,7 +2,7 @@ from django.db.models.signals import pre_delete, post_save
 from django.dispatch import receiver
 from ...models import File, Temp, LearnedModel
 import os
-from ..exceptions.file_exception import *
+from ...exceptions import *
 from ..utils.utils import *
 from ...feature.service.feature_service import FeatureService
 from ...feature.serializers import FileFeatureSerializer

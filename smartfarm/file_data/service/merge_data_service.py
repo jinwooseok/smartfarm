@@ -1,7 +1,7 @@
 from ...file.utils.utils import *
 from .get_file_data_service import GetFileDataService
 from ...file.service.temp_save_service import TempSaveService
-from ..exceptions.file_data_exceptions import StandardDuplicateException
+from ...exceptions import *
 from ..utils.process import DataProcess
 
 import pandas as pd

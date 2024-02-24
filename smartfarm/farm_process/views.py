@@ -7,7 +7,6 @@ from common.response import *
 from common.validators import login_validator, serializer_validator
 from .service.farm_process_service import FarmProcessService
 from .service.trans_abms_service import TransABMSService
-from common.validate_exception import ValidationException
 from .serializers import FarmProcessSerializer, EnvABMSSerializer
 class DataABMSViewSet(viewsets.GenericViewSet):
     def page(self, request, file_title):

@@ -1,4 +1,3 @@
-from ...models import LearnedModel
 from sklearn.model_selection import train_test_split
 from .save_model_service import SaveModelService
 from ..utils.rf_model import CustomRandomForestClassifier, CustomRandomForestRegressor
@@ -12,10 +11,9 @@ from ..utils.elasticnet import CustomElasticNet
 from ..serializers import *
 from common.validators import serializer_validator
 import pandas as pd
-from ..exceptions.model_type_exception import ModelTypeException
-from ..exceptions.data_count_exception import DataCountException
+from ...exceptions import *
 import numpy as np
-from ..utils.encoder import Encoder
+
 class CreateModelService():
     def __init__(self, model_name, x_value, y_value, model, file_object, file_data, train_size=0.7, model_params={}):
         self.model_name = model_name
@@ -39,15 +37,19 @@ class CreateModelService():
                     ,serializer.validated_data['modelParams'])
 
     def execute(self):
-        # file_absolute_path = search_file_absolute_path(instance.file_root)
-        # df = GetFileDataService.file_to_df(file_absolute_path)
         json_data = self.file_data
         df = pd.DataFrame(json_data)
+        
+        for name in self.x_value+[self.y_value]:
+            if name not in df.columns:
+                raise InvalidFeatureException(name)
+        
         df.replace('', np.nan, inplace=True)
         df.dropna(axis=0, subset=self.x_value+[self.y_value], inplace=True) #nan 제거
+        
         if len(df) < len(self.x_value) + 1:
             raise DataCountException(len(self.x_value), len(df))
-        
+            
         x_df = df[self.x_value]
         y_df = df[self.y_value]
         #모델 train_set 설정

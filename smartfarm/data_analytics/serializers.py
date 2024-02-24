@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from ..file.serializers import FileNameSerializer
 from ..models import LearnedModel
-from ..file.exceptions.file_exception import FileNotFoundException
+from ..exceptions import *
 from django.core.validators import MinValueValidator, MaxValueValidator
 class CreateModelSerializer(FileNameSerializer):
     modelName = serializers.CharField()

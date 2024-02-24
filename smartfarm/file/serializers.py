@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from ..models import File, Temp
-from .exceptions.file_exception import FileNotFoundException
+from ..exceptions import *
 from .repositorys import *
 class FileInfoSerializer(serializers.ModelSerializer):
     fileName = serializers.CharField(source='file_title')
