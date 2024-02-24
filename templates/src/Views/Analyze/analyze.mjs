@@ -23,6 +23,48 @@ const globalData = {
 
 const fileName = JSON.parse(localStorage.getItem("fileTitle"));
 
+const checkRadioValue = (htmlTag) => {
+  for (let i = 0; i < htmlTag.length; i++) {
+    if (htmlTag[i].checked) {
+      if (htmlTag[i].value === "else"){
+        return document.getElementById("elsePeriod").value;
+      }
+      return htmlTag[i].value;
+    }
+  }
+}
+
+const setToolValue = (option) => {
+  if (option === "lasso" || option === "ridge") {
+    return {
+      alpha: document.querySelector(".alpha").value,
+    }
+  } else if (option === "elastic") {
+    return {
+      alpha: document.querySelector(".alpha").value,
+      l1_ratio: document.querySelector(".l1_ratio").value,
+    }
+  } else if (option === "svr") {
+    return {
+      l1_ratio: checkRadioValue(document.querySelectorAll('input[name="kernal"]')),
+    }
+  } else if(option === "gb") {
+    return {
+      n_estimators: document.querySelector(".n_estimators").value,
+      learning_rate: document.querySelector(".learning_rate").value,
+      max_depth: document.querySelector(".max_depth").value,
+    }
+  } else if (option === "rfs") {
+    return {
+      n_estimators: document.querySelector(".n_estimators").value,
+      max_depth: document.querySelector(".max_depth").value,
+    }
+  } else {
+    return {}
+  }
+}
+
+
 const clickEvent = async (event, id,) => {
   if (id === "nextPage" || id === "prevPage") {
     confirm(`이동 합니다.`) === true ? changeProgress(id) : null;
@@ -35,6 +77,12 @@ const clickEvent = async (event, id,) => {
 
     return;
 	}
+
+  if (id === "technique") {
+    const $optionDIV = document.querySelector("#optionDIV");
+    const value = document.querySelector(".technique").options[document.querySelector(".technique").selectedIndex]?.value;
+    $optionDIV.innerHTML = ToolPage.drawOptionDiv(value);
+  }
 
   if (id === "modelDown") {
     const link = document.createElement("a");
@@ -70,15 +118,20 @@ const clickEvent = async (event, id,) => {
 
   if (id === "create") {
     Loading.StartLoading();
+    const value = document.querySelector(".technique").options[document.querySelector(".technique").selectedIndex]?.value;
     globalData.modelName = document.querySelector(".modelName").value
     const data = {
       modelName: globalData.modelName,
-      model: document.querySelector(".technique").options[document.querySelector(".technique").selectedIndex]?.value,
+      model: value,
       trainSize: document.querySelector(".trainSize").value,
       yValue: globalData.y,
       xValue: JSON.stringify(globalData.x),
       fileData: JSON.stringify(VarPage.getFileData()),
+      modelParams : {
+
+      }
     };
+    data.modelParams = setToolValue(value);
     const response = await ToolPage.postModelData(fileName, data); // 결과
     if (response) {
       const $modelResultDIV = document.querySelector(".modelResultDIV");

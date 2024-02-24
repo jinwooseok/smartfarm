@@ -70,6 +70,8 @@ class ToolPage {
 				</fieldset>
 			</fieldset>
 
+			<div class="optionDIV"></div>
+
 			<button class="create" id="create">모델 생성</button>
 			`
 		}
@@ -86,12 +88,64 @@ class ToolPage {
 					<select name="technique" id="technique" class="technique">
 						<option value="linear">선형회귀분석</option>
 						<option value="lstm">로지스틱회귀분석</option>
+						<option value="lasso">라쏘회귀</option>
+						<option value="ridge">릿지회귀</option>
+						<option value="elastic">엘라스틱넷</option>
+						<option value="gb">gradient_boosting</option>
+						<option value="svr">소프트벡터회귀</option>
+						<option value="rfs">랜덤포레스트회귀</option>
 					</select>
 				</fieldset>
 		</fieldset>
 
+		<div class="optionDIV" id="optionDIV">
+		</div>
+
 		<button class="create" id="create">모델 생성</button>
 		`
+	}
+
+	drawOptionDiv(option) {
+		if (option === "lasso" || option === "ridge") {
+			return `
+				<legend>alpha</legend>
+				<input type="number" name="alpha" class="alpha" id="alpha" placeholder="0~1 사이 값을 입력해주세요">
+			`
+		} else if (option === "elastic") {
+			return `
+				<legend>alpha</legend>
+				<input type="number" name="alpha" class="alpha" id="alpha" value="1">
+				<legend>l1_ratio</legend>
+				<input type="number" name="l1_ratio" class="l1_ratio" id="l1_ratio" placeholder="0~1 사이 값을 입력해주세요">
+			`
+		} else if (option === "svr") {
+			return `
+				<legend>kernal</legend>
+				<div class="kernalDIV" id="kernalDIV">
+					<input type="radio" name="kernal" id="rbf" value="rbf"><label for="rbf">rbf</label>
+					<input type="radio" name="kernal" id="poly" value="poly"><label for="poly">poly</label>
+					<input type="radio" name="kernal" id="linear" value="linear"><label for="linear">linear</label>
+				</div>
+			`
+		} else if (option === "gb") {
+			return `
+				<legend>n_estimators</legend>
+				<input type="number" name="n_estimators" class="n_estimators" id="n_estimators" placeholder="0보다 큰 값">
+				<legend>learning_rate</legend>
+				<input type="number" name="learning_rate" class="learning_rate" id="learning_rate" placeholder="0~1 사이 값을 입력해주세요">
+				<legend>max_depth</legend>
+				<input type="number" name="max_depth" class="max_depth" id="max_depth" placeholder="0보다 큰 값">
+			`
+		} else if (option === "rfs") {
+			return `
+				<legend>n_estimators</legend>
+				<input type="number" name="n_estimators" class="n_estimators" id="n_estimators" placeholder="0보다 큰 값">
+				<legend>max_depth</legend>
+				<input type="number" name="max_depth" class="max_depth" id="max_depth" placeholder="0보다 큰 값">
+				`
+		} else {
+			return ``;
+		}
 	}
 
 	drawModelResult(result) {

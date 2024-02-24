@@ -233,6 +233,10 @@ fieldset {
 	margin : 20px auto;
 }
 
+.optionDIV{
+	margin-bottom: 20px;
+}
+
 .modelResultDIV {
 	width: 300px;
 	margin-left: 20px;
