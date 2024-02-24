@@ -9,13 +9,14 @@ from ..utils.logistic import CustomLogisticRegression
 from ..utils.svm import CustomSVC, CustomSVR
 from ..utils.gradient_boosting import CustomGradientBoosting
 from ..utils.elasticnet import CustomElasticNet
-
+from ..serializers import *
+from common.validators import serializer_validator
 import pandas as pd
 from ..exceptions.model_type_exception import ModelTypeException
 from ..exceptions.data_count_exception import DataCountException
 import numpy as np
 class CreateModelService():
-    def __init__(self, model_name, x_value, y_value, model, file_object, file_data, train_size=0.7, is_save=False):
+    def __init__(self, model_name, x_value, y_value, model, file_object, file_data, train_size=0.7, model_params={}):
         self.model_name = model_name
         self.x_value = x_value
         self.y_value = y_value
@@ -23,7 +24,7 @@ class CreateModelService():
         self.model = model
         self.file_object = file_object
         self.file_data = file_data
-        self.is_save = is_save
+        self.model_params = model_params
     
     @classmethod
     def from_serializer(cls, serializer, user) -> "CreateModelService":
@@ -33,7 +34,8 @@ class CreateModelService():
                     ,serializer.validated_data['model']
                     ,serializer.get_file_object(user)
                     ,serializer.validated_data['fileData']
-                    ,serializer.validated_data['trainSize'])
+                    ,serializer.validated_data['trainSize']
+                    ,serializer.validated_data['modelParams'])
 
     def execute(self):
         # file_absolute_path = search_file_absolute_path(instance.file_root)
@@ -63,7 +65,8 @@ class CreateModelService():
         if self.model == "rf":
             if y_train.dtype is not object:
                 raise ModelTypeException(y_train.name, "연속형")
-            model = CustomRandomForestClassifier(x_train, y_train, random_state)
+            serializer = RFClassifierSerializer(data = self.model_params)
+            model = CustomRandomForestClassifier(x_train, y_train, serializer.data)
             model.fit()
             return model 
         
@@ -73,7 +76,9 @@ class CreateModelService():
                 raise ModelTypeException(nominal_columns, "명목형 혹은 범주형")
             if y_train.dtype is object:
                 raise ModelTypeException(y_train.name, "명목형 혹은 범주형")
-            model = CustomRandomForestRegressor(x_train, y_train, random_state)
+            serializer = RFRegressorSerializer(data = self.model_params)
+            serializer = serializer_validator(serializer)
+            model = CustomRandomForestRegressor(x_train, y_train, random_state, serializer.validated_data)
             model.fit()
             return model
         
@@ -83,7 +88,7 @@ class CreateModelService():
                 raise ModelTypeException(nominal_columns, "명목형 혹은 범주형")
             if y_train.dtype is object:
                 raise ModelTypeException(y_train.name, "명목형 혹은 범주형")
-            model = CustomLinearRegression(x_train, y_train, random_state)
+            model = CustomLinearRegression(x_train, y_train, random_state, self.model_params)
             model.fit()
             return model
         
@@ -93,7 +98,9 @@ class CreateModelService():
                 raise ModelTypeException(nominal_columns, "명목형 혹은 범주형")
             if y_train.dtype is object:
                 raise ModelTypeException(y_train.name, "명목형 혹은 범주형")
-            model = CustomLassoRegression(x_train, y_train, random_state)
+            serializer = LassoSerializer(data = self.model_params)
+            serializer = serializer_validator(serializer)
+            model = CustomLassoRegression(x_train, y_train, random_state, serializer.validated_data)
             model.fit()
             return model
         
@@ -103,7 +110,9 @@ class CreateModelService():
                 raise ModelTypeException(nominal_columns, "명목형 혹은 범주형")
             if y_train.dtype is object:
                 raise ModelTypeException(y_train.name, "명목형 혹은 범주형")
-            model = CustomRidgeRegression(x_train, y_train, random_state)
+            serializer = RidgeSerializer(data = self.model_params)
+            serializer = serializer_validator(serializer)
+            model = CustomRidgeRegression(x_train, y_train, random_state, serializer.validated_data)
             model.fit()
             return model
         
@@ -124,7 +133,9 @@ class CreateModelService():
         elif self.model == "svr":
             if y_train.dtype is object:
                 raise ModelTypeException(y_train.name, "명목형 혹은 범주형")
-            model = CustomSVR(x_train, y_train, random_state)
+            serializer = SVMSerializer(data = self.model_params)
+            serializer = serializer_validator(serializer)
+            model = CustomSVR(x_train, y_train, random_state, serializer.validated_data)
             model.fit()
             return model
         
@@ -139,7 +150,10 @@ class CreateModelService():
                 raise ModelTypeException(nominal_columns, "명목형 혹은 범주형")
             if y_train.dtype is object:
                 raise ModelTypeException(y_train.name, "명목형 혹은 범주형")
-            model = CustomGradientBoosting(x_train, y_train, random_state)
+            
+            serializer = GBRegressorSerializer(data = self.model_params)
+            serializer = serializer_validator(serializer)
+            model = CustomGradientBoosting(x_train, y_train, random_state, serializer.validated_data)
             model.fit()
             return model
         
@@ -149,7 +163,9 @@ class CreateModelService():
                 raise ModelTypeException(nominal_columns, "명목형 혹은 범주형")
             if y_train.dtype is object:
                 raise ModelTypeException(y_train.name, "명목형 혹은 범주형")
-            model = CustomElasticNet(x_train, y_train, random_state)
+            serializer = ElasticSerializer(data = self.model_params)
+            serializer = serializer_validator(serializer)
+            model = CustomElasticNet(x_train, y_train, random_state, serializer.validated_data)
             model.fit()
             return model
         

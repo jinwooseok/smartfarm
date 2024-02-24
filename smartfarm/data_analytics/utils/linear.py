@@ -4,12 +4,13 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 class CustomLinearRegression:
-    def __init__(self, x_dataset, y_dataset, random_state):
+    def __init__(self, x_dataset, y_dataset, sample_random_state, model_params):
         self.model = LinearRegression()
         self.learned_model = None
         self.x_dataset = x_dataset
         self.y_dataset = y_dataset
-        self.random_state = random_state
+        self.sample_random_state = sample_random_state
+        self.model_params = model_params
         self.model_name = 'Linear Regression'
         
     def fit(self):
@@ -24,7 +25,7 @@ class CustomLinearRegression:
             'model': self.model_name,
             'featureNames': list(self.x_dataset.columns),
             'targetNames': self.y_dataset.name,
-            'randomState': self.random_state
+            'randomState': self.sample_random_state,
         }
     
     def predict(self, x_test, y_test):
@@ -43,7 +44,7 @@ class CustomLinearRegression:
             'model' : self.model_name,
             'featureNames': list(self.x_dataset.columns),
             'targetNames': self.y_dataset.name,
-            'randomState': self.random_state,
+            'randomState': self.sample_random_state,
             'MSE': round(mse, 4),
             'R2': round(r2, 4),
             'testData': pd.concat([x_test, y_test, y_pred], axis=1).to_dict(orient='records'),
