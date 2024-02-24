@@ -2,6 +2,7 @@ from rest_framework import serializers
 from ..file.serializers import FileNameSerializer
 from ..models import LearnedModel
 from ..file.exceptions.file_exception import FileNotFoundException
+from django.core.validators import MinValueValidator, MaxValueValidator
 class CreateModelSerializer(FileNameSerializer):
     modelName = serializers.CharField()
     xValue = serializers.JSONField()
@@ -29,33 +30,32 @@ class CreateModelSerializer(FileNameSerializer):
 
 class RidgeSerializer(serializers.Serializer):
     random_state = serializers.IntegerField(default=42, required=False)
-    alpha = serializers.FloatField(default=1.0, required=False)
-    
+    alpha = serializers.FloatField(default=1.0, required=False, validators=[MinValueValidator(0)])
+
 class LassoSerializer(serializers.Serializer):
     random_state = serializers.IntegerField(default=42, required=False)
-    alpha = serializers.FloatField(default=1.0, required=False)
+    alpha = serializers.FloatField(default=1.0, required=False, validators=[MinValueValidator(0)])
 
 class ElasticSerializer(serializers.Serializer):
     random_state = serializers.IntegerField(default=42, required=False)
-    alpha = serializers.FloatField(default=1.0, required=False)
-    l1_ratio = serializers.FloatField(default=0.5, required=False)
+    alpha = serializers.FloatField(default=1.0, required=False, validators=[MinValueValidator(0)])
+    l1_ratio = serializers.FloatField(default=0.5, required=False, validators=[MinValueValidator(0), MaxValueValidator(1)])
 
 class SVMSerializer(serializers.Serializer):
     kernel = serializers.ChoiceField(choices=["linear", "poly", "rbf", "sigmoid"], default="rbf", required=False)
 
 class RFRegressorSerializer(serializers.Serializer):
-    n_estimators = serializers.IntegerField(default=100, required=False)
-    max_depth = serializers.IntegerField(default=3, required=False)
-
-class RFClassifierSerializer(serializers.Serializer):
-    n_estimators = serializers.IntegerField(default=100, required=False)
-    max_depth = serializers.IntegerField(default=3, required=False)
+    n_estimators = serializers.IntegerField(default=100, required=False, validators=[MinValueValidator(1)])
+    max_depth = serializers.IntegerField(default=3, required=False, validators=[MinValueValidator(1)])
 
 class GBRegressorSerializer(serializers.Serializer):
-    n_estimators = serializers.IntegerField(default=100, required=False)
-    learning_rate = serializers.FloatField(default=0.1, required=False)
-    max_depth = serializers.IntegerField(default=3, required=False)
+    n_estimators = serializers.IntegerField(default=100, required=False, validators=[MinValueValidator(1)])
+    learning_rate = serializers.FloatField(default=0.1, required=False, validators=[MinValueValidator(0)])
+    max_depth = serializers.IntegerField(default=3, required=False, validators=[MinValueValidator(1)])
 
+class RFClassifierSerializer(serializers.Serializer):
+    n_estimators = serializers.IntegerField(default=100, required=False, validators=[MinValueValidator(1)])
+    max_depth = serializers.IntegerField(default=3, required=False, validators=[MinValueValidator(1)])
 
 class ModelNameSerializer(serializers.Serializer):
     modelName = serializers.CharField()
