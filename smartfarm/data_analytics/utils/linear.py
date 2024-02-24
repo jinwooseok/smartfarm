@@ -4,17 +4,17 @@ import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 class CustomLinearRegression:
-    def __init__(self, x_dataset, y_dataset, sample_random_state, model_params):
+    def __init__(self, x_train, y_train, sample_random_state, model_params):
         self.model = LinearRegression()
         self.learned_model = None
-        self.x_dataset = x_dataset
-        self.y_dataset = y_dataset
+        self.x_train = x_train
+        self.y_train = y_train
         self.sample_random_state = sample_random_state
         self.model_params = model_params
         self.model_name = 'Linear Regression'
         
     def fit(self):
-        self.learned_model = self.model.fit(self.x_dataset, self.y_dataset)
+        self.learned_model = self.model.fit(self.x_train, self.y_train)
         return self.learned_model
     
     def feature_importances(self):
@@ -23,8 +23,8 @@ class CustomLinearRegression:
     def meta(self):
         return {
             'model': self.model_name,
-            'featureNames': list(self.x_dataset.columns),
-            'targetNames': self.y_dataset.name,
+            'featureNames': list(self.x_train.columns),
+            'targetNames': self.y_train.name,
             'randomState': self.sample_random_state,
         }
     
@@ -42,8 +42,8 @@ class CustomLinearRegression:
         # 추가적인 예측 결과 리턴
         return {
             'model' : self.model_name,
-            'featureNames': list(self.x_dataset.columns),
-            'targetNames': self.y_dataset.name,
+            'featureNames': list(self.x_train.columns),
+            'targetNames': self.y_train.name,
             'randomState': self.sample_random_state,
             'MSE': round(mse, 4),
             'R2': round(r2, 4),

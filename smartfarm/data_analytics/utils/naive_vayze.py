@@ -4,16 +4,16 @@ import pandas as pd
 import numpy as np
 
 class CustomNaiveBayes:
-    def __init__(self, x_dataset, y_dataset, random_state):
+    def __init__(self, x_train, y_dataset, random_state):
         self.model = GaussianNB()
         self.learned_model = None
-        self.x_dataset = x_dataset
+        self.x_train = x_train
         self.y_dataset = y_dataset
         self.random_state = random_state
         self.model_name = 'Naive Bayes'
         
     def fit(self):
-        self.learned_model = self.model.fit(self.x_dataset, self.y_dataset)
+        self.learned_model = self.model.fit(self.x_train, self.y_dataset)
         return self.learned_model
     
     def feature_importances(self):
@@ -22,8 +22,8 @@ class CustomNaiveBayes:
         
         # For example, you could calculate the mean and standard deviation for each feature for each class
         # and consider them as "importances"
-        mean_by_class = self.x_dataset.groupby(self.y_dataset).mean()
-        std_by_class = self.x_dataset.groupby(self.y_dataset).std()
+        mean_by_class = self.x_train.groupby(self.y_dataset).mean()
+        std_by_class = self.x_train.groupby(self.y_dataset).std()
         
         importances = {
             f'Mean_{col}_Class_{cls}': mean_by_class.loc[cls, col]
@@ -36,7 +36,7 @@ class CustomNaiveBayes:
     def meta(self):
         return {
             'model': self.model_name,
-            'featureNames': list(self.x_dataset.columns),
+            'featureNames': list(self.x_train.columns),
             'targetNames': self.y_dataset.name,
             'randomState': self.random_state
         }
@@ -55,7 +55,7 @@ class CustomNaiveBayes:
         # Additional results
         return {
             'model' : self.model_name,
-            'featureNames': list(self.x_dataset.columns),
+            'featureNames': list(self.x_train.columns),
             'targetNames': self.y_dataset.name,
             'randomState': self.random_state,
             'Accuracy': round(accuracy, 4),

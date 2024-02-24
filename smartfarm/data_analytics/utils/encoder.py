@@ -11,9 +11,8 @@ class Encoder:
             le = OneHotEncoder()
         # 라벨인코더 선언 및 Fitting
         le = LabelEncoder()
-        le.fit(categorical_data)
-
-        # 인코딩한 데이터로 변환
-        le_encoded = le.transform(categorical_data)
-
-        return pd.DataFrame(le_encoded, columns = [categorical_data.name])
+        categorical_data = pd.DataFrame(categorical_data)
+        encoded_data = categorical_data.apply(lambda col: le.fit_transform(col))
+        if categorical_data.shape[1] == 1:
+            encoded_data = encoded_data.iloc[:, 0]
+        return encoded_data
