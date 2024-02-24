@@ -66,6 +66,7 @@ class ToolPage {
 					<legend>분석 종류</legend>
 					<select name="technique" id="technique" class="technique">
 						<option value="rf">랜텀포레스트</option>
+						<option value="svc">소프트 벡터머신</option>
 					</select>
 				</fieldset>
 			</fieldset>
@@ -86,14 +87,14 @@ class ToolPage {
 			<fieldset class="typeDIV">
 					<legend>분석 종류</legend>
 					<select name="technique" id="technique" class="technique">
-						<option value="linear">선형회귀분석</option>
-						<option value="lstm">로지스틱회귀분석</option>
-						<option value="lasso">라쏘회귀</option>
-						<option value="ridge">릿지회귀</option>
+						<option value="linear">선형 회귀분석</option>
+						<option value="lstm">로지스틱 회귀분석</option>
+						<option value="lasso">라쏘 회귀</option>
+						<option value="ridge">릿지 회귀</option>
 						<option value="elastic">엘라스틱넷</option>
 						<option value="gb">gradient_boosting</option>
-						<option value="svr">소프트벡터회귀</option>
-						<option value="rfs">랜덤포레스트회귀</option>
+						<option value="svr">소프트 벡터회귀</option>
+						<option value="rfs">랜덤포레스트 회귀</option>
 					</select>
 				</fieldset>
 		</fieldset>
@@ -118,7 +119,7 @@ class ToolPage {
 				<legend>l1_ratio</legend>
 				<input type="number" name="l1_ratio" class="l1_ratio" id="l1_ratio" placeholder="0~1 사이 값을 입력해주세요">
 			`
-		} else if (option === "svr") {
+		} else if (option === "svr" || option === "svc") {
 			return `
 				<legend>kernal</legend>
 				<div class="kernalDIV" id="kernalDIV">
@@ -136,15 +137,15 @@ class ToolPage {
 				<legend>max_depth</legend>
 				<input type="number" name="max_depth" class="max_depth" id="max_depth" placeholder="0보다 큰 값">
 			`
-		} else if (option === "rfs") {
+		} else if (option === "rfs" || option === "rf") {
 			return `
 				<legend>n_estimators</legend>
 				<input type="number" name="n_estimators" class="n_estimators" id="n_estimators" placeholder="0보다 큰 값">
 				<legend>max_depth</legend>
 				<input type="number" name="max_depth" class="max_depth" id="max_depth" placeholder="0보다 큰 값">
 				`
-		} else {
-			return ``;
+		} else if (option === "svc") {
+
 		}
 	}
 

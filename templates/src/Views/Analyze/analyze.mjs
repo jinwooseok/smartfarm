@@ -44,7 +44,7 @@ const setToolValue = (option) => {
       alpha: document.querySelector(".alpha").value,
       l1_ratio: document.querySelector(".l1_ratio").value,
     }
-  } else if (option === "svr") {
+  } else if (option === "svr" || option === "svc") {
     return {
       l1_ratio: checkRadioValue(document.querySelectorAll('input[name="kernal"]')),
     }
@@ -54,7 +54,7 @@ const setToolValue = (option) => {
       learning_rate: document.querySelector(".learning_rate").value,
       max_depth: document.querySelector(".max_depth").value,
     }
-  } else if (option === "rfs") {
+  } else if (option === "rfs" || option === "rf") {
     return {
       n_estimators: document.querySelector(".n_estimators").value,
       max_depth: document.querySelector(".max_depth").value,
