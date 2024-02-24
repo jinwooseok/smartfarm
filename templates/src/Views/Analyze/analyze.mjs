@@ -37,10 +37,14 @@ const clickEvent = async (event, id,) => {
 	}
 
   if (id === "modelDown") {
-    Loading.StartLoading();
-    await API(`/analytics/${globalData.modelData.modelFileName}/model/download/`, "get");
-    Loading.CloseLoading();
-    return;
+    const link = document.createElement("a");
+    link.href = `/analytics/${globalData.modelData.modelFileName}/model/download/`;
+    link.style.visibility = "hidden";
+    link.download = globalData.modelData.modelFileName;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 
   if (id === "fileDown") {
