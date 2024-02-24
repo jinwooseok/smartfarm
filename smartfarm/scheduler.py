@@ -6,14 +6,14 @@ from django.utils import timezone
 logger = logging.getLogger('django')
 
 def temp_model_delete():
-    delete_time = timezone.now()-timezone.timedelta(days=1)
+    delete_time = timezone.now()-timezone.timedelta(hours=1)
     Temp.object.filter(created_at__lt=delete_time).delete()
     LearnedModel.object.filter(created_at__lt=delete_time).delete()    
 def start():
     scheduler=BackgroundScheduler()
     scheduler.add_job(
         temp_model_delete,
-        trigger=CronTrigger(hour=0, minute=0),
+        trigger=CronTrigger(minute=0),
         id="delete",
         misfire_grace_time=300,
         replace_existing=True,
