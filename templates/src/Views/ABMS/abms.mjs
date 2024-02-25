@@ -1,5 +1,4 @@
 import API from "/templates/src/Utils/API.mjs";
-import Loading from "/templates/src/Utils/Loading.mjs";
 import { getFileNameList, setFileList } from "/templates/src/Utils/fileNameList.mjs";
 import { abmsTextValue } from "/templates/src/Constant/variableList.mjs";
 
@@ -108,8 +107,6 @@ const setEnvData = () => {
 
 // abms 데이터 만들기
 $abmsSave.addEventListener("click", async() => {
-  Loading.StartLoading();
-
 	const fileType = $abmsType.options[$abmsType.selectedIndex].value;
 
 	if (fileType !== "환경") {
@@ -118,7 +115,6 @@ $abmsSave.addEventListener("click", async() => {
 			fileData : JSON.stringify(setABMSdata()),
 		});
 
-    Loading.CloseLoading();
 		response.status === "success" ? location.replace("/file-list/") : alert("에러");
 		return;
 	}
@@ -127,8 +123,6 @@ $abmsSave.addEventListener("click", async() => {
 		columns: JSON.stringify(setEnvData()),
 		newFileName: $abmsFileName.value,
 	});
-
-  Loading.CloseLoading();
   
   const status = response.status;
   status === "success" ? location.replace("/file-list/") : null;

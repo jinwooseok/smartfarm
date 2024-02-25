@@ -1,5 +1,4 @@
 import Logout from "/templates/src/Utils/Logout.mjs";
-import Loading from "/templates/src/Utils/Loading.mjs";
 import { getFileNameList, setFileList } from "/templates/src/Utils/fileNameList.mjs";
 
 import ShowFilePage from "./ShowFilePage.mjs";
@@ -91,9 +90,7 @@ const clickEvent = async (event, id, targetClass) => {
 
 			// 전처리
 			if(targetClass.contains("treat")) {
-				Loading.StartLoading();
 				const status = await ShowPreprocessPage.submit();
-				Loading.CloseLoading();
 				status === "success" ? changeProgress(id) : null;
 			}
 		}
@@ -126,9 +123,7 @@ const clickEvent = async (event, id, targetClass) => {
 		submitData.newFileName = document.querySelector('#fileName').value;
 		submitData.var = JSON.stringify(RevisePage.getNewData());
 
-		Loading.StartLoading();
 		await RevisePage.submit(fileName, submitData);
-		Loading.CloseLoading();
 	}
 
 	if (id === "resetData") {// 변수 초기화
@@ -190,11 +185,9 @@ const changeDiv = async (nowProgress) => {
 		const $spreadSheetDIV = document.querySelector("#spreadSheetDIV");
 
 		// 파일 데이터 그리기
-		Loading.StartLoading();
 		ShowFilePage.setFileTitle(fileName);
 		await ShowFilePage.setFileData();
 		ShowFilePage.showFile($spreadSheetDIV);
-		Loading.CloseLoading();
 	}
 
 	if (nowProgress === 1) { // 전처리

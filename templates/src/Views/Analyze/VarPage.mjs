@@ -1,5 +1,4 @@
 import API from "/templates/src/Utils/API.mjs";
-import Loading from "/templates/src/Utils/Loading.mjs";
 
 class VarPage {
 	#fileFeatureInfo = ""; // 파일 변수 중요도 및 특징 겍체
@@ -125,14 +124,12 @@ class VarPage {
 	async setFileFeatureInfo(fileName) {
 		const response = await API(`/files/${fileName}/data/feature/`, "get");
 		const status = response.status;
-		Loading.CloseLoading();
 		return status === "success" ? this.#fileFeatureInfo = response.data : null;
 	}
 
 	async setImportanceOfFeature(fileName, data) {
 		const response = await API(`/files/${fileName}/data/feature/importance/`, "post", data);
 		const status = response.status;
-		Loading.CloseLoading();
 		return status === "success" ? this.#fileFeatureInfo = response.data : null;
 	}
 

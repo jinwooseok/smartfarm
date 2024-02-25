@@ -1,5 +1,4 @@
 import Excel from "/templates/src/Model/Excel.mjs";
-import Loading from "/templates/src/Utils/Loading.mjs";
 
 class ResultPage {
 	#fileData;
@@ -123,7 +122,6 @@ class ResultPage {
 	}
 
 	setModelResult(data) {
-		Loading.CloseLoading()
 		this.#modelResult = data;
 		this.#fileData = this.#modelResult.testData;
 		this.#setGraphData();

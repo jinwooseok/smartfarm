@@ -1,5 +1,4 @@
 import API from "/templates/src/Utils/API.mjs";
-import Loading from "/templates/src/Utils/Loading.mjs";
 
 class ToolPage {
 	#xVarList;
@@ -201,7 +200,6 @@ class ToolPage {
 		this.validateData(data);
 		const response = await API(`/analytics/${fileName}/model/`, "post", data);
     const status = response.status;
-		Loading.CloseLoading();
 		return status === "success" ? response.data : null;
 	}
 
