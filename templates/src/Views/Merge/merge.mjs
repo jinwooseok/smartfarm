@@ -1,6 +1,5 @@
 import API from "/templates/src/Utils/API.mjs";
 import Logout from "/templates/src/Utils/Logout.mjs";
-import Loading from "/templates/src/Utils/Loading.mjs";
 import { getFileNameList } from "/templates/src/Utils/fileNameList.mjs";
 
 import MergePage from "./MergePage.mjs";
@@ -86,10 +85,8 @@ const clickEvent = async (event, id, targetClass) => {
 		managedData.fileTitle = $mergeFileName.value;
 
 		// 파일 데이터 그리기
-		Loading.StartLoading();
 		const $spreadSheetDIV = document.querySelector("#spreadSheetDIV");
 		MergePage.showFile($spreadSheetDIV);
-		Loading.CloseLoading();
 	}
 
 	if (id === "switch") {

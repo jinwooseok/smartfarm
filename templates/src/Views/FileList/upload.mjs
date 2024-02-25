@@ -1,5 +1,4 @@
 import API from "/templates/src/Utils/API.mjs";
-import Loading from "/templates/src/Utils/Loading.mjs";
 import Excel from "/templates/src/Model/Excel.mjs";
 import { setFileList } from "/templates/src/Utils/fileNameList.mjs";
 
@@ -47,7 +46,6 @@ $closeUploadPopup.addEventListener("click", () => {
 
 const readFileContent = (file, fileType) => {
   const reader = new FileReader();
-  Loading.StartLoading();
 
   reader.onload = function (event) {
     const fileContent = event.target.result;
@@ -60,12 +58,10 @@ const readFileContent = (file, fileType) => {
 
     new Excel(sheetData.slice(0, 30), $file);
     setFileList($dateBox, Object.keys(sheetData[0]));
-    Loading.CloseLoading();
   };
 
   reader.onerror = function (event) {
     console.error(event.target.error);
-    Loading.CloseLoading();
   };
 
   if (fileType === 'xlsx') {
@@ -110,8 +106,9 @@ const showFile = () => {
   }
 }
 
-$fileUploadInput.addEventListener("change", (event) => {
+$fileUploadInput.addEventListener("input", (event) => {
   selectedFile = event.target.files[0];
+  console.log(event.target.files)
   if (!selectedFile) {
     return;
   }

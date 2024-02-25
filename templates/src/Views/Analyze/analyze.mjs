@@ -1,7 +1,5 @@
 import Logout from "/templates/src/Utils/Logout.mjs";
-import Loading from "/templates/src/Utils/Loading.mjs";
 import downloadToCsv from "/templates/src/Utils/DownloadToCsv.mjs";
-import API from "/templates/src/Utils/API.mjs";
 import { setFileList } from "/templates/src/Utils/fileNameList.mjs";
 
 import ToolPage from "./ToolPage.mjs";
@@ -71,7 +69,6 @@ const clickEvent = async (event, id,) => {
 
     if (event.target.classList.contains("analyze")) {
 
-      Loading.StartLoading();
       ResultPage.setModelResult(globalData.modelData);
     }
 
@@ -117,7 +114,6 @@ const clickEvent = async (event, id,) => {
   }
 
   if (id === "create") {
-    Loading.StartLoading();
     const value = document.querySelector(".technique").options[document.querySelector(".technique").selectedIndex]?.value;
     globalData.modelName = document.querySelector(".modelName").value
     const data = {
@@ -163,7 +159,6 @@ const clickEvent = async (event, id,) => {
   }
 
   if (id === "timeDiffCreate") {
-    Loading.StartLoading();
     const data = {
       xValue: JSON.stringify(VarPage.setCheckedVarList()),
       yValue: document.querySelector(".yValue").options[document.querySelector(".yValue").selectedIndex]?.value,
