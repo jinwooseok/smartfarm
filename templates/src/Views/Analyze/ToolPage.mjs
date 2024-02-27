@@ -139,7 +139,7 @@ class ToolPage {
 				<legend>max_depth</legend>
 				<input type="number" name="max_depth" class="max_depth" id="max_depth" placeholder="0보다 큰 값">
 			`
-		} else if (option === "rfs" || option === "rf") {
+		} else if (option === "rfr" || option === "rf") {
 			return `
 				<legend>n_estimators</legend>
 				<input type="number" name="n_estimators" class="n_estimators" id="n_estimators" placeholder="0보다 큰 값">
