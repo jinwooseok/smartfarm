@@ -45,7 +45,7 @@ class MergeDataService():
     
         for i in range(1, len(dfs)):
             merged_data.info(memory_usage=True)
-            merged_data = pd.merge(merged_data, dfs[i], on="기준", suffixes=(f'_{i}', f'_{i+1}'), how='outer', sort=True)
+            merged_data = pd.merge(merged_data, dfs[i], on="기준", suffixes=(f'_{i}', f'_{i+1}'), how='outer')
         
         file_title = file_object.file_title
 
