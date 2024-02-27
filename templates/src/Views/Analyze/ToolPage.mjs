@@ -87,7 +87,7 @@ class ToolPage {
 					<legend>분석 종류</legend>
 					<select name="technique" id="technique" class="technique">
 						<option value="linear">선형 회귀분석</option>
-						<option value="lstm">로지스틱 회귀분석</option>
+						<option value="logistic">로지스틱 회귀분석</option>
 						<option value="lasso">라쏘 회귀</option>
 						<option value="ridge">릿지 회귀</option>
 						<option value="elastic">엘라스틱넷</option>
@@ -106,6 +106,9 @@ class ToolPage {
 	}
 
 	drawOptionDiv(option) {
+		if (option === "linear" || option === "logistic") {
+			return ``
+		}
 		if (option === "lasso" || option === "ridge") {
 			return `
 				<legend>alpha</legend>
