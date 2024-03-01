@@ -7,8 +7,8 @@ logger = logging.getLogger('django')
 
 def temp_model_delete():
     delete_time = timezone.now()-timezone.timedelta(hours=1)
-    Temp.object.filter(created_at__lt=delete_time).delete()
-    LearnedModel.object.filter(created_at__lt=delete_time).delete()    
+    Temp.objects.filter(created_at__lt=delete_time).delete()
+    LearnedModel.objects.filter(created_at__lt=delete_time).delete()    
 def start():
     scheduler=BackgroundScheduler()
     scheduler.add_job(

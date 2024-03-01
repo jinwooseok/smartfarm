@@ -22,7 +22,6 @@ class ShiftDataService():
                    ,serializer.validated_data["yValue"])
     
     def execute(self):
-        print(self.yValue, self.xValue)
         if self.yValue in self.xValue:
             raise YValueDuplicateException(self.yValue)
         elif None in self.xValue:

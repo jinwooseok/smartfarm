@@ -119,15 +119,11 @@ class CreateModelService():
             return model
         
         elif self.model == "logistic":
-            if y_train.dtypes != "object":
-                raise ModelTypeException(y_train.name, "연속형")
             model = CustomLogisticRegression(x_train, y_train, random_state, self.model_params)
             model.fit()
             return model
          
         elif self.model == "svc":
-            if y_train.dtypes != "object":
-                raise ModelTypeException(y_train.name, "연속형")
             serializer = SVMSerializer(data = self.model_params)
             serializer = serializer_validator(serializer)
             model = CustomSVC(x_train, y_train, random_state, serializer.validated_data)
