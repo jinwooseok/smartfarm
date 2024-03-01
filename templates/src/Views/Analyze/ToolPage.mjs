@@ -146,8 +146,8 @@ class ToolPage {
 				<legend>max_depth</legend>
 				<input type="number" name="max_depth" class="max_depth" id="max_depth" placeholder="0보다 큰 값">
 				`
-		}
-	}
+		} else {
+			return ``;
 
 	drawModelResult(result) {
 		return `
