@@ -64,13 +64,13 @@ class ToolPage {
 				<fieldset class="typeDIV">
 					<legend>분석 종류</legend>
 					<select name="technique" id="technique" class="technique">
-						<option value="rf">랜텀포레스트</option>
+						<option value="rf">랜덤포레스트</option>
 						<option value="svc">소프트 벡터머신</option>
 					</select>
 				</fieldset>
 			</fieldset>
 
-			<div class="optionDIV"></div>
+			<div class="optionDIV" id="optionDIV"></div>
 
 			<button class="create" id="create">모델 생성</button>
 			`
@@ -87,13 +87,13 @@ class ToolPage {
 					<legend>분석 종류</legend>
 					<select name="technique" id="technique" class="technique">
 						<option value="linear">선형 회귀분석</option>
-						<option value="lstm">로지스틱 회귀분석</option>
+						<option value="logistic">로지스틱 회귀분석</option>
 						<option value="lasso">라쏘 회귀</option>
 						<option value="ridge">릿지 회귀</option>
 						<option value="elastic">엘라스틱넷</option>
 						<option value="gb">gradient_boosting</option>
 						<option value="svr">소프트 벡터회귀</option>
-						<option value="rfs">랜덤포레스트 회귀</option>
+						<option value="rfr">랜덤포레스트 회귀</option>
 					</select>
 				</fieldset>
 		</fieldset>
@@ -106,6 +106,9 @@ class ToolPage {
 	}
 
 	drawOptionDiv(option) {
+		if (option === "linear" || option === "logistic") {
+			return ``
+		}
 		if (option === "lasso" || option === "ridge") {
 			return `
 				<legend>alpha</legend>
@@ -136,7 +139,7 @@ class ToolPage {
 				<legend>max_depth</legend>
 				<input type="number" name="max_depth" class="max_depth" id="max_depth" placeholder="0보다 큰 값">
 			`
-		} else if (option === "rfs" || option === "rf") {
+		} else if (option === "rfr" || option === "rf") {
 			return `
 				<legend>n_estimators</legend>
 				<input type="number" name="n_estimators" class="n_estimators" id="n_estimators" placeholder="0보다 큰 값">

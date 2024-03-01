@@ -52,7 +52,7 @@ const setToolValue = (option) => {
       learning_rate: document.querySelector(".learning_rate").value,
       max_depth: document.querySelector(".max_depth").value,
     }
-  } else if (option === "rfs" || option === "rf") {
+  } else if (option === "rfr" || option === "rf") {
     return {
       n_estimators: document.querySelector(".n_estimators").value,
       max_depth: document.querySelector(".max_depth").value,
@@ -78,6 +78,7 @@ const clickEvent = async (event, id,) => {
   if (id === "technique") {
     const $optionDIV = document.querySelector("#optionDIV");
     const value = document.querySelector(".technique").options[document.querySelector(".technique").selectedIndex]?.value;
+    console.log(ToolPage.drawOptionDiv(value));
     $optionDIV.innerHTML = ToolPage.drawOptionDiv(value);
   }
 
