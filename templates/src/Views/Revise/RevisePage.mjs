@@ -13,7 +13,6 @@ class RevisePage {
 	}
 
   async submit(fileName, submitData) {
-    console.log("var",submitData.var)
     const response = await API(`/files/${fileName}/data/farm/`, "post", submitData);
 		const status = response.status;
     status === "success" ? location.replace("/file-list/") : null;
