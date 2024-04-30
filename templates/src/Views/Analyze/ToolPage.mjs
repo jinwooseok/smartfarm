@@ -148,6 +148,8 @@ class ToolPage {
 				`
 		} else {
 			return ``;
+		}
+	}
 
 	drawModelResult(result) {
 		return `

@@ -145,6 +145,7 @@ const clickEvent = async (event, id, targetClass) => {
 
 	if (id === "easy") {
 		document.querySelector(".box").innerHTML = RevisePage.templatesEasy();
+		ShowFilePage.setColumn(document.querySelector("#dataColumnList"));
 	}
 
 	if (id === "hard") {
