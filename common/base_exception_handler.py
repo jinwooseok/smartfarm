@@ -1,25 +1,48 @@
+'''
+datetime : 시간 관련 라이브러리
+logging : 로깅 관련 라이브러리
+traceback : 예외 처리 세부사항 출력
+exceptions : rest_framework 예외 처리 관련 객체
+exception_handler : rest_framework 예외 처리 객체
+Response : rest_framework 응답 객체
+HttpResponseNotFound : rest_framework 404 에러 객체
+CustomBaseException : 사용자 정의 예외 처리 객체
+STATUS_RSP_INTERNAL_ERROR : 서버 내부 오류 응답 코드
+'''
 from datetime import datetime
+import logging
+import traceback
 from rest_framework import exceptions
 from rest_framework.views import exception_handler
 from rest_framework.response import Response
+from django.http import HttpResponseNotFound
 from .base_exception import CustomBaseException
 from .exception_codes import STATUS_RSP_INTERNAL_ERROR
-from django.http import HttpResponseNotFound
-import logging
-import traceback
+
 def base_exception_handler(exc, context):
+    '''
+    Django 요청 처리 중 발생한 예외를 처리합니다.
+
+    매개변수:
+        exc (Exception): 발생한 예외 객체입니다.
+        context (dict): 요청 및 뷰 정보를 포함하는 컨텍스트 사전입니다.
+
+    반환값:
+        Response: 오류 세부 정보를 포함하는 HTTP 응답 객체입니다.
+    '''
     logger = logging.getLogger('django.request')
 
     response = exception_handler(exc, context)
 
-    logger.info(f"\n[ERROR] {datetime.now()}")
-    logger.info(f"----------------------------------------")
+    logger.info("\n[ERROR] %s", datetime.now())
+    logger.info("----------------------------------------")
     traceback.print_exc()
-    logger.info(f"----------------------------------------")
-    logger.info(f"> context : {context}")
-    logger.info(f"> error : {exc}")
+    logger.info("----------------------------------------")
+    logger.info("> context : %s", context)
+    logger.info("> error : %s", exc)
 
     if response is not None:
+        # 예외 유형에 따라 상태 코드와 메시지를 설정합니다.
         if isinstance(exc, exceptions.ParseError):
             status_code = 400
             code = response.status_code
@@ -73,9 +96,10 @@ def base_exception_handler(exc, context):
             code = response.status_code
             msg = "unknown error occurred.",
 
-        #서버측 에러 표현
-        logger.error(f"> {status_code}({code}) detail : {msg}\n")
+        #서버측 오류를 로그로 기록합니다.
+        logger.error("> %s(%s) detail : %s\n", status_code, code, msg)
 
+        # 오류 세부 정보를 업데이트하여 응답 데이터를 반환합니다.
         response.status_code = status_code
 
         if response.data is not dict:
@@ -87,7 +111,7 @@ def base_exception_handler(exc, context):
 
         return response
     else:
-        #서버측 에러 표현
-        logger.error(f"> {STATUS_RSP_INTERNAL_ERROR['status']} detail : {STATUS_RSP_INTERNAL_ERROR['message']}\n")
+        # 처리되지 않은 예외에 대한 서버 측 오류를 로그로 기록합니다.
+        logger.error("> %s detail : %s\n", STATUS_RSP_INTERNAL_ERROR['status'], STATUS_RSP_INTERNAL_ERROR['message'])
 
         return Response(STATUS_RSP_INTERNAL_ERROR, status=500)
