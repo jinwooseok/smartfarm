@@ -1,7 +1,6 @@
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score, confusion_matrix
 import pandas as pd
-import numpy as np
 
 class CustomNaiveBayes:
     def __init__(self, x_train, y_dataset, random_state):

@@ -1,17 +1,17 @@
 from sklearn.model_selection import train_test_split
-from .save_model_service import SaveModelService
-from ..utils.rf_model import CustomRandomForestClassifier, CustomRandomForestRegressor
-from ..utils.linear import CustomLinearRegression
-from ..utils.lasso import CustomLassoRegression
-from ..utils.ridge import CustomRidgeRegression
-from ..utils.logistic import CustomLogisticRegression
-from ..utils.svm import CustomSVC, CustomSVR
-from ..utils.gradient_boosting import CustomGradientBoosting
-from ..utils.elasticnet import CustomElasticNet
-from ..serializers import *
+from save_model_service import SaveModelService
+from data_analytics.utils.rf_model import CustomRandomForestClassifier, CustomRandomForestRegressor
+from data_analytics.utils.linear import CustomLinearRegression
+from data_analytics.utils.lasso import CustomLassoRegression
+from data_analytics.utils.ridge import CustomRidgeRegression
+from data_analytics.utils.logistic import CustomLogisticRegression
+from data_analytics.utils.svm import CustomSVC, CustomSVR
+from data_analytics.utils.gradient_boosting import CustomGradientBoosting
+from data_analytics.utils.elasticnet import CustomElasticNet
+from data_analytics.serializers import *
 from common.validators import serializer_validator
 import pandas as pd
-from ...exceptions import *
+from common.exceptions import *
 import numpy as np
 
 class CreateModelService():

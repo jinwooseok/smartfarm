@@ -1,4 +1,4 @@
-from ...file.service.file_download_service import FileDownloadService
+from file.service.file_download_service import FileDownloadService
 
 class DownloadModelService(FileDownloadService):
     @classmethod

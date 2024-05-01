@@ -42,8 +42,3 @@ class DataAnalyticsViewSet(viewsets.GenericViewSet):
         serializer = serializer_validator(serializer)
         return Response(ResponseBody.generate(
             data=PredictModelService.from_serializer(serializer, user_id).execute()),status=200)
-    
-    # def get_model_list(self, request):
-    #     user_id = login_validator(request)
-    #     return Response(ResponseBody.generate(
-    #         data=GetModelListService(user_id).execute()),status=200)

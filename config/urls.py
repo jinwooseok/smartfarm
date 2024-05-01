@@ -23,6 +23,11 @@ from django.views.generic import TemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('smartfarm.urls')),
+    path('',include('file.urls')),
+    path('',include('feature.urls')),
+    path('',include('farm_process.urls')),
+    path('',include('file_data.urls')),
+    path('',include('data_analytics.urls')),
     path('users/',include('users.urls')),
     
     path('robots.txt',  TemplateView.as_view(template_name="robots.txt", content_type='text/plain')),

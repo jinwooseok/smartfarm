@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from ..file.serializers import FileNameSerializer
-from ..models import LearnedModel
-from ..exceptions import *
+from file.serializers import FileNameSerializer
+from data_analytics.models import LearnedModel
+from common.exceptions import *
 from django.core.validators import MinValueValidator, MaxValueValidator
 class CreateModelSerializer(FileNameSerializer):
     modelName = serializers.CharField()

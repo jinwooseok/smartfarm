@@ -1,5 +1,6 @@
-from ..utils.rf_model import CustomRandomForestClassifier
-from ..utils.linear import CustomLinearRegression
+from data_analytics.utils.rf_model import CustomRandomForestClassifier
+from data_analytics.utils.linear import CustomLinearRegression
+
 import pickle
 class PredictModelService:
     def __init__(self, model_object, test_data, x_value, y_value):
@@ -9,6 +10,7 @@ class PredictModelService:
         self.y_value = y_value
         self.loaded_model = None
     
+    @classmethod
     def from_serializer(cls, serializer, user) -> "PredictModelService":
         return cls(serializer.get_model_object(user)
                    ,serializer.validated_data['testData']
@@ -24,7 +26,7 @@ class PredictModelService:
         
         
     def model_handler(self, x_df, y_df, random_state=42):
-        if self.model == "linear":
+        if self.model_object.model == "linear":
             model = CustomLinearRegression(x_df, y_df, random_state)
             model.learned_model = self.loaded_model
             result = model.predict(x_df, y_df)

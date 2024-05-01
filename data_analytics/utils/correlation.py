@@ -1,6 +1,6 @@
 import pandas as pd
 from scipy.stats import pearsonr, pointbiserialr, chi2_contingency
-from .encoder import Encoder
+from encoder import Encoder
 import numpy as np
 def calculate_correlation(data, var1, var2):
     df = data.copy()

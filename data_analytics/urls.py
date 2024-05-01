@@ -1,13 +1,9 @@
-from django.urls import path, include
-
-from . import views
+from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
+from data_analytics.views import DataAnalyticsViewSet
 
-from .file.views import FileViewSet
-
-app_name='smartfarm'
-
+app_name='data_analytics'
 
 urlpatterns = [
      #분석

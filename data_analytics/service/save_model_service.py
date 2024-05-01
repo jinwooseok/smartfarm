@@ -1,8 +1,7 @@
-from ...file.service.file_save_service import FileSaveService
+from file.service.file_save_service import FileSaveService
 from django.db import transaction
-from ...models import LearnedModel, ModelFeature, File
-import copy
-import json
+from data_analytics.models import LearnedModel 
+from file.models import File
 import datetime
 class SaveModelService(FileSaveService):
     def __init__(self, file_object, model, model_name, model_meta) -> "SaveModelService":

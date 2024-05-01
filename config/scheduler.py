@@ -1,8 +1,10 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 import logging
-from ..smartfarm.models import Temp, LearnedModel
+from file.models import Temp
+from data_analytics.models import LearnedModel
 from django.utils import timezone
+
 logger = logging.getLogger('django')
 
 def temp_model_delete():

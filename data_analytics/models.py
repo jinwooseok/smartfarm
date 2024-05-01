@@ -1,4 +1,9 @@
 from django.db import models
+from users.models import User
+import os
+import pickle
+import json
+from django.conf import settings
 
 # Create your models here.
 def user_model_path(instance, file_root):

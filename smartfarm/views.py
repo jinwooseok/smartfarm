@@ -1,4 +1,3 @@
-
 from django.shortcuts import render
 
 #-----------------------유틸리티 import-----------------------
@@ -6,7 +5,6 @@ from django.shortcuts import render
 #---------------분석도구 import ----------------
 
 from rest_framework.decorators import api_view
-from django.http import HttpResponse
 from django.shortcuts import redirect
 @api_view(['GET'])
 def main_page(request):
