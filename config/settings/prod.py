@@ -46,10 +46,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    #주요 함수 앱
     'smartfarm',
-    #유저 관련 앱
     'users',
+    'common',
+    'file',
+    'file_data',
+    'farm_process',
+    'feature',
+    'data_data_analytics',
     #크로스도메인 보안 관련
     'corsheaders',
     'rest_framework',
