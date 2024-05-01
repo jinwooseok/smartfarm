@@ -12,21 +12,8 @@ def linear(d,x,y):#회귀분석을 실행. 결과표,분산분석표,상관분�
     X = sm.add_constant(d)
     
     result = sm.OLS(d[y],X).fit()
-    #f_html=result.summary().to_html()
     result_dict = {}
     result_dict = result.summary().as_html()
-    # for i, table in enumerate(result.summary().tables):
-    #     df = pd.read_html(table.as_html(),header=0)[0]
-    #     print(len(df))
-    #     for j in range(len(df)):
-    #         df.iloc[j,0] = str(df.iloc[j,0]).replace(":", "")
-    #         df.iloc[j,2] = str(df.iloc[j,2]).replace(":", "")
-                
-    #         print(df.iloc[j,0],df.iloc[j,1],df.iloc[j,2],df.iloc[j,3])
-    #         result_dict[df.iloc[j,0]] = df.iloc[j,1]
-    #         result_dict[df.iloc[j,2]] = df.iloc[j,3]
-    # #사후분석
-    # print(result_dict)
     return result_dict
 
 def ttest(request,type):#2번 단일표본 3번 독립표본 4번 대응표본
@@ -54,18 +41,6 @@ def logistic(d,x,y):
     result = sm.Logit(d[y],d[x]).fit()
     result_dict = {}
     result_dict = result.summary().as_html()
-    # for i, table in enumerate(result.summary().tables):
-    #     df = pd.read_html(table.as_html(),header=0)[0]
-    #     print(len(df))
-    #     for j in range(len(df)):
-    #         df.iloc[j,0] = str(df.iloc[j,0]).replace(":", "")
-    #         df.iloc[j,2] = str(df.iloc[j,2]).replace(":", "")
-                
-    #         print(df.iloc[j,0],df.iloc[j,1],df.iloc[j,2],df.iloc[j,3])
-    #         result_dict[df.iloc[j,0]] = df.iloc[j,1]
-    #         result_dict[df.iloc[j,2]] = df.iloc[j,3]
-    # #사후분석
-    # print(result_dict)
     return result_dict
 
 def x_prob(request):
