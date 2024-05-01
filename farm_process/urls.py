@@ -1,10 +1,7 @@
-from django.urls import path, include
-
-from . import views
+from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-
-from .file.views import FileViewSet
+from farm_process.views import FarmProcessViewSet, DataABMSViewSet
 
 app_name='smartfarm'
 

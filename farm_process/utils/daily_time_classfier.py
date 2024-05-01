@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import datetime
-from .masks import *
+from masks import *
 from common.decorators import logging_time
 class DailyTimeClassifier:
     def __init__(self, sun_df, date_series, t=2, noon=12):

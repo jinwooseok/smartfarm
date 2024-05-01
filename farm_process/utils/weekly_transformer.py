@@ -1,6 +1,6 @@
 import pandas as pd
 import datetime
-from .masks import *
+from masks import *
 class WeeklyTransformer:
     def __init__(self, data, date_series, period):
         self.data = data

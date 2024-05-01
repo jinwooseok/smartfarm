@@ -2,7 +2,7 @@ import datetime
 import pandas as pd
 import requests
 from dateutil.relativedelta import relativedelta
-from ...exceptions import *
+from common.exceptions import *
 from common.decorators import logging_time
 # 일출,일몰 크롤링 모듈
         #

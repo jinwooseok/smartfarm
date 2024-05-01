@@ -2,12 +2,11 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.response import Response
 from django.http import HttpResponse
-
 from common.response import *
 from common.validators import login_validator, serializer_validator
-from .service.farm_process_service import FarmProcessService
-from .service.trans_abms_service import TransABMSService
-from .serializers import FarmProcessSerializer, EnvABMSSerializer
+from farm_process.service.farm_process_service import FarmProcessService
+from farm_process.service.trans_abms_service import TransABMSService
+from farm_process.serializers import FarmProcessSerializer, EnvABMSSerializer
 class DataABMSViewSet(viewsets.GenericViewSet):
     def page(self, request, file_title):
         user_id = request.session.get('user')
@@ -21,7 +20,7 @@ class DataABMSViewSet(viewsets.GenericViewSet):
         data['fileName'] = file_title
         serializer = EnvABMSSerializer(data = data)
         serializer = serializer_validator(serializer)
-        data=TransABMSService.from_serializer(serializer, user_id).execute()
+        TransABMSService.from_serializer(serializer, user_id).execute()
         return Response(ResponseBody.generate(), status=200)
     
 class FarmProcessViewSet(viewsets.GenericViewSet):
@@ -32,6 +31,6 @@ class FarmProcessViewSet(viewsets.GenericViewSet):
         data['fileName'] = file_title
         serializer:FarmProcessSerializer = FarmProcessSerializer(data = data)
         serializer:FarmProcessSerializer = serializer_validator(serializer)
-        data=FarmProcessService(serializer, user_id).execute()
+        FarmProcessService(serializer, user_id).execute()
         return Response(ResponseBody.generate(), status=200)
     

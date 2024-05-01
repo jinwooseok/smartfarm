@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..file.serializers import FileNameSerializer
+from file.serializers import FileNameSerializer
 class FarmProcessSerializer(FileNameSerializer):
     newFileName = serializers.CharField()
     fileType = serializers.ChoiceField(choices=[("env","env"),("growth","growth"),("output","output")])
