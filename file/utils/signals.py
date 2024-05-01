@@ -4,7 +4,7 @@ from file.models import File, Temp
 from data_analytics.models import LearnedModel
 import os
 from common.exceptions import *
-from utils import search_file_absolute_path
+from file.utils.utils import search_file_absolute_path
 from feature.service.feature_service import FeatureService
 from feature.serializers import FileFeatureSerializer
 from common.validators import serializer_validator
@@ -16,11 +16,6 @@ def delete_file(sender, instance, **kwargs):
 @receiver(pre_delete, sender=Temp)
 def delete_temp(sender, instance, **kwargs):
     delete_local_file(search_file_absolute_path(instance.file_root))
-    
-@receiver(pre_delete, sender=LearnedModel)
-def delete_file(sender, instance, **kwargs):
-    delete_local_file(search_file_absolute_path(instance.model_root))
-    delete_local_file(search_file_absolute_path(instance.model_meta_root))
     
 def delete_local_file(file_path):
     try:
@@ -34,5 +29,4 @@ def create_file(sender, instance, **kwargs):
     #변수 정보 저장
     feature_serializer = FileFeatureSerializer(data=feature_info_list, many=True)
     feature_serializer = serializer_validator(feature_serializer)
-    
     feature_serializer.save()

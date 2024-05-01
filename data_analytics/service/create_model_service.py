@@ -1,5 +1,5 @@
 from sklearn.model_selection import train_test_split
-from save_model_service import SaveModelService
+from data_analytics.service.save_model_service import SaveModelService
 from data_analytics.utils.rf_model import CustomRandomForestClassifier, CustomRandomForestRegressor
 from data_analytics.utils.linear import CustomLinearRegression
 from data_analytics.utils.lasso import CustomLassoRegression

@@ -1,6 +1,6 @@
 from sklearn.svm import SVC, SVR
-from linear import CustomLinearRegression
-from logistic import CustomLogisticRegression
+from data_analytics.utils.linear import CustomLinearRegression
+from data_analytics.utils.logistic import CustomLogisticRegression
 
 class CustomSVC(CustomLogisticRegression):
     def __init__(self, x_train, y_train, random_state, model_params):

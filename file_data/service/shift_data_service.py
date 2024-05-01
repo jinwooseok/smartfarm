@@ -1,4 +1,4 @@
-from get_file_data_service import GetFileDataService
+from file_data.service.get_file_data_service import GetFileDataService
 from file.utils.utils import search_file_absolute_path
 import pandas as pd
 from file_data.utils.process import DataProcess

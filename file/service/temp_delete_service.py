@@ -1,4 +1,4 @@
-from file_delete_service import FileDeleteService
+from file.service.file_delete_service import FileDeleteService
 from common.exceptions import *
 from file.utils.utils import *
 class TempDeleteService(FileDeleteService):

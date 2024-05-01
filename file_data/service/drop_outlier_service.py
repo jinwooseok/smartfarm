@@ -1,4 +1,4 @@
-from get_file_data_service import GetFileDataService
+from file_data.service.get_file_data_service import GetFileDataService
 from file.utils.utils import search_file_absolute_path
 from file_data.utils.process import DataProcess
 from file.service.temp_save_service import TempSaveService

@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'file_data',
     'farm_process',
     'feature',
-    'data_data_analytics',
+    'data_analytics',
     #크로스도메인 보안 관련
     'corsheaders',
     'rest_framework',

@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from masks import *
+from farm_process.utils.masks import *
 from common.exceptions import *
 from file_data.utils.process import DataProcess
 from common.decorators import logging_time

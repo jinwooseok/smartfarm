@@ -1,6 +1,6 @@
-from file_save_service import FileSaveService
+from file.service.file_save_service import FileSaveService
 from file.repositorys import *
-from file.models import Temp, TempStatus, File
+from file.models import Temp, TempStatus
 from django.core import files
 import copy
 import os

@@ -1,6 +1,6 @@
 from file.utils.utils import *
 from file_data.utils.process import DataProcess
-from get_file_data_service import GetFileDataService
+from file_data.service.get_file_data_service import GetFileDataService
 import pandas as pd
 
 class GetDataSummaryService():

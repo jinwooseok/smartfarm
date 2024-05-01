@@ -1,13 +1,13 @@
 from rest_framework import viewsets
 from django.shortcuts import render
-from ..models import File
-from .serializers import *
+from file.models import File
+from file_data.serializers import *
 from django.http import HttpResponse
 from rest_framework.response import Response
 from common.response import *
-from ..file.serializers import FileNameSerializer
+from file.serializers import FileNameSerializer
 from common.response import ResponseBody
-from .serializers import ProcessOutlierSerializer
+from file_data.serializers import ProcessOutlierSerializer
 
 from .service.merge_data_service import MergeDataService
 from .service.get_file_data_service import GetFileDataService

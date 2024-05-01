@@ -1,5 +1,5 @@
 from sklearn.linear_model import Ridge
-from linear import CustomLinearRegression
+from data_analytics.utils.linear import CustomLinearRegression
 
 class CustomRidgeRegression(CustomLinearRegression):
     def __init__(self, x_train, y_train, sample_random_state, model_params):

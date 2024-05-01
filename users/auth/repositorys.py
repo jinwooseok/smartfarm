@@ -1,5 +1,5 @@
 from users.models import User
-from exceptions.auth_exceptions import IdNotFoundException
+from users.auth.exceptions.auth_exceptions import IdNotFoundException
 def exist_user_by_email(email):
     return User.objects.filter(user_id=email).exists()
 
