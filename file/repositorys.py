@@ -1,5 +1,5 @@
-from ..models import Temp, File
-from ..exceptions import *
+from file.models import Temp, File
+from common.exceptions import *
 def get_temp_by_file_id_status_id(file_id, status_id):
     try:
         return Temp.objects.get(file_id=file_id, statuses=status_id)

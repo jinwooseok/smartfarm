@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from ..file.serializers import FileNameSerializer
-from ..file.repositorys import *
-from ..exceptions import *
+from file.serializers import FileNameSerializer
+from file.repositorys import *
+from common.exceptions import *
 
 class ProcessOutlierSerializer(FileNameSerializer):
     pass

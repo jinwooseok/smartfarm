@@ -1,5 +1,5 @@
-from ...file.utils.utils import *
-from ...file_data.service.get_file_data_service import GetFileDataService
+from file.utils.utils import *
+from file_data.service.get_file_data_service import GetFileDataService
 import json
 class FeatureService:
     @staticmethod

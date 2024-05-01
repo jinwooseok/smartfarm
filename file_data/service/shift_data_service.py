@@ -1,8 +1,8 @@
-from .get_file_data_service import GetFileDataService
-from ...file.utils.utils import search_file_absolute_path
+from get_file_data_service import GetFileDataService
+from file.utils.utils import search_file_absolute_path
 import pandas as pd
-from ..utils.process import DataProcess
-from ...exceptions import *
+from file_data.utils.process import DataProcess
+from common.exceptions import *
 class ShiftDataService():
     def __init__(self, user, file_object, count, xValue, yValue):
         self.user = user

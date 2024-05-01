@@ -1,9 +1,8 @@
-from ...file.utils.utils import *
+from file.utils.utils import *
 import pandas as pd
-from ..utils.process import DataProcess
-import os
-from .get_file_data_service import GetFileDataService
-from ...models import Temp
+from file_data.utils.process import DataProcess
+from get_file_data_service import GetFileDataService
+from file.models import Temp
 
 class GetTempDataService(GetFileDataService):
     def __init__(self, file_name, file_object, status_id):

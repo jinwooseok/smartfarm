@@ -1,6 +1,6 @@
-from ...file.utils.utils import *
+from file.utils.utils import *
 import pandas as pd
-from ..utils.process import DataProcess
+from file_data.utils.process import DataProcess
 import os
 
 class GetFileDataService():

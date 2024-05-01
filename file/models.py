@@ -1,5 +1,5 @@
 from django.db import models
-
+from users.models import User
 # Create your models here.
 def user_file_path(instance, file_root):
     # 파일이 저장될 경로: media/file/<user_id>/<filename>

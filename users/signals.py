@@ -1,6 +1,6 @@
 from django.db.models.signals import pre_delete, post_save
 from django.dispatch import receiver
-from .models import User
+from users.models import User
 import os
 from django.conf import settings
 @receiver(post_save, sender=User)

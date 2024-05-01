@@ -1,5 +1,6 @@
 from rest_framework import viewsets
-from ..models import FileFeature, File
+from feature.models import FileFeature
+from file.models import File
 from rest_framework.response import Response
 from common.response import *
 from .serializers import FileFeatureSerializer, GetFeatureImportanceSerializer

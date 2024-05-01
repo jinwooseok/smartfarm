@@ -1,4 +1,3 @@
-from rest_framework import status
 from common.base_exception import CustomBaseException
 #회원가입
 class EmailDuplicatedException(CustomBaseException):

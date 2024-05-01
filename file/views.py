@@ -1,14 +1,14 @@
 from rest_framework import viewsets
 from django.shortcuts import render
-from .serializers import *
+from file.serializers import *
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from django.http import HttpResponse
 
 from common.response import *
-from .service.file_save_service import FileSaveService
-from .service.file_delete_service import FileDeleteService
-from ..file_data.service.get_file_data_service import GetFileDataService
+from file.service.file_save_service import FileSaveService
+from file.service.file_delete_service import FileDeleteService
+from file_data.service.get_file_data_service import GetFileDataService
 from common.validators import login_validator, serializer_validator
 
 #파일 관련 뷰셋

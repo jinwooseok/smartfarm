@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import json
-from ...exceptions import *
+from common.exceptions import *
 from common.decorators import logging_time
 ## -------------데이터 변경 클래스-----------------
 class DataProcess:
@@ -31,7 +31,7 @@ class DataProcess:
     @staticmethod
     def drop_columns(data, columns):
         return data.drop(columns, axis=1)
-    
+    @staticmethod
     def drop_rows(data, rows):
         return data.drop(rows, axis=0)
     
@@ -52,6 +52,7 @@ class DataProcess:
             return np.nan
         
     #다양한 날짜 형식 처리, 타입 처리 전엔 항상 날짜의 형태의 문자열로 처리, 날짜 열만 따로 호출함.
+    @staticmethod
     def date_converter(date_series):
         date_type = date_series.dtype
         date_series = date_series.rename("날짜")

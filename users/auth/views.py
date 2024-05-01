@@ -3,10 +3,10 @@ from rest_framework import exceptions,viewsets
 from rest_framework.response import Response
 
 from common.response import ResponseBody
-from .serializers import *
-from .exceptions.auth_exceptions import *
-from .service.save_user_service import SaveUserService
-from .service.auth_user_service import AuthUserService
+from users.auth.serializers import *
+from users.auth.exceptions.auth_exceptions import *
+from users.auth.service.save_user_service import SaveUserService
+from users.auth.service.auth_user_service import AuthUserService
 from common.validators import serializer_validator
 from django.http import HttpResponse
 class SignUpViewSet(viewsets.GenericViewSet):

@@ -6,6 +6,6 @@ class FileConfig(AppConfig):
     name = 'file'
     
     def ready(self):
-        from .file.utils import signals  # 시그널 파일을 임포트합니다.
-        from . import scheduler
+        from file.utils import signals  # 시그널 파일을 임포트합니다.
+        from config import scheduler
         scheduler.start()

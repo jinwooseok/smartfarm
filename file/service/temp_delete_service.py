@@ -1,6 +1,6 @@
-from .file_delete_service import FileDeleteService
-from ...exceptions import *
-from ..utils.utils import *
+from file_delete_service import FileDeleteService
+from common.exceptions import *
+from file.utils.utils import *
 class TempDeleteService(FileDeleteService):
     @classmethod    
     def from_serializer(cls, serializer, user, status) -> "TempDeleteService":        

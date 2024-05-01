@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import User
+from users.models import User
 class SignUpSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source="user_id",required=True)
     password = serializers.CharField(source="user_pw",required=True)

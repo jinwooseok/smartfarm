@@ -1,10 +1,9 @@
-from django.urls import path, include
+from django.urls import path
 
-from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 
-from .file.views import FileViewSet
+from file_data.views import FileDataViewSet, DataMergeViewSet
 
 app_name='smartfarm'
 

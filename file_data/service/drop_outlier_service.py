@@ -1,7 +1,7 @@
-from .get_file_data_service import GetFileDataService
-from ...file.utils.utils import search_file_absolute_path
-from ..utils.process import DataProcess
-from ...file.service.temp_save_service import TempSaveService
+from get_file_data_service import GetFileDataService
+from file.utils.utils import search_file_absolute_path
+from file_data.utils.process import DataProcess
+from file.service.temp_save_service import TempSaveService
 class ProcessOutlierService():
     def __init__(self, file_name, file_root, file_object, user):
         self.user = user

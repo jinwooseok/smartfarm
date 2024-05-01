@@ -1,6 +1,6 @@
-from ...exceptions import *
-from ..utils.utils import *
-from ...models import *
+from common.exceptions import *
+from file.utils.utils import *
+from file.models import *
 class FileDeleteService():    
     def __init__(self, user, file_object):
         self.user = user

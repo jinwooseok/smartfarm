@@ -1,11 +1,12 @@
 from django.db.models.signals import pre_delete, post_save
 from django.dispatch import receiver
-from ...models import File, Temp, LearnedModel
+from file.models import File, Temp
+from data_analytics.models import LearnedModel
 import os
-from ...exceptions import *
-from ..utils.utils import *
-from ...feature.service.feature_service import FeatureService
-from ...feature.serializers import FileFeatureSerializer
+from common.exceptions import *
+from utils import search_file_absolute_path
+from feature.service.feature_service import FeatureService
+from feature.serializers import FileFeatureSerializer
 from common.validators import serializer_validator
 
 @receiver(pre_delete, sender=File)

@@ -1,7 +1,7 @@
-from ..exceptions.auth_exceptions import EmailDuplicatedException, UserTelDuplicatedException
+from users.auth.exceptions.auth_exceptions import EmailDuplicatedException, UserTelDuplicatedException
 from argon2 import PasswordHasher
-from ...models import User
-from ..repositorys import exist_user_by_email, exist_user_by_tel
+from users.models import User
+from users.auth.repositorys import exist_user_by_email, exist_user_by_tel
 
 class SaveUserService:
     def __init__(self, user_id, user_pw, user_name, user_job, user_tel):

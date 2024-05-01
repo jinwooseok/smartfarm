@@ -3,7 +3,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from farm_process.views import FarmProcessViewSet, DataABMSViewSet
 
-app_name='smartfarm'
+app_name='farm_process'
 
 
 urlpatterns = [

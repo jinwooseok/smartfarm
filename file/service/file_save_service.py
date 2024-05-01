@@ -1,12 +1,12 @@
-from ...models import File, FileStatus
+from file.models import File, FileStatus
 import pandas as pd
 from django.core import files
 import copy
 import os
 from django.db import transaction
-from ..utils.utils import *
-from ...exceptions import *
-from ..repositorys import *
+from file.utils.utils import *
+from common.exceptions import *
+from file.repositorys import *
 
 class FileSaveService():
     
