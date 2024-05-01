@@ -1,7 +1,7 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 import logging
-from .models import Temp, LearnedModel
+from ..smartfarm.models import Temp, LearnedModel
 from django.utils import timezone
 logger = logging.getLogger('django')
 
