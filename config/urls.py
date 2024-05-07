@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
 
-urlpatterns = [
+urlpatterns = [ #하위 폴더들의 모든 URL들과 연결시켜주는 역할
     path('admin/', admin.site.urls),
     path('',include('smartfarm.urls')),
     path('',include('file.urls')),
@@ -29,13 +29,10 @@ urlpatterns = [
     path('',include('file_data.urls')),
     path('',include('data_analytics.urls')),
     path('users/',include('users.urls')),
-    
-    path('robots.txt',  TemplateView.as_view(template_name="robots.txt", content_type='text/plain')),
+    path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type='text/plain')),
 ]
 
-if settings.DEBUG: 
+if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-from django.conf.urls.static import static
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
