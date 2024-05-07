@@ -1,16 +1,38 @@
-from .validate_exception import ValidationException
+'''
+ValidationException : 유효성 검사 예외처리
+exceptions : rest_framework에서 제공하는 예외처리
+'''
 from rest_framework import exceptions
+from common.validate_exception import ValidationException
 
 def serializer_validator(serializer):
+    '''
+    설명
+        serializer의 유효성 검사를 위한 함수
+    매개변수
+        serializer : serializer 객체
+    반환값
+        serializer : 유효성 검사 결과
+        raise ValidationException(serializer) : 유효성 검사 실패 시 예외 처리
+    '''
     if serializer.is_valid():
         return serializer
     else:
         raise ValidationException(serializer)
-    
+
 def login_validator(request):
-    user_id = request.session.get('user')#session데이터불러오기
+    '''
+    설명
+        로그인 여부를 확인하기 위한 함수
+    매개변수
+        request : 요청 객체
+    반환값
+        user_id : 로그인한 사용자의 아이디
+        raise exceptions.NotAuthenticated() : 로그인하지 않은 경우 예외 처리
+    '''
+    user_id = request.session.get('user') #session의 유저 데이터불러오기
     if user_id is None:
-            raise exceptions.NotAuthenticated()
-    else: 
-        return user_id #None을 반환하면 페이지 이동 시 None소유 템플릿에서 if문 처리 가능
+        raise exceptions.NotAuthenticated()
+    else:
+        return user_id
         

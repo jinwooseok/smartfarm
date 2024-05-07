@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from file.models import File, Temp
-from common.exceptions import *
-from .repositorys import *
+from file.repositorys import (get_file_by_user_file_title,
+                              get_temp_by_file_id_status_id,
+                              get_temp_or_none_by_file_id_status_id)
 class FileInfoSerializer(serializers.ModelSerializer):
     fileName = serializers.CharField(source='file_title')
     createdDate = serializers.DateTimeField(source='created_at', format='%Y-%m-%d')
