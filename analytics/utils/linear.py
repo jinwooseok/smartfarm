@@ -12,14 +12,11 @@ class CustomLinearRegression:
         self.sample_random_state = sample_random_state
         self.model_params = model_params
         self.model_name = 'Linear Regression'
-        
+
     def fit(self):
         self.learned_model = self.model.fit(self.x_train, self.y_train)
         return self.learned_model
-    
-    def feature_importances(self):
-        return self.learned_model.params
-    
+
     def meta(self):
         return {
             'model': self.model_name,
@@ -27,15 +24,13 @@ class CustomLinearRegression:
             'targetNames': self.y_train.name,
             'randomState': self.sample_random_state,
         }
-    
+
     def predict(self, x_test, y_test):
         y_pred = self.learned_model.predict(x_test)
         y_pred = np.round(y_pred, decimals=4)
-        
         x_test = x_test.reset_index(drop=True)
         y_test = y_test.reset_index(drop=True)
         y_pred = pd.Series(y_pred, name=y_test.name + '_pred').reset_index(drop=True)
-        
         # 예측 결과 평가
         mse = mean_squared_error(y_test, y_pred)
         r2 = r2_score(y_test, y_pred)

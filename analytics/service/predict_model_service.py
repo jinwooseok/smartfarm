@@ -19,10 +19,10 @@ class PredictModelService:
     def __init__(self, model_object, test_data, x_value, y_value):
         """
         매개변수
-        - model_object : 모델 객체
-        - test_data : 새로 예측하고자 하는 데이터
-        - x_value : 독립변수
-        - y_value : 종속변수
+        - model_object (LearnedModel): 모델 객체
+        - test_data (DataFrame): 새로 예측하고자 하는 데이터
+        - x_value (str): 독립변수
+        - y_value (str): 종속변수
         """
         self.model_object = model_object
         self.test_data = test_data

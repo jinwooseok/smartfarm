@@ -4,7 +4,7 @@
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from common.exceptions import (InvalidFeatureException, DataCountException, ModelTypeException)
+from common.exceptions import InvalidFeatureException, DataCountException, ModelTypeException
 from common.validators import serializer_validator
 from analytics.serializers import (RFClassifierSerializer, RFRegressorSerializer,
                                    RidgeSerializer, LassoSerializer,
@@ -15,10 +15,10 @@ from analytics.utils.gradient_boosting import CustomGradientBoosting
 from analytics.utils.linear import CustomLinearRegression
 from analytics.utils.lasso import CustomLassoRegression
 from analytics.utils.logistic import CustomLogisticRegression
-from analytics.utils.rf_model import (CustomRandomForestClassifier, CustomRandomForestRegressor)
+from analytics.utils.rf_model import CustomRandomForestClassifier, CustomRandomForestRegressor
 from analytics.utils.ridge import CustomRidgeRegression
 from analytics.utils.elasticnet import CustomElasticNet
-from analytics.utils.svm import (CustomSVC, CustomSVR)
+from analytics.utils.svm import CustomSVC, CustomSVR
 
 class CreateModelService():
     """
@@ -36,14 +36,14 @@ class CreateModelService():
                  model_params, train_size=0.7):
         """
         매개변수
-        - model_name: 모델 파일명
-        - x_value: 독립변수
-        - y_value: 종속변수
-        - model: 생성할 모델의 종류
-        - file_object: 파일 객체
-        - file_data: 파일 데이터
-        - model_params: 모델 하이퍼파라미터
-        - train_size: 학습 데이터 비율
+        - model_name (str): 모델 파일명
+        - x_value (list): 독립변수
+        - y_value (str): 종속변수
+        - model (str): 생성할 모델의 종류
+        - file_object (File): 파일 객체
+        - file_data (DataFrame): 파일 데이터
+        - model_params (Dict): 모델 하이퍼파라미터
+        - train_size (float): 학습 데이터 비율
         """
         self.model_name = model_name
         self.x_value = x_value

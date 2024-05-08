@@ -19,7 +19,7 @@ class SaveModelService(FileSaveService):
     - save_model : DB와 파일시스템에 모델 저장을 수행
     - process_duplicated_file_name : model 파일명 중복 처리 
     """
-    def __init__(self, file_object, model, model_name, model_meta) -> "SaveModelService":
+    def __init__(self, file_object:File, model, model_name:str, model_meta:dict) -> "SaveModelService":
         """
         매개변수
         - file_object : File 객체

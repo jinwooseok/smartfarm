@@ -43,9 +43,7 @@ class CustomLogisticRegression(CustomLinearRegression):
             'yPred': y_pred.tolist(),
             'y': y_test.tolist()
         }
-    def feature_importances(self):
-        return self.learned_model.feature_importances_
-    
+
     def meta(self):
         return {
             'model': self.model_name,
