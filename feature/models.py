@@ -1,6 +1,6 @@
 from django.db import models
 from file.models import File, Temp
-from data_analytics.models import LearnedModel
+from analytics.models import LearnedModel
 # Create your models here.
 class FileFeature(models.Model):
     file = models.ForeignKey(File,on_delete=models.CASCADE,default=000000)

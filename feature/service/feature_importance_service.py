@@ -1,6 +1,6 @@
 from feature.serializers import GetFeatureImportanceSerializer
 import pandas as pd
-from data_analytics.utils.correlation import calculate_correlation
+from analytics.utils.correlation import calculate_correlation
 from common.exceptions import *
 import numpy as np
 class FeatureImportanceService:

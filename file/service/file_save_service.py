@@ -1,14 +1,18 @@
+"""
+파일 저장 서비스를 제공하는 파일
+"""
 from file.models import File, FileStatus
 import pandas as pd
 from django.core import files
 import copy
 import os
 from django.db import transaction
-from file.utils.utils import *
-from common.exceptions import *
-from file.repositorys import *
+from common.exceptions import (StartIndexException,
+                               DateColumnException,
+                               FileSaveException,
+                               DataToCsvException)
 
-class FileSaveService():
+class FileSaveService:
     
     def __init__(self, user, file_title, file_data, date_column=None, start_index=1, statuses=1):
         self.user = user
@@ -31,26 +35,26 @@ class FileSaveService():
         #파일명 중복 체크
         self.file_title = self.convert_file_name(self.user, self.file_title)
         #데이터 배열을 csv파일로 만들기
-        if type(self.file_data) is not pd.DataFrame:
+        if isinstance(self.file_data, pd.DataFrame) is False:
             self.file_data = pd.DataFrame(self.file_data)
-        
+        #시작 인덱스 설정
         if self.start_index < 1 or self.start_index > len(self.file_data):
             raise StartIndexException()
         elif self.start_index > 1:
             self.file_data = self.file_data[self.start_index-1:]
             self.start_index = 1
-        
-        if self.date_column == None:
+
+        if self.date_column is None:
             pass
         elif self.date_column != self.file_data.columns[0]:
             try:
                 date_series = self.file_data.pop(self.date_column)
-            except:
-                raise DateColumnException()
+            except Exception as exc:
+                raise DateColumnException() from exc
             self.file_data.insert(0, self.date_column, date_series)
         self.data_to_csv(self.file_title, self.file_data)
         self.save_file()
-    
+
     def save_file(self):
         try:
             f = open(self.file_title,'rb')

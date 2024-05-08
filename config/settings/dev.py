@@ -20,10 +20,10 @@ from django.core.exceptions import ImproperlyConfigured
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 def get_secret(setting):
-    '''
+    """
     설명
         secrets.json 파일을 통해 비밀변수를 가져오는 함수
-    '''
+    """
     with open(os.path.join(BASE_DIR,'secrets.json'), encoding='utf-8') as f:
         secrets = json.loads(f.read())
     #비밀 변수를 가져오거나 명시적 예외를 반환한다.
@@ -65,7 +65,7 @@ INSTALLED_APPS = [
     'file_data',
     'farm_process',
     'feature',
-    'data_analytics',
+    'analytics',
     #크로스도메인 보안 관련. 나중에 세부 설정 필요할 수 있음
     'corsheaders',
 ]

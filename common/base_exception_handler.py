@@ -1,14 +1,6 @@
-'''
-datetime : 시간 관련 라이브러리
-logging : 로깅 관련 라이브러리
-traceback : 예외 처리 세부사항 출력
-exceptions : rest_framework 예외 처리 관련 객체
-exception_handler : rest_framework 예외 처리 객체
-Response : rest_framework 응답 객체
-HttpResponseNotFound : rest_framework 404 에러 객체
-CustomBaseException : 사용자 정의 예외 처리 객체
-STATUS_RSP_INTERNAL_ERROR : 서버 내부 오류 응답 코드
-'''
+"""
+Django 요청 처리 중 발생한 예외를 처리하는 핸들러입니다.
+"""
 from datetime import datetime
 import logging
 import traceback
@@ -20,7 +12,7 @@ from .base_exception import CustomBaseException
 from .exception_codes import STATUS_RSP_INTERNAL_ERROR
 
 def base_exception_handler(exc, context):
-    '''
+    """
     Django 요청 처리 중 발생한 예외를 처리합니다.
 
     매개변수:
@@ -29,7 +21,7 @@ def base_exception_handler(exc, context):
 
     반환값:
         Response: 오류 세부 정보를 포함하는 HTTP 응답 객체입니다.
-    '''
+    """
     logger = logging.getLogger('django.request')
 
     response = exception_handler(exc, context)

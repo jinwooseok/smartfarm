@@ -1,7 +1,7 @@
 from django.db.models.signals import pre_delete, post_save
 from django.dispatch import receiver
 from file.models import File, Temp
-from data_analytics.models import LearnedModel
+from analytics.models import LearnedModel
 import os
 from common.exceptions import *
 from file.utils.utils import search_file_absolute_path

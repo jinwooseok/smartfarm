@@ -1,13 +1,13 @@
-'''
+"""
 공통 유효성 검사 실패 예외 처리 클래스. base_exception.CustomBaseException을 상속받아 구현한다.
-'''
+"""
 from common.base_exception import CustomBaseException
 
 class ValidationException(CustomBaseException):
-    '''
+    """
     설명
         유효성 검사 실패 예외 처리 클래스
-    '''
+    """
     def __init__(self, serializer):
         super().__init__()
         # 유효성 검사가 실패한 경우 serializer 클래스의 errors 속성을 참조하여 에러 메시지를 생성한다.
