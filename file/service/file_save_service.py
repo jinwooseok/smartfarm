@@ -14,7 +14,47 @@ from common.exceptions import (StartIndexException,
 from file.repositorys import exist_file_by_user_file_title
 
 class FileSaveService:
+    """
+    파일 저장 서비스
     
+    Attributes:
+    ----------
+    user : int
+        사용자 id
+    file_title : str
+        파일 이름
+    file_data : pd.DataFrame
+        파일 데이터
+    date_column : str
+        
+    start_index : int
+        시작 인덱스
+    statuses : int
+        파일 상태
+    
+    Methods:
+    -------
+    from_serializer : FileSaveService
+        serializer로부터 FileSaveService 인스턴스 생성
+    execute : None
+        파일 저장 실행
+    save_file : None
+        파일 저장
+    file_form : File
+        File 인스턴스 생성
+    data_to_csv : None
+        데이터를 csv로 변환
+    df_to_csv : None
+        DataFrame을 csv로 변환
+    json_to_csv : None
+        json을 csv로 변환
+    convert_file_name : str
+        파일명 중복 체크
+    remove_file_suffix : str
+        파일명에서 확장자 제거
+    process_duplicated_file_name : str
+        중복되지 않는 파일 이름 생성
+    """
     def __init__(self, user, file_title, file_data, date_column=None, start_index=1, statuses=1):
         self.user = user
         self.file_title:str = file_title

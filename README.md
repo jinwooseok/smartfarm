@@ -14,7 +14,6 @@ sqlite3 or mysql
 (command prompt)
 python manage.py migrates
 
-#### secrets.json
 
 
 

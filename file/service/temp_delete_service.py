@@ -1,3 +1,6 @@
+"""
+file delete service를 상속받아 temp file delete service를 구현. 임시 파일을 삭제하는 서비스
+"""
 from file.service.file_delete_service import FileDeleteService
 from common.exceptions import *
 from file.utils.utils import *
