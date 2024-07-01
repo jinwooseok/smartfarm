@@ -27,7 +27,7 @@ urlpatterns = [ #하위 폴더들의 모든 URL들과 연결시켜주는 역할
     path('',include('feature.urls')),
     path('',include('farm_process.urls')),
     path('',include('file_data.urls')),
-    path('',include('data_analytics.urls')),
+    path('',include('analytics.urls')),
     path('users/',include('users.urls')),
     path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type='text/plain')),
 ]

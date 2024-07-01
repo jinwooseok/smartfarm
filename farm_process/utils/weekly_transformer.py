@@ -1,14 +1,36 @@
+"""
+주별로 데이터를 정리하는 클래스입니다.
+"""
 import pandas as pd
 import datetime
 from farm_process.utils.masks import *
 class WeeklyTransformer:
+    """
+    메서드
+    __init__(self, data, date_series, period) : 초기화 메서드
+    execute(self) : 실행 메서드
+    """
     def __init__(self, data, date_series, period):
+        """
+        초기화 메서드
+        
+        매개변수
+        - data : 데이터
+        - date_series : 날짜 데이터
+        - period : 주기
+        """
         self.data = data
         self.date_series = date_series
         self.period = period
         
     def execute(self):
+        """
+        실행 메서드
         
+        로직
+        1. 주별로 데이터를 정리
+        2. 결과 반환
+        """
         first_date = self.date_series.iloc[0]
         last_date = self.date_series.iloc[-1]
         
@@ -31,7 +53,5 @@ class WeeklyTransformer:
             weeknum+=1
             if standard_date.year < (standard_date+pd.Timedelta(days=self.period)).year:
                 weeknum=1
-
             standard_date += pd.Timedelta(days=self.period)
-            
         return temp_df
