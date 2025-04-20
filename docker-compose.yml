@@ -23,6 +23,7 @@ services:
       - "8000:8000"
     depends_on:
       - django
+      - next
     networks:
       - nmh_network
 
@@ -32,6 +33,19 @@ services:
     command: redis-server --port 6379
     networks:
       - nmh_network
+
+  next:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: next
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - nmh_network
+
 networks:
   nmh_network:
 
