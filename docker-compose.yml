@@ -1,4 +1,3 @@
-version: '3'
 services:
   django:
     build:
@@ -10,8 +9,6 @@ services:
       - .:/app
     expose:
       - "8001"
-    env_file:
-      - ./secrets.yaml
     networks:
       - nmh_network
 

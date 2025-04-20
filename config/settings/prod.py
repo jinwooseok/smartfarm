@@ -38,7 +38,7 @@ def get_secret(setting):
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: 서버의 보안과 관련된 비밀키
-SECRET_KEY = get_secret('SECRET_KEY')
+SECRET_KEY = 'SECRET_KEY'
 
 # SECURITY WARNING: 개발 모드 여부. 배포 시 반드시 False로 변경
 DEBUG = False
